@@ -119,6 +119,24 @@ document.querySelectorAll('.read-btn-mock').forEach(btn => {
         }
     });
 });
+            const filterBtns = document.querySelectorAll('.filter-btn');
+        const posts = document.querySelectorAll('.post-skeleton');
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                filterBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                const filter = btn.getAttribute('data-filter');
+                posts.forEach(post => {
+                    if (filter === 'all' || post.getAttribute('data-category') === filter) {
+                        post.style.display = 'block';
+                    } else {
+                        post.style.display = 'none';
+                    }
+                });
+            });
+        });
+
 </script>
 </body>
 </html>
