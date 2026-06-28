@@ -3,27 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Живой ИИ — Ежедневный гид по нейросетям</title>
+    <title>Живой ИИ - Ежедневный гид по нейросетям</title>
     <style>
         body { background: #0b0b13; color: #fff; font-family: sans-serif; margin: 0; padding: 15px; }
         header { text-align: center; padding: 10px 0; border-bottom: 1px solid #222; }
-        .logo { font-size: 20px; font-weight: bold; background: linear-gradient(45deg, #00ffcc, #ff007f); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .logo { font-size: 24px; font-weight: bold; background: linear-gradient(45deg, #00ffcc, #ff007f); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         .tagline { font-size: 12px; color: #666; text-transform: uppercase; margin-top: 5px; }
         nav { display: flex; gap: 8px; margin: 15px 0; overflow-x: auto; white-space: nowrap; padding-bottom: 5px; }
-        nav a { background: #161625; color: #fff; padding: 8px 16px; border-radius: 20px; text-decoration: none; font-size: 14px; border: 1px solid #222; }
+        nav a { background: #161625; color: #fff; padding: 8px 16px; border-radius: 20px; text-decoration: none; font-size: 14px; }
         nav a.active { background: #0088cc; }
         .promo-banner { background: #110c22; border: 1px solid #332255; border-radius: 12px; padding: 15px; margin-bottom: 20px; }
         .promo-tag { background: #ff007f; padding: 2px 6px; border-radius: 4px; font-size: 10px; font-weight: bold; }
-        .promo-title { font-size: 18px; font-weight: bold; margin: 8px 0; }
+        .promo-title { font-size: 18px; font-weight: bold; margin: 8px 0 0; }
         .promo-desc { font-size: 13px; color: #aaa; margin-bottom: 15px; }
-        .promo-btn { display: inline-block; background: #833ab4; color: #fff; padding: 10px 20px; border-radius: 8px; text-decoration: none; font-weight: bold; font-size: 14px; }
+        .promo-btn { display: inline-block; background: #8334b4; color: #fff; padding: 10px 20px; border-radius: 8px; text-decoration: none; font-size: 14px; font-weight: bold; margin-bottom: 15px; }
         .feed-title { font-size: 18px; font-weight: bold; margin-bottom: 15px; }
         .post-skeleton { background: #161625; border-radius: 12px; padding: 15px; margin-bottom: 15px; border: 1px solid #222; }
         .post-meta-mock { font-size: 12px; color: #ff007f; margin-bottom: 8px; }
         .post-title-mock { font-size: 16px; font-weight: bold; margin-bottom: 10px; }
         .post-text-mock { font-size: 14px; color: #ccc; line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
         .post-text-mock.expanded { display: block; overflow: visible; }
-        .read-btn-mock { display: inline-block; margin-top: 12px; color: #00ffcc; text-decoration: none; font-size: 14px; font-weight: bold; }
+        .read-btn-mock { display: inline-block; margin-top: 12px; color: #00ffcc; text-decoration: none; font-size: 14px; font-weight: bold; cursor: pointer; }
         .article-subtitle { font-weight: bold; color: #00ffcc; }
     </style>
 </head>
@@ -35,61 +35,64 @@
 </header>
 
 <nav>
-            <a href="#" class="filter-btn active" data-filter="all">Все темы</a>
-            <a href="#" class="filter-btn" data-filter="lifehacks">Лайфхаки</a>
-            <a href="#" class="filter-btn" data-filter="earning">Заработок</a>
-
+    <a href="#" class="filter-btn active" data-filter="all">Все темы</a>
+    <a href="#" class="filter-btn" data-filter="lifehacks">Лайфхаки</a>
+    <a href="#" class="filter-btn" data-filter="earning">Заработок</a>
 </nav>
 
 <div class="promo-banner">
-    <span class="promo-tag">🤖 VIP ДОСТУП</span>
+    <span class="promo-tag">🔥 VIP ДОСТУП</span>
     <div class="promo-title">Закрытая база промптов</div>
     <div class="promo-desc">Готовые запросы для ИИ, которые сэкономят вам 2 часа работы каждый день.</div>
     <a href="#" class="promo-btn" id="toggle-pay-btn" onclick="togglePayZone(event)">Получить доступ</a>
 
-    <div id="pay-zone" style="display: none; margin-top: 15px; padding: 15px; background: #1b112c; border: 2px solid #833ab4; border-radius: 10px; text-align: center;">
-        <h4 style="color: #00ffcc; margin: 0 0 10px 0;">💳 Доступ к закрытой базе промптов</h4>
-        <p style="font-size: 13px; color: #fff; margin-bottom: 12px;">Для получения ключа переведите <b>79 руб.</b> по СБП на номер <span style="color:#ff007f;">+79173831313</span> (любой банк через СБП). В комментарии укажите "ДОСТУП К ВИП".</p>
+    <div id="pay-zone" style="display: none; margin-top: 15px; padding: 15px; background: #1b112c; border: 2px solid #8334b4; border-radius: 8px;">
+        <h4 style="color: #00ffcc; margin: 0 0 10px 0;">🔑 Доступ к закрытой базе промптов</h4>
+        <p style="font-size: 13px; color: #fff; margin-bottom: 12px;">Для получения ключа переведите 79 руб. по СБП.</p>
         <div style="display: flex; gap: 8px; justify-content: center;">
-            <input type="text" id="vip-key" placeholder="Введите полученный ключ" style="padding: 8px; border-radius: 5px; border: 1px solid #ff007f; background: #0f0f1a; color: #fff; font-size: 13px; width: 60%;">
-            <button onclick="checkVipKey()" style="padding: 8px 15px; border-radius: 5px; border: none; background: linear-gradient(135deg, #833ab4, #fd1d1d); color: #fff; font-weight: bold; cursor: pointer; font-size: 13px;">Войти</button>
+            <input type="text" id="vip-key" placeholder="Введите полученный ключ" style="padding: 8px; border-radius: 5px; border: none; width: 60%;">
+            <button onclick="checkVipKey()" style="padding: 8px 15px; border-radius: 5px; border: none; background: linear-gradient(45deg, #00ffcc, #ff007f); color: #fff; font-weight: bold;">Войти</button>
         </div>
         <p id="pay-error" style="color: #ff3333; font-size: 12px; margin: 5px 0 0 0; display: none;">Неверный ключ доступа!</p>
     </div>
 </div>
-   <div id="vip-content" style="display: none; margin-top: 20px; padding: 15px; background: #1a1a2e; border: 1px dashed #833ab4; border-radius: 10px;">
-        <h3 style="color: #ff007f; margin-top: 0;">🔒 Эксклюзив: Промпт-анализатор авторского стиля</h3>
-        <p style="font-size: 14px; color: #cdcdcd;">Скопируйте системный промпт ниже и отправьте в ИИ вместе с 3 примерами ваших текстов:</p>
-        <textarea readonly style="width: 100%; height: 120px; background: #0f0f1a; color: #00ffcc; border: 1px solid #333; border-radius: 5px; font-family: monospace; font-size: 12px; padding: 8px; box-sizing: border-box;">
 
-       <div class="feed-title">Новые публикации</div>
-       
-        <article class="post-skeleton" data-category="lifehacks">
-            <div class="post-text-mock">🔥 Лайфхаки • Сегодня</div>
-            <div class="post-text-mock">Копирайтинг на стероидах: Как заставить ИИ писать как живой человек</div>
-            <div class="post-text-mock">Большинство людей используют ChatGPT неправильно, получая сухие, шаблонные и скучные тексты с кучей "воды". На самом деле нейросеть способна выдавать экспертный контент, который невозможно отличить от работы топового автора. Главное — дать ей правильную роль и жесткие ограничения.<br><br><span class="article-subtitle">Секретная формула промпта.</span> Чтобы ИИ перестал писать банальные вещи, всегда используйте структуру: Роль + Задача + Целевая аудитория + Ограничения. Например: "Действуй как опытный коммерческий редактор. Напиши пост для Telegram про автоматизацию бизнеса. Аудитория — предприниматели. Избегай канцеляризмов, пиши короткими предложениями, используй сильные глаголы. Не используй вводные слова вроде 'в современном мире'."<br><br><span class="article-subtitle">Как убрать "цифровой след".</span> Нейросети обожают слова-маркеры: "уникальный", "инновационный", "ключевой", "важно отметить". Всегда добавляйте в команду запрет на эти штампы. Просите ИИ писать в стиле "инфостиля" Ильяхова — просто, емко и только по делу. Это мгновенно поднимает уникальность и читаемость текста.<br><br><span class="article-subtitle">Где искать первые заказы без опыта.</span> Начните с простых бирж (Kwork, еТХТ) или Telegram-каналов с вакансиями для фрилансеров. Ищите задачи на рерайт статей, заполнение карточек товаров или написание постов для соцсетей. С помощью ИИ вы сможете выполнять дневной объем работы обычного копирайтера всего за один час, беря качеством и скоростью.</div>
-            <a href="#" class="read-btn-mock">Читать полностью</a>
-        </article>
+<div id="vip-content" style="display: none; margin-top: 20px; padding: 15px; background: #1a1a2e; border: 1px dashed #8334b4; border-radius: 8px;">
+    <h3 style="color: #00ffcc; margin-top: 0;">✨ Эксклюзив: Промпт-анализатор авторского стиля</h3>
+    <p style="font-size: 14px; color: #cdcdcd;">Скопируйте системный промпт ниже и отправьте в ИИ вместе с 3 примерами ваших текстов:</p>
+    <textarea readonly style="width: 100%; height: 12px; background: #0f0f1a; color: #00ffcc; border: 1px solid #333; padding: 5px; font-family: monospace;">[Промпт скрыт под ключом]</textarea>
+</div>
 
-        <article class="post-skeleton" data-category="lifehacks">
-            <div class="post-text-mock">🔥 Лайфхаки • Сегодня</div>
-            <div class="post-text-mock">Как заставить нейросеть писать тексты под ваш голос</div>
-            <div class="post-text-mock">Чтобы искусственный интеллект перестал выдавать шаблонные ответы, его нужно правильно обучить. Главный секрет заключается в том, чтобы скопировать 3-4 ваших реальных текста или сообщения и загрузить их в ИИ с командой: "Проанализируй этот стиль, длину предложений и любимые слова. Напиши следующий текст, полностью копируя этот авторский голос".<br><br><span class="article-subtitle">Промпт-анализатор стиля.</span> Используйте готовую связку в ChatGPT: "Act as an expert linguistic analyst. Analyze the texts provided across 5 dimensions: Lexicon, Sentence Architecture, Tone, Stylistic Devices, and Punctuation Patterns. Create a unique prompt template that forces GPT to replicate this exact authorial identity in future responses." После этого ИИ выдаст вам персональный код-настройку, который можно применять для любых задач, и тексты будут звучать именно так, как будто их написали вы сами.</div>
-            <a href="#" class="read-btn-mock">Читать полностью</a>
-        </article>
+<div class="feed-title">Новые публикации</div>
 
-        <article class="post-skeleton" data-category="earning">
-            <div class="post-text-mock">💰 Заработок • Today</div>
-            <div class="post-text-mock">Как нейросети меняют рынок труда: 5 реальных способов заработка сегодня</div>
-            <div class="post-text-mock">Мир стремительно меняется, и те, кто вчера относился к ИИ как к забавной игрушке, сегодня первыми смогут кратно увеличить свой доход и делегировать до 80% рутины.<br><br><span class="article-subtitle">Направление 1: Копирайтинг нового поколения.</span> Век шаблонных текстов прошел. Сейчас востребованы промпт-копирайтеры, умеющие настраивать ИИ под конкретную задачу бизнеса и выдавать экспертный контент в 5 раз быстрее обычных авторов. Они создают сложные контент-планы, SEO-статьи и прогревы, сохраняя уникальный голос бренда (Tone of Voice). Это позволяет закрывать месячный объем работы классического агентства силами всего одного специалиста.<br><br><span class="article-subtitle">Направление 2: Коммерческий нейродизайн.</span> Создание сочных фонов, уникальной инфографики и баннеров для маркетплейсов (Wildberries, Ozon) с помощью нейросетей Midjourney и Flux без навыков рисования. Нейросети позволяют мгновенно адаптировать карточки товаров под сезонные распродажи и генерировать десятки фотореалистичных вариантов в разных ракурсах. Такой подход снижает затраты бизнеса на аренду студий, моделей и работу профессиональных ретушеров.<br><br><span class="article-subtitle">Направление 3: Нейро-ассистирование для бизнеса.</span> Настройка умных чат-ботов в Telegram и автоматизация рутины (ответы на отзывы, сортировка почты), за которую предприниматели готовы платить фикс в месяц. Интеграция ИИ-ассистентов в CRM-системы позволяет компаниям обрабатывать входящие заявки клиентов круглосуточно и без задержек. Предприниматель получает готовую автономную систему, которая кратно снижает нагрузку на живую службу поддержки.<br><br><span class="article-subtitle">Направление 4: Локализация и переводы.</span> Быстрая транскрибация видео, перевод и адаптация контента, сайтов и приложений под зарубежные рынки с сохранением сленга и контекста. Современные ИИ-переводчики учитывают культурные особенности и локальные идиомы конкретных стран, исключая неловкие дословные переводы. Это помогает брендам и блогерам быстро масштабировать свой продукт на международную аудиторию с минимальным бюджетом.<br><br><span class="article-subtitle">Направление 5: Продажа готовых промптов.</span> Создание и упаковка сложных, протестированных цепочек команд под конкретные нужды бизнеса для продажи через закрытые VIP-зоны. Сюда входят готовые алгоритмы («инструкции») для генерации юридических документов, анализа финансовых отчетов или создания рекламных креативов. Покупатели платят за экономию сотен часов своего времени, получая гарантированный и предсказуемый результат от ИИ в один клик.</div>
-            <a href="#" class="read-btn-mock">Читать полностью</a>
-        </article>
-        
+<div class="feed-items">
+    <article class="post-skeleton" data-category="lifehacks">
+        <div class="post-meta-mock">🔥 Лайфхаки • Сегодня</div>
+        <div class="post-title-mock">Копирайтинг на стероидах: Как заставить ИИ писать как живой человек</div>
+        <div class="post-text-mock">Большинство людей используют ChatGPT неправильно, получая сухие, шаблонные и скучные тексты. Но если использовать правильную структуру запроса, нейросеть способна выдавать контент, который невозможно отличить от работы профессионального автора. Секрет кроется в передаче правильного контекста, тональности и ограничений. Разберем три главных правила настройки стиля.</div>
+        <a class="read-btn-mock">Читать полностью</a>
+    </article>
+
+    <article class="post-skeleton" data-category="lifehacks">
+        <div class="post-meta-mock">🔥 Лайфхаки • Сегодня</div>
+        <div class="post-title-mock">Как настроить нейросеть писать тексты под ваш голос</div>
+        <div class="post-text-mock">Чтобы искусственный интеллект перестал выдавать шаблонные ответы, его нужно правильно обучить. Для этого соберите несколько своих лучших постов или писем, загрузите их в чат и попросите составить карту вашего стиля. Используйте полученную карту в каждом новом диалоге, чтобы ИИ сразу понимал нужный ритм, длину предложений и любимые речевые обороты.</div>
+        <a class="read-btn-mock">Читать полностью</a>
+    </article>
+
+    <article class="post-skeleton" data-category="earning">
+        <div class="post-meta-mock">💼 Заработок • Today</div>
+        <div class="post-title-mock">Как нейросети меняют рынок труда: 5 реальных способов заработка сегодня</div>
+        <div class="post-text-mock">Мир стремительно меняется, и те, кто вчера относился к ИИ как к забавной игрушке, сегодня зарабатывают на этом неплохие деньги. Создание карточек товаров для маркетплейсов, генерация уникальных иллюстраций на заказ, ведение автоматизированных каналов и даже базовая настройка чат-ботов для локального бизнеса — всё это доступно уже сейчас, даже если у вас есть только смартфон.</div>
+        <a class="read-btn-mock">Читать полностью</a>
+    </article>
+</div>
+
+<script>
 function togglePayZone(e) {
     e.preventDefault();
     var payZone = document.getElementById("pay-zone");
     if (payZone.style.display === "none") {
-
         payZone.style.display = "block";
     } else {
         payZone.style.display = "none";
@@ -98,7 +101,7 @@ function togglePayZone(e) {
 
 function checkVipKey() {
     var userKey = document.getElementById("vip-key").value.trim().toUpperCase();
-    var correctKey = "ДОСТУП К ВИП";
+    var correctKey = "ДОСТУП К ВИП"; 
     if (userKey === correctKey) {
         document.getElementById("vip-content").style.display = "block";
         document.getElementById("pay-zone").style.display = "none";
@@ -114,31 +117,31 @@ document.querySelectorAll('.read-btn-mock').forEach(btn => {
         const textBlock = this.closest('.post-skeleton').querySelector('.post-text-mock');
         if (textBlock.classList.contains('expanded')) {
             textBlock.classList.remove('expanded');
-            this.textContent = 'Читать полностью';
+            this.textContent = "Читать полностью";
         } else {
             textBlock.classList.add('expanded');
-            this.textContent = 'Свернуть текст ←';
+            this.textContent = "Свернуть текст";
         }
     });
 });
-            const filterBtns = document.querySelectorAll('.filter-btn');
-        const posts = document.querySelectorAll('.post-skeleton');
-        filterBtns.forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                e.preventDefault();
-                filterBtns.forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-                const filter = btn.getAttribute('data-filter');
-                posts.forEach(post => {
-                    if (filter === 'all' || post.getAttribute('data-category') === filter) {
-                        post.style.display = 'block';
-                    } else {
-                        post.style.display = 'none';
-                    }
-                });
-            });
-        });
 
+const filterBtns = document.querySelectorAll('.filter-btn');
+const posts = document.querySelectorAll('.post-skeleton');
+filterBtns.forEach(btn => {
+    btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        filterBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const filter = btn.getAttribute('data-filter');
+        posts.forEach(post => {
+            if (filter === "all" || post.getAttribute('data-category') === filter) {
+                post.style.display = 'block';
+            } else {
+                post.style.display = 'none';
+            }
+        });
+    });
+});
 </script>
 </body>
 </html>
