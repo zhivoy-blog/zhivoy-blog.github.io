@@ -13,10 +13,10 @@
         nav a { background: #161625; color: #fff; padding: 8px 16px; border-radius: 20px; text-decoration: none; font-size: 14px; }
         nav a.active { background: #0088cc; }
         .promo-banner { background: #110c22; border: 1px solid #332255; border-radius: 12px; padding: 15px; margin-bottom: 20px; }
-        .promo-tag { background: #ff007f; padding: 2px 6px; border-radius: 4px; font-size: 10px; font-weight: bold; }
+        .promo-tag { background: #00ffcc; color: #000; padding: 2px 6px; border-radius: 4px; font-size: 10px; font-weight: bold; }
         .promo-title { font-size: 18px; font-weight: bold; margin: 8px 0 0; }
         .promo-desc { font-size: 13px; color: #aaa; margin-bottom: 15px; }
-        .promo-btn { display: inline-block; background: #8334b4; color: #fff; padding: 10px 20px; border-radius: 8px; text-decoration: none; font-size: 14px; font-weight: bold; margin-bottom: 15px; }
+        .promo-btn { display: inline-block; background: #0088cc; color: #fff; padding: 10px 20px; border-radius: 8px; text-decoration: none; font-size: 14px; font-weight: bold; margin-bottom: 15px; }
         .feed-title { font-size: 18px; font-weight: bold; margin-bottom: 15px; }
         .post-skeleton { background: #161625; border-radius: 12px; padding: 15px; margin-bottom: 15px; border: 1px solid #222; }
         .post-meta-mock { font-size: 12px; color: #ff007f; margin-bottom: 8px; }
@@ -25,6 +25,7 @@
         .post-text-mock.expanded { display: block; overflow: visible; -webkit-line-clamp: none; }
         .read-btn-mock { display: inline-block; margin-top: 12px; color: #00ffcc; text-decoration: none; font-size: 14px; font-weight: bold; cursor: pointer; }
         .article-subtitle { font-weight: bold; color: #00ffcc; margin-top: 12px; margin-bottom: 4px; display: block; }
+        .tg-link-btn { display: inline-block; background: #229ED9; color: #fff; padding: 8px 15px; border-radius: 5px; text-decoration: none; font-weight: bold; font-size: 14px; margin-bottom: 10px; }
     </style>
 </head>
 <body>
@@ -38,24 +39,25 @@
     <a href="#" class="filter-btn" data-filter="earning">Заработок</a>
 </nav>
 <div class="promo-banner">
-    <span class="promo-tag">🔥 VIP ДОСТУП</span>
+    <span class="promo-tag">🎁 БЕСПЛАТНЫЙ БОНУС</span>
     <div class="promo-title">Закрытая база промптов</div>
-    <div class="promo-desc">Готовые запросы для ИИ, которые сэкономят вам 2 часа работы каждый день.</div>
+    <div class="promo-desc">Готовые запросы для ИИ, которые сэкономят вам 2 часа работы каждый день. Доступно бесплатно для подписчиков.</div>
     <a href="#" class="promo-btn" id="toggle-pay-btn" onclick="togglePayZone(event)">Получить доступ</a>
-    <div id="pay-zone" style="display: none; margin-top: 15px; padding: 15px; background: #1b112c; border: 2px solid #8334b4; border-radius: 8px;">
-        <h4 style="color: #00ffcc; margin: 0 0 10px 0;">🔑 Доступ к закрытой базе промптов</h4>
-        <p style="font-size: 13px; color: #fff; margin-bottom: 12px;">Для получения ключа переведите 79 руб. по СБП.</p>
-        <div style="display: flex; gap: 8px; justify-content: center;">
-            <input type="text" id="vip-key" placeholder="Введите полученный ключ" style="padding: 8px; border-radius: 5px; border: none; width: 60%;">
-            <button onclick="checkVipKey()" style="padding: 8px 15px; border-radius: 5px; border: none; background: linear-gradient(45deg, #00ffcc, #ff007f); color: #fff; font-weight: bold;">Войти</button>
+    <div id="pay-zone" style="display: none; margin-top: 15px; padding: 15px; background: #111625; border: 2px solid #0088cc; border-radius: 8px;">
+        <h4 style="color: #00ffcc; margin: 0 0 10px 0;">🔑 Как активировать доступ:</h4>
+        <p style="font-size: 13px; color: #fff; margin-bottom: 12px;">1. Подпишитесь на наш Telegram-канал.<br>2. Заберите секретный ключ из закрепленного сообщения.</p>
+        <a href="ССЫЛКА_НА_ВАШ_ТЕЛЕГРАМ_КАНАЛ" target="_blank" class="tg-link-btn">👉 Перейти в наш Telegram</a>
+        <div style="display: flex; gap: 8px; justify-content: center; margin-top: 5px;">
+            <input type="text" id="vip-key" placeholder="Введите ключ из канала" style="padding: 8px; border-radius: 5px; border: none; width: 60%;">
+            <button onclick="checkVipKey()" style="padding: 8px 15px; border-radius: 5px; border: none; background: linear-gradient(45deg, #00ffcc, #0088cc); color: #fff; font-weight: bold;">Войти</button>
         </div>
-        <p id="pay-error" style="color: #ff3333; font-size: 12px; margin: 5px 0 0 0; display: none;">Неверный ключ доступа!</p>
+        <p id="pay-error" style="color: #ff3333; font-size: 12px; margin: 5px 0 0 0; display: none;">Неверный ключ доступа! Проверьте закреп в канале.</p>
     </div>
 </div>
 <div id="vip-content" style="display: none; margin-top: 20px; padding: 15px; background: #1a1a2e; border: 1px dashed #8334b4; border-radius: 8px;">
     <h3 style="color: #00ffcc; margin-top: 0;">✨ Эксклюзив: Промпт-анализатор авторского стиля</h3>
     <p style="font-size: 14px; color: #cdcdcd;">Скопируйте системный промпт ниже и отправьте в ИИ вместе с 3 примерами ваших текстов:</p>
-    <textarea readonly style="width: 100%; height: 120px; background: #0f0f1a; color: #00ffcc; border: 1px solid #333; padding: 5px; font-family: monospace;">[Промпт скрыт под ключом]</textarea>
+    <textarea readonly style="width: 100%; height: 120px; background: #0f0f1a; color: #00ffcc; border: 1px solid #333; padding: 5px; font-family: monospace;">Напиши текст в стиле автора, используя короткие предложения и живой язык, исключая штампы.</textarea>
 </div>
 <div class="feed-title">Новые публикации</div>
 <div class="feed-items">
