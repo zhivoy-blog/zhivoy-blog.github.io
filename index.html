@@ -57,7 +57,7 @@ Act as an expert linguistic analyst. Analyze the texts provided across 5 dimensi
   <!-- НАЧАЛО БЛОКА МОНЕТИЗАЦИИ -->
 <div id="pay-zone" style="margin-top: 15px; padding: 15px; background: #1b112c; border: 2px solid #833ab4; border-radius: 10px; text-align: center;">
     <h4 style="color: #00ffcc; margin: 0 0 10px 0;">💳 Доступ к закрытой базе промптов</h4>
-    <p style="font-size: 13px; color: #fff; margin-bottom: 12px;">Для получения ключа переведите <b>79 руб.</b> по СБП на номер <span style="color:#ff007f;">+79173831313</span> (любой Банк через СПБ). В комментарии укажите "ИИ".</p>
+    <p style="font-size: 13px; color: #fff; margin-bottom: 12px;">Для получения ключа переведите <b>79 руб.</b> по СБП на номер <span style="color:#ff007f;">+79173831313</span> (любой Банк через СПБ). В комментарии укажите "ДОСТУП К ВИП".</p>
     <div style="display: flex; gap: 8px; justify-content: center;">
         <input type="text" id="vip-key" placeholder="Введите полученный ключ" style="padding: 8px; border-radius: 5px; border: 1px solid #ff007f; background: #0f0f1a; color: #fff; font-size: 13px; width: 60%;">
         <button onclick="checkVipKey()" style="padding: 8px 15px; border-radius: 5px; border: none; background: linear-gradient(135deg, #833ab4, #fd1d1d); color: #fff; font-weight: bold; cursor: pointer; font-size: 13px;">Войти</button>
@@ -73,7 +73,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
 function checkVipKey() {
     var userKey = document.getElementById("vip-key").value.trim();
-    var correctKey = "ZHIVOY2026"; // ВАШ СЕКРЕТНЫЙ ПАРОЛЬ
+    var correctKey = "ДОСТУП К ВИП"; // ВАШ СЕКРЕТНЫЙ ПАРОЛЬ
     
     if (userKey === correctKey) {
         document.getElementById("vip-content").style.display = "block"; // Показываем промпт
