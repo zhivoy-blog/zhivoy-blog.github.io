@@ -21,31 +21,27 @@
         .post-skeleton { background: #161625; border-radius: 12px; padding: 15px; margin-bottom: 15px; border: 1px solid #222; }
         .post-meta-mock { font-size: 12px; color: #ff007f; margin-bottom: 8px; }
         .post-title-mock { font-size: 16px; font-weight: bold; margin-bottom: 10px; }
-        .post-text-mock { font-size: 14px; color: #ccc; line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
-        .post-text-mock.expanded { display: block; overflow: visible; }
+        .post-text-mock { font-size: 14px; color: #ccc; line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; text-overflow: ellipsis; }
+        .post-text-mock.expanded { display: block; overflow: visible; -webkit-line-clamp: none; }
         .read-btn-mock { display: inline-block; margin-top: 12px; color: #00ffcc; text-decoration: none; font-size: 14px; font-weight: bold; cursor: pointer; }
-        .article-subtitle { font-weight: bold; color: #00ffcc; }
+        .article-subtitle { font-weight: bold; color: #00ffcc; margin-top: 12px; margin-bottom: 4px; display: block; }
     </style>
 </head>
 <body>
-
 <header>
     <div class="logo">ЖИВОЙ ИИ</div>
     <div class="tagline">Ежедневный гид по нейросетям</div>
 </header>
-
 <nav>
     <a href="#" class="filter-btn active" data-filter="all">Все темы</a>
     <a href="#" class="filter-btn" data-filter="lifehacks">Лайфхаки</a>
     <a href="#" class="filter-btn" data-filter="earning">Заработок</a>
 </nav>
-
 <div class="promo-banner">
     <span class="promo-tag">🔥 VIP ДОСТУП</span>
     <div class="promo-title">Закрытая база промптов</div>
     <div class="promo-desc">Готовые запросы для ИИ, которые сэкономят вам 2 часа работы каждый день.</div>
     <a href="#" class="promo-btn" id="toggle-pay-btn" onclick="togglePayZone(event)">Получить доступ</a>
-
     <div id="pay-zone" style="display: none; margin-top: 15px; padding: 15px; background: #1b112c; border: 2px solid #8334b4; border-radius: 8px;">
         <h4 style="color: #00ffcc; margin: 0 0 10px 0;">🔑 Доступ к закрытой базе промптов</h4>
         <p style="font-size: 13px; color: #fff; margin-bottom: 12px;">Для получения ключа переведите 79 руб. по СБП.</p>
@@ -56,15 +52,12 @@
         <p id="pay-error" style="color: #ff3333; font-size: 12px; margin: 5px 0 0 0; display: none;">Неверный ключ доступа!</p>
     </div>
 </div>
-
 <div id="vip-content" style="display: none; margin-top: 20px; padding: 15px; background: #1a1a2e; border: 1px dashed #8334b4; border-radius: 8px;">
     <h3 style="color: #00ffcc; margin-top: 0;">✨ Эксклюзив: Промпт-анализатор авторского стиля</h3>
     <p style="font-size: 14px; color: #cdcdcd;">Скопируйте системный промпт ниже и отправьте в ИИ вместе с 3 примерами ваших текстов:</p>
-    <textarea readonly style="width: 100%; height: 12px; background: #0f0f1a; color: #00ffcc; border: 1px solid #333; padding: 5px; font-family: monospace;">[Промпт скрыт под ключом]</textarea>
+    <textarea readonly style="width: 100%; height: 120px; background: #0f0f1a; color: #00ffcc; border: 1px solid #333; padding: 5px; font-family: monospace;">[Промпт скрыт под ключом]</textarea>
 </div>
-
 <div class="feed-title">Новые публикации</div>
-
 <div class="feed-items">
     <article class="post-skeleton" data-category="lifehacks">
         <div class="post-meta-mock">🔥 Лайфхаки • Сегодня</div>
@@ -72,33 +65,41 @@
         <div class="post-text-mock">Большинство людей используют ChatGPT неправильно, получая сухие, шаблонные и скучные тексты. Но если использовать правильную структуру запроса, нейросеть способна выдавать контент, который невозможно отличить от работы профессионального автора. Секрет кроется в передаче правильного контекста, тональности и ограничений. Разберем три главных правила настройки стиля.</div>
         <a class="read-btn-mock">Читать полностью</a>
     </article>
-
-    <article class="post-skeleton" data-category="lifehacks">
+        <article class="post-skeleton" data-category="lifehacks">
         <div class="post-meta-mock">🔥 Лайфхаки • Сегодня</div>
         <div class="post-title-mock">Как настроить нейросеть писать тексты под ваш голос</div>
         <div class="post-text-mock">Чтобы искусственный интеллект перестал выдавать шаблонные ответы, его нужно правильно обучить. Для этого соберите несколько своих лучших постов или писем, загрузите их в чат и попросите составить карту вашего стиля. Используйте полученную карту в каждом новом диалоге, чтобы ИИ сразу понимал нужный ритм, длину предложений и любимые речевые обороты.</div>
         <a class="read-btn-mock">Читать полностью</a>
     </article>
-
     <article class="post-skeleton" data-category="earning">
-        <div class="post-meta-mock">💼 Заработок • Today</div>
+        <div class="post-meta-mock">💼 Заработок • Сегодня</div>
         <div class="post-title-mock">Как нейросети меняют рынок труда: 5 реальных способов заработка сегодня</div>
-        <div class="post-text-mock">Мир стремительно меняется, и те, кто вчера относился к ИИ как к забавной игрушке, сегодня зарабатывают на этом неплохие деньги. Создание карточек товаров для маркетплейсов, генерация уникальных иллюстраций на заказ, ведение автоматизированных каналов и даже базовая настройка чат-ботов для локального бизнеса — всё это доступно уже сейчас, даже если у вас есть только смартфон.</div>
+        <div class="post-text-mock">
+            Мир стремительно меняется, и те, кто вчера относился к ИИ как к забавной игрушке, сегодня зарабатывают на этом неплохие деньги. Создание карточек товаров для маркетплейсов, генерация уникальных иллюстраций на заказ, ведение автоматизированных каналов и даже базовая настройка чат-ботов для локального бизнеса — всё это доступно уже сейчас, даже если у вас есть только смартфон.
+            <span class="article-subtitle">1. Генерация карточек товаров для маркетплейсов</span>
+            Владельцы магазинов на Wildberries и Ozon постоянно нуждаются в описаниях и красивых фото. С помощью ИИ можно за минуты создавать продающие SEO-тексты и удалять фон с фотографий товаров, добавляя их в стильные интерьеры.
+            <span class="article-subtitle">2. Создание уникальных иллюстраций и логотипов</span>
+            Midjourney и бесплатные аналоги позволяют создавать графику коммерческого качества. Вы можете предлагать услуги по созданию логотипов, принтов для одежды или иллюстраций для соцсетей малого бизнеса.
+            <span class="article-subtitle">3. Ведение и контент-план для соцсетей</span>
+            Многие локальные бизнесы (кофейни, салоны красоты) не умеют вести блоги. Нейросеть способна составить контент-план на месяц вперед, написать тексты постов и придумать идеи для коротких видеороликов.
+            <span class="article-subtitle">4. Базовая настройка ИИ-ассистентов</span>
+            Предпринимателям нужны автоответчики в Telegram и WhatsApp. Используя простые конструкторы, можно настроить умного бота, который будет отвечать клиентам базы знаний, созданной с помощью ChatGPT.
+            <span class="article-subtitle">5. Перевод и адаптация зарубежного контента</span>
+            С ИИ перевод узкоспециализированных статей стал качественным. Можно брать популярные англоязычные материалы, переводить их, адаптировать под локальный рынок и продавать профильным изданиям или пабликам.
+        </div>
         <a class="read-btn-mock">Читать полностью</a>
     </article>
 </div>
-
 <script>
 function togglePayZone(e) {
     e.preventDefault();
     var payZone = document.getElementById("pay-zone");
-    if (payZone.style.display === "none") {
+    if (payZone.style.display === "none" || payZone.style.display === "") {
         payZone.style.display = "block";
     } else {
         payZone.style.display = "none";
     }
 }
-
 function checkVipKey() {
     var userKey = document.getElementById("vip-key").value.trim().toUpperCase();
     var correctKey = "ДОСТУП К ВИП"; 
@@ -110,7 +111,6 @@ function checkVipKey() {
         document.getElementById("pay-error").style.display = "block";
     }
 }
-
 document.querySelectorAll('.read-btn-mock').forEach(btn => {
     btn.addEventListener('click', function(e) {
         e.preventDefault();
@@ -124,7 +124,6 @@ document.querySelectorAll('.read-btn-mock').forEach(btn => {
         }
     });
 });
-
 const filterBtns = document.querySelectorAll('.filter-btn');
 const posts = document.querySelectorAll('.post-skeleton');
 filterBtns.forEach(btn => {
@@ -145,3 +144,4 @@ filterBtns.forEach(btn => {
 </script>
 </body>
 </html>
+
