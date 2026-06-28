@@ -72,16 +72,17 @@ document.addEventListener("DOMContentLoaded", function() {
 });
 
 function checkVipKey() {
-    var userKey = document.getElementById("vip-key").value.trim();
-    var correctKey = "ДОСТУП К ВИП"; // ВАШ СЕКРЕТНЫЙ ПАРОЛЬ
+    var userKey = document.getElementById("vip-key").value.trim().toUpperCase();
+    var correctKey = "ДОСТУП К ВИП";
     
     if (userKey === correctKey) {
-        document.getElementById("vip-content").style.display = "block"; // Показываем промпт
-        document.getElementById("pay-zone").style.display = "none"; // Прячем блок оплаты
+        document.getElementById("vip-content").style.display = "block";
+        document.getElementById("pay-zone").style.display = "none";
     } else {
-        document.getElementById("pay-error").style.display = "block"; // Показываем ошибку
+        document.getElementById("pay-error").style.display = "block";
     }
 }
+
 </script>
 <!-- КОНЕЦ БЛОКА МОНЕТИЗАЦИИ -->
 
