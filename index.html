@@ -25,7 +25,7 @@
         .post-text-mock.expanded { display: block; overflow: visible; -webkit-line-clamp: none; }
         .read-btn-mock { display: inline-block; margin-top: 12px; color: #00ffcc; text-decoration: none; font-size: 14px; font-weight: bold; cursor: pointer; }
         .article-subtitle { font-weight: bold; color: #00ffcc; margin-top: 12px; margin-bottom: 4px; display: block; }
-        .tg-link-btn { display: inline-block; background: #229ED9; color: #fff; padding: 8px 15px; border-radius: 5px; text-decoration: none; font-weight: bold; font-size: 14px; margin-bottom: 10px; }
+        .tg-link-btn { display: inline-block; background: #229ED9; color: #fff; padding: 10px 20px; border-radius: 8px; text-decoration: none; font-weight: bold; font-size: 14px; margin-bottom: 15px; text-align: center; }
     </style>
 </head>
 <body>
@@ -41,20 +41,20 @@
 <div class="promo-banner">
     <span class="promo-tag">🎁 БЕСПЛАТНЫЙ БОНУС</span>
     <div class="promo-title">Закрытая база промптов</div>
-    <div class="promo-desc">Готовые запросы для ИИ, которые сэкономят вам 2 часа работы каждый день. Доступно бесплатно для подписчиков.</div>
+    <div class="promo-desc">Готовые запросы для ИИ, которые сэкономят вам 2 часа работы каждый день. Бесплатно для наших подписчиков.</div>
     <a href="#" class="promo-btn" id="toggle-pay-btn" onclick="togglePayZone(event)">Получить доступ</a>
     <div id="pay-zone" style="display: none; margin-top: 15px; padding: 15px; background: #111625; border: 2px solid #0088cc; border-radius: 8px;">
-        <h4 style="color: #00ffcc; margin: 0 0 10px 0;">🔑 Как активировать доступ:</h4>
-        <p style="font-size: 13px; color: #fff; margin-bottom: 12px;">1. Подпишитесь на наш Telegram-канал.<br>2. Заберите секретный ключ из закрепленного сообщения.</p>
-        <a href="ССЫЛКА_НА_ВАШ_ТЕЛЕГРАМ_КАНАЛ" target="_blank" class="tg-link-btn">👉 Перейти в наш Telegram</a>
+        <h4 style="color: #00ffcc; margin: 0 0 10px 0;">🔑 Как открыть секретную зону:</h4>
+        <p style="font-size: 13px; color: #fff; margin-bottom: 15px; line-height: 1.4;">1. Подпишитесь на наш Telegram-канал <b>Живой ИИ</b>.<br>2. Скопируйте секретный ключ из закрепленного сообщения канала.</p>
+        <a href="https://t.me" target="_blank" class="tg-link-btn">👉 Подписаться на Telegram</a>
         <div style="display: flex; gap: 8px; justify-content: center; margin-top: 5px;">
-            <input type="text" id="vip-key" placeholder="Введите ключ из канала" style="padding: 8px; border-radius: 5px; border: none; width: 60%;">
-            <button onclick="checkVipKey()" style="padding: 8px 15px; border-radius: 5px; border: none; background: linear-gradient(45deg, #00ffcc, #0088cc); color: #fff; font-weight: bold;">Войти</button>
+            <input type="text" id="vip-key" placeholder="Введите ключ из закрепа" style="padding: 10px; border-radius: 5px; border: none; width: 60%; font-size: 14px;">
+            <button onclick="checkVipKey()" style="padding: 10px 15px; border-radius: 5px; border: none; background: linear-gradient(45deg, #00ffcc, #0088cc); color: #fff; font-weight: bold; font-size: 14px;">Войти</button>
         </div>
-        <p id="pay-error" style="color: #ff3333; font-size: 12px; margin: 5px 0 0 0; display: none;">Неверный ключ доступа! Проверьте закреп в канале.</p>
+        <p id="pay-error" style="color: #ff3333; font-size: 12px; margin: 8px 0 0 0; display: none;">Неверный ключ! Загляните в закрепленный пост канала t.me/zhivoy_ii</p>
     </div>
 </div>
-<div id="vip-content" style="display: none; margin-top: 20px; padding: 15px; background: #1a1a2e; border: 1px dashed #8334b4; border-radius: 8px;">
+<div id="vip-content" style="display: none; margin-top: 20px; padding: 15px; background: #1a1a2e; border: 1px dashed #00ffcc; border-radius: 8px;">
     <h3 style="color: #00ffcc; margin-top: 0;">✨ Эксклюзив: Промпт-анализатор авторского стиля</h3>
     <p style="font-size: 14px; color: #cdcdcd;">Скопируйте системный промпт ниже и отправьте в ИИ вместе с 3 примерами ваших текстов:</p>
     <textarea readonly style="width: 100%; height: 120px; background: #0f0f1a; color: #00ffcc; border: 1px solid #333; padding: 5px; font-family: monospace;">Напиши текст в стиле автора, используя короткие предложения и живой язык, исключая штампы.</textarea>
@@ -104,7 +104,7 @@ function togglePayZone(e) {
 }
 function checkVipKey() {
     var userKey = document.getElementById("vip-key").value.trim().toUpperCase();
-    var correctKey = "ДОСТУП К ВИП"; 
+    var correctKey = "ЖИВОЙ ИИ"; 
     if (userKey === correctKey) {
         document.getElementById("vip-content").style.display = "block";
         document.getElementById("pay-zone").style.display = "none";
