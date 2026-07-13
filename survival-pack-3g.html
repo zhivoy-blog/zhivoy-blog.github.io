@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Пакет выживания на 3G — Живой ИИ</title>
+    <style>
+        :root {
+            --bg-color: #0b0f19;
+            --card-bg: #131a2c;
+            --accent-blue: #007aff;
+            --accent-green: #34c759;
+            --text-main: #ffffff;
+            --text-muted: #8e9e93;
+            --text-muted-alt: #8e9eaf;
+        }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.6;
+            padding: 16px;
+            max-width: 680px;
+            margin: 0 auto;
+        }
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            color: var(--accent-blue);
+            text-decoration: none;
+            font-size: 15px;
+            font-weight: 500;
+            margin-bottom: 20px;
+            padding: 8px 0;
+            gap: 4px;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        article {
+            background-color: var(--card-bg);
+            border-radius: 16px;
+            padding: 20px;
+            border: 1px solid #222e4b;
+        }
+        .article-date {
+            display: block;
+            font-size: 13px;
+            color: var(--text-muted-alt);
+            margin-bottom: 8px;
+        }
+        h1 {
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            line-height: 1.3;
+        }
+        h2 {
+            font-size: 18px;
+            margin: 20px 0 12px;
+            color: var(--text-main);
+        }
+        p {
+            font-size: 15px;
+            color: #d1d1d6;
+            margin-bottom: 16px;
+        }
+        strong {
+            color: #ffffff;
+            font-weight: 600;
+        }
+
+        /* Блок промпта */
+        .prompt-wrapper {
+            margin: 20px 0 24px;
+        }
+        .copy-toolbar {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 6px;
+        }
+        .btn-copy {
+            background-color: #1e2a3a;
+            border: 1px solid var(--accent-blue);
+            color: var(--accent-blue);
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 14px;
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s, color 0.2s, border-color 0.2s;
+        }
+        .btn-copy:active {
+            transform: scale(0.97);
+        }
+        .btn-copy.copied {
+            background-color: var(--accent-green);
+            border-color: var(--accent-green);
+            color: #fff;
+        }
+        .btn-copy svg {
+            width: 15px;
+            height: 15px;
+            fill: currentColor;
+        }
+        .prompt-box {
+            background-color: #0b0f19;
+            border-left: 4px solid var(--accent-blue);
+            padding: 14px;
+            border-radius: 0 8px 8px 0;
+            font-size: 13px;
+            color: var(--accent-green);
+            font-family: 'SF Mono', 'Fira Code', monospace;
+            white-space: pre-wrap;
+            word-break: break-word;
+            line-height: 1.5;
+            overflow-x: auto;
+        }
+        .prompt-box code {
+            color: inherit;
+            font: inherit;
+            background: none;
+        }
+
+        @media (max-width: 500px) {
+            body {
+                padding: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <a href="index.html" class="back-link">← Назад</a>
+
+    <article>
+        <time datetime="2026-07-05" class="article-date">5 июля 2026</time>
+        <h1>Краш-тест ИИ на слабом 3G интернете: Пакет выживания в полевых условиях</h1>
+
+        <p>Мобильный интернет за городом — штука капризная. То одна палочка LTE, то старый добрый 3G с пингом под 800 мс. А если нужно срочно проконсультироваться с нейросетью, пока связь окончательно не отвалилась, цена каждого лишнего байта возрастает до небес. В этом материале я собрал проверенные лайфхаки и один сверхмощный промпт, который заставит ИИ работать в режиме максимальной экономии трафика.</p>
+
+        <h2>Лайфхак 1: Пишите промпты в заметках заранее</h2>
+        <p>Не набирайте текст в окне чата в режиме реального времени. На слабом сигнале каждое нажатие клавиши может вызывать задержки, а внезапный обрыв связи уничтожит всё написанное. Откройте приложение "Заметки" или любой офлайн-текстовый редактор, составьте полный промпт там и одним движением скопируйте в буфер обмена. Затем вставьте в окно ИИ. Это экономит до 30% времени и снижает риск потери данных.</p>
+
+        <h2>Лайфхак 2: Используйте текстовые зеркала без графики</h2>
+        <p>Официальные сайты и приложения нейросетей часто загружают десятки килобайт картинок, анимаций и скриптов, которые при 3G могут грузиться вечность. Ищите легковесные текстовые интерфейсы — агрегаторы моделей или API-демки, которые рендерят только поле ввода и ответ. Например, чистый HTML-фронтенд к Claude или ChatGPT без JavaScript-тяжеловесов открывается даже на EDGE. В моём Telegram-канале есть список таких "ультра-лёгких" зеркал.</p>
+
+        <h2>Лайфхак 3: Принудительно ограничьте длину ответа ИИ</h2>
+        <p>По умолчанию нейросети любят разглагольствовать: "Конечно, я с радостью помогу вам разобраться в этом сложном и интересном вопросе..." В условиях плохого интернета каждое такое слово тратит драгоценные пакеты данных. Используйте промпт, который с самого начала заставляет модель отвечать сжато, без вступлений и заключений. Именно такой промпт я привожу ниже — он превращает ИИ в аскетичного ассистента, который выдаёт только суть.</p>
+
+        <h2>Лайфхак 4: Отключите автозагрузку медиа в мессенджерах</h2>
+        <p>Пока вы ждёте ответа от нейросети, фоновый процесс может пытаться подгрузить гифки, стикеры или обновления чатов. Это крадёт полосу пропускания. Временный режим "только текст" в Telegram или WhatsApp (Настройки → Данные и память → Автозагрузка медиа → Выключить) освободит канал для главной задачи.</p>
+
+        <h2>Супер-промпт: "Пакет выживания" для слабого интернета</h2>
+        <p>Скопируйте этот текст и вставьте в самое начало диалога с любой нейросетью. Она перестроится в режим экстремальной экономии трафика: будет отвечать максимально кратко, без эмодзи, маркдауна и лишней вежливости. Идеально для ситуаций, когда каждый байт на счету.</p>
+
+        <!-- Блок с промптом и кнопкой копирования -->
+        <div class="prompt-wrapper" id="promptBlock">
+            <div class="copy-toolbar">
+                <button class="btn-copy" id="copyButton" onclick="copyPrompt()">
+                    <svg viewBox="0 0 24 24"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg>
+                    Скопировать промпт
+                </button>
+            </div>
+            <div class="prompt-box"><code>Ты — ассистент для работы в экстремально слабом мобильном интернете (3G/EDGE). Отвечай только самой необходимой информацией. Каждое сообщение должно быть максимально сжатым, без приветствий, прощаний, лишних слов-паразитов. Используй короткие предложения. Если можно ответить одним словом или числом — сделай это. Избегай форматирования, маркдауна и эмодзи. Цель — минимизировать объём передаваемых данных. Если запрос непонятен — уточни одним коротким вопросом. Не предлагай дополнительных опций, не спрашивай, чем ещё помочь. Просто реши задачу и остановись.</code></div>
+        </div>
+
+        <p>Этот промпт не раз спасал меня, когда нужно было уточнить курс валюты, перевести пару предложений или получить код ошибки, пока поезд проезжал мёртвую зону. Добавьте его в постоянные заметки смартфона — и вы больше не будете ждать загрузки ответа с рюшечками.</p>
+    </article>
+
+    <script>
+        function copyPrompt() {
+            const promptText = `Ты — ассистент для работы в экстремально слабом мобильном интернете (3G/EDGE). Отвечай только самой необходимой информацией. Каждое сообщение должно быть максимально сжатым, без приветствий, прощаний, лишних слов-паразитов. Используй короткие предложения. Если можно ответить одним словом или числом — сделай это. Избегай форматирования, маркдауна и эмодзи. Цель — минимизировать объём передаваемых данных. Если запрос непонятен — уточни одним коротким вопросом. Не предлагай дополнительных опций, не спрашивай, чем ещё помочь. Просто реши задачу и остановись.`;
+
+            const button = document.getElementById('copyButton');
+
+            navigator.clipboard.writeText(promptText).then(() => {
+                const originalHTML = button.innerHTML;
+                button.innerHTML = '✅ Скопировано!';
+                button.classList.add('copied');
+
+                setTimeout(() => {
+                    button.innerHTML = originalHTML;
+                    button.classList.remove('copied');
+                }, 2000);
+            }).catch(err => {
+                const textarea = document.createElement('textarea');
+                textarea.value = promptText;
+                textarea.style.position = 'fixed';
+                textarea.style.opacity = '0';
+                document.body.appendChild(textarea);
+                textarea.select();
+                try {
+                    document.execCommand('copy');
+                    const originalHTML = button.innerHTML;
+                    button.innerHTML = '✅ Скопировано!';
+                    button.classList.add('copied');
+                    setTimeout(() => {
+                        button.innerHTML = originalHTML;
+                        button.classList.remove('copied');
+                    }, 2000);
+                } catch (e) {
+                    alert('Не удалось скопировать. Попробуйте выделить текст вручную.');
+                }
+                document.body.removeChild(textarea);
+            });
+        }
+    </script>
+</body>
+</html>
