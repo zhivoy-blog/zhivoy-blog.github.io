@@ -4,138 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Топ-3 бесплатных ИИ — Живой ИИ</title>
-    <style>
-        :root {
-            --bg-color: #0b0f19;
-            --card-bg: #131a2c;
-            --accent-blue: #007aff;
-            --accent-green: #34c759;
-            --text-main: #ffffff;
-            --text-muted: #8e9e93;
-            --text-muted-alt: #8e9eaf;
-        }
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-main);
-            line-height: 1.6;
-            padding: 16px;
-            max-width: 680px;
-            margin: 0 auto;
-        }
-        .back-link {
-            display: inline-flex;
-            align-items: center;
-            color: var(--accent-blue);
-            text-decoration: none;
-            font-size: 15px;
-            font-weight: 500;
-            margin-bottom: 20px;
-            padding: 8px 0;
-            gap: 4px;
-        }
-        .back-link:hover {
-            text-decoration: underline;
-        }
-        article {
-            background-color: var(--card-bg);
-            border-radius: 16px;
-            padding: 20px;
-            border: 1px solid #222e4b;
-        }
-        .article-date {
-            display: block;
-            font-size: 13px;
-            color: var(--text-muted-alt);
-            margin-bottom: 8px;
-        }
-        h1 {
-            font-size: 22px;
-            font-weight: 700;
-            margin-bottom: 16px;
-            line-height: 1.3;
-        }
-        h2 {
-            font-size: 18px;
-            margin: 20px 0 12px;
-            color: var(--text-main);
-        }
-        p {
-            font-size: 15px;
-            color: #d1d1d6;
-            margin-bottom: 16px;
-        }
-        strong {
-            color: #ffffff;
-            font-weight: 600;
-        }
-
-        /* Блок промпта */
-        .prompt-wrapper {
-            margin: 20px 0 24px;
-        }
-        .copy-toolbar {
-            display: flex;
-            justify-content: flex-end;
-            margin-bottom: 6px;
-        }
-        .btn-copy {
-            background-color: #1e2a3a;
-            border: 1px solid var(--accent-blue);
-            color: var(--accent-blue);
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            padding: 8px 14px;
-            border-radius: 10px;
-            font-size: 13px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background-color 0.2s, color 0.2s, border-color 0.2s;
-        }
-        .btn-copy:active {
-            transform: scale(0.97);
-        }
-        .btn-copy.copied {
-            background-color: var(--accent-green);
-            border-color: var(--accent-green);
-            color: #fff;
-        }
-        .btn-copy svg {
-            width: 15px;
-            height: 15px;
-            fill: currentColor;
-        }
-        .prompt-box {
-            background-color: #0b0f19;
-            border-left: 4px solid var(--accent-blue);
-            padding: 14px;
-            border-radius: 0 8px 8px 0;
-            font-size: 13px;
-            color: var(--accent-green);
-            font-family: 'SF Mono', 'Fira Code', monospace;
-            white-space: pre-wrap;
-            word-break: break-word;
-            line-height: 1.5;
-            overflow-x: auto;
-        }
-        .prompt-box code {
-            color: inherit;
-            font: inherit;
-            background: none;
-        }
-
-        @media (max-width: 500px) {
-            body {
-                padding: 12px;
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="article-style.css">
+    <script src="article-script.js" defer></script>
 </head>
 <body>
     <a href="index.html" class="back-link">← Назад</a>
@@ -168,9 +38,9 @@
         <p>Чтобы выжать из Flux максимум, нужен правильный промпт. Я подготовил шаблон, который даёт стабильно крутой результат для портретов, предметной съёмки и городских пейзажей. Просто скопируйте его, замените описание в квадратных скобках на своё и запускайте генерацию.</p>
 
         <!-- Блок с промптом и кнопкой копирования -->
-        <div class="prompt-wrapper" id="promptBlock">
+        <div class="prompt-wrapper">
             <div class="copy-toolbar">
-                <button class="btn-copy" id="copyButton" onclick="copyPrompt()">
+                <button class="btn-copy">
                     <svg viewBox="0 0 24 24"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg>
                     Скопировать промпт
                 </button>
@@ -180,44 +50,5 @@
 
         <p>Эти три инструмента закрывают 90% повседневных задач: от создания контента для соцсетей до подготовки отчётов и редактирования фото. И всё это без подписок, VPN и лишних сложностей. Пробуйте, экспериментируйте и делитесь находками в нашем Telegram-канале — там я выкладываю ещё больше рабочих связок и лайфхаков для бесплатных нейросетей.</p>
     </article>
-
-    <script>
-        function copyPrompt() {
-            const promptText = `Создай фотореалистичное изображение высокого качества: [вставьте описание сцены, например, "молодая женщина в кафе, мягкий свет из окна, кожаная куртка, чашка кофе, глубина резкости"]. Используй следующие технические параметры: фотореализм, высокая детализация, естественное освещение, кинематографическая цветокоррекция, текстуры кожи должны быть натуральными, без пластикового эффекта. Избегай искажений пальцев и текста, если они присутствуют в кадре.`;
-
-            const button = document.getElementById('copyButton');
-
-            navigator.clipboard.writeText(promptText).then(() => {
-                const originalHTML = button.innerHTML;
-                button.innerHTML = '✅ Скопировано!';
-                button.classList.add('copied');
-
-                setTimeout(() => {
-                    button.innerHTML = originalHTML;
-                    button.classList.remove('copied');
-                }, 2000);
-            }).catch(err => {
-                const textarea = document.createElement('textarea');
-                textarea.value = promptText;
-                textarea.style.position = 'fixed';
-                textarea.style.opacity = '0';
-                document.body.appendChild(textarea);
-                textarea.select();
-                try {
-                    document.execCommand('copy');
-                    const originalHTML = button.innerHTML;
-                    button.innerHTML = '✅ Скопировано!';
-                    button.classList.add('copied');
-                    setTimeout(() => {
-                        button.innerHTML = originalHTML;
-                        button.classList.remove('copied');
-                    }, 2000);
-                } catch (e) {
-                    alert('Не удалось скопировать. Попробуйте выделить текст вручную.');
-                }
-                document.body.removeChild(textarea);
-            });
-        }
-    </script>
 </body>
 </html>
