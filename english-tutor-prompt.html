@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Промпт-репетитор английского языка — Живой ИИ</title>
+    <style>
+        :root {
+            --bg-color: #0b0f19;
+            --card-bg: #131a2c;
+            --accent-blue: #007aff;
+            --accent-green: #34c759;
+            --text-main: #ffffff;
+            --text-muted: #8e9e93;
+            --text-muted-alt: #8e9eaf;
+        }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.6;
+            padding: 16px;
+            max-width: 680px;
+            margin: 0 auto;
+        }
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            color: var(--accent-blue);
+            text-decoration: none;
+            font-size: 15px;
+            font-weight: 500;
+            margin-bottom: 20px;
+            padding: 8px 0;
+            gap: 4px;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        article {
+            background-color: var(--card-bg);
+            border-radius: 16px;
+            padding: 20px;
+            border: 1px solid #222e4b;
+        }
+        .article-date {
+            display: block;
+            font-size: 13px;
+            color: var(--text-muted-alt);
+            margin-bottom: 8px;
+        }
+        h1 {
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            line-height: 1.3;
+        }
+        h2 {
+            font-size: 18px;
+            margin: 20px 0 12px;
+            color: var(--text-main);
+        }
+        p {
+            font-size: 15px;
+            color: #d1d1d6;
+            margin-bottom: 16px;
+        }
+        strong {
+            color: #ffffff;
+            font-weight: 600;
+        }
+
+        /* Блок промпта */
+        .prompt-wrapper {
+            margin: 20px 0 24px;
+        }
+        .copy-toolbar {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 6px;
+        }
+        .btn-copy {
+            background-color: #1e2a3a;
+            border: 1px solid var(--accent-blue);
+            color: var(--accent-blue);
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 14px;
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s, color 0.2s, border-color 0.2s;
+        }
+        .btn-copy:active {
+            transform: scale(0.97);
+        }
+        .btn-copy.copied {
+            background-color: var(--accent-green);
+            border-color: var(--accent-green);
+            color: #fff;
+        }
+        .btn-copy svg {
+            width: 15px;
+            height: 15px;
+            fill: currentColor;
+        }
+        .prompt-box {
+            background-color: #0b0f19;
+            border-left: 4px solid var(--accent-blue);
+            padding: 14px;
+            border-radius: 0 8px 8px 0;
+            font-size: 13px;
+            color: var(--accent-green);
+            font-family: 'SF Mono', 'Fira Code', monospace;
+            white-space: pre-wrap;
+            word-break: break-word;
+            line-height: 1.5;
+            overflow-x: auto;
+        }
+        .prompt-box code {
+            color: inherit;
+            font: inherit;
+            background: none;
+        }
+
+        @media (max-width: 500px) {
+            body {
+                padding: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <a href="index.html" class="back-link">← Назад</a>
+
+    <article>
+        <time datetime="2026-07-08" class="article-date">8 июля 2026</time>
+        <h1>Промпт-репетитор английского языка</h1>
+
+        <p>Идея разговаривать с носителем языка вызывает мурашки у большинства взрослых учеников. Страх ошибиться, сказать что-то не то, выглядеть глупо — это знакомо каждому, кто учил язык "для себя", а не для галочки в резюме. Но что, если собеседник будет терпеливым, не осудит, а наоборот — мягко поправит и похвалит? Именно таким собеседником может стать нейросеть, если дать ей правильную инструкцию.</p>
+
+        <p>В этой статье я поделюсь продвинутым интерактивным промптом, который превращает ChatGPT или Claude в персонального English Coach и ролевого партнёра. Вы сможете практиковать разговорный английский в любой обстановке: в кафе, аэропорту, на ресепшене отеля — и при этом получать аккуратную обратную связь по грамматике и произношению без страха покраснеть.</p>
+
+        <h2>Как это работает</h2>
+        <p>Промпт заставляет ИИ следовать строгому сценарию: он инициирует ролевую игру (например, "вы пришли в кафе и хотите заказать кофе"), задаёт по одному вопросу за раз и ждёт вашего ответа. После каждого вашего сообщения нейросеть сначала выделяет грамматические ошибки, исправляет их с кратким пояснением на русском языке, затем обязательно хвалит вас за смелость и правильные фразы, и только потом продолжает диалог. Такой подход снижает тревожность и закрепляет правильные конструкции через живое общение.</p>
+
+        <p>Промпт подходит для уровней A2 (Elementary) и B1 (Intermediate). Вы можете адаптировать тему, просто попросив ИИ сменить сценарий: "а теперь давай поиграем в магазин одежды" или "представь, что я прохожу паспортный контроль". Нейросеть помнит контекст и перестроится на лету.</p>
+
+        <h2>Готовый промпт: English Coach & Roleplay Partner</h2>
+        <p>Скопируйте этот текст и вставьте в новый диалог с ChatGPT или Claude. С первого же сообщения нейросеть начнёт ролевую игру и будет придерживаться всех инструкций до конца сессии.</p>
+
+        <!-- Блок с промптом и кнопкой копирования -->
+        <div class="prompt-wrapper" id="promptBlock">
+            <div class="copy-toolbar">
+                <button class="btn-copy" id="copyButton" onclick="copyPrompt()">
+                    <svg viewBox="0 0 24 24"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg>
+                    Скопировать промпт
+                </button>
+            </div>
+            <div class="prompt-box"><code>Ты — English Coach и Roleplay Partner для ученика уровня A2-B1. Твоя задача — помочь ему практиковать разговорный английский через живые диалоги. Следуй строгим правилам:
+
+1. В начале выбери одну реалистичную ситуацию (например, в аэропорту, в кафе, на ресепшене отеля, в магазине) и предложи её ученику. Если он согласен, начинай ролевую игру. Если нет — спроси, какой сценарий ему интересен.
+
+2. В ролевой игре ты играешь роль (официанта, сотрудника аэропорта и т.д.), а ученик — самого себя. Ты задаёшь по ОДНОМУ вопросу за раз и ждёшь ответа ученика. Не пиши длинные сообщения, сохраняй темп живого разговора.
+
+3. После каждого ответа ученика ты должен сначала дать обратную связь на русском языке строго в формате:
+   Исправления:
+   - Было: [исходная фраза ученика с ошибкой]
+   - Правильно: [исправленная версия]
+   - Пояснение: [кратко, почему это ошибка и как запомнить]
+
+   Затем обязательно похвали ученика за конкретные удачные моменты (использование лексики, правильную структуру, смелость).
+
+4. После обратной связи продолжай диалог — задай следующий вопрос по сценарию. Поддерживай естественный разговор, не перебивай игру исправлениями во время самого ответа.
+
+5. Если ученик просит сменить тему или сценарий, сразу подстройся и продолжай по тем же правилам. Всегда оставайся терпеливым, ободряющим и дружелюбным.
+
+Начни прямо сейчас: предложи первый сценарий и дождись моего ответа.</code></div>
+        </div>
+
+        <p>Я протестировал этот промпт на ChatGPT 4o и Claude 3.5 Sonnet — оба прекрасно держат роль, не сбиваются на русский без запроса и дают точные, человеческие исправления. Особенно радует, что нейросеть не просто исправляет, а объясняет правило на простом русском, что гораздо полезнее, чем сухое "неправильно — правильно".</p>
+
+        <p>Такой подход снимает языковой барьер буквально за пару сессий. Попробуйте сегодня же: откройте чат, вставьте промпт и закажите свой первый виртуальный кофе на английском. Успехов в практике, и не бойтесь ошибок — теперь у вас есть идеальный цифровой собеседник, который не поставит двойку.</p>
+    </article>
+
+    <script>
+        function copyPrompt() {
+            const promptText = `Ты — English Coach и Roleplay Partner для ученика уровня A2-B1. Твоя задача — помочь ему практиковать разговорный английский через живые диалоги. Следуй строгим правилам:
+
+1. В начале выбери одну реалистичную ситуацию (например, в аэропорту, в кафе, на ресепшене отеля, в магазине) и предложи её ученику. Если он согласен, начинай ролевую игру. Если нет — спроси, какой сценарий ему интересен.
+
+2. В ролевой игре ты играешь роль (официанта, сотрудника аэропорта и т.д.), а ученик — самого себя. Ты задаёшь по ОДНОМУ вопросу за раз и ждёшь ответа ученика. Не пиши длинные сообщения, сохраняй темп живого разговора.
+
+3. После каждого ответа ученика ты должен сначала дать обратную связь на русском языке строго в формате:
+   Исправления:
+   - Было: [исходная фраза ученика с ошибкой]
+   - Правильно: [исправленная версия]
+   - Пояснение: [кратко, почему это ошибка и как запомнить]
+
+   Затем обязательно похвали ученика за конкретные удачные моменты (использование лексики, правильную структуру, смелость).
+
+4. После обратной связи продолжай диалог — задай следующий вопрос по сценарию. Поддерживай естественный разговор, не перебивай игру исправлениями во время самого ответа.
+
+5. Если ученик просит сменить тему или сценарий, сразу подстройся и продолжай по тем же правилам. Всегда оставайся терпеливым, ободряющим и дружелюбным.
+
+Начни прямо сейчас: предложи первый сценарий и дождись моего ответа.`;
+
+            const button = document.getElementById('copyButton');
+
+            navigator.clipboard.writeText(promptText).then(() => {
+                const originalHTML = button.innerHTML;
+                button.innerHTML = '✅ Скопировано!';
+                button.classList.add('copied');
+
+                setTimeout(() => {
+                    button.innerHTML = originalHTML;
+                    button.classList.remove('copied');
+                }, 2000);
+            }).catch(err => {
+                const textarea = document.createElement('textarea');
+                textarea.value = promptText;
+                textarea.style.position = 'fixed';
+                textarea.style.opacity = '0';
+                document.body.appendChild(textarea);
+                textarea.select();
+                try {
+                    document.execCommand('copy');
+                    const originalHTML = button.innerHTML;
+                    button.innerHTML = '✅ Скопировано!';
+                    button.classList.add('copied');
+                    setTimeout(() => {
+                        button.innerHTML = originalHTML;
+                        button.classList.remove('copied');
+                    }, 2000);
+                } catch (e) {
+                    alert('Не удалось скопировать. Попробуйте выделить текст вручную.');
+                }
+                document.body.removeChild(textarea);
+            });
+        }
+    </script>
+</body>
+</html>
