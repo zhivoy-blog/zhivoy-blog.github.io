@@ -4,138 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Музыкальный сериал — Часть 1 — Живой ИИ</title>
-    <style>
-        :root {
-            --bg-color: #0b0f19;
-            --card-bg: #131a2c;
-            --accent-blue: #007aff;
-            --accent-green: #34c759;
-            --text-main: #ffffff;
-            --text-muted: #8e9e93;
-            --text-muted-alt: #8e9eaf;
-        }
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-main);
-            line-height: 1.6;
-            padding: 16px;
-            max-width: 680px;
-            margin: 0 auto;
-        }
-        .back-link {
-            display: inline-flex;
-            align-items: center;
-            color: var(--accent-blue);
-            text-decoration: none;
-            font-size: 15px;
-            font-weight: 500;
-            margin-bottom: 20px;
-            padding: 8px 0;
-            gap: 4px;
-        }
-        .back-link:hover {
-            text-decoration: underline;
-        }
-        article {
-            background-color: var(--card-bg);
-            border-radius: 16px;
-            padding: 20px;
-            border: 1px solid #222e4b;
-        }
-        .article-date {
-            display: block;
-            font-size: 13px;
-            color: var(--text-muted-alt);
-            margin-bottom: 8px;
-        }
-        h1 {
-            font-size: 22px;
-            font-weight: 700;
-            margin-bottom: 16px;
-            line-height: 1.3;
-        }
-        h2 {
-            font-size: 18px;
-            margin: 20px 0 12px;
-            color: var(--text-main);
-        }
-        p {
-            font-size: 15px;
-            color: #d1d1d6;
-            margin-bottom: 16px;
-        }
-        strong {
-            color: #ffffff;
-            font-weight: 600;
-        }
-
-        /* Блок промпта */
-        .prompt-wrapper {
-            margin: 20px 0 24px;
-        }
-        .copy-toolbar {
-            display: flex;
-            justify-content: flex-end;
-            margin-bottom: 6px;
-        }
-        .btn-copy {
-            background-color: #1e2a3a;
-            border: 1px solid var(--accent-blue);
-            color: var(--accent-blue);
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            padding: 8px 14px;
-            border-radius: 10px;
-            font-size: 13px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background-color 0.2s, color 0.2s, border-color 0.2s;
-        }
-        .btn-copy:active {
-            transform: scale(0.97);
-        }
-        .btn-copy.copied {
-            background-color: var(--accent-green);
-            border-color: var(--accent-green);
-            color: #fff;
-        }
-        .btn-copy svg {
-            width: 15px;
-            height: 15px;
-            fill: currentColor;
-        }
-        .prompt-box {
-            background-color: #0b0f19;
-            border-left: 4px solid var(--accent-blue);
-            padding: 14px;
-            border-radius: 0 8px 8px 0;
-            font-size: 13px;
-            color: var(--accent-green);
-            font-family: 'SF Mono', 'Fira Code', monospace;
-            white-space: pre-wrap;
-            word-break: break-word;
-            line-height: 1.5;
-            overflow-x: auto;
-        }
-        .prompt-box code {
-            color: inherit;
-            font: inherit;
-            background: none;
-        }
-
-        @media (max-width: 500px) {
-            body {
-                padding: 12px;
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="article-style.css">
+    <script src="article-script.js" defer></script>
 </head>
 <body>
     <a href="index.html" class="back-link">← Назад</a>
@@ -164,9 +34,9 @@
         <p>Скопируйте этот промпт, вставьте в поле Style & Lyrics и дайте нейросети поработать. Она сгенерирует полноценную песню с учётом всех структурных требований. При желании замените тему и текст на свой, но сохраните маркеры — это обязательное условие успеха.</p>
 
         <!-- Блок с промптом и кнопкой копирования -->
-        <div class="prompt-wrapper" id="promptBlock">
+        <div class="prompt-wrapper">
             <div class="copy-toolbar">
-                <button class="btn-copy" id="copyButton" onclick="copyPrompt()">
+                <button class="btn-copy">
                     <svg viewBox="0 0 24 24"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg>
                     Скопировать промпт
                 </button>
@@ -188,56 +58,5 @@
 
         <p>В следующей части нашего музыкального сериала я покажу, как именно скормить эту структуру в Suno AI через мобильное приложение и какие настройки стиля дают самый «живой» звук. А пока — пробуйте, экспериментируйте с текстом внутри маркеров и делитесь результатами в нашем Telegram-канале. Обещаю, вы сильно удивитесь тому, насколько человечным может быть цифровой голос, если дать ему правильный импульс.</p>
     </article>
-
-    <script>
-        function copyPrompt() {
-            const promptText = `Создай песню в жанре инди-рок с элементами акустической гитары и мягкого мужского вокала. Настроение — глубокая меланхолия, воспоминания о потерянной любви. Темп умеренный, с динамическим нарастанием к припеву. Используй следующую структуру:
-
-[Verse 1]
-Тихая, атмосферная гитара, одинокий голос. Опиши пустую кухню, остывший кофе, тишину за окном после дождя. Передай ощущение тоски и недосказанности.
-
-[Chorus]
-Мощный всплеск эмоций, барабаны и электрогитара. Крик души о том, что всё кончено, но воспоминания не отпускают. Главная строчка должна легко запоминаться.
-
-[Verse 2]
-Немного спокойнее, но с надрывом. Расскажи о том, как герой пытался всё вернуть, перебирая старые фотографии и сообщения. Постепенно нарастает напряжение.
-
-[Outro]
-Медленное затухание, остаётся только акустическая гитара и тихий шёпот. Повтор одной и той же строчки, которая растворяется в тишине. Создай ощущение пустоты и светлой грусти.`;
-
-            const button = document.getElementById('copyButton');
-
-            navigator.clipboard.writeText(promptText).then(() => {
-                const originalHTML = button.innerHTML;
-                button.innerHTML = '✅ Скопировано!';
-                button.classList.add('copied');
-
-                setTimeout(() => {
-                    button.innerHTML = originalHTML;
-                    button.classList.remove('copied');
-                }, 2000);
-            }).catch(err => {
-                const textarea = document.createElement('textarea');
-                textarea.value = promptText;
-                textarea.style.position = 'fixed';
-                textarea.style.opacity = '0';
-                document.body.appendChild(textarea);
-                textarea.select();
-                try {
-                    document.execCommand('copy');
-                    const originalHTML = button.innerHTML;
-                    button.innerHTML = '✅ Скопировано!';
-                    button.classList.add('copied');
-                    setTimeout(() => {
-                        button.innerHTML = originalHTML;
-                        button.classList.remove('copied');
-                    }, 2000);
-                } catch (e) {
-                    alert('Не удалось скопировать. Попробуйте выделить текст вручную.');
-                }
-                document.body.removeChild(textarea);
-            });
-        }
-    </script>
 </body>
 </html>
