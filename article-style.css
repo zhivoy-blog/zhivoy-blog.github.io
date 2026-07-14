@@ -1,9 +1,9 @@
-/* Плавное появление карточек статей после снятия .is-hidden */
-.article {
-    animation: fadeInArticle 0.3s ease forwards;
+/* Плавное появление карточек анонсов ТОЛЬКО на главной странице */
+.article-card {
+    animation: fadeInCard 0.3s ease forwards;
 }
 
-@keyframes fadeInArticle {
+@keyframes fadeInCard {
     from {
         opacity: 0;
         transform: scale(0.98);
@@ -14,8 +14,8 @@
     }
 }
 
-/* Скрытие карточки — строго убираем из потока, ломать фильтр нельзя */
-.article.is-hidden {
+/* Скрытие карточки без нарушения потока */
+.article-card.is-hidden {
     display: none !important;
     animation: none;
 }
