@@ -202,9 +202,72 @@ strong {
     flex-shrink: 0;
 }
 
+/* ========== БЛОК РЕАКЦИЙ И ПРОСМОТРОВ ========== */
+.article-reactions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 28px;
+    padding-top: 18px;
+    border-top: 1px solid #222e4b;
+}
+
+.reactions-buttons {
+    display: flex;
+    gap: 8px;
+}
+
+.reaction-btn {
+    background: transparent;
+    border: 1px solid #3a4a6a;
+    color: var(--text-muted);
+    font-size: 17px;
+    padding: 10px 16px;
+    border-radius: 10px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    min-width: 44px;
+    min-height: 44px;
+    justify-content: center;
+    transition: background-color 0.2s, color 0.2s, transform 0.1s, border-color 0.2s;
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
+}
+
+.reaction-btn:active {
+    transform: scale(0.95);
+}
+
+.reaction-btn.active {
+    background-color: var(--accent-blue);
+    border-color: var(--accent-blue);
+    color: #fff;
+}
+
+.views-counter {
+    margin-left: auto;
+    color: var(--text-muted);
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    white-space: nowrap;
+}
+
 @media (max-width: 500px) {
     body {
         padding: 12px;
+    }
+    .article-reactions {
+        flex-wrap: wrap;
+    }
+    .views-counter {
+        margin-left: 0;
+        width: 100%;
+        justify-content: flex-end;
+        margin-top: 8px;
     }
 }
 
@@ -311,37 +374,3 @@ strong {
 }
 .label-before { left: 12px; }
 .label-after { right: 12px; }
-
-/* ========== ШАГ 7: ФИНАЛЬНАЯ АНИМАЦИЯ И АДАПТИВНОСТЬ ========== */
-.article-card {
-    animation: fadeInCard 0.3s ease forwards;
-}
-
-@keyframes fadeInCard {
-    from {
-        opacity: 0;
-        transform: scale(0.98);
-    }
-    to {
-        opacity: 1;
-        transform: scale(1);
-    }
-}
-
-.article-card.is-hidden {
-    display: none !important;
-    animation: none;
-}
-
-@media (min-width: 501px) and (max-width: 768px) {
-    body { padding: 24px; }
-    article { padding: 24px; }
-    .prompt-box { padding: 16px; font-size: 14px; }
-    .btn-copy { padding: 10px 18px; font-size: 14px; }
-}
-
-.prompt-box {
-    word-break: break-word;
-    overflow-wrap: break-word;
-    -webkit-overflow-scrolling: touch;
-}
