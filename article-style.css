@@ -25,6 +25,19 @@ body {
     margin: 0 auto;
 }
 
+/* Прогресс-бар чтения */
+.reading-progress-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 0%;
+    height: 4px;
+    background-color: var(--accent-blue);
+    z-index: 9999;
+    transition: width 0.1s ease;
+    box-shadow: 0 0 8px rgba(0, 122, 255, 0.5);
+}
+
 .back-link {
     display: inline-flex;
     align-items: center;
@@ -139,6 +152,54 @@ strong {
     color: inherit;
     font: inherit;
     background: none;
+}
+
+/* Блок "Читать также" */
+.read-more-block {
+    margin-top: 40px;
+    padding-top: 24px;
+    border-top: 1px solid #222e4b;
+}
+
+.read-more-block h3 {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 16px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.read-more-link {
+    display: block;
+    background-color: var(--card-bg);
+    border: 1px solid #222e4b;
+    border-radius: 12px;
+    padding: 14px 16px;
+    margin-bottom: 12px;
+    text-decoration: none;
+    color: var(--text-main);
+    font-weight: 600;
+    font-size: 15px;
+    transition: border-color 0.2s, background-color 0.2s;
+    min-height: 52px;
+    display: flex;
+    align-items: center;
+}
+
+.read-more-link:hover,
+.read-more-link:active {
+    border-color: var(--accent-blue);
+    background-color: #1a2338;
+}
+
+.read-more-link::before {
+    content: "→";
+    margin-right: 12px;
+    color: var(--accent-blue);
+    font-weight: 700;
+    font-size: 18px;
+    flex-shrink: 0;
 }
 
 @media (max-width: 500px) {
