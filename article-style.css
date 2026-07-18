@@ -52,18 +52,6 @@ body {
     text-decoration: underline
 }
 
-/* Плавное появление/скрытие карточек статей */
-.article {
-    transition: opacity 0.3s ease, transform 0.3s ease
-}
-
-.article.is-hidden {
-    opacity: 0;
-    visibility: hidden;
-    pointer-events: none;
-    display: block
-}
-
 article {
     background-color: var(--card-bg);
     border-radius: 16px;
@@ -97,99 +85,89 @@ strong {
     font-weight: 600
 }
 
-/* ===== ОБЁРТКА ПРОМТА ===== */
+/* ===== БЛОК С ПРОМПТОМ (АБСОЛЮТНОЕ ПОЗИЦИОНИРОВАНИЕ) ===== */
 .prompt-wrapper {
+    position: relative;
     margin: 24px 0;
     border: 1px solid #222e4b;
     border-radius: 12px;
     padding: 16px;
-    background-color: #0f1522;
-    display: flex !important;
-    flex-direction: column !important;
-    gap: 0 !important;
-    position: relative !important
+    background-color: #0f1522
 }
 
-/* Тулбар с кнопкой копирования — строго над блоком, прижат вправо, с отступом 12px */
-.copy-toolbar,
-.copy-textbox {
-    display: flex !important;
-    justify-content: flex-end !important;
-    align-items: center !important;
-    width: 100% !important;
-    margin: 0 0 12px 0 !important;
-    padding: 0 !important;
-    position: relative !important;
-    order: -1 !important;
-    z-index: 2 !important
-}
-
-/* Кнопка копирования */
-.btn-copy {
-    display: inline-flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    gap: 6px !important;
-    background-color: transparent !important;
-    border: 1px solid var(--accent-blue) !important;
-    color: var(--accent-blue) !important;
-    font-size: 14px !important;
-    font-weight: 600 !important;
-    cursor: pointer;
-    padding: 8px 16px !important;
-    border-radius: 8px !important;
-    transition: color 0.2s, background-color 0.2s, border-color 0.2s;
-    white-space: nowrap;
-    -webkit-tap-highlight-color: transparent;
-    margin: 0 !important;
-    position: relative !important;
-    min-height: 44px;
-    min-width: 44px
-}
-
-.btn-copy:active,
-.btn-copy.copied {
-    color: var(--accent-green) !important;
-    border-color: var(--accent-green) !important;
-    background-color: rgba(52, 199, 89, 0.08) !important
-}
-
-.btn-copy svg {
-    width: 16px;
-    height: 16px;
-    fill: currentColor !important;
-    flex-shrink: 0
-}
-
-/* Чёрный блок с кодом */
 .prompt-box {
-    display: block !important;
-    width: 100% !important;
-    background-color: #050811 !important;
-    border: 1px solid var(--accent-blue) !important;
-    border-left: 4px solid var(--accent-green) !important;
-    border-radius: 8px !important;
-    padding: 14px !important;
-    color: var(--accent-green) !important;
-    font-family: 'SF Mono', 'Fira Code', monospace !important;
-    font-size: 14px !important;
-    font-weight: 500 !important;
-    white-space: pre-wrap !important;
-    word-break: break-word !important;
-    overflow-wrap: break-word !important;
+    display: block;
+    width: 100%;
+    background-color: #050811;
+    border: 1px solid var(--accent-blue);
+    border-left: 4px solid var(--accent-green);
+    border-radius: 8px;
+    padding: 14px;
+    color: var(--accent-green);
+    font-family: 'SF Mono', 'Fira Code', monospace;
+    font-size: 14px;
+    font-weight: 500;
+    white-space: pre-wrap;
+    word-break: break-word;
+    overflow-wrap: break-word;
     -webkit-overflow-scrolling: touch;
-    line-height: 1.5 !important;
-    overflow-x: auto !important;
-    margin: 0 !important;
-    position: relative !important;
-    z-index: 1 !important;
-    order: 0 !important
+    line-height: 1.5;
+    overflow-x: auto;
+    margin-bottom: 10px
 }
 
 .prompt-box code {
     color: inherit;
     font-family: inherit;
     background: transparent
+}
+
+/* Кнопка копирования — вынесена из потока и зафиксирована в правом верхнем углу */
+.btn-copy {
+    position: absolute;
+    top: 8px;
+    right: 12px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    background-color: #0f1522;
+    border: 1px solid var(--accent-blue);
+    color: var(--accent-blue);
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    padding: 6px 14px;
+    border-radius: 8px;
+    transition: color 0.2s, background-color 0.2s, border-color 0.2s;
+    white-space: nowrap;
+    -webkit-tap-highlight-color: transparent;
+    min-height: 44px;
+    min-width: 44px;
+    z-index: 5
+}
+
+.btn-copy:active,
+.btn-copy.copied {
+    color: var(--accent-green);
+    border-color: var(--accent-green);
+    background-color: rgba(52, 199, 89, 0.08)
+}
+
+.btn-copy svg {
+    width: 16px;
+    height: 16px;
+    fill: currentColor;
+    flex-shrink: 0
+}
+
+/* Описание под блоком кода (если есть) */
+.prompt-description {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-top: 8px;
+    margin-bottom: 0;
+    line-height: 1.4
 }
 
 /* ===== КОНЕЦ БЛОКА ПРОМТА ===== */
@@ -473,7 +451,6 @@ strong {
     transform: scale(0.97)
 }
 
-/* Адаптивность для планшетов (ширина от 501px до 768px) */
 @media (min-width: 501px) and (max-width: 768px) {
     body {
         padding: 24px
@@ -486,7 +463,7 @@ strong {
         font-size: 14px
     }
     .btn-copy {
-        padding: 10px 18px;
+        padding: 8px 16px;
         font-size: 14px
     }
 }
@@ -505,7 +482,9 @@ strong {
         margin-top: 8px
     }
     .btn-copy {
-        font-size: 13px;
-        padding: 8px 14px !important
+        font-size: 12px;
+        padding: 6px 12px;
+        top: 6px;
+        right: 8px
     }
 }
