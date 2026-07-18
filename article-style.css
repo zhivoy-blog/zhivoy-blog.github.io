@@ -85,7 +85,7 @@ strong {
     font-weight: 600
 }
 
-/* ===== БЛОК С ПРОМПТОМ (АБСОЛЮТНОЕ ПОЗИЦИОНИРОВАНИЕ) ===== */
+/* ===== БЛОК С ПРОМПТОМ (АБСОЛЮТНОЕ ПОЗИЦИОНИРОВАНИЕ КНОПКИ) ===== */
 .prompt-wrapper {
     position: relative;
     margin: 24px 0;
@@ -93,6 +93,16 @@ strong {
     border-radius: 12px;
     padding: 16px;
     background-color: #0f1522
+}
+
+/* Обнуляем тулбар, чтобы он не мешал абсолютному позиционированию кнопки */
+.copy-toolbar,
+.copy-textbox {
+    position: static;
+    display: block;
+    width: auto;
+    margin: 0;
+    padding: 0
 }
 
 .prompt-box {
@@ -122,11 +132,11 @@ strong {
     background: transparent
 }
 
-/* Кнопка копирования — вынесена из потока и зафиксирована в правом верхнем углу */
+/* Кнопка копирования — абсолют, правый верхний угол */
 .btn-copy {
     position: absolute;
-    top: 8px;
-    right: 12px;
+    top: 10px;
+    right: 14px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -137,7 +147,7 @@ strong {
     font-size: 13px;
     font-weight: 600;
     cursor: pointer;
-    padding: 6px 14px;
+    padding: 7px 15px;
     border-radius: 8px;
     transition: color 0.2s, background-color 0.2s, border-color 0.2s;
     white-space: nowrap;
@@ -484,7 +494,7 @@ strong {
     .btn-copy {
         font-size: 12px;
         padding: 6px 12px;
-        top: 6px;
-        right: 8px
+        top: 8px;
+        right: 10px
     }
 }
