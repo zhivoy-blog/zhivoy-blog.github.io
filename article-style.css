@@ -85,29 +85,31 @@ strong {
     font-weight: 600;
 }
 
-/* Идеальная структура контейнера промпта без абсолютных координат */
+/* Общий серый контейнер карточки */
 .prompt-wrapper {
     margin: 24px 0;
     border: 1px solid #222e4b;
     border-radius: 12px;
     padding: 16px;
     background-color: #0f1522;
-    display: flex;
-    flex-direction: column;
-    gap: 12px; /* Создает фиксированный зазор между зоной кнопки и окном кода */
+    /* Убираем позиционирование, включаем упорядоченный поток элементов */
+    display: block; 
+    position: static !important;
 }
 
-/* Выравнивает контейнер с кнопкой по правому краю */
+/* Строка, где лежит кнопка. Она идет ПЕРВОЙ */
 .copy-textbox {
     display: flex;
-    justify-content: flex-end;
+    justify-content: flex-end; /* Прижимает кнопку вправо */
     width: 100%;
+    margin-bottom: 12px; /* Фиксированный отступ СНИЗУ от кнопки до рамки кода */
+    position: static !important;
 }
 
-/* Чистая синяя кнопка-ссылка по вашему стандарту */
+/* Синяя кнопка-ссылка. Находится строго ВНУТРИ строки .copy-textbox */
 .btn-copy {
-    background: transparent;
-    border: none;
+    background: transparent !important;
+    border: none !important;
     color: var(--accent-blue);
     font-size: 14px;
     font-weight: 600;
@@ -115,11 +117,12 @@ strong {
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    padding: 6px 0; /* Убрали боковые отступы, чтобы кнопка ровно прижималась к правому краю */
+    padding: 4px 0; 
     border-radius: 0;
     transition: color 0.2s;
     white-space: nowrap;
     -webkit-tap-highlight-color: transparent;
+    position: static !important; /* Убираем абсолютные координаты предыдущей сети */
 }
 
 .btn-copy:active,
@@ -133,14 +136,16 @@ strong {
     fill: currentColor;
 }
 
-/* Чёрное окно с зелёным текстом кода — теперь всегда СТРОГО под кнопкой */
+/* Черное окно с кодом. Начинается строго ПОСЛЕ контейнера с кнопкой */
 .prompt-box {
-    background-color: #050811; /* Глубокий черный фон для контраста */
-    border: 1px solid var(--accent-blue); /* Ваша синяя фирменная рамка */
-    border-left: 4px solid var(--accent-green); /* Зеленый акцент слева */
+    display: block;
+    width: 100%;
+    background-color: #050811; 
+    border: 1px solid var(--accent-blue); /* Ваша синяя рамка */
+    border-left: 4px solid var(--accent-green); 
     border-radius: 8px;
     padding: 14px;
-    color: var(--accent-green);
+    color: var(--accent-green); 
     font-family: 'SF Mono', 'Fira Code', monospace;
     font-size: 14px;
     font-weight: 500;
@@ -148,6 +153,8 @@ strong {
     word-break: break-word;
     line-height: 1.5;
     overflow-x: auto;
+    position: static !important; /* Отменяем любые попытки сдвинуть окно */
+    margin-top: 0 !important;
 }
 
 .prompt-box code {
@@ -277,15 +284,8 @@ strong {
     display: block;
 }
 
-.slider-image-before {
-    z-index: 1;
-}
-
-.slider-image-after {
-    width: 50%;
-    overflow: hidden;
-    z-index: 2;
-}
+.slider-image-before { z-index: 1; }
+.slider-image-after { width: 50%; overflow: hidden; z-index: 2; }
 
 .slider-handle {
     position: absolute;
@@ -366,9 +366,7 @@ strong {
     margin: 20px 0;
 }
 
-.todo-list {
-    list-style: none;
-}
+.todo-list { list-style: none; }
 
 .todo-item {
     display: flex;
@@ -380,9 +378,7 @@ strong {
     color: #d1d1d6;
 }
 
-.todo-item:last-child {
-    border-bottom: none;
-}
+.todo-item:last-child { border-bottom: none; }
 
 .todo-item input[type="checkbox"] {
     -webkit-appearance: none;
@@ -404,9 +400,7 @@ strong {
     background-position: center;
 }
 
-.todo-item span {
-    line-height: 1.4;
-}
+.todo-item span { line-height: 1.4; }
 
 .btn-telegram {
     display: block;
@@ -426,25 +420,11 @@ strong {
     transition: transform 0.1s ease;
 }
 
-.btn-telegram:active {
-    transform: scale(0.97);
-}
+.btn-telegram:active { transform: scale(0.97); }
 
-/* Мобильная адаптивность без хаоса */
 @media (max-width: 500px) {
-    body {
-        padding: 12px;
-    }
-    .article-reactions {
-        flex-wrap: wrap;
-    }
-    .views-count {
-        margin-left: 0;
-        width: 100%;
-        justify-content: flex-start;
-        margin-top: 8px;
-    }
-    .btn-copy {
-        font-size: 13px;
-    }
+    body { padding: 12px; }
+    .article-reactions { flex-wrap: wrap; }
+    .views-count { margin-left: 0; width: 100%; justify-content: flex-start; margin-top: 8px; }
+    .btn-copy { font-size: 13px; }
 }
