@@ -85,7 +85,7 @@ strong {
     font-weight: 600
 }
 
-/* ===== ОБЁРТКА ПРОМТА ===== */
+/* ===== ОБЁРТКА ПРОМТА — СТРОГИЙ ПОРЯДОК ЭЛЕМЕНТОВ ===== */
 .prompt-wrapper {
     margin: 24px 0;
     border: 1px solid #222e4b;
@@ -94,53 +94,63 @@ strong {
     background-color: #0f1522;
     display: flex !important;
     flex-direction: column !important;
-    gap: 10px !important;
-    position: static !important
+    gap: 0 !important;
+    position: relative !important
 }
 
-/* Тулбар с кнопкой копирования — общий для .copy-toolbar и .copy-textbox */
+/* Тулбар с кнопкой копирования */
 .copy-toolbar,
 .copy-textbox {
     display: flex !important;
     justify-content: flex-end !important;
+    align-items: center !important;
     width: 100% !important;
-    margin: 0 !important;
-    padding: 0 2px 6px 0 !important;
-    position: static !important;
-    order: 0 !important
+    margin: 0 0 8px 0 !important;
+    padding: 0 !important;
+    position: relative !important;
+    order: -1 !important;
+    z-index: 2 !important
 }
 
+/* Сама кнопка */
 .btn-copy {
-    background: transparent !important;
-    border: none !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 6px !important;
+    background-color: transparent !important;
+    border: 1px solid var(--accent-blue) !important;
     color: var(--accent-blue) !important;
     font-size: 14px !important;
     font-weight: 600 !important;
     cursor: pointer;
-    display: inline-flex !important;
-    align-items: center !important;
-    gap: 6px !important;
-    padding: 6px 12px !important;
+    padding: 8px 16px !important;
     border-radius: 8px !important;
-    transition: color 0.2s, background-color 0.2s;
+    transition: color 0.2s, background-color 0.2s, border-color 0.2s;
     white-space: nowrap;
-    position: static !important;
     -webkit-tap-highlight-color: transparent;
-    margin: 0 !important
+    margin: 0 !important;
+    position: relative !important;
+    float: none !important;
+    min-height: 44px;
+    min-width: 44px
 }
 
 .btn-copy:active,
 .btn-copy.copied {
     color: var(--accent-green) !important;
+    border-color: var(--accent-green) !important;
     background-color: rgba(52, 199, 89, 0.08) !important
 }
 
 .btn-copy svg {
     width: 16px;
     height: 16px;
-    fill: currentColor !important
+    fill: currentColor !important;
+    flex-shrink: 0
 }
 
+/* Чёрный блок с кодом */
 .prompt-box {
     display: block !important;
     width: 100% !important;
@@ -157,9 +167,10 @@ strong {
     word-break: break-word !important;
     line-height: 1.5 !important;
     overflow-x: auto !important;
-    position: static !important;
-    margin-top: 0 !important;
-    order: 1 !important
+    margin: 0 !important;
+    position: relative !important;
+    z-index: 1 !important;
+    order: 0 !important
 }
 
 .prompt-box code {
@@ -463,6 +474,7 @@ strong {
         margin-top: 8px
     }
     .btn-copy {
-        font-size: 13px
+        font-size: 13px;
+        padding: 8px 14px !important
     }
 }
