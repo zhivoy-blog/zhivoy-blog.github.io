@@ -1,1 +1,314 @@
-(function(){'use strict';function B(b,t,o){const a=document.createElement('textarea');a.value=t;a.style.position='fixed';a.style.opacity='0';document.body.appendChild(a);a.select();try{document.execCommand('copy'),b.innerHTML='✅ Скопировано!',b.classList.add('copied'),setTimeout(()=>{b.innerHTML=o,b.classList.remove('copied')},2000)}catch(e){alert('Не удалось скопировать.')}finally{document.body.removeChild(a)}}function A(){document.querySelectorAll('.btn-copy').forEach(b=>{b.addEventListener('click',function(){const t=b.closest('.prompt-wrapper');if(!t)return;const o=t.querySelector('.prompt-box code');if(!o)return;const a=o.textContent||'',c=b.innerHTML;navigator.clipboard&&navigator.clipboard.writeText?navigator.clipboard.writeText(a).then(()=>{b.innerHTML='✅ Скопировано!';b.classList.add('copied');setTimeout(()=>{b.innerHTML=c;b.classList.remove('copied')},2000)}).catch(()=>B(b,a,c)):B(b,a,c)})})}function C(){document.querySelectorAll('.image-slider').forEach(b=>{const t=b.querySelector('.slider-top-wrapper'),o=b.querySelector('.slider-handle'),a=o?o.querySelector('.slider-knob'):null;if(!t||!o||!a)return;let c=!1;function d(e){const i=b.getBoundingClientRect();let l=e-i.left;l<0&&(l=0),l>i.width&&(l=i.width);const s=l/i.width*100;t.style.width=s+'%',o.style.left=s+'%'}function f(e){c=!0,a.style.cursor='grabbing',e.preventDefault();const i=e.type.includes('touch')?e.touches[0].clientX:e.clientX;d(i)}function g(e){c&&(e.preventDefault(),d(e.type.includes('touch')?e.touches[0].clientX:e.clientX))}function h(){c&&(c=!1,a.style.cursor='grab')}a.addEventListener('mousedown',f),document.addEventListener('mousemove',g),document.addEventListener('mouseup',h),a.addEventListener('touchstart',f,{passive:!1}),document.addEventListener('touchmove',g,{passive:!1}),document.addEventListener('touchend',h),document.addEventListener('touchcancel',h)})}function D(){const b=document.createElement('div');b.className='reading-progress-bar',document.body.prepend(b);function t(){const o=window.scrollY||document.documentElement.scrollTop,a=document.documentElement.scrollHeight-window.innerHeight;b.style.width=a>0?Math.min(100,Math.max(0,o/a*100))+'%':'0%'}window.addEventListener('scroll',t,{passive:!0}),t()}function E(){const b=[{title:'Как я пытался создать постоянного ИИ-персонажа для блога, и почему нейросеть раздела его от стресса',url:'ai-striptiz.html'},{title:'Музыкальный сериал – Часть 2',url:'music-part-2.html'},{title:'Краш-тест ИИ на окраине цивилизации',url:'crash-test-3g.html'},{title:'Музыкальный сериал — Часть 1',url:'suno-music.html'},{title:'Топ-3 бесплатных ИИ',url:'top-3-free-ai.html'},{title:'Промпт-репетитор английского языка',url:'english-tutor-prompt.html'},{title:'Пакет выживания на 3G',url:'survival-pack-3g.html'}];const t=window.location.pathname.split('/').pop()||'';const o=b.filter(a=>a.url!==t);if(!o.length)return;const c=o.sort(()=>0.5-Math.random()).slice(0,3);const d=document.createElement('div');d.className='read-more-block';const f=document.createElement('h3');f.textContent='Читать также';d.appendChild(f);c.forEach(a=>{const e=document.createElement('a');e.className='read-more-link';e.href=a.url;e.textContent=a.title;d.appendChild(e)});const g=document.querySelector('article:last-of-type');g?g.insertAdjacentElement('afterend',d):document.body.appendChild(d)}function F(){const b=window.location.pathname.split('/').pop()||'',t=b.replace('.html','')||'index';if(document.querySelector('.article-reactions'))return;const o=document.createElement('div');o.className='article-reactions';o.innerHTML='<div class="reactions-buttons"><button class="reaction-btn like" data-type="like">👍 <span class="count">0</span></button><button class="reaction-btn dislike" data-type="dislike">👎 <span class="count">0</span></button></div><div class="views-counter">👁️ <span class="count">0</span> просмотров</div>';const a=document.querySelector('.read-more-block');a?a.parentNode.insertBefore(o,a):(document.querySelector('article:last-of-type')||document.body).appendChild(o);const c=o.querySelector('.reaction-btn.like'),d=o.querySelector('.reaction-btn.dislike'),f=c.querySelector('.count'),g=d.querySelector('.count'),h=o.querySelector('.views-counter .count');let i={};try{i=JSON.parse(localStorage.getItem('blog_articles_stats'))||{}}catch(e){i={}}i[t]||(i[t]={views:0,likes:0,dislikes:0});i[t].views++;localStorage.setItem('blog_articles_stats',JSON.stringify(i));let l=localStorage.getItem('user_reaction_'+t);function j(){const e=i[t]||{views:0,likes:0,dislikes:0};f.textContent=e.likes;g.textContent=e.dislikes;h.textContent=e.views;l==='like'?(c.classList.add('active'),d.classList.remove('active')):l==='dislike'?(d.classList.add('active'),c.classList.remove('active')):(c.classList.remove('active'),d.classList.remove('active'))}function k(e){const n=e.currentTarget.getAttribute('data-type'),s=i[t]||{views:0,likes:0,dislikes:0};if(l===n){n==='like'?s.likes=Math.max(0,s.likes-1):s.dislikes=Math.max(0,s.dislikes-1);l=null;localStorage.removeItem('user_reaction_'+t)}else if(l&&l!==n){l==='like'?s.likes=Math.max(0,s.likes-1):s.dislikes=Math.max(0,s.dislikes-1);n==='like'?s.likes++:s.dislikes++;l=n;localStorage.setItem('user_reaction_'+t,n)}else{n==='like'?s.likes++:s.dislikes++;l=n;localStorage.setItem('user_reaction_'+t,n)}i[t]=s;localStorage.setItem('blog_articles_stats',JSON.stringify(i));j()}c.addEventListener('click',k);d.addEventListener('click',k);j()}function G(){A(),C(),D(),E(),F()}document.readyState==='loading'?document.addEventListener('DOMContentLoaded',G):G();})();
+(function() {
+    'use strict';
+
+    /* Резервное копирование через textarea */
+    function fallbackCopy(button, text, originalHTML) {
+        const textarea = document.createElement('textarea');
+        textarea.value = text;
+        textarea.style.position = 'fixed';
+        textarea.style.opacity = '0';
+        document.body.appendChild(textarea);
+        textarea.select();
+        try {
+            document.execCommand('copy');
+            button.innerHTML = '✅ Скопировано!';
+            button.classList.add('copied');
+            setTimeout(() => {
+                button.innerHTML = originalHTML;
+                button.classList.remove('copied');
+            }, 2000);
+        } catch (e) {
+            alert('Не удалось скопировать.');
+        } finally {
+            document.body.removeChild(textarea);
+        }
+    }
+
+    /* Инициализация кнопок копирования + ПРИНУДИТЕЛЬНОЕ ИСПРАВЛЕНИЕ ВЁРСТКИ */
+    function initCopyButtons() {
+        document.querySelectorAll('.prompt-wrapper').forEach(wrapper => {
+            // 1. Принудительно ставим column, чтобы кнопка была НАД блоком
+            wrapper.style.display = 'flex';
+            wrapper.style.flexDirection = 'column';
+            wrapper.style.gap = '12px';
+
+            // 2. Ищем или создаём тулбар для кнопки
+            let toolbar = wrapper.querySelector('.copy-toolbar, .copy-textbox');
+            if (!toolbar) {
+                // Если тулбара нет — создаём его и забираем существующую кнопку
+                toolbar = document.createElement('div');
+                toolbar.className = 'copy-toolbar';
+                const existingBtn = wrapper.querySelector('.btn-copy');
+                if (existingBtn) {
+                    toolbar.appendChild(existingBtn);
+                }
+                // Вставляем тулбар ПЕРЕД .prompt-box
+                const promptBox = wrapper.querySelector('.prompt-box');
+                if (promptBox) {
+                    wrapper.insertBefore(toolbar, promptBox);
+                } else {
+                    wrapper.prepend(toolbar);
+                }
+            }
+
+            // 3. Принудительно выравниваем тулбар вправо
+            toolbar.style.display = 'flex';
+            toolbar.style.justifyContent = 'flex-end';
+            toolbar.style.width = '100%';
+            toolbar.style.margin = '0';
+            toolbar.style.padding = '0';
+            toolbar.style.order = '0'; // гарантированно первый
+
+            // 4. Блок с кодом идёт вторым
+            const promptBox = wrapper.querySelector('.prompt-box');
+            if (promptBox) {
+                promptBox.style.order = '1';
+                promptBox.style.marginTop = '0';
+            }
+
+            // 5. Вешаем обработчик на кнопку
+            const btn = toolbar.querySelector('.btn-copy');
+            if (btn && !btn.dataset.copyInitialized) {
+                btn.dataset.copyInitialized = 'true';
+                btn.addEventListener('click', function() {
+                    const codeElement = wrapper.querySelector('.prompt-box code');
+                    if (!codeElement) return;
+                    const text = codeElement.textContent || '';
+                    const originalHTML = btn.innerHTML;
+
+                    if (navigator.clipboard && navigator.clipboard.writeText) {
+                        navigator.clipboard.writeText(text).then(() => {
+                            btn.innerHTML = '✅ Скопировано!';
+                            btn.classList.add('copied');
+                            setTimeout(() => {
+                                btn.innerHTML = originalHTML;
+                                btn.classList.remove('copied');
+                            }, 2000);
+                        }).catch(() => {
+                            fallbackCopy(btn, text, originalHTML);
+                        });
+                    } else {
+                        fallbackCopy(btn, text, originalHTML);
+                    }
+                });
+            }
+        });
+    }
+
+    /* Слайдер "Было / Стало" */
+    function initImageSliders() {
+        document.querySelectorAll('.image-slider').forEach(slider => {
+            const topWrapper = slider.querySelector('.slider-top-wrapper');
+            const handle = slider.querySelector('.slider-handle');
+            const knob = handle ? handle.querySelector('.slider-knob') : null;
+            if (!topWrapper || !handle || !knob) return;
+
+            let isDragging = false;
+
+            function updatePosition(clientX) {
+                const rect = slider.getBoundingClientRect();
+                let x = clientX - rect.left;
+                if (x < 0) x = 0;
+                if (x > rect.width) x = rect.width;
+                const percent = (x / rect.width) * 100;
+                topWrapper.style.width = percent + '%';
+                handle.style.left = percent + '%';
+            }
+
+            function onStart(e) {
+                isDragging = true;
+                knob.style.cursor = 'grabbing';
+                e.preventDefault();
+                const clientX = e.type.includes('touch') ? e.touches[0].clientX : e.clientX;
+                updatePosition(clientX);
+            }
+
+            function onMove(e) {
+                if (!isDragging) return;
+                e.preventDefault();
+                const clientX = e.type.includes('touch') ? e.touches[0].clientX : e.clientX;
+                updatePosition(clientX);
+            }
+
+            function onEnd() {
+                if (isDragging) {
+                    isDragging = false;
+                    knob.style.cursor = 'grab';
+                }
+            }
+
+            knob.addEventListener('mousedown', onStart);
+            document.addEventListener('mousemove', onMove);
+            document.addEventListener('mouseup', onEnd);
+            knob.addEventListener('touchstart', onStart, { passive: false });
+            document.addEventListener('touchmove', onMove, { passive: false });
+            document.addEventListener('touchend', onEnd);
+            document.addEventListener('touchcancel', onEnd);
+        });
+    }
+
+    /* Прогресс-бар чтения */
+    function initProgressBar() {
+        const bar = document.createElement('div');
+        bar.className = 'reading-progress-bar';
+        document.body.prepend(bar);
+
+        function update() {
+            const scrollTop = window.scrollY || document.documentElement.scrollTop;
+            const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
+            bar.style.width = scrollHeight > 0 ? Math.min(100, Math.max(0, (scrollTop / scrollHeight) * 100)) + '%' : '0%';
+        }
+        window.addEventListener('scroll', update, { passive: true });
+        update();
+    }
+
+    /* Блок "Читать также" */
+    function initReadMore() {
+        const allArticles = [
+            { title: 'Как я пытался создать постоянного ИИ-персонажа для блога, и почему нейросеть раздела его от стресса', url: 'ai-striptiz.html' },
+            { title: 'Музыкальный сериал – Часть 2', url: 'music-part-2.html' },
+            { title: 'Краш-тест ИИ на окраине цивилизации', url: 'crash-test-3g.html' },
+            { title: 'Музыкальный сериал — Часть 1', url: 'suno-music.html' },
+            { title: 'Топ-3 бесплатных ИИ', url: 'top-3-free-ai.html' },
+            { title: 'Промпт-репетитор английского языка', url: 'english-tutor-prompt.html' },
+            { title: 'Пакет выживания на 3G', url: 'survival-pack-3g.html' }
+        ];
+
+        const currentFile = window.location.pathname.split('/').pop() || '';
+        const otherArticles = allArticles.filter(a => a.url !== currentFile);
+        if (!otherArticles.length) return;
+
+        const selected = otherArticles.sort(() => 0.5 - Math.random()).slice(0, 3);
+        const block = document.createElement('div');
+        block.className = 'read-more-block';
+        const heading = document.createElement('h3');
+        heading.textContent = 'Читать также';
+        block.appendChild(heading);
+
+        selected.forEach(a => {
+            const link = document.createElement('a');
+            link.className = 'read-more-link';
+            link.href = a.url;
+            link.textContent = a.title;
+            block.appendChild(link);
+        });
+
+        const lastArticle = document.querySelector('article:last-of-type');
+        if (lastArticle) {
+            lastArticle.insertAdjacentElement('afterend', block);
+        } else {
+            document.body.appendChild(block);
+        }
+    }
+
+    /* Реакции и счётчик просмотров */
+    function initReactions() {
+        const currentFile = window.location.pathname.split('/').pop() || '';
+        const storageKey = currentFile.replace('.html', '') || 'index';
+
+        if (document.querySelector('.article-reactions')) return;
+
+        const reactionsDiv = document.createElement('div');
+        reactionsDiv.className = 'article-reactions';
+        reactionsDiv.innerHTML = `
+            <div class="reactions-buttons">
+                <button class="reaction-btn like" data-type="like">👍 <span class="count">0</span></button>
+                <button class="reaction-btn dislike" data-type="dislike">👎 <span class="count">0</span></button>
+            </div>
+            <div class="views-counter">👁️ <span class="count">0</span> просмотров</div>
+        `;
+
+        const readMoreBlock = document.querySelector('.read-more-block');
+        if (readMoreBlock) {
+            readMoreBlock.parentNode.insertBefore(reactionsDiv, readMoreBlock);
+        } else {
+            const lastArticle = document.querySelector('article:last-of-type');
+            (lastArticle || document.body).appendChild(reactionsDiv);
+        }
+
+        const likeBtn = reactionsDiv.querySelector('.reaction-btn.like');
+        const dislikeBtn = reactionsDiv.querySelector('.reaction-btn.dislike');
+        const likeCount = likeBtn.querySelector('.count');
+        const dislikeCount = dislikeBtn.querySelector('.count');
+        const viewsCount = reactionsDiv.querySelector('.views-counter .count');
+
+        let allStats = {};
+        try {
+            allStats = JSON.parse(localStorage.getItem('blog_articles_stats')) || {};
+        } catch (e) {
+            allStats = {};
+        }
+        if (!allStats[storageKey]) {
+            allStats[storageKey] = { views: 0, likes: 0, dislikes: 0 };
+        }
+        allStats[storageKey].views++;
+        localStorage.setItem('blog_articles_stats', JSON.stringify(allStats));
+
+        let userReaction = localStorage.getItem('user_reaction_' + storageKey);
+
+        function updateUI() {
+            const stats = allStats[storageKey] || { views: 0, likes: 0, dislikes: 0 };
+            likeCount.textContent = stats.likes;
+            dislikeCount.textContent = stats.dislikes;
+            viewsCount.textContent = stats.views;
+
+            if (userReaction === 'like') {
+                likeBtn.classList.add('active');
+                dislikeBtn.classList.remove('active');
+            } else if (userReaction === 'dislike') {
+                dislikeBtn.classList.add('active');
+                likeBtn.classList.remove('active');
+            } else {
+                likeBtn.classList.remove('active');
+                dislikeBtn.classList.remove('active');
+            }
+        }
+
+        function handleReaction(e) {
+            const type = e.currentTarget.getAttribute('data-type');
+            const stats = allStats[storageKey] || { views: 0, likes: 0, dislikes: 0 };
+
+            if (userReaction === type) {
+                if (type === 'like') stats.likes = Math.max(0, stats.likes - 1);
+                if (type === 'dislike') stats.dislikes = Math.max(0, stats.dislikes - 1);
+                userReaction = null;
+                localStorage.removeItem('user_reaction_' + storageKey);
+            } else if (userReaction && userReaction !== type) {
+                if (userReaction === 'like') stats.likes = Math.max(0, stats.likes - 1);
+                if (userReaction === 'dislike') stats.dislikes = Math.max(0, stats.dislikes - 1);
+                if (type === 'like') stats.likes++;
+                if (type === 'dislike') stats.dislikes++;
+                userReaction = type;
+                localStorage.setItem('user_reaction_' + storageKey, type);
+            } else {
+                if (type === 'like') stats.likes++;
+                if (type === 'dislike') stats.dislikes++;
+                userReaction = type;
+                localStorage.setItem('user_reaction_' + storageKey, type);
+            }
+
+            allStats[storageKey] = stats;
+            localStorage.setItem('blog_articles_stats', JSON.stringify(allStats));
+            updateUI();
+        }
+
+        likeBtn.addEventListener('click', handleReaction);
+        dislikeBtn.addEventListener('click', handleReaction);
+        updateUI();
+    }
+
+    /* Запуск всего */
+    function initAll() {
+        initCopyButtons();
+        initImageSliders();
+        initProgressBar();
+        initReadMore();
+        initReactions();
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initAll);
+    } else {
+        initAll();
+    }
+})();
