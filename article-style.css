@@ -85,7 +85,7 @@ strong {
     font-weight: 600
 }
 
-/* ===== ИСПРАВЛЕННЫЙ БЛОК: ОБЁРТКА ПРОМТА ===== */
+/* ===== ОБЁРТКА ПРОМТА ===== */
 .prompt-wrapper {
     margin: 24px 0;
     border: 1px solid #222e4b;
@@ -94,26 +94,20 @@ strong {
     background-color: #0f1522;
     display: flex !important;
     flex-direction: column !important;
-    gap: 12px !important;
+    gap: 10px !important;
     position: static !important
 }
 
-/* Новый класс для тулбара с кнопкой копирования (исправляет проблему) */
-.copy-toolbar {
-    display: flex !important;
-    justify-content: flex-end !important;
-    width: 100% !important;
-    margin-bottom: 0 !important;
-    position: static !important
-}
-
-/* Старый класс .copy-textbox оставляю для обратной совместимости, если используется в других статьях */
+/* Тулбар с кнопкой копирования — общий для .copy-toolbar и .copy-textbox */
+.copy-toolbar,
 .copy-textbox {
     display: flex !important;
     justify-content: flex-end !important;
     width: 100% !important;
-    margin-bottom: 0 !important;
-    position: static !important
+    margin: 0 !important;
+    padding: 0 2px 6px 0 !important;
+    position: static !important;
+    order: 0 !important
 }
 
 .btn-copy {
@@ -126,17 +120,19 @@ strong {
     display: inline-flex !important;
     align-items: center !important;
     gap: 6px !important;
-    padding: 4px 0 !important;
-    border-radius: 0 !important;
-    transition: color 0.2s;
+    padding: 6px 12px !important;
+    border-radius: 8px !important;
+    transition: color 0.2s, background-color 0.2s;
     white-space: nowrap;
     position: static !important;
-    -webkit-tap-highlight-color: transparent
+    -webkit-tap-highlight-color: transparent;
+    margin: 0 !important
 }
 
 .btn-copy:active,
 .btn-copy.copied {
-    color: var(--accent-green) !important
+    color: var(--accent-green) !important;
+    background-color: rgba(52, 199, 89, 0.08) !important
 }
 
 .btn-copy svg {
@@ -162,7 +158,8 @@ strong {
     line-height: 1.5 !important;
     overflow-x: auto !important;
     position: static !important;
-    margin-top: 0 !important
+    margin-top: 0 !important;
+    order: 1 !important
 }
 
 .prompt-box code {
@@ -171,7 +168,7 @@ strong {
     background: transparent
 }
 
-/* ===== КОНЕЦ ИСПРАВЛЕННОГО БЛОКА ===== */
+/* ===== КОНЕЦ БЛОКА ПРОМТА ===== */
 
 .read-more-block {
     margin-top: 40px;
