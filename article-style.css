@@ -52,6 +52,18 @@ body {
     text-decoration: underline
 }
 
+/* Плавное появление/скрытие карточек статей */
+.article {
+    transition: opacity 0.3s ease, transform 0.3s ease
+}
+
+.article.is-hidden {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    display: block
+}
+
 article {
     background-color: var(--card-bg);
     border-radius: 16px;
@@ -164,6 +176,8 @@ strong {
     font-weight: 500 !important;
     white-space: pre-wrap !important;
     word-break: break-word !important;
+    overflow-wrap: break-word !important;
+    -webkit-overflow-scrolling: touch;
     line-height: 1.5 !important;
     overflow-x: auto !important;
     margin: 0 !important;
@@ -459,7 +473,25 @@ strong {
     transform: scale(0.97)
 }
 
-@media (max-width:500px) {
+/* Адаптивность для планшетов (ширина от 501px до 768px) */
+@media (min-width: 501px) and (max-width: 768px) {
+    body {
+        padding: 24px
+    }
+    article {
+        padding: 24px
+    }
+    .prompt-box {
+        padding: 16px;
+        font-size: 14px
+    }
+    .btn-copy {
+        padding: 10px 18px;
+        font-size: 14px
+    }
+}
+
+@media (max-width: 500px) {
     body {
         padding: 12px
     }
