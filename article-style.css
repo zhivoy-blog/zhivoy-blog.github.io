@@ -85,7 +85,7 @@ strong {
     font-weight: 600
 }
 
-/* ===== ОБЁРТКА ПРОМТА — СТРОГИЙ ПОРЯДОК ЭЛЕМЕНТОВ ===== */
+/* ===== ОБЁРТКА ПРОМТА ===== */
 .prompt-wrapper {
     margin: 24px 0;
     border: 1px solid #222e4b;
@@ -98,21 +98,21 @@ strong {
     position: relative !important
 }
 
-/* Тулбар с кнопкой копирования */
+/* Тулбар с кнопкой копирования — строго над блоком, прижат вправо, с отступом 12px */
 .copy-toolbar,
 .copy-textbox {
     display: flex !important;
     justify-content: flex-end !important;
     align-items: center !important;
     width: 100% !important;
-    margin: 0 0 8px 0 !important;
+    margin: 0 0 12px 0 !important;
     padding: 0 !important;
     position: relative !important;
     order: -1 !important;
     z-index: 2 !important
 }
 
-/* Сама кнопка */
+/* Кнопка копирования */
 .btn-copy {
     display: inline-flex !important;
     align-items: center !important;
@@ -131,7 +131,6 @@ strong {
     -webkit-tap-highlight-color: transparent;
     margin: 0 !important;
     position: relative !important;
-    float: none !important;
     min-height: 44px;
     min-width: 44px
 }
