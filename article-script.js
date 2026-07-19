@@ -1,7 +1,6 @@
 (function() {
     'use strict';
 
-    /* Резервное копирование через textarea */
     function fallbackCopy(button, text, originalHTML) {
         const textarea = document.createElement('textarea');
         textarea.value = text;
@@ -24,7 +23,6 @@
         }
     }
 
-    /* Инициализация кнопок копирования */
     function initCopyButtons() {
         document.querySelectorAll('.btn-copy').forEach(btn => {
             if (btn.dataset.copyInitialized) return;
@@ -56,7 +54,6 @@
         });
     }
 
-    /* Интерактивный слайдер "Было / Стало" */
     function initImageSliders() {
         document.querySelectorAll('.image-slider').forEach(slider => {
             const topWrapper = slider.querySelector('.slider-top-wrapper');
@@ -108,7 +105,6 @@
         });
     }
 
-    /* Прогресс-бар чтения */
     function initProgressBar() {
         const bar = document.createElement('div');
         bar.className = 'reading-progress-bar';
@@ -123,7 +119,6 @@
         update();
     }
 
-    /* Блок "Читать также" */
     function initReadMore() {
         const allArticles = [
             { title: 'Как я пытался создать постоянного ИИ-персонажа для блога, и почему нейросеть раздела его от стресса', url: 'ai-striptiz.html' },
@@ -162,7 +157,6 @@
         }
     }
 
-    /* Реакции и счётчик просмотров */
     function initReactions() {
         const currentFile = window.location.pathname.split('/').pop() || '';
         const storageKey = currentFile.replace('.html', '') || 'index';
@@ -258,7 +252,6 @@
         updateUI();
     }
 
-    /* Запуск всего */
     function initAll() {
         initCopyButtons();
         initImageSliders();
