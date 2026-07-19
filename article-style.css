@@ -90,6 +90,7 @@ strong {
     font-weight: 600
 }
 
+/* ===== БЛОК ПРОМПТА (ОРИГИНАЛЬНАЯ РАБОЧАЯ ЛОГИКА) ===== */
 .prompt-wrapper {
     margin: 20px 0 24px
 }
@@ -136,7 +137,6 @@ strong {
 
 .prompt-box {
     background-color: #0b0f19;
-    border: 1px solid #222e4b;
     border-left: 4px solid var(--accent-blue);
     padding: 14px;
     border-radius: 0 8px 8px 0;
@@ -154,6 +154,8 @@ strong {
     font: inherit;
     background: none
 }
+
+/* ===== КОНЕЦ БЛОКА ПРОМТА ===== */
 
 .read-more-block {
     margin-top: 40px;
