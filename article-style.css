@@ -90,7 +90,7 @@ strong {
     font-weight: 600
 }
 
-/* ===== БЛОК ПРОМПТА (ОРИГИНАЛЬНАЯ РАБОЧАЯ ЛОГИКА) ===== */
+/* ===== БЛОК ПРОМПТА (РАБОЧАЯ ЛОГИКА КНОПКИ) ===== */
 .prompt-wrapper {
     margin: 20px 0 24px
 }
@@ -255,6 +255,7 @@ strong {
     white-space: nowrap
 }
 
+/* ===== ИНТЕРАКТИВНЫЙ СЛАЙДЕР "БЫЛО / СТАЛО" ===== */
 .image-slider {
     position: relative;
     width: 100%;
@@ -351,6 +352,8 @@ strong {
 .label-after {
     right: 12px
 }
+
+/* ===== КОНЕЦ СЛАЙДЕРА ===== */
 
 .article-image {
     margin: 20px 0;
