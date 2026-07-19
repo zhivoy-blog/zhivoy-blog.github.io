@@ -90,7 +90,6 @@ strong {
     font-weight: 600
 }
 
-/* ===== БЛОК ПРОМПТА (РАБОЧАЯ ЛОГИКА КНОПКИ) ===== */
 .prompt-wrapper {
     margin: 20px 0 24px
 }
@@ -137,6 +136,7 @@ strong {
 
 .prompt-box {
     background-color: #0b0f19;
+    border: 1px solid #222e4b;
     border-left: 4px solid var(--accent-blue);
     padding: 14px;
     border-radius: 0 8px 8px 0;
@@ -154,8 +154,6 @@ strong {
     font: inherit;
     background: none
 }
-
-/* ===== КОНЕЦ БЛОКА ПРОМТА ===== */
 
 .read-more-block {
     margin-top: 40px;
@@ -255,7 +253,6 @@ strong {
     white-space: nowrap
 }
 
-/* ===== ИНТЕРАКТИВНЫЙ СЛАЙДЕР "БЫЛО / СТАЛО" ===== */
 .image-slider {
     position: relative;
     width: 100%;
@@ -352,8 +349,6 @@ strong {
 .label-after {
     right: 12px
 }
-
-/* ===== КОНЕЦ СЛАЙДЕРА ===== */
 
 .article-image {
     margin: 20px 0;
