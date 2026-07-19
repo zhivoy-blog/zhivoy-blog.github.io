@@ -1,6 +1,7 @@
 (function() {
     'use strict';
 
+    /* Резервное копирование через textarea */
     function fallbackCopy(button, text, originalHTML) {
         const textarea = document.createElement('textarea');
         textarea.value = text;
@@ -23,37 +24,78 @@
         }
     }
 
+    /* Инициализация кнопок копирования + ПРИНУДИТЕЛЬНОЕ ИСПРАВЛЕНИЕ ВЁРСТКИ */
     function initCopyButtons() {
-        document.querySelectorAll('.btn-copy').forEach(btn => {
-            if (btn.dataset.copyInitialized) return;
-            btn.dataset.copyInitialized = 'true';
+        document.querySelectorAll('.prompt-wrapper').forEach(wrapper => {
+            // 1. Принудительно ставим column, чтобы кнопка была НАД блоком
+            wrapper.style.display = 'flex';
+            wrapper.style.flexDirection = 'column';
+            wrapper.style.gap = '12px';
 
-            btn.addEventListener('click', function() {
-                const wrapper = btn.closest('.prompt-wrapper');
-                if (!wrapper) return;
-                const codeElement = wrapper.querySelector('.prompt-box code');
-                if (!codeElement) return;
-                const text = codeElement.textContent || '';
-                const originalHTML = btn.innerHTML;
-
-                if (navigator.clipboard && navigator.clipboard.writeText) {
-                    navigator.clipboard.writeText(text).then(() => {
-                        btn.innerHTML = '✅ Скопировано!';
-                        btn.classList.add('copied');
-                        setTimeout(() => {
-                            btn.innerHTML = originalHTML;
-                            btn.classList.remove('copied');
-                        }, 2000);
-                    }).catch(() => {
-                        fallbackCopy(btn, text, originalHTML);
-                    });
-                } else {
-                    fallbackCopy(btn, text, originalHTML);
+            // 2. Ищем или создаём тулбар для кнопки
+            let toolbar = wrapper.querySelector('.copy-toolbar, .copy-textbox');
+            if (!toolbar) {
+                // Если тулбара нет — создаём его и забираем существующую кнопку
+                toolbar = document.createElement('div');
+                toolbar.className = 'copy-toolbar';
+                const existingBtn = wrapper.querySelector('.btn-copy');
+                if (existingBtn) {
+                    toolbar.appendChild(existingBtn);
                 }
-            });
+                // Вставляем тулбар ПЕРЕД .prompt-box
+                const promptBox = wrapper.querySelector('.prompt-box');
+                if (promptBox) {
+                    wrapper.insertBefore(toolbar, promptBox);
+                } else {
+                    wrapper.prepend(toolbar);
+                }
+            }
+
+            // 3. Принудительно выравниваем тулбар вправо
+            toolbar.style.display = 'flex';
+            toolbar.style.justifyContent = 'flex-end';
+            toolbar.style.width = '100%';
+            toolbar.style.margin = '0';
+            toolbar.style.padding = '0';
+            toolbar.style.order = '0'; // гарантированно первый
+
+            // 4. Блок с кодом идёт вторым
+            const promptBox = wrapper.querySelector('.prompt-box');
+            if (promptBox) {
+                promptBox.style.order = '1';
+                promptBox.style.marginTop = '0';
+            }
+
+            // 5. Вешаем обработчик на кнопку
+            const btn = toolbar.querySelector('.btn-copy');
+            if (btn && !btn.dataset.copyInitialized) {
+                btn.dataset.copyInitialized = 'true';
+                btn.addEventListener('click', function() {
+                    const codeElement = wrapper.querySelector('.prompt-box code');
+                    if (!codeElement) return;
+                    const text = codeElement.textContent || '';
+                    const originalHTML = btn.innerHTML;
+
+                    if (navigator.clipboard && navigator.clipboard.writeText) {
+                        navigator.clipboard.writeText(text).then(() => {
+                            btn.innerHTML = '✅ Скопировано!';
+                            btn.classList.add('copied');
+                            setTimeout(() => {
+                                btn.innerHTML = originalHTML;
+                                btn.classList.remove('copied');
+                            }, 2000);
+                        }).catch(() => {
+                            fallbackCopy(btn, text, originalHTML);
+                        });
+                    } else {
+                        fallbackCopy(btn, text, originalHTML);
+                    }
+                });
+            }
         });
     }
 
+    /* Слайдер "Было / Стало" */
     function initImageSliders() {
         document.querySelectorAll('.image-slider').forEach(slider => {
             const topWrapper = slider.querySelector('.slider-top-wrapper');
@@ -105,6 +147,7 @@
         });
     }
 
+    /* Прогресс-бар чтения */
     function initProgressBar() {
         const bar = document.createElement('div');
         bar.className = 'reading-progress-bar';
@@ -119,6 +162,7 @@
         update();
     }
 
+    /* Блок "Читать также" */
     function initReadMore() {
         const allArticles = [
             { title: 'Как я пытался создать постоянного ИИ-персонажа для блога, и почему нейросеть раздела его от стресса', url: 'ai-striptiz.html' },
@@ -157,6 +201,7 @@
         }
     }
 
+    /* Реакции и счётчик просмотров */
     function initReactions() {
         const currentFile = window.location.pathname.split('/').pop() || '';
         const storageKey = currentFile.replace('.html', '') || 'index';
@@ -252,6 +297,7 @@
         updateUI();
     }
 
+    /* Запуск всего */
     function initAll() {
         initCopyButtons();
         initImageSliders();
