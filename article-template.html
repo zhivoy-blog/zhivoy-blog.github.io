@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="page-title">Живой ИИ</title>
+    <link rel="stylesheet" href="article-style.css">
+</head>
+<body>
+    <a href="index.html" class="back-link">← Назад к статьям</a>
+
+    <article id="article-content">
+        <p>Загрузка статьи...</p>
+    </article>
+
+    <script src="article-script.js"></script>
+    <script>
+        (function() {
+            const slug = new URLSearchParams(window.location.search).get('article');
+            if (!slug) {
+                document.getElementById('article-content').innerHTML = '<p style="color:#d1d1d6; text-align:center; padding:40px 0;">❓ Статья не найдена. <a href="index.html" style="color:var(--accent-blue);">Вернуться к списку</a></p>';
+                return;
+            }
+
+            fetch('articles/' + slug + '.json')
+                .then(function(response) {
+                    if (!response.ok) throw new Error('Not found');
+                    return response.json();
+                })
+                .then(function(data) {
+                    document.getElementById('page-title').textContent = data.title + ' — Живой ИИ';
+                    document.getElementById('article-content').innerHTML = data.content;
+
+                    setTimeout(function() {
+                        if (typeof initAll === 'function') {
+                            initAll();
+                        }
+                    }, 50);
+                })
+                .catch(function() {
+                    document.getElementById('article-content').innerHTML = '<p style="color:#d1d1d6; text-align:center; padding:40px 0;">❌ Ошибка загрузки статьи. <a href="index.html" style="color:var(--accent-blue);">Вернуться к списку</a></p>';
+                });
+        })();
+    </script>
+</body>
+</html>
