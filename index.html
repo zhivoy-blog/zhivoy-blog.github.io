@@ -3,204 +3,242 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="article-style.css">
-    <title>GigaChat против Kling AI</title>
+    <title>Живой ИИ — Платформа личного опыта и скрытых инструментов</title>
     <style>
-        /* Дополнительные стили для кнопки назад, рамки промта и кнопки копирования */
-        .back-button {
-            display: inline-block;
-            padding: 10px 20px;
-            background-color: #007aff;
-            color: #ffffff;
-            text-decoration: none;
-            border-radius: 12px;
-            font-weight: 600;
-            font-size: 15px;
-            margin-bottom: 20px;
-            transition: background-color 0.2s, transform 0.1s;
+        :root {
+            --bg-color: #113154;
+            --card-bg: #1b436d;
+            --accent-blue: #007aff;
+            --accent-green: #34c759;
+            --text-main: #ffffff;
+            --text-muted: #8e9e93;
+            --text-muted-alt: #8e9eaf
         }
-        .back-button:active {
-            transform: scale(0.97);
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0
         }
-        .prompt-container {
-            margin: 20px 0;
-            border: 2px solid #007aff;
-            border-radius: 16px;
-            padding: 18px 20px;
-            background-color: rgba(0, 122, 255, 0.08);
-            box-shadow: 0 4px 12px rgba(0, 122, 255, 0.15);
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.5;
+            padding: 16px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center
         }
-        .prompt-box {
-            font-size: 15px;
-            line-height: 1.6;
-            color: #d1d1d6;
+        .header {
+            text-align: center;
+            padding: 12px 0 16px;
+            width: 100%;
+            max-width: 600px
         }
-        .prompt-box strong {
-            color: #ffffff;
+        .header h1 {
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 14px;
+            color: var(--text-main)
         }
-        .prompt-box span {
+        .btn-telegram {
             display: block;
-            margin-top: 8px;
-            font-style: italic;
-            word-break: break-word;
+            width: 100%;
+            max-width: 360px;
+            margin: 0 auto;
+            background-color: var(--accent-blue);
+            color: white;
+            text-align: center;
+            padding: 14px 20px;
+            border-radius: 12px;
+            font-weight: 700;
+            text-decoration: none;
+            font-size: 15px;
+            letter-spacing: 0.3px;
+            box-shadow: 0 4px 14px rgba(0, 122, 255, 0.35);
+            transition: transform 0.1s ease
         }
-        .copy-btn {
-            display: inline-block;
-            margin-top: 14px;
-            padding: 10px 24px;
-            background-color: #007aff;
-            color: #ffffff;
-            border: none;
+        .btn-telegram:active {
+            transform: scale(0.97)
+        }
+        .tag-filter {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            margin: 16px 0 24px;
+            width: 100%;
+            max-width: 600px
+        }
+        .tag-btn {
+            background-color: transparent;
+            border: 1px solid var(--accent-blue);
+            color: var(--accent-blue);
+            padding: 10px 18px;
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s, color 0.2s;
+            min-height: 44px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            white-space: nowrap
+        }
+        .tag-btn.active-tag {
+            background-color: var(--accent-blue);
+            color: #fff
+        }
+        .feed {
+            width: 100%;
+            max-width: 600px;
+            margin-top: 8px
+        }
+        .article-card {
+            background-color: var(--card-bg);
+            border-radius: 16px;
+            padding: 18px;
+            margin-bottom: 18px;
+            border: 1px solid #0088cc;
+            transition: opacity 0.2s, transform 0.2s
+        }
+        .article-card.is-hidden {
+            display: none !important
+        }
+        .article-date {
+            display: block;
+            font-size: 13px;
+            color: var(--text-muted-alt);
+            margin-bottom: 6px;
+            font-weight: 500
+        }
+        .article-card h2 {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: var(--text-main);
+            line-height: 1.3
+        }
+        .article-excerpt {
+            font-size: 14px;
+            color: #d1d1d6;
+            margin-bottom: 14px
+        }
+        .read-more {
+            display: block;
+            width: 100%;
+            background-color: transparent;
+            border: 1px solid var(--accent-blue);
+            color: var(--accent-blue);
+            text-align: center;
+            padding: 12px;
             border-radius: 12px;
             font-weight: 600;
+            text-decoration: none;
             font-size: 15px;
-            cursor: pointer;
-            transition: background-color 0.2s, transform 0.1s;
+            transition: background-color 0.2s, color 0.2s
         }
-        .copy-btn:active {
-            transform: scale(0.97);
+        .read-more:active {
+            background-color: var(--accent-blue);
+            color: white
         }
-        .copy-btn.copied {
-            background-color: #34c759;
-        }
-        @media (max-width: 640px) {
-            .back-button {
-                width: 100%;
-                text-align: center;
-            }
-            .copy-btn {
-                width: 100%;
-                text-align: center;
+        @media(min-width:640px) {
+            .btn-telegram {
+                max-width: 380px
             }
         }
     </style>
 </head>
 <body>
-
-<!-- Кнопка "Назад на главную" -->
-<a href="index.html" class="back-button">← Назад на главную</a>
-
-<h1>GigaChat против Kling AI [Сравнение 2-х видео внутри]</h1>
-
-<img src="oblozhka1.jpeg" alt="GigaChat против Kling AI" style="max-width:100%; height:auto; display:block; margin: 20px auto;">
-
-<p>«Замена Runway и Sora? Как китайский Kling AI совершил тихую видеореволюцию, о которой в Рунете почти не пишут» 🎬</p>
-<p>Феномен Kling AI: Честный разбор китайской нейросети, которая обошла американских гигантов.</p>
-<p>Но так ли все идеально на самом деле? 🤔</p>
-
-<h2>Анатомия Kling: What скрывается под капотом?</h2>
-<p>Kling AI — это нейросеть класса Diffusion Transformer (DiT). 🧠</p>
-<p>Простыми словами: она не просто склеивает статичные картинки, а буквально моделирует законы физики реального мира внутри кадра.</p>
-<p>Основные технические возможности: ⚙?</p>
-
-<ul>
-<li><strong>Два режима работы:</strong> Text-to-Video (генерация по текстовому описанию) и Image-to-Video (оживление готовой картинки). 📑</li>
-<li><strong>Хронометраж:</strong> Стандартное бесплатное видео длится 5 секунд. При использовании платной подписки ролик можно продлевать (Extend) до 2-3 минут сквозного сюжета. ⏳</li>
-<li><strong>Частота кадров:</strong> Честные 30 FPS. Видео получается плавным, без эффекта «рваной» анимации. 🎬</li>
-<li><strong>Разрешение:</strong> В бесплатной версии — до 1080p, в продвинутом Pro-режиме — полноценный кинематографичный формат. 📺</li>
-<li><strong>Практический тест:</strong> Бросаем Kling AI в пекло (Кинематографичный постапокалипсис).</li>
-</ul>
-
-<p>Я не стал генерировать простые портреты, а заставил нейросеть смоделировать сложнейшую сцену в стиле голливудского фильма-катастрофы. 🔥</p>
-<p><strong>Условия теста:</strong> Сложная физика: Персонаж должен пробираться по пояс в мутной воде затопленного разрушенного города, таща за собой тяжелый ящик. Это проверка на взаимодействие объектов с жидкостью. 🌊</p>
-
-<video src="video1.mp4" controls style="max-width:100%; display:block; margin: 20px auto;"></video>
-
-<p>Kling AI: Проверяем физику воды и нативный звук фразы «ЕСТЬ КТО ЖИВОЙ?»</p>
-<p><strong>Оптика:</strong> Запрос на съемку 35-миллиметровой пленкой (Arri Alexa) для имитации киношного размытия и света. 📹</p>
-<p><strong>Главное испытание</strong> — Нативный звук 3.0: Мы включили встроенную генерацию аудио и заставили ИИ не просто шуметь водой, а закричать на русском языке: «ЕСТЬ КТО ЖИВОЙ?». Результат эксперимента: Сетка справилась на ура. Физика воды отработала честно — капли дождя и брызги от движения персонажа синхронизированы с его телом, а не просто наложены слоем сверху. 🌧?</p>
-
-<p><strong>35-мм оптика</strong> выдала глубокую, мрачную картинку, как в дорогом кино. 🎬</p>
-<p>Но больше всего поразила функция Native Audio — нейросеть смогла сгенерировать не только реалистичные всплески воды, но и чёткий, эмоциональный крик на русском языке без дикого зарубежного акцента, что для азиатских моделей является огромной редкостью. 🗣?</p>
-
-<p>💡 <strong>Промт для вашего теста:</strong> Вы можете лично проверить этот сценарий и убедиться в возможностях нейросети. Вот готовый рабочий промт на английском языке, который я использовал для генерации этого видео (просто скопируйте его и вставьте в Kling AI).</p>
-
-<!-- Блок с промтом в рамке + кнопка копирования -->
-<div class="prompt-container">
-    <div class="prompt-box">
-        <strong>📋 PROMPT:</strong>
-        <span id="prompt-text">Cinematic 35mm film shot, post-apocalyptic survivor wading through waist-deep murky flooded ruins of a destroyed city. He is pulling a heavy military cargo case behind him with a strap. Photorealistic cinematic lighting, dark gritty atmosphere, splashing water, heavy rain. Camera tracking shot moving backward. [Audio: Loud realistic sound of wading through rushing water, sloshing and splashing sounds. The man suddenly cups his hands around his mouth and shouts loudly with an echo: "ЕСТЬ КТО ЖИВОЙ!"] Masterfully graded, high fidelity, movie scene.</span>
+    <header class="header">
+        <h1>Живой ИИ</h1>
+        <a href="https://t.me/zhivoy_ii" target="_blank" rel="noopener noreferrer" class="btn-telegram">Вступить в Telegram [Ключ в закрепе]</a>
+    </header>
+    <div class="tag-filter">
+        <button class="tag-btn active-tag" data-tag="все">Все</button>
+        <button class="tag-btn" data-tag="музыка">Музыка</button>
+        <button class="tag-btn" data-tag="промпты">Промпты</button>
+        <button class="tag-btn" data-tag="тексты">Тексты</button>
     </div>
-    <button id="copy-prompt-btn" class="copy-btn">Скопировать промт</button>
-</div>
+    <main class="feed">
+        <article class="article-card" data-tag="тексты">
+            <time datetime="2026-07-17" class="article-date">17 июля 2026</time>
+            <h2>Как я пытался создать постоянного ИИ-персонажа для блога, и почему нейросеть раздела его от стресса</h2>
+            <p class="article-excerpt">История о том, как я пытался создать постоянного персонажа в нейросети и почему все ваши ИИ-лайфхаки — отстой 🗑️</p>
+            <a href="ai-striptiz.html" class="read-more">Читать полностью</a>
+        </article>
+        <article class="article-card" data-tag="музыка">
+            <time datetime="2026-07-15" class="article-date">15 июля 2026</time>
+            <h2>Музыкальный сериал – Часть 2</h2>
+            <p class="article-excerpt">Как укротить Suno AI и почему я проиграл войну с её ограничениями. В этом выпуске: живые теги, инженерные маркеры и беспощадная минутная отсечка.</p>
+            <a href="music-part-2.html" class="read-more">Читать полностью</a>
+        </article>
+        <article class="article-card" data-tag="тексты">
+            <time datetime="2026-07-14" class="article-date">14 июля 2026</time>
+            <h2>Краш-тест ИИ на окраине цивилизации: какая нейросеть выживет на слабом 3G в лесу и выдаст базу с первой попытки</h2>
+            <p class="article-excerpt">Каждый раз, когда я читаю обзоры нейросетей, они написаны в идеальных условиях. Сверхбыстрый гигабитный Wi-Fi в коворкинге, топовый MacBook, открытый платный ChatGPT Plus и стабильный дорогой VPN. Но давайте спустимся на землю.</p>
+            <a href="crash-test-3g.html" class="read-more">Читать полностью</a>
+        </article>
+        <article class="article-card" data-tag="музыка">
+            <time datetime="2026-07-12" class="article-date">12 июля 2026</time>
+            <h2>Музыкальный сериал — Часть 1</h2>
+            <p class="article-excerpt">Знаете, я часто вижу в сети ролики с ИИ-песнями и всегда думал: «ну как у них получается так душевно?». Я сам недавно наступил на эти грабли...</p>
+            <a href="suno-music.html" class="read-more">Читать полностью</a>
+        </article>
+        <article class="article-card" data-tag="промпты">
+            <time datetime="2026-07-10" class="article-date">10 июля 2026</time>
+            <h2>Топ-3 бесплатных ИИ</h2>
+            <p class="article-excerpt">В этой подборке мы разберем три мощнейших инструмента, которые доступны абсолютно бесплатно и без VPN. Flux, NotebookLM и Clipdrop — революция в доступности ИИ.</p>
+            <a href="top-3-free-ai.html" class="read-more">Читать полностью</a>
+        </article>
+        <article class="article-card" data-tag="промпты">
+            <time datetime="2026-07-08" class="article-date">8 июля 2026</time>
+            <h2>Промпт-репетитор английского языка</h2>
+            <p class="article-excerpt">Интерактивный сценарий для прокачки разговорного английского (уровень A2, тема путешествий). Превращает ChatGPT в терпеливого собеседника.</p>
+            <a href="english-tutor-prompt.html" class="read-more">Читать полностью</a>
+        </article>
+        <article class="article-card" data-tag="тексты">
+            <time datetime="2026-07-05" class="article-date">5 июля 2026</time>
+            <h2>Краш-тест ИИ на слабом 3G интернете: Пакет выживания в полевых условиях</h2>
+            <p class="article-excerpt">Что делать, если связь ловит еле-еле, в кармане обычный смартфон без Google-сервисов, а сложную текстовую задачу нужно решить прямо сейчас с первой попытки?</p>
+            <a href="survival-pack-3g.html" class="read-more">Читать полностью</a>
+        </article>
+    </main>
+    <script>
+        (function() {
+            const t = document.querySelectorAll('.tag-btn');
+            const e = document.querySelectorAll('.article-card');
 
-<p>⚡ <strong>Совет по настройке:</strong> Обратите внимание на тег <code>[Audio: ...]</code>. Именно внутри него прописываются звуковые эффекты и точная фраза на русском языке. Если захотите изменить реплику персонажа, просто замените текст в кавычках.</p>
-
-<h2>А что выдаст GigaChat на похожем промте?</h2>
-<p>Раз уж зашла речь про революцию в видео и звуке, я решил провести эксперимент и столкнуть китайский Kling AI с отечественным GigaChat. Условия жесткие: тот же кинематографичный постапокалипсис, сложная физика воды, проливной дождь и попытка выжать из нейросети звук в один присест.</p>
-<p><strong>Промт для GigaChat</strong> я немного скорректировал под женского персонажа и добавил команду на крик прямо в тело запроса. Результат генерации видео:</p>
-
-<video src="video2.mp4" controls style="max-width:100%; display:block; margin: 20px auto;"></video>
-
-<p>GigaChat: физика воды на ура, кадр тоже, но вместо звука тишина.</p>
-
-<h3>Честный разбор полетов:</h3>
-<p>По физике и динамике GigaChat отработал на ура. Картинка сочная, наезд камеры плавный, а монстр на заднем плане не превратился в кашу. Но чуда «всё в одном флаконе» не произошло. Встроенный звуковой движок не справился с режиссурой — на выходе получилась полная тишина. Закричать «Неееет!» на все 4 секунды ролика ИИ так и не смог. По части нативного звука Kling пока остается недосягаемым. 🏆</p>
-
-<h2>Итог: Что в итоге выбрать? 🤔</h2>
-<p>Обе нейросети по-своему хороши, но задачи они решают разные:</p>
-<ol>
-<li><strong>Китайский Kling AI</strong> — это выбор, если вам нужен готовый кинематографичный визуал со встроенным звуком на английском. Но бесплатного тарифа в 66 кредитов вам хватит ненадолго. Чтобы работать постоянно, придется заводить несколько аккаунтов или покупать подписку.</li>
-<li><strong>Отечественный GigaChat</strong> — идеален для повседневных тестов. Он уже дышит китайцам в спину по качеству картинки, физике движений и мимике лица. К тому же, GigaChat дает по 10 бесплатных видео каждый день. Да, со звуком в один промт пока беда, но для залипательных роликов — это отличный бесплатный инструмент.</li>
-</ol>
-
-<p>Я тестирую нейросети с планшета и делюсь результатами без пафоса. <strong>Подписывайтесь на блог и комментируйте</strong>, будем вместе разбираться.</p>
-
-<script>
-    (function() {
-        const copyBtn = document.getElementById('copy-prompt-btn');
-        const promptText = document.getElementById('prompt-text');
-
-        if (copyBtn && promptText) {
-            copyBtn.addEventListener('click', function() {
-                const text = promptText.innerText;
-                // Используем Clipboard API
-                if (navigator.clipboard && navigator.clipboard.writeText) {
-                    navigator.clipboard.writeText(text).then(function() {
-                        copyBtn.textContent = 'Скопировано!';
-                        copyBtn.classList.add('copied');
-                        setTimeout(function() {
-                            copyBtn.textContent = 'Скопировать промт';
-                            copyBtn.classList.remove('copied');
-                        }, 3000);
-                    }).catch(function(err) {
-                        console.error('Ошибка копирования: ', err);
-                        // Запасной вариант через document.execCommand
-                        fallbackCopy(text);
-                    });
-                } else {
-                    // Если Clipboard API не поддерживается
-                    fallbackCopy(text);
-                }
-            });
-
-            function fallbackCopy(text) {
-                const textarea = document.createElement('textarea');
-                textarea.value = text;
-                textarea.style.position = 'fixed';
-                textarea.style.opacity = '0';
-                document.body.appendChild(textarea);
-                textarea.select();
-                try {
-                    const successful = document.execCommand('copy');
-                    if (successful) {
-                        copyBtn.textContent = 'Скопировано!';
-                        copyBtn.classList.add('copied');
-                        setTimeout(function() {
-                            copyBtn.textContent = 'Скопировать промт';
-                            copyBtn.classList.remove('copied');
-                        }, 3000);
+            function r(t) {
+                e.forEach(e => {
+                    if (t === 'все') {
+                        e.classList.remove('is-hidden')
                     } else {
-                        alert('Не удалось скопировать текст. Попробуйте вручную.');
+                        const r = e.getAttribute('data-tag');
+                        if (r === t) {
+                            e.classList.remove('is-hidden')
+                        } else {
+                            e.classList.add('is-hidden')
+                        }
                     }
-                } catch (e) {
-                    alert('Не удалось скопировать текст. Попробуйте вручную.');
-                }
-                document.body.removeChild(textarea);
+                })
             }
-        }
-    })();
-</script>
 
+            function n(e) {
+                t.forEach(t => t.classList.remove('active-tag'));
+                e.classList.add('active-tag')
+            }
+            t.forEach(e => {
+                e.addEventListener('click', function() {
+                    const t = this.getAttribute('data-tag');
+                    n(this);
+                    r(t)
+                })
+            })
+        })();
+    </script>
 </body>
 </html>
