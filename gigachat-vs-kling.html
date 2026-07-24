@@ -5,101 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="article-style.css">
     <title>GigaChat против Kling AI</title>
-    <style>
-        /* ===== ГАРАНТИРУЮЩИЕ СТИЛИ — переопределяют любые внешние ===== */
-        /* Кнопка «Назад на главную» */
-        .back-link {
-            display: inline-flex !important;
-            align-items: center !important;
-            color: #007aff !important;
-            text-decoration: none !important;
-            font-size: 15px !important;
-            font-weight: 500 !important;
-            margin-bottom: 20px !important;
-            padding: 8px 0 !important;
-            gap: 4px !important;
-        }
-        .back-link:hover {
-            text-decoration: underline !important;
-        }
-
-        /* Обёртка промт-блока */
-        .prompt-wrapper {
-            background-color: #2d2d2d !important;
-            border-radius: 10px !important;
-            padding: 20px !important;
-            margin: 25px 0 !important;
-            display: flex !important;
-            flex-direction: column !important;
-            box-sizing: border-box !important;
-        }
-
-        /* Контейнер для кнопки (строго над чёрным блоком) */
-        .copy-textbox {
-            display: flex !important;
-            justify-content: flex-end !important;
-            margin-bottom: 12px !important;
-            width: 100% !important;
-        }
-
-        /* Кнопка «Скопировать промпт» */
-        .btn-copy {
-            background: none !important;
-            border: none !important;
-            color: #4da6ff !important;
-            font-size: 15px !important;
-            font-weight: 500 !important;
-            cursor: pointer !important;
-            display: inline-flex !important;
-            align-items: center !important;
-            gap: 6px !important;
-            padding: 6px 12px !important;
-            border-radius: 6px !important;
-            transition: color 0.2s, background-color 0.2s !important;
-            white-space: nowrap !important;
-            line-height: 1.4 !important;
-            text-decoration: none !important;
-        }
-        .btn-copy:hover {
-            color: #80c1ff !important;
-            background-color: rgba(77, 166, 255, 0.12) !important;
-        }
-        .btn-copy svg {
-            width: 16px !important;
-            height: 16px !important;
-            fill: currentColor !important;
-            flex-shrink: 0 !important;
-        }
-
-        /* Чёрное окно с зелёным кодом */
-        .prompt-box {
-            background-color: #0a0a0a !important;
-            color: #00ff41 !important;
-            border: 2px solid #1e90ff !important;
-            border-radius: 8px !important;
-            padding: 16px !important;
-            font-family: 'Courier New', Courier, monospace !important;
-            font-size: 14px !important;
-            line-height: 1.6 !important;
-            white-space: pre-wrap !important;
-            word-break: break-word !important;
-            overflow-x: auto !important;
-            margin: 0 !important;
-            box-sizing: border-box !important;
-        }
-
-        /* Адаптация для планшетов и телефонов */
-        @media (max-width: 600px) {
-            .prompt-wrapper { padding: 14px !important; margin: 18px 0 !important; }
-            .copy-textbox { margin-bottom: 8px !important; }
-            .btn-copy { font-size: 14px !important; padding: 5px 10px !important; }
-            .prompt-box { padding: 12px !important; font-size: 13px !important; }
-        }
-    </style>
 </head>
 <body>
 
-<!-- ===== КНОПКА НАЗАД НА ГЛАВНУЮ (РАБОТАЕТ) ===== -->
+<!-- Кнопка «Назад на главную» -->
 <a href="index.html" class="back-link">← Назад на главную</a>
 
 <article>
@@ -138,9 +47,9 @@
 
     <p>💡 <strong>Промт для вашего теста:</strong> Вы можете лично проверить этот сценарий и убедиться в возможностях нейросети. Вот готовый рабочий промт на английском языке, который я использовал для генерации этого видео (просто скопируйте его и вставьте в Kling AI).</p>
 
-    <!-- ===== ПРАВИЛЬНЫЙ ПРОМТ-БЛОК ===== -->
+    <!-- Промт-блок: кнопка над чёрным блоком -->
     <div class="prompt-wrapper">
-        <div class="copy-textbox">
+        <div class="copy-toolbar">
             <button class="btn-copy">
                 <svg viewBox="0 0 24 24" width="15" height="15"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
                 Скопировать промт
@@ -174,7 +83,6 @@
     <p>Я тестирую нейросети с планшета и делюсь результатами без пафоса. <strong>Подписывайтесь на блог и комментируйте</strong>, будем вместе разбираться.</p>
 </article>
 
-<!-- Подключаем ваш JS-скрипт (он обеспечит копирование при клике) -->
 <script src="article-script.js"></script>
 </body>
 </html>
