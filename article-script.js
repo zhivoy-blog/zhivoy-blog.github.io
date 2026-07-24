@@ -169,6 +169,7 @@
             { title: 'Музыкальный сериал – Часть 2', url: 'music-part-2.html' },
             { title: 'Краш-тест ИИ на окраине цивилизации', url: 'crash-test-3g.html' },
             { title: 'Музыкальный сериал — Часть 1', url: 'suno-music.html' },
+            { title: 'GigaChat против Kling AI [Сравнение 2-х видео внутри]', url: 'gigachat-vs-kling.html' },
             { title: 'Топ-3 бесплатных ИИ', url: 'top-3-free-ai.html' },
             { title: 'Промпт-репетитор английского языка', url: 'english-tutor-prompt.html' },
             { title: 'Пакет выживания на 3G', url: 'survival-pack-3g.html' }
