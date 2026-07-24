@@ -145,6 +145,18 @@
             background-color: var(--accent-blue);
             color: white
         }
+        .feed-loading {
+            text-align: center;
+            padding: 40px 0;
+            color: var(--text-muted-alt);
+            font-size: 15px
+        }
+        .feed-error {
+            text-align: center;
+            padding: 40px 0;
+            color: #ff6b6b;
+            font-size: 15px
+        }
         @media(min-width:640px) {
             .btn-telegram {
                 max-width: 380px
@@ -163,87 +175,117 @@
         <button class="tag-btn" data-tag="промпты">Промпты</button>
         <button class="tag-btn" data-tag="тексты">Тексты</button>
     </div>
-    <main class="feed">
-        <article class="article-card" data-tag="промпты">
-            <time datetime="2026-07-22" class="article-date">22 июля 2026</time>
-            <h2>GigaChat против Kling AI [Сравнение 2-х видео внутри]</h2>
-            <p class="article-excerpt">«Замена Runway и Sora? Как китайский Kling AI совершил тихую видеореволюцию, о которой в Рунете почти не пишут». Честный разбор китайской нейросети, которая обошла американских гигантов. Но так ли все идеально на самом деле? 🤔</p>
-            <a href="gigachat-vs-kling.html" class="read-more">Читать полностью</a>
-        </article>
-        <article class="article-card" data-tag="тексты">
-            <time datetime="2026-07-17" class="article-date">17 июля 2026</time>
-            <h2>Как я пытался создать постоянного ИИ-персонажа для блога, и почему нейросеть раздела его от стресса</h2>
-            <p class="article-excerpt">История о том, как я пытался создать постоянного персонажа в нейросети и почему все ваши ИИ-лайфхаки — отстой 🗑️</p>
-            <a href="ai-striptiz.html" class="read-more">Читать полностью</a>
-        </article>
-        <article class="article-card" data-tag="музыка">
-            <time datetime="2026-07-15" class="article-date">15 июля 2026</time>
-            <h2>Музыкальный сериал – Часть 2</h2>
-            <p class="article-excerpt">Как укротить Suno AI и почему я проиграл войну с её ограничениями. В этом выпуске: живые теги, инженерные маркеры и беспощадная минутная отсечка.</p>
-            <a href="music-part-2.html" class="read-more">Читать полностью</a>
-        </article>
-        <article class="article-card" data-tag="тексты">
-            <time datetime="2026-07-14" class="article-date">14 июля 2026</time>
-            <h2>Краш-тест ИИ на окраине цивилизации: какая нейросеть выживет на слабом 3G в лесу и выдаст базу с первой попытки</h2>
-            <p class="article-excerpt">Каждый раз, когда я читаю обзоры нейросетей, они написаны в идеальных условиях. Сверхбыстрый гигабитный Wi-Fi в коворкинге, топовый MacBook, открытый платный ChatGPT Plus и стабильный дорогой VPN. Но давайте спустимся на землю.</p>
-            <a href="crash-test-3g.html" class="read-more">Читать полностью</a>
-        </article>
-        <article class="article-card" data-tag="музыка">
-            <time datetime="2026-07-12" class="article-date">12 июля 2026</time>
-            <h2>Музыкальный сериал — Часть 1</h2>
-            <p class="article-excerpt">Знаете, я часто вижу в сети ролики с ИИ-песнями и всегда думал: «ну как у них получается так душевно?». Я сам недавно наступил на эти грабли...</p>
-            <a href="suno-music.html" class="read-more">Читать полностью</a>
-        </article>
-        <article class="article-card" data-tag="промпты">
-            <time datetime="2026-07-10" class="article-date">10 июля 2026</time>
-            <h2>Топ-3 бесплатных ИИ</h2>
-            <p class="article-excerpt">В этой подборке мы разберем три мощнейших инструмента, которые доступны абсолютно бесплатно и без VPN. Flux, NotebookLM и Clipdrop — революция в доступности ИИ.</p>
-            <a href="top-3-free-ai.html" class="read-more">Читать полностью</a>
-        </article>
-        <article class="article-card" data-tag="промпты">
-            <time datetime="2026-07-08" class="article-date">8 июля 2026</time>
-            <h2>Промпт-репетитор английского языка</h2>
-            <p class="article-excerpt">Интерактивный сценарий для прокачки разговорного английского (уровень A2, тема путешествий). Превращает ChatGPT в терпеливого собеседника.</p>
-            <a href="english-tutor-prompt.html" class="read-more">Читать полностью</a>
-        </article>
-        <article class="article-card" data-tag="тексты">
-            <time datetime="2026-07-05" class="article-date">5 июля 2026</time>
-            <h2>Краш-тест ИИ на слабом 3G интернете: Пакет выживания в полевых условиях</h2>
-            <p class="article-excerpt">Что делать, если связь ловит еле-еле, в кармане обычный смартфон без Google-сервисов, а сложную текстовую задачу нужно решить прямо сейчас с первой попытки?</p>
-            <a href="survival-pack-3g.html" class="read-more">Читать полностью</a>
-        </article>
+    <main class="feed" id="feed">
+        <p class="feed-loading">Загрузка статей...</p>
     </main>
     <script>
         (function() {
-            const t = document.querySelectorAll('.tag-btn');
-            const e = document.querySelectorAll('.article-card');
+            var feed = document.getElementById('feed');
+            var tagButtons = document.querySelectorAll('.tag-btn');
+            var allCards = [];
+            var currentTag = 'все';
 
-            function r(t) {
-                e.forEach(e => {
-                    if (t === 'все') {
-                        e.classList.remove('is-hidden')
+            function formatDate(dateString) {
+                var months = [
+                    'января', 'февраля', 'марта', 'апреля', 'мая', 'июня',
+                    'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря'
+                ];
+                var date = new Date(dateString);
+                var day = date.getDate();
+                var month = months[date.getMonth()];
+                var year = date.getFullYear();
+                return day + ' ' + month + ' ' + year;
+            }
+
+            function createCard(article) {
+                var card = document.createElement('article');
+                card.className = 'article-card';
+                card.setAttribute('data-tag', article.tag);
+
+                var time = document.createElement('time');
+                time.className = 'article-date';
+                time.setAttribute('datetime', article.date);
+                time.textContent = formatDate(article.date);
+
+                var h2 = document.createElement('h2');
+                h2.textContent = article.title;
+
+                var excerpt = document.createElement('p');
+                excerpt.className = 'article-excerpt';
+                excerpt.textContent = article.excerpt;
+
+                var link = document.createElement('a');
+                link.className = 'read-more';
+                link.href = 'article-template.html?article=' + article.slug;
+                link.textContent = 'Читать полностью';
+
+                card.appendChild(time);
+                card.appendChild(h2);
+                card.appendChild(excerpt);
+                card.appendChild(link);
+
+                return card;
+            }
+
+            function applyFilter(tag) {
+                currentTag = tag;
+                allCards.forEach(function(card) {
+                    if (tag === 'все') {
+                        card.classList.remove('is-hidden');
                     } else {
-                        const r = e.getAttribute('data-tag');
-                        if (r === t) {
-                            e.classList.remove('is-hidden')
+                        var cardTag = card.getAttribute('data-tag');
+                        if (cardTag === tag) {
+                            card.classList.remove('is-hidden');
                         } else {
-                            e.classList.add('is-hidden')
+                            card.classList.add('is-hidden');
                         }
                     }
-                })
+                });
             }
 
-            function n(e) {
-                t.forEach(t => t.classList.remove('active-tag'));
-                e.classList.add('active-tag')
+            function setActiveButton(activeBtn) {
+                tagButtons.forEach(function(btn) {
+                    btn.classList.remove('active-tag');
+                });
+                activeBtn.classList.add('active-tag');
             }
-            t.forEach(e => {
-                e.addEventListener('click', function() {
-                    const t = this.getAttribute('data-tag');
-                    n(this);
-                    r(t)
+
+            tagButtons.forEach(function(btn) {
+                btn.addEventListener('click', function() {
+                    var tag = this.getAttribute('data-tag');
+                    setActiveButton(this);
+                    applyFilter(tag);
+                });
+            });
+
+            fetch('articles/manifest.json')
+                .then(function(response) {
+                    if (!response.ok) throw new Error('Network error');
+                    return response.json();
                 })
-            })
+                .then(function(articles) {
+                    articles.sort(function(a, b) {
+                        return new Date(b.date) - new Date(a.date);
+                    });
+
+                    feed.innerHTML = '';
+
+                    if (articles.length === 0) {
+                        feed.innerHTML = '<p class="feed-loading">Нет опубликованных статей.</p>';
+                        return;
+                    }
+
+                    articles.forEach(function(article) {
+                        var card = createCard(article);
+                        allCards.push(card);
+                        feed.appendChild(card);
+                    });
+
+                    applyFilter(currentTag);
+                })
+                .catch(function() {
+                    feed.innerHTML = '<p class="feed-error">⚠️ Не удалось загрузить статьи. Проверьте подключение к интернету.</p>';
+                });
         })();
     </script>
 </body>
