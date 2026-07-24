@@ -5,10 +5,96 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="article-style.css">
     <title>GigaChat против Kling AI</title>
+    <style>
+        /* ГАРАНТИРУЮЩИЕ СТИЛИ — не зависят от article-style.css */
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            color: #007aff;
+            text-decoration: none;
+            font-size: 15px;
+            font-weight: 500;
+            margin-bottom: 20px;
+            padding: 8px 0;
+            gap: 4px;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Идеальная раскладка промт-блока (Flexbox) */
+        .prompt-wrapper {
+            background-color: #2d2d2d;   /* общий фон карточки */
+            border-radius: 10px;
+            padding: 20px;
+            margin: 25px 0;
+            display: flex;
+            flex-direction: column;      /* кнопка → блок */
+            box-sizing: border-box;
+        }
+
+        .copy-textbox {
+            display: flex;
+            justify-content: flex-end;   /* кнопка справа */
+            margin-bottom: 12px;         /* отступ до чёрного окна */
+            width: 100%;
+        }
+
+        .btn-copy {
+            background: none;
+            border: none;
+            color: #4da6ff;              /* синий цвет */
+            font-size: 15px;
+            font-weight: 500;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            border-radius: 6px;
+            transition: color 0.2s, background-color 0.2s;
+            white-space: nowrap;
+            line-height: 1.4;
+            text-decoration: none;
+        }
+        .btn-copy:hover {
+            color: #80c1ff;
+            background-color: rgba(77, 166, 255, 0.12);
+        }
+        .btn-copy svg {
+            width: 16px;
+            height: 16px;
+            fill: currentColor;
+            flex-shrink: 0;
+        }
+
+        .prompt-box {
+            background-color: #0a0a0a;   /* чёрный фон */
+            color: #00ff41;              /* зелёный текст */
+            border: 2px solid #1e90ff;   /* синяя рамка */
+            border-radius: 8px;
+            padding: 16px;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 14px;
+            line-height: 1.6;
+            white-space: pre-wrap;
+            word-break: break-word;
+            overflow-x: auto;
+            margin: 0;
+            box-sizing: border-box;
+        }
+
+        @media (max-width: 600px) {
+            .prompt-wrapper { padding: 14px; margin: 18px 0; }
+            .copy-textbox { margin-bottom: 8px; }
+            .btn-copy { font-size: 14px; padding: 5px 10px; }
+            .prompt-box { padding: 12px; font-size: 13px; }
+        }
+    </style>
 </head>
 <body>
 
-<!-- Кнопка "Назад на главную" строго по стилям article-style.css -->
+<!-- Кнопка «Назад на главную» -->
 <a href="index.html" class="back-link">← Назад на главную</a>
 
 <article>
@@ -47,9 +133,9 @@
 
     <p>💡 <strong>Промт для вашего теста:</strong> Вы можете лично проверить этот сценарий и убедиться в возможностях нейросети. Вот готовый рабочий промт на английском языке, который я использовал для генерации этого видео (просто скопируйте его и вставьте в Kling AI).</p>
 
-    <!-- Правильный промт-блок: кнопка отдельно сверху, текст в рамке -->
+    <!-- ПРАВИЛЬНЫЙ ПРОМТ-БЛОК (кнопка над окном) -->
     <div class="prompt-wrapper">
-        <div class="copy-toolbar">
+        <div class="copy-textbox">
             <button class="btn-copy">
                 <svg viewBox="0 0 24 24" width="15" height="15"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
                 Скопировать промт
@@ -83,7 +169,7 @@
     <p>Я тестирую нейросети с планшета и делюсь результатами без пафоса. <strong>Подписывайтесь на блог и комментируйте</strong>, будем вместе разбираться.</p>
 </article>
 
-<!-- Подключаем внешний JS-файл со всеми функциями -->
+<!-- Подключаем ваш JS-скрипт (он обеспечит копирование) -->
 <script src="article-script.js"></script>
 </body>
 </html>
