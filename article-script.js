@@ -35,14 +35,12 @@
             // 2. Ищем или создаём тулбар для кнопки
             let toolbar = wrapper.querySelector('.copy-toolbar, .copy-textbox');
             if (!toolbar) {
-                // Если тулбара нет — создаём его и забираем существующую кнопку
                 toolbar = document.createElement('div');
                 toolbar.className = 'copy-toolbar';
                 const existingBtn = wrapper.querySelector('.btn-copy');
                 if (existingBtn) {
                     toolbar.appendChild(existingBtn);
                 }
-                // Вставляем тулбар ПЕРЕД .prompt-box
                 const promptBox = wrapper.querySelector('.prompt-box');
                 if (promptBox) {
                     wrapper.insertBefore(toolbar, promptBox);
@@ -57,7 +55,7 @@
             toolbar.style.width = '100%';
             toolbar.style.margin = '0';
             toolbar.style.padding = '0';
-            toolbar.style.order = '0'; // гарантированно первый
+            toolbar.style.order = '0';
 
             // 4. Блок с кодом идёт вторым
             const promptBox = wrapper.querySelector('.prompt-box');
@@ -149,6 +147,7 @@
 
     /* Прогресс-бар чтения */
     function initProgressBar() {
+        if (document.querySelector('.reading-progress-bar')) return;
         const bar = document.createElement('div');
         bar.className = 'reading-progress-bar';
         document.body.prepend(bar);
@@ -164,19 +163,21 @@
 
     /* Блок "Читать также" */
     function initReadMore() {
+        if (document.querySelector('.read-more-block')) return;
+
         const allArticles = [
-            { title: 'Как я пытался создать постоянного ИИ-персонажа для блога, и почему нейросеть раздела его от стресса', url: 'ai-striptiz.html' },
-            { title: 'Музыкальный сериал – Часть 2', url: 'music-part-2.html' },
-            { title: 'Краш-тест ИИ на окраине цивилизации', url: 'crash-test-3g.html' },
-            { title: 'Музыкальный сериал — Часть 1', url: 'suno-music.html' },
-            { title: 'GigaChat против Kling AI [Сравнение 2-х видео внутри]', url: 'gigachat-vs-kling.html' },
-            { title: 'Топ-3 бесплатных ИИ', url: 'top-3-free-ai.html' },
-            { title: 'Промпт-репетитор английского языка', url: 'english-tutor-prompt.html' },
-            { title: 'Пакет выживания на 3G', url: 'survival-pack-3g.html' }
+            { title: 'GigaChat против Kling AI [Сравнение 2-х видео внутри]', url: 'article-template.html?article=gigachat-vs-kling' },
+            { title: 'Как я пытался создать постоянного ИИ-персонажа для блога, и почему нейросеть раздела его от стресса', url: 'article-template.html?article=ai-striptiz' },
+            { title: 'Музыкальный сериал – Часть 2', url: 'article-template.html?article=music-part-2' },
+            { title: 'Краш-тест ИИ на окраине цивилизации', url: 'article-template.html?article=crash-test-3g' },
+            { title: 'Музыкальный сериал — Часть 1', url: 'article-template.html?article=suno-music' },
+            { title: 'Топ-3 бесплатных ИИ', url: 'article-template.html?article=top-3-free-ai' },
+            { title: 'Промпт-репетитор английского языка', url: 'article-template.html?article=english-tutor-prompt' },
+            { title: 'Пакет выживания на 3G', url: 'article-template.html?article=survival-pack-3g' }
         ];
 
-        const currentFile = window.location.pathname.split('/').pop() || '';
-        const otherArticles = allArticles.filter(a => a.url !== currentFile);
+        const currentSlug = new URLSearchParams(window.location.search).get('article') || '';
+        const otherArticles = allArticles.filter(a => !a.url.includes(currentSlug));
         if (!otherArticles.length) return;
 
         const selected = otherArticles.sort(() => 0.5 - Math.random()).slice(0, 3);
@@ -194,9 +195,9 @@
             block.appendChild(link);
         });
 
-        const lastArticle = document.querySelector('article:last-of-type');
-        if (lastArticle) {
-            lastArticle.insertAdjacentElement('afterend', block);
+        const articleEl = document.querySelector('article');
+        if (articleEl) {
+            articleEl.insertAdjacentElement('afterend', block);
         } else {
             document.body.appendChild(block);
         }
@@ -204,8 +205,8 @@
 
     /* Реакции и счётчик просмотров */
     function initReactions() {
-        const currentFile = window.location.pathname.split('/').pop() || '';
-        const storageKey = currentFile.replace('.html', '') || 'index';
+        const currentSlug = new URLSearchParams(window.location.search).get('article') || 'index';
+        const storageKey = 'article_' + currentSlug;
 
         if (document.querySelector('.article-reactions')) return;
 
@@ -223,8 +224,8 @@
         if (readMoreBlock) {
             readMoreBlock.parentNode.insertBefore(reactionsDiv, readMoreBlock);
         } else {
-            const lastArticle = document.querySelector('article:last-of-type');
-            (lastArticle || document.body).appendChild(reactionsDiv);
+            const articleEl = document.querySelector('article');
+            (articleEl || document.body).appendChild(reactionsDiv);
         }
 
         const likeBtn = reactionsDiv.querySelector('.reaction-btn.like');
@@ -307,9 +308,33 @@
         initReactions();
     }
 
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', initAll);
-    } else {
+    /* Наблюдатель за изменениями в article — ключевое исправление для динамического контента */
+    function setupObserver() {
+        const articleEl = document.querySelector('article');
+        if (!articleEl) {
+            setTimeout(setupObserver, 100);
+            return;
+        }
+
+        const observer = new MutationObserver(function(mutations) {
+            mutations.forEach(function(mutation) {
+                if (mutation.type === 'childList' && mutation.addedNodes.length > 0) {
+                    initAll();
+                }
+            });
+        });
+
+        observer.observe(articleEl, {
+            childList: true,
+            subtree: true
+        });
+
         initAll();
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', setupObserver);
+    } else {
+        setupObserver();
     }
 })();
