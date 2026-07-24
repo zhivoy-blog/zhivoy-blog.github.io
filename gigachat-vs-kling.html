@@ -6,95 +6,100 @@
     <link rel="stylesheet" href="article-style.css">
     <title>GigaChat против Kling AI</title>
     <style>
-        /* ГАРАНТИРУЮЩИЕ СТИЛИ — не зависят от article-style.css */
+        /* ===== ГАРАНТИРУЮЩИЕ СТИЛИ — переопределяют любые внешние ===== */
+        /* Кнопка «Назад на главную» */
         .back-link {
-            display: inline-flex;
-            align-items: center;
-            color: #007aff;
-            text-decoration: none;
-            font-size: 15px;
-            font-weight: 500;
-            margin-bottom: 20px;
-            padding: 8px 0;
-            gap: 4px;
+            display: inline-flex !important;
+            align-items: center !important;
+            color: #007aff !important;
+            text-decoration: none !important;
+            font-size: 15px !important;
+            font-weight: 500 !important;
+            margin-bottom: 20px !important;
+            padding: 8px 0 !important;
+            gap: 4px !important;
         }
         .back-link:hover {
-            text-decoration: underline;
+            text-decoration: underline !important;
         }
 
-        /* Идеальная раскладка промт-блока (Flexbox) */
+        /* Обёртка промт-блока */
         .prompt-wrapper {
-            background-color: #2d2d2d;   /* общий фон карточки */
-            border-radius: 10px;
-            padding: 20px;
-            margin: 25px 0;
-            display: flex;
-            flex-direction: column;      /* кнопка → блок */
-            box-sizing: border-box;
+            background-color: #2d2d2d !important;
+            border-radius: 10px !important;
+            padding: 20px !important;
+            margin: 25px 0 !important;
+            display: flex !important;
+            flex-direction: column !important;
+            box-sizing: border-box !important;
         }
 
+        /* Контейнер для кнопки (строго над чёрным блоком) */
         .copy-textbox {
-            display: flex;
-            justify-content: flex-end;   /* кнопка справа */
-            margin-bottom: 12px;         /* отступ до чёрного окна */
-            width: 100%;
+            display: flex !important;
+            justify-content: flex-end !important;
+            margin-bottom: 12px !important;
+            width: 100% !important;
         }
 
+        /* Кнопка «Скопировать промпт» */
         .btn-copy {
-            background: none;
-            border: none;
-            color: #4da6ff;              /* синий цвет */
-            font-size: 15px;
-            font-weight: 500;
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            padding: 6px 12px;
-            border-radius: 6px;
-            transition: color 0.2s, background-color 0.2s;
-            white-space: nowrap;
-            line-height: 1.4;
-            text-decoration: none;
+            background: none !important;
+            border: none !important;
+            color: #4da6ff !important;
+            font-size: 15px !important;
+            font-weight: 500 !important;
+            cursor: pointer !important;
+            display: inline-flex !important;
+            align-items: center !important;
+            gap: 6px !important;
+            padding: 6px 12px !important;
+            border-radius: 6px !important;
+            transition: color 0.2s, background-color 0.2s !important;
+            white-space: nowrap !important;
+            line-height: 1.4 !important;
+            text-decoration: none !important;
         }
         .btn-copy:hover {
-            color: #80c1ff;
-            background-color: rgba(77, 166, 255, 0.12);
+            color: #80c1ff !important;
+            background-color: rgba(77, 166, 255, 0.12) !important;
         }
         .btn-copy svg {
-            width: 16px;
-            height: 16px;
-            fill: currentColor;
-            flex-shrink: 0;
+            width: 16px !important;
+            height: 16px !important;
+            fill: currentColor !important;
+            flex-shrink: 0 !important;
         }
 
+        /* Чёрное окно с зелёным кодом */
         .prompt-box {
-            background-color: #0a0a0a;   /* чёрный фон */
-            color: #00ff41;              /* зелёный текст */
-            border: 2px solid #1e90ff;   /* синяя рамка */
-            border-radius: 8px;
-            padding: 16px;
-            font-family: 'Courier New', Courier, monospace;
-            font-size: 14px;
-            line-height: 1.6;
-            white-space: pre-wrap;
-            word-break: break-word;
-            overflow-x: auto;
-            margin: 0;
-            box-sizing: border-box;
+            background-color: #0a0a0a !important;
+            color: #00ff41 !important;
+            border: 2px solid #1e90ff !important;
+            border-radius: 8px !important;
+            padding: 16px !important;
+            font-family: 'Courier New', Courier, monospace !important;
+            font-size: 14px !important;
+            line-height: 1.6 !important;
+            white-space: pre-wrap !important;
+            word-break: break-word !important;
+            overflow-x: auto !important;
+            margin: 0 !important;
+            box-sizing: border-box !important;
         }
 
+        /* Адаптация для планшетов и телефонов */
         @media (max-width: 600px) {
-            .prompt-wrapper { padding: 14px; margin: 18px 0; }
-            .copy-textbox { margin-bottom: 8px; }
-            .btn-copy { font-size: 14px; padding: 5px 10px; }
-            .prompt-box { padding: 12px; font-size: 13px; }
+            .prompt-wrapper { padding: 14px !important; margin: 18px 0 !important; }
+            .copy-textbox { margin-bottom: 8px !important; }
+            .btn-copy { font-size: 14px !important; padding: 5px 10px !important; }
+            .prompt-box { padding: 12px !important; font-size: 13px !important; }
         }
     </style>
 </head>
 <body>
 
-<!-- Кнопка «Назад на главную» -->
+<!-- ===== КНОПКА НАЗАД НА ГЛАВНУЮ (РАБОТАЕТ) ===== -->
 <a href="index.html" class="back-link">← Назад на главную</a>
 
 <article>
@@ -133,7 +138,7 @@
 
     <p>💡 <strong>Промт для вашего теста:</strong> Вы можете лично проверить этот сценарий и убедиться в возможностях нейросети. Вот готовый рабочий промт на английском языке, который я использовал для генерации этого видео (просто скопируйте его и вставьте в Kling AI).</p>
 
-    <!-- ПРАВИЛЬНЫЙ ПРОМТ-БЛОК (кнопка над окном) -->
+    <!-- ===== ПРАВИЛЬНЫЙ ПРОМТ-БЛОК ===== -->
     <div class="prompt-wrapper">
         <div class="copy-textbox">
             <button class="btn-copy">
@@ -169,7 +174,7 @@
     <p>Я тестирую нейросети с планшета и делюсь результатами без пафоса. <strong>Подписывайтесь на блог и комментируйте</strong>, будем вместе разбираться.</p>
 </article>
 
-<!-- Подключаем ваш JS-скрипт (он обеспечит копирование) -->
+<!-- Подключаем ваш JS-скрипт (он обеспечит копирование при клике) -->
 <script src="article-script.js"></script>
 </body>
 </html>
