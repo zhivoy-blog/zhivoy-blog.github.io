@@ -30,7 +30,6 @@
                 .then(function(data) {
                     document.getElementById('page-title').textContent = data.title + ' — Живой ИИ';
 
-                    // Создаём временный контейнер для обработки путей
                     var tempDiv = document.createElement('div');
                     tempDiv.innerHTML = data.content;
 
@@ -42,11 +41,28 @@
                         }
                     });
 
-                    // Исправляем пути у всех видео
-                    tempDiv.querySelectorAll('video, source').forEach(function(el) {
-                        var src = el.getAttribute('src');
+                    // Исправляем пути и атрибуты у всех видео
+                    tempDiv.querySelectorAll('video').forEach(function(video) {
+                        var src = video.getAttribute('src');
                         if (src && !src.startsWith('http') && !src.startsWith('articles/')) {
-                            el.setAttribute('src', 'articles/' + slug + '/' + src);
+                            video.setAttribute('src', 'articles/' + slug + '/' + src);
+                        }
+                        // Принудительно добавляем атрибуты для мобильных
+                        video.setAttribute('playsinline', '');
+                        video.setAttribute('webkit-playsinline', '');
+                        video.setAttribute('loop', '');
+                        video.setAttribute('muted', '');
+                        video.setAttribute('controls', '');
+                        video.setAttribute('preload', 'auto');
+                        video.style.width = '100%';
+                        video.style.maxWidth = '100%';
+                    });
+
+                    // Исправляем пути у source внутри video
+                    tempDiv.querySelectorAll('video source').forEach(function(source) {
+                        var src = source.getAttribute('src');
+                        if (src && !src.startsWith('http') && !src.startsWith('articles/')) {
+                            source.setAttribute('src', 'articles/' + slug + '/' + src);
                         }
                     });
 
@@ -56,7 +72,7 @@
                         if (typeof initAll === 'function') {
                             initAll();
                         }
-                    }, 50);
+                    }, 100);
                 })
                 .catch(function() {
                     document.getElementById('article-content').innerHTML = '<p style="color:#d1d1d6; text-align:center; padding:40px 0;">❌ Ошибка загрузки статьи. <a href="index.html" style="color:var(--accent-blue);">Вернуться к списку</a></p>';
