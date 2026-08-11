@@ -29,7 +29,28 @@
                 })
                 .then(function(data) {
                     document.getElementById('page-title').textContent = data.title + ' — Живой ИИ';
-                    document.getElementById('article-content').innerHTML = data.content;
+
+                    // Создаём временный контейнер для обработки путей
+                    var tempDiv = document.createElement('div');
+                    tempDiv.innerHTML = data.content;
+
+                    // Исправляем пути у всех картинок
+                    tempDiv.querySelectorAll('img').forEach(function(img) {
+                        var src = img.getAttribute('src');
+                        if (src && !src.startsWith('http') && !src.startsWith('articles/')) {
+                            img.setAttribute('src', 'articles/' + slug + '/' + src);
+                        }
+                    });
+
+                    // Исправляем пути у всех видео
+                    tempDiv.querySelectorAll('video, source').forEach(function(el) {
+                        var src = el.getAttribute('src');
+                        if (src && !src.startsWith('http') && !src.startsWith('articles/')) {
+                            el.setAttribute('src', 'articles/' + slug + '/' + src);
+                        }
+                    });
+
+                    document.getElementById('article-content').innerHTML = tempDiv.innerHTML;
 
                     setTimeout(function() {
                         if (typeof initAll === 'function') {
