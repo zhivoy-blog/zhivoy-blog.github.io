@@ -22,7 +22,7 @@
                 return;
             }
 
-            fetch('articles/' + slug + '.json')
+            fetch('articles/' + slug + '/data.json')
                 .then(function(response) {
                     if (!response.ok) throw new Error('Not found');
                     return response.json();
