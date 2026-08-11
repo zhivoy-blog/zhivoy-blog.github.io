@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Упаковщик статей для zhivoy-ai.ru</title>
+    <style>
+        body { font-family: -apple-system, sans-serif; padding: 15px; line-height: 1.5; background: #f5f5f5; color: #222; }
+        h1 { font-size: 24px; margin-bottom: 5px; }
+        .subtitle { color: #666; margin-top: 0; font-size: 14px; }
+        button, .big-btn { background: #2ea44f; color: white; border: none; padding: 16px 24px; font-size: 18px; border-radius: 10px; margin: 10px 5px 0 0; cursor: pointer; width: 100%; box-sizing: border-box; font-weight: bold; }
+        .big-btn:active { background: #22863a; }
+        .section { background: white; padding: 15px; border-radius: 10px; margin: 15px 0; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        ul { list-style: none; padding: 0; }
+        li { background: #f8f9fa; margin: 8px 0; padding: 12px; border-radius: 8px; display: flex; flex-wrap: wrap; align-items: center; gap: 8px; border-left: 4px solid #0366d6; }
+        .badge { font-weight: bold; padding: 4px 12px; border-radius: 20px; font-size: 14px; white-space: nowrap; }
+        .assigned { background: #e6ffed; color: #22863a; }
+        .unassigned { background: #ffeef0; color: #cb2431; }
+        .multiple { background: #fff3cd; color: #856404; }
+        select { padding: 10px; border-radius: 6px; border: 1px solid #ccc; flex: 1; min-width: 140px; background: white; font-size: 16px; }
+        .status { font-size: 14px; color: #555; margin-left: auto; }
+        hr { margin: 20px 0; border: none; border-top: 1px solid #ddd; }
+        ol li { border-left: none; background: #f0f7ff; cursor: pointer; padding: 15px; font-size: 15px; }
+        ol li:active { background: #ddeeff; }
+        .copy-btn { background: #0366d6; color: white; border: none; padding: 12px; border-radius: 8px; width: 100%; font-size: 16px; cursor: pointer; margin-top: 10px; }
+        .loading { text-align: center; padding: 30px; font-size: 18px; color: #666; }
+        .error { color: #cb2431; padding: 15px; background: #ffeef0; border-radius: 8px; }
+        .count { font-size: 28px; font-weight: bold; margin: 10px 0; }
+        .done { color: #22863a; }
+    </style>
+</head>
+<body>
+    <h1>📦 Упаковщик статей</h1>
+    <p class="subtitle">Для блога zhivoy-ai.ru • GitHub: zhivoy-blog/zhivoy-blog.github.io</p>
+
+    <div id="step1" class="section">
+        <p><strong>🔍 Шаг 1:</strong> Нажми кнопку, чтобы прочитать все файлы из папки <code>articles/</code> в твоём репозитории.</p>
+        <p style="font-size:14px; color:#666;">Скрипт прочитает JSON-файлы, найдёт в них упоминания картинок и видео, и покажет, что куда нужно переместить.</p>
+        <button class="big-btn" onclick="startAnalysis()">🚀 Начать анализ</button>
+    </div>
+
+    <div id="progress" style="display:none;" class="section loading">
+        <p>⏳ Читаю файлы... Пожалуйста, подожди.</p>
+        <p id="progressDetail" style="font-size:14px;"></p>
+    </div>
+
+    <div id="step2" style="display:none;">
+        <div class="section">
+            <h3>📊 Назначения файлов</h3>
+            <p>Для каждой картинки/видео уже выбрана папка статьи (если связь найдена). Можешь изменить вручную:</p>
+            <ul id="fileList"></ul>
+        </div>
+
+        <div class="section">
+            <h3>📋 План действий (выполняй по порядку в GitHub)</h3>
+            <p style="font-size:14px; color:#666;">Нажимай на каждый пункт — подробная инструкция скопируется в буфер. Или скопируй всё сразу:</p>
+            <ol id="actionPlan"></ol>
+            <button class="copy-btn" onclick="copyPlan()">📄 Скопировать ВЕСЬ план в буфер</button>
+        </div>
+    </div>
+
+    <script>
+        const USERNAME = 'zhivoy-blog';
+        const REPO = 'zhivoy-blog.github.io';
+        const ARTICLES_PATH = 'articles';
+        const API_BASE = `https://api.github.com/repos/${USERNAME}/${REPO}/contents/${ARTICLES_PATH}`;
+
+        let allFiles = [];
+        let jsonFiles = [];
+        let mediaFiles = [];
+        let assignments = new Map();
+
+        async function startAnalysis() {
+            const step1 = document.getElementById('step1');
+            const progressDiv = document.getElementById('progress');
+            const progressDetail = document.getElementById('progressDetail');
+            
+            step1.style.display = 'none';
+            progressDiv.style.display = 'block';
+            
+            try {
+                // Шаг 1: Получаем список всех файлов
+                progressDetail.textContent = '📂 Получаю список файлов в articles/...';
+                const resp = await fetch(API_BASE);
+                if (!resp.ok) {
+                    if (resp.status === 403) {
+                        throw new Error('GitHub API ограничил доступ. Подожди немного и попробуй снова. Или попробуй открыть этот файл через GitHub Pages (https://zhivoy-ai.ru/pack-articles.html)');
+                    } else if (resp.status === 404) {
+                        throw new Error('Папка articles/ не найдена. Проверь, точно ли она есть в репозитории?');
+                    } else {
+                        throw new Error(`Ошибка GitHub API: ${resp.status}. Попробуй позже.`);
+                    }
+                }
+                allFiles = await resp.json();
+                
+                // Фильтруем только файлы (исключаем папки, которые уже могут быть)
+                allFiles = allFiles.filter(f => f.type === 'file');
+                
+                jsonFiles = allFiles.filter(f => f.name.endsWith('.json'));
+                mediaFiles = allFiles.filter(f => {
+                    const name = f.name.toLowerCase();
+                    return !name.endsWith('.json') && 
+                           (name.endsWith('.jpg') || name.endsWith('.jpeg') || 
+                            name.endsWith('.png') || name.endsWith('.gif') || 
+                            name.endsWith('.webp') || name.endsWith('.mp4') || 
+                            name.endsWith('.webm') || name.endsWith('.mov'));
+                });
+                
+                progressDetail.textContent = `📄 Найдено JSON-статей: ${jsonFiles.length}, медиафайлов: ${mediaFiles.length}. Читаю содержимое статей...`;
+                
+                // Шаг 2: Читаем каждый JSON
+                for (let i = 0; i < jsonFiles.length; i++) {
+                    const jsonFile = jsonFiles[i];
+                    const articleSlug = jsonFile.name.replace('.json', '');
+                    progressDetail.textContent = `📖 Читаю статью ${i+1}/${jsonFiles.length}: ${jsonFile.name}...`;
+                    
+                    try {
+                        const contentResp = await fetch(jsonFile.download_url);
+                        if (!contentResp.ok) continue;
+                        const text = await contentResp.text();
+                        
+                        // Ищем все упоминания медиафайлов
+                        const regex = /src=["']([^"']*?\.(jpg|jpeg|png|gif|webp|mp4|webm|mov))["']/gi;
+                        let match;
+                        while ((match = regex.exec(text)) !== null) {
+                            let filename = match[1];
+                            // Убираем путь, оставляем только имя файла
+                            if (filename.includes('/')) {
+                                filename = filename.split('/').pop();
+                            }
+                            // Декодируем URL-encoded символы
+                            filename = decodeURIComponent(filename);
+                            
+                            if (!assignments.has(filename)) {
+                                assignments.set(filename, new Set());
+                            }
+                            assignments.get(filename).add(articleSlug);
+                        }
+                    } catch (e) {
+                        console.warn(`Не смог прочитать ${jsonFile.name}:`, e);
+                    }
+                }
+                
+                progressDiv.style.display = 'none';
+                
+                // Шаг 3: Показываем результаты
+                let totalLinked = 0;
+                for (let [name, slugs] of assignments) {
+                    if (slugs.size > 0) totalLinked++;
+                }
+                
+                document.getElementById('step2').style.display = 'block';
+                document.getElementById('step2').insertAdjacentHTML('afterbegin', 
+                    `<div class="section" style="background:#e6ffed;">
+                        <p class="done">✅ Анализ завершён!</p>
+                        <p>📊 Найдено связей: <strong>${totalLinked}</strong> из <strong>${mediaFiles.length}</strong> медиафайлов.</p>
+                    </div>`
+                );
+                
+                renderResults();
+                
+            } catch (e) {
+                progressDiv.style.display = 'none';
+                step1.style.display = 'block';
+                step1.insertAdjacentHTML('beforeend', 
+                    `<div class="error">❌ <strong>Ошибка:</strong> ${e.message}</div>`
+                );
+            }
+        }
+
+        function getAssignedFolder(mediaName) {
+            const articleSet = assignments.get(mediaName);
+            if (!articleSet || articleSet.size === 0) return null;
+            if (articleSet.size === 1) {
+                return Array.from(articleSet)[0];
+            }
+            return 'MULTIPLE';
+        }
+
+        function renderResults() {
+            const listEl = document.getElementById('fileList');
+            const planEl = document.getElementById('actionPlan');
+            listEl.innerHTML = '';
+            planEl.innerHTML = '';
+
+            let unassignedCount = 0;
+            let assignedCount = 0;
+            let multipleCount = 0;
+
+            // Сортируем: сначала назначенные, потом нет
+            const sortedMedia = [...mediaFiles].sort((a, b) => {
+                const aFolder = getAssignedFolder(a.name);
+                const bFolder = getAssignedFolder(b.name);
+                if (aFolder && !bFolder) return -1;
+                if (!aFolder && bFolder) return 1;
+                return a.name.localeCompare(b.name);
+            });
+
+            for (let file of sortedMedia) {
+                const autoFolder = getAssignedFolder(file.name);
+                const li = document.createElement('li');
+                
+                const nameSpan = document.createElement('span');
+                nameSpan.textContent = file.name;
+                nameSpan.style.flex = '2';
+                nameSpan.style.wordBreak = 'break-all';
+                
+                const select = document.createElement('select');
+                select.dataset.filename = file.name;
+                select.style.flex = '1';
+                
+                // Опция "не назначено"
+                const unassignedOpt = document.createElement('option');
+                unassignedOpt.value = '_unassigned';
+                unassignedOpt.textContent = '— не назначено —';
+                select.appendChild(unassignedOpt);
+                
+                // Опции папок статей
+                jsonFiles.forEach(jf => {
+                    const slug = jf.name.replace('.json', '');
+                    const opt = document.createElement('option');
+                    opt.value = slug;
+                    opt.textContent = '📁 ' + slug;
+                    if (autoFolder === slug) {
+                        opt.selected = true;
+                    }
+                    select.appendChild(opt);
+                });
+                
+                // Если ни одна не выбрана — выбираем "не назначено"
+                if (!autoFolder || autoFolder === 'MULTIPLE') {
+                    unassignedOpt.selected = true;
+                }
+
+                const statusSpan = document.createElement('span');
+                statusSpan.className = 'badge';
+                if (autoFolder && autoFolder !== 'MULTIPLE') {
+                    statusSpan.textContent = '✓ Назначено';
+                    statusSpan.classList.add('assigned');
+                    assignedCount++;
+                } else if (autoFolder === 'MULTIPLE') {
+                    statusSpan.textContent = '⚠ В нескольких';
+                    statusSpan.classList.add('multiple');
+                    multipleCount++;
+                    // Для файлов в нескольких статьях — не выбираем автоматически
+                    unassignedOpt.selected = true;
+                    unassignedOpt.textContent = '⚠ Выбери вручную (в нескольких)';
+                } else {
+                    statusSpan.textContent = '? Не привязано';
+                    statusSpan.classList.add('unassigned');
+                    unassignedCount++;
+                }
+                
+                li.appendChild(nameSpan);
+                li.appendChild(select);
+                li.appendChild(statusSpan);
+                listEl.appendChild(li);
+            }
+
+            // Обновляем заголовок с количеством
+            const fileListTitle = document.querySelector('#step2 .section h3');
+            if (fileListTitle) {
+                fileListTitle.textContent = `📊 Файлы (✓${assignedCount} ⚠${multipleCount} ?${unassignedCount})`;
+            }
+
+            generatePlan();
+        }
+
+        function generatePlan() {
+            const planEl = document.getElementById('actionPlan');
+            planEl.innerHTML = '';
+            const selects = document.querySelectorAll('#fileList select');
+            const planSteps = [];
+
+            // Часть 1: Создаём папки для статей и переносим JSON
+            planSteps.push({
+                title: '🔹 ПОДГОТОВКА ПАПОК СТАТЕЙ',
+                text: '',
+                action: 'Сначала создадим папки для каждой статьи и перенесём в них JSON-файлы (переименовав в data.json).',
+                isHeader: true
+            });
+
+            jsonFiles.forEach(jf => {
+                const slug = jf.name.replace('.json', '');
+                planSteps.push({
+                    text: `Создать папку и перенести ${jf.name}`,
+                    action: `1. Открой папку articles/ в GitHub\n2. Нажми "Add file" → "Create new file"\n3. Введи имя: articles/${slug}/data.json\n4. Скопируй содержимое из articles/${jf.name} и вставь сюда\n5. Сохрани (Commit)\n6. Вернись в articles/ и удали старый файл ${jf.name}`,
+                    isHeader: false
+                });
+            });
+
+            // Часть 2: Переносим медиафайлы
+            planSteps.push({
+                title: '🔹 ПЕРЕНОС МЕДИАФАЙЛОВ',
+                text: '',
+                action: 'Теперь перенесём картинки и видео в папки своих статей.',
+                isHeader: true
+            });
+
+            const mediaMoves = new Map();
+            selects.forEach(select => {
+                const folder = select.value;
+                const filename = select.dataset.filename;
+                if (!mediaMoves.has(folder)) mediaMoves.set(folder, []);
+                mediaMoves.get(folder).push(filename);
+            });
+
+            // Сначала показываем назначенные
+            for (let [folder, files] of mediaMoves) {
+                if (folder === '_unassigned') continue;
+                planSteps.push({
+                    text: `📁 ${folder}/ ← ${files.length} файл(а)`,
+                    action: `Перенеси в папку articles/${folder}/:\n${files.map(f => '• ' + f).join('\n')}\n\nКак: В articles/ нажми на файл → "..." (три точки) → "Move file" → укажи путь articles/${folder}/[имя_файла]`,
+                    isHeader: false
+                });
+            }
+
+            // Потом неопознанные
+            if (mediaMoves.has('_unassigned') && mediaMoves.get('_unassigned').length > 0) {
+                planSteps.push({
+                    title: '🔹 НЕОПОЗНАННЫЕ ФАЙЛЫ',
+                    text: '',
+                    action: 'Эти файлы не упоминаются ни в одной статье. Перемести их во временную папку _unassigned для ручного разбора.',
+                    isHeader: true
+                });
+                planSteps.push({
+                    text: `📁 _unassigned/ ← ${mediaMoves.get('_unassigned').length} файл(а)`,
+                    action: `Создай папку articles/_unassigned/ (через "Create new file" → articles/_unassigned/.gitkeep) и перемести туда:\n${mediaMoves.get('_unassigned').map(f => '• ' + f).join('\n')}`,
+                    isHeader: false
+                });
+            }
+
+            // Отрисовка
+            planSteps.forEach((step, idx) => {
+                if (step.isHeader) {
+                    const div = document.createElement('div');
+                    div.style.cssText = 'font-weight:bold; margin-top:20px; color:#0366d6; font-size:16px;';
+                    div.textContent = step.title;
+                    planEl.appendChild(div);
+                    if (step.action) {
+                        const p = document.createElement('p');
+                        p.style.cssText = 'font-size:13px; color:#666; margin:5px 0;';
+                        p.textContent = step.action;
+                        planEl.appendChild(p);
+                    }
+                } else {
+                    const li = document.createElement('li');
+                    li.textContent = step.text;
+                    li.title = 'Нажми, чтобы скопировать инструкцию';
+                    li.addEventListener('click', () => {
+                        navigator.clipboard.writeText(step.action).then(() => {
+                            // Временная подсветка
+                            li.style.background = '#d4edda';
+                            setTimeout(() => { li.style.background = '#f0f7ff'; }, 500);
+                        }).catch(() => {
+                            alert('Не удалось скопировать. Вот инструкция:\n\n' + step.action);
+                        });
+                    });
+                    planEl.appendChild(li);
+                }
+            });
+
+            // Сохраняем для копирования всего плана
+            const fullPlan = planSteps
+                .filter(s => !s.isHeader)
+                .map((s, i) => `${i+1}. ${s.text}\n${s.action}`)
+                .join('\n\n');
+            
+            document.getElementById('planData')?.remove();
+            const hiddenPlan = document.createElement('textarea');
+            hiddenPlan.id = 'planData';
+            hiddenPlan.style.display = 'none';
+            hiddenPlan.value = fullPlan;
+            document.body.appendChild(hiddenPlan);
+        }
+
+        function copyPlan() {
+            const planText = document.getElementById('planData')?.value;
+            if (planText) {
+                navigator.clipboard.writeText(planText).then(() => {
+                    alert('✅ Весь план скопирован! Теперь выполняй шаги в GitHub.');
+                }).catch(() => {
+                    // Fallback: показываем текст
+                    const win = window.open('', '_blank', 'width=400,height=600');
+                    win.document.write('<pre>' + planText + '</pre>');
+                    win.document.close();
+                });
+            }
+        }
+
+        // Перегенерируем план при изменении выпадающих списков
+        document.addEventListener('change', function(e) {
+            if (e.target.tagName === 'SELECT' && e.target.closest('#fileList')) {
+                generatePlan();
+            }
+        });
+    </script>
+</body>
+</html>
