@@ -28,7 +28,22 @@ padding: 16px;
 min-height: 100vh;
 display: flex;
 flex-direction: column;
-align-items: center
+align-items: center;
+position: relative;
+overflow-x: hidden
+}
+#bg-canvas {
+position: fixed;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+z-index: 0;
+pointer-events: none
+}
+.header, .tag-filter, .feed, .site-footer {
+position: relative;
+z-index: 1
 }
 .header {
 text-align: center;
@@ -229,6 +244,7 @@ max-width: 380px
 </style>
 </head>
 <body>
+<canvas id="bg-canvas"></canvas>
 
 <header class="header">
 <h1>Живой ИИ</h1>
@@ -260,6 +276,91 @@ max-width: 380px
 </footer>
 
 <script>
+// --- Фоновая сеть частиц: живёт сама по себе, а на десктопе реагирует на курсор ---
+(function() {
+var canvas = document.getElementById('bg-canvas');
+var ctx = canvas.getContext('2d');
+var W, H, particles = [];
+var mouse = { x: null, y: null, active: false };
+var PARTICLE_COUNT = window.innerWidth < 640 ? 40 : 80;
+var LINK_DIST = 130;
+var MOUSE_DIST = 150;
+
+function resize() {
+W = canvas.width = window.innerWidth;
+H = canvas.height = window.innerHeight;
+}
+window.addEventListener('resize', resize);
+resize();
+
+function Particle() {
+this.x = Math.random() * W;
+this.y = Math.random() * H;
+this.vx = (Math.random() - 0.5) * 0.4;
+this.vy = (Math.random() - 0.5) * 0.4;
+this.r = Math.random() * 1.5 + 1;
+}
+Particle.prototype.update = function() {
+this.x += this.vx;
+this.y += this.vy;
+if (this.x < 0 || this.x > W) this.vx *= -1;
+if (this.y < 0 || this.y > H) this.vy *= -1;
+
+if (mouse.active) {
+var dx = this.x - mouse.x;
+var dy = this.y - mouse.y;
+var dist = Math.sqrt(dx * dx + dy * dy);
+if (dist < MOUSE_DIST) {
+var force = (MOUSE_DIST - dist) / MOUSE_DIST;
+this.x += (dx / dist) * force * 1.8;
+this.y += (dy / dist) * force * 1.8;
+}
+}
+};
+
+for (var i = 0; i < PARTICLE_COUNT; i++) particles.push(new Particle());
+
+window.addEventListener('mousemove', function(e) {
+mouse.x = e.clientX;
+mouse.y = e.clientY;
+mouse.active = true;
+});
+window.addEventListener('mouseleave', function() {
+mouse.active = false;
+});
+
+function draw() {
+ctx.clearRect(0, 0, W, H);
+
+for (var i = 0; i < particles.length; i++) {
+particles[i].update();
+ctx.beginPath();
+ctx.arc(particles[i].x, particles[i].y, particles[i].r, 0, Math.PI * 2);
+ctx.fillStyle = 'rgba(0, 122, 255, 0.7)';
+ctx.fill();
+}
+
+for (var a = 0; a < particles.length; a++) {
+for (var b = a + 1; b < particles.length; b++) {
+var dx = particles[a].x - particles[b].x;
+var dy = particles[a].y - particles[b].y;
+var dist = Math.sqrt(dx * dx + dy * dy);
+if (dist < LINK_DIST) {
+ctx.beginPath();
+ctx.moveTo(particles[a].x, particles[a].y);
+ctx.lineTo(particles[b].x, particles[b].y);
+ctx.strokeStyle = 'rgba(220, 225, 235, ' + (1 - dist / LINK_DIST) * 0.35 + ')';
+ctx.lineWidth = 1;
+ctx.stroke();
+}
+}
+}
+
+requestAnimationFrame(draw);
+}
+draw();
+})();
+
 (function() {
 var feed = document.getElementById('feed');
 var tagButtons = document.querySelectorAll('.tag-btn');
