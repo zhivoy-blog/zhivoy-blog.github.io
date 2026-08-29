@@ -1,292 +1,368 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Живой ИИ — Платформа личного опыта и скрытых инструментов</title>
-    <style>
-        :root {
-            --bg-color: #113154;
-            --card-bg: #1b436d;
-            --accent-blue: #007aff;
-            --accent-green: #34c759;
-            --text-main: #ffffff;
-            --text-muted: #8e9e93;
-            --text-muted-alt: #8e9eaf
-        }
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0
-        }
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-main);
-            line-height: 1.5;
-            padding: 16px;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center
-        }
-        .header {
-            text-align: center;
-            padding: 12px 0 16px;
-            width: 100%;
-            max-width: 600px
-        }
-        .header h1 {
-            font-size: 22px;
-            font-weight: 700;
-            margin-bottom: 14px;
-            color: var(--text-main)
-        }
-        .btn-telegram {
-            display: block;
-            width: 100%;
-            max-width: 360px;
-            margin: 0 auto;
-            background-color: var(--accent-blue);
-            color: white;
-            text-align: center;
-            padding: 14px 20px;
-            border-radius: 12px;
-            font-weight: 700;
-            text-decoration: none;
-            font-size: 15px;
-            letter-spacing: 0.3px;
-            box-shadow: 0 4px 14px rgba(0, 122, 255, 0.35);
-            transition: transform 0.1s ease
-        }
-        .btn-telegram:active {
-            transform: scale(0.97)
-        }
-        .tag-filter {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            justify-content: center;
-            margin: 16px 0 24px;
-            width: 100%;
-            max-width: 600px
-        }
-        .tag-btn {
-            background-color: transparent;
-            border: 1px solid var(--accent-blue);
-            color: var(--accent-blue);
-            padding: 10px 18px;
-            border-radius: 10px;
-            font-size: 15px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background-color 0.2s, color 0.2s;
-            min-height: 44px;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            white-space: nowrap
-        }
-        .tag-btn.active-tag {
-            background-color: var(--accent-blue);
-            color: #fff
-        }
-        .feed {
-            width: 100%;
-            max-width: 600px;
-            margin-top: 8px
-        }
-        .article-card {
-            background-color: var(--card-bg);
-            border-radius: 16px;
-            padding: 18px;
-            margin-bottom: 18px;
-            border: 1px solid #0088cc;
-            transition: opacity 0.2s, transform 0.2s
-        }
-        .article-card.is-hidden {
-            display: none !important
-        }
-        .article-date {
-            display: block;
-            font-size: 13px;
-            color: var(--text-muted-alt);
-            margin-bottom: 6px;
-            font-weight: 500
-        }
-        .article-card h2 {
-            font-size: 18px;
-            font-weight: 600;
-            margin-bottom: 10px;
-            color: var(--text-main);
-            line-height: 1.3
-        }
-        .article-excerpt {
-            font-size: 14px;
-            color: #d1d1d6;
-            margin-bottom: 14px
-        }
-        .read-more {
-            display: block;
-            width: 100%;
-            background-color: transparent;
-            border: 1px solid var(--accent-blue);
-            color: var(--accent-blue);
-            text-align: center;
-            padding: 12px;
-            border-radius: 12px;
-            font-weight: 600;
-            text-decoration: none;
-            font-size: 15px;
-            transition: background-color 0.2s, color 0.2s
-        }
-        .read-more:active {
-            background-color: var(--accent-blue);
-            color: white
-        }
-        .feed-loading {
-            text-align: center;
-            padding: 40px 0;
-            color: var(--text-muted-alt);
-            font-size: 15px
-        }
-        .feed-error {
-            text-align: center;
-            padding: 40px 0;
-            color: #ff6b6b;
-            font-size: 15px
-        }
-        @media(min-width:640px) {
-            .btn-telegram {
-                max-width: 380px
-            }
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Живой ИИ — Платформа личного опыта и скрытых инструментов</title>
+<style>
+:root {
+--bg-color: #113154;
+--card-bg: #1b436d;
+--accent-blue: #007aff;
+--accent-green: #34c759;
+--text-main: #ffffff;
+--text-muted: #8e9e93;
+--text-muted-alt: #8e9eaf
+}
+* {
+box-sizing: border-box;
+margin: 0;
+padding: 0
+}
+body {
+font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+background-color: var(--bg-color);
+color: var(--text-main);
+line-height: 1.5;
+padding: 16px;
+min-height: 100vh;
+display: flex;
+flex-direction: column;
+align-items: center
+}
+.header {
+text-align: center;
+padding: 12px 0 16px;
+width: 100%;
+max-width: 600px
+}
+.header h1 {
+font-size: 22px;
+font-weight: 700;
+margin-bottom: 14px;
+color: var(--text-main)
+}
+
+/* --- Общая панель ссылок (header nav) --- */
+.site-links {
+display: flex;
+flex-wrap: wrap;
+gap: 10px;
+justify-content: center;
+margin-bottom: 14px
+}
+.btn-link {
+display: inline-flex;
+align-items: center;
+justify-content: center;
+flex: 1 1 140px;
+max-width: 180px;
+background-color: var(--accent-blue);
+color: white;
+text-align: center;
+padding: 14px 16px;
+border-radius: 12px;
+font-weight: 700;
+text-decoration: none;
+font-size: 14px;
+letter-spacing: 0.3px;
+box-shadow: 0 4px 14px rgba(0, 122, 255, 0.35);
+transition: transform 0.1s ease
+}
+.btn-link.vk {
+background-color: #0077ff;
+}
+.btn-link.vc {
+background-color: #ff5c00;
+box-shadow: 0 4px 14px rgba(255, 92, 0, 0.35);
+}
+.btn-link:active {
+transform: scale(0.97)
+}
+
+.btn-telegram {
+display: block;
+width: 100%;
+max-width: 360px;
+margin: 0 auto;
+background-color: var(--accent-blue);
+color: white;
+text-align: center;
+padding: 14px 20px;
+border-radius: 12px;
+font-weight: 700;
+text-decoration: none;
+font-size: 15px;
+letter-spacing: 0.3px;
+box-shadow: 0 4px 14px rgba(0, 122, 255, 0.35);
+transition: transform 0.1s ease
+}
+.btn-telegram:active {
+transform: scale(0.97)
+}
+.tag-filter {
+display: flex;
+flex-wrap: wrap;
+gap: 10px;
+justify-content: center;
+margin: 16px 0 24px;
+width: 100%;
+max-width: 600px
+}
+.tag-btn {
+background-color: transparent;
+border: 1px solid var(--accent-blue);
+color: var(--accent-blue);
+padding: 10px 18px;
+border-radius: 10px;
+font-size: 15px;
+font-weight: 600;
+cursor: pointer;
+transition: background-color 0.2s, color 0.2s;
+min-height: 44px;
+display: inline-flex;
+align-items: center;
+justify-content: center;
+text-align: center;
+white-space: nowrap
+}
+.tag-btn.active-tag {
+background-color: var(--accent-blue);
+color: #fff
+}
+.feed {
+width: 100%;
+max-width: 600px;
+margin-top: 8px
+}
+.article-card {
+background-color: var(--card-bg);
+border-radius: 16px;
+padding: 18px;
+margin-bottom: 18px;
+border: 1px solid #0088cc;
+transition: opacity 0.2s, transform 0.2s
+}
+.article-card.is-hidden {
+display: none !important
+}
+.article-date {
+display: block;
+font-size: 13px;
+color: var(--text-muted-alt);
+margin-bottom: 6px;
+font-weight: 500
+}
+.article-card h2 {
+font-size: 18px;
+font-weight: 600;
+margin-bottom: 10px;
+color: var(--text-main);
+line-height: 1.3
+}
+.article-excerpt {
+font-size: 14px;
+color: #d1d1d6;
+margin-bottom: 14px
+}
+.read-more {
+display: block;
+width: 100%;
+background-color: transparent;
+border: 1px solid var(--accent-blue);
+color: var(--accent-blue);
+text-align: center;
+padding: 12px;
+border-radius: 12px;
+font-weight: 600;
+text-decoration: none;
+font-size: 15px;
+transition: background-color 0.2s, color 0.2s
+}
+.read-more:active {
+background-color: var(--accent-blue);
+color: white
+}
+.feed-loading {
+text-align: center;
+padding: 40px 0;
+color: var(--text-muted-alt);
+font-size: 15px
+}
+.feed-error {
+text-align: center;
+padding: 40px 0;
+color: #ff6b6b;
+font-size: 15px
+}
+
+/* --- Общий footer --- */
+.site-footer {
+width: 100%;
+max-width: 600px;
+margin-top: 32px;
+padding: 20px 0 10px;
+border-top: 1px solid rgba(255,255,255,0.1);
+text-align: center;
+color: var(--text-muted-alt);
+font-size: 13px
+}
+.site-footer .footer-links {
+display: flex;
+flex-wrap: wrap;
+gap: 14px;
+justify-content: center;
+margin-bottom: 10px
+}
+.site-footer .footer-links a {
+color: var(--accent-blue);
+text-decoration: none;
+font-weight: 600;
+font-size: 14px
+}
+
+@media(min-width:640px) {
+.btn-telegram {
+max-width: 380px
+}
+}
+</style>
 </head>
 <body>
-    <header class="header">
-        <h1>Живой ИИ</h1>
-        <a href="https://t.me/zhivoy_ii" target="_blank" rel="noopener noreferrer" class="btn-telegram">Вступить в Telegram [Ключ в закрепе]</a>
-    </header>
-    <div class="tag-filter">
-        <button class="tag-btn active-tag" data-tag="все">Все</button>
-        <button class="tag-btn" data-tag="музыка">Музыка</button>
-        <button class="tag-btn" data-tag="промпты">Промпты</button>
-        <button class="tag-btn" data-tag="тексты">Тексты</button>
-    </div>
-    <main class="feed" id="feed">
-        <p class="feed-loading">Загрузка статей...</p>
-    </main>
-    <script>
-        (function() {
-            var feed = document.getElementById('feed');
-            var tagButtons = document.querySelectorAll('.tag-btn');
-            var allCards = [];
-            var currentTag = 'все';
 
-            function formatDate(dateString) {
-                var months = [
-                    'января', 'февраля', 'марта', 'апреля', 'мая', 'июня',
-                    'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря'
-                ];
-                var date = new Date(dateString);
-                var day = date.getDate();
-                var month = months[date.getMonth()];
-                var year = date.getFullYear();
-                return day + ' ' + month + ' ' + year;
-            }
+<header class="header">
+<h1>Живой ИИ</h1>
+<div class="site-links">
+<a href="https://vk.ru/zhivoy_ai" target="_blank" rel="noopener noreferrer" class="btn-link vk">Мы в ВК</a>
+<a href="https://vc.ru/id6025411" target="_blank" rel="noopener noreferrer" class="btn-link vc">Блог на vc.ru</a>
+</div>
+<a href="https://t.me/zhivoy_ii" target="_blank" rel="noopener noreferrer" class="btn-telegram">Вступить в Telegram [Ключ в закрепе]</a>
+</header>
 
-            function createCard(article) {
-                var card = document.createElement('article');
-                card.className = 'article-card';
-                card.setAttribute('data-tag', article.tag);
+<div class="tag-filter">
+<button class="tag-btn active-tag" data-tag="все">Все</button>
+<button class="tag-btn" data-tag="музыка">Музыка</button>
+<button class="tag-btn" data-tag="промпты">Промпты</button>
+<button class="tag-btn" data-tag="тексты">Тексты</button>
+</div>
 
-                var time = document.createElement('time');
-                time.className = 'article-date';
-                time.setAttribute('datetime', article.date);
-                time.textContent = formatDate(article.date);
+<main class="feed" id="feed">
+<p class="feed-loading">Загрузка статей...</p>
+</main>
 
-                var h2 = document.createElement('h2');
-                h2.textContent = article.title;
+<footer class="site-footer">
+<div class="footer-links">
+<a href="https://vk.ru/zhivoy_ai" target="_blank" rel="noopener noreferrer">ВКонтакте</a>
+<a href="https://vc.ru/id6025411" target="_blank" rel="noopener noreferrer">vc.ru</a>
+<a href="https://t.me/zhivoy_ii" target="_blank" rel="noopener noreferrer">Telegram</a>
+</div>
+<p>© Живой ИИ</p>
+</footer>
 
-                var excerpt = document.createElement('p');
-                excerpt.className = 'article-excerpt';
-                excerpt.textContent = article.excerpt;
+<script>
+(function() {
+var feed = document.getElementById('feed');
+var tagButtons = document.querySelectorAll('.tag-btn');
+var allCards = [];
+var currentTag = 'все';
 
-                var link = document.createElement('a');
-                link.className = 'read-more';
-                link.href = 'article-template.html?article=' + article.slug;
-                link.textContent = 'Читать полностью';
+function formatDate(dateString) {
+var months = [
+'января', 'февраля', 'марта', 'апреля', 'мая', 'июня',
+'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря'
+];
+var date = new Date(dateString);
+var day = date.getDate();
+var month = months[date.getMonth()];
+var year = date.getFullYear();
+return day + ' ' + month + ' ' + year;
+}
 
-                card.appendChild(time);
-                card.appendChild(h2);
-                card.appendChild(excerpt);
-                card.appendChild(link);
+function createCard(article) {
+var card = document.createElement('article');
+card.className = 'article-card';
+card.setAttribute('data-tag', article.tag);
 
-                return card;
-            }
+var time = document.createElement('time');
+time.className = 'article-date';
+time.setAttribute('datetime', article.date);
+time.textContent = formatDate(article.date);
 
-            function applyFilter(tag) {
-                currentTag = tag;
-                allCards.forEach(function(card) {
-                    if (tag === 'все') {
-                        card.classList.remove('is-hidden');
-                    } else {
-                        var cardTag = card.getAttribute('data-tag');
-                        if (cardTag === tag) {
-                            card.classList.remove('is-hidden');
-                        } else {
-                            card.classList.add('is-hidden');
-                        }
-                    }
-                });
-            }
+var h2 = document.createElement('h2');
+h2.textContent = article.title;
 
-            function setActiveButton(activeBtn) {
-                tagButtons.forEach(function(btn) {
-                    btn.classList.remove('active-tag');
-                });
-                activeBtn.classList.add('active-tag');
-            }
+var excerpt = document.createElement('p');
+excerpt.className = 'article-excerpt';
+excerpt.textContent = article.excerpt;
 
-            tagButtons.forEach(function(btn) {
-                btn.addEventListener('click', function() {
-                    var tag = this.getAttribute('data-tag');
-                    setActiveButton(this);
-                    applyFilter(tag);
-                });
-            });
+var link = document.createElement('a');
+link.className = 'read-more';
+link.href = 'article-template.html?article=' + article.slug;
+link.textContent = 'Читать полностью';
 
-            fetch('articles/manifest.json')
-                .then(function(response) {
-                    if (!response.ok) throw new Error('Network error');
-                    return response.json();
-                })
-                .then(function(articles) {
-                    articles.sort(function(a, b) {
-                        return new Date(b.date) - new Date(a.date);
-                    });
+card.appendChild(time);
+card.appendChild(h2);
+card.appendChild(excerpt);
+card.appendChild(link);
+return card;
+}
 
-                    feed.innerHTML = '';
+function applyFilter(tag) {
+currentTag = tag;
+allCards.forEach(function(card) {
+if (tag === 'все') {
+card.classList.remove('is-hidden');
+} else {
+var cardTag = card.getAttribute('data-tag');
+if (cardTag === tag) {
+card.classList.remove('is-hidden');
+} else {
+card.classList.add('is-hidden');
+}
+}
+});
+}
 
-                    if (articles.length === 0) {
-                        feed.innerHTML = '<p class="feed-loading">Нет опубликованных статей.</p>';
-                        return;
-                    }
+function setActiveButton(activeBtn) {
+tagButtons.forEach(function(btn) {
+btn.classList.remove('active-tag');
+});
+activeBtn.classList.add('active-tag');
+}
 
-                    articles.forEach(function(article) {
-                        var card = createCard(article);
-                        allCards.push(card);
-                        feed.appendChild(card);
-                    });
+tagButtons.forEach(function(btn) {
+btn.addEventListener('click', function() {
+var tag = this.getAttribute('data-tag');
+setActiveButton(this);
+applyFilter(tag);
+});
+});
 
-                    applyFilter(currentTag);
-                })
-                .catch(function() {
-                    feed.innerHTML = '<p class="feed-error">⚠️ Не удалось загрузить статьи. Проверьте подключение к интернету.</p>';
-                });
-        })();
-    </script>
+fetch('articles/manifest.json')
+.then(function(response) {
+if (!response.ok) throw new Error('Network error');
+return response.json();
+})
+.then(function(articles) {
+articles.sort(function(a, b) {
+return new Date(b.date) - new Date(a.date);
+});
+feed.innerHTML = '';
+if (articles.length === 0) {
+feed.innerHTML = '<p class="feed-loading">Нет опубликованных статей.</p>';
+return;
+}
+articles.forEach(function(article) {
+var card = createCard(article);
+allCards.push(card);
+feed.appendChild(card);
+});
+applyFilter(currentTag);
+})
+.catch(function() {
+feed.innerHTML = '<p class="feed-error">⚠️ Не удалось загрузить статьи. Проверьте подключение к интернету.</p>';
+});
+})();
+</script>
 </body>
 </html>
