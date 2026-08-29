@@ -12,7 +12,18 @@
 --accent-green: #34c759;
 --text-main: #ffffff;
 --text-muted: #8e9e93;
---text-muted-alt: #8e9eaf
+--text-muted-alt: #8e9eaf;
+--border-color: #0088cc;
+--line-color: 220, 225, 235
+}
+[data-theme="light"] {
+--bg-color: #eef2f7;
+--card-bg: #ffffff;
+--text-main: #11213a;
+--text-muted: #5b6b82;
+--text-muted-alt: #5b6b82;
+--border-color: #cfd8e3;
+--line-color: 0, 90, 160
 }
 * {
 box-sizing: border-box;
@@ -30,7 +41,8 @@ display: flex;
 flex-direction: column;
 align-items: center;
 position: relative;
-overflow-x: hidden
+overflow-x: hidden;
+transition: background-color 0.3s ease, color 0.3s ease
 }
 #bg-canvas {
 position: fixed;
@@ -44,6 +56,42 @@ pointer-events: none
 .header, .tag-filter, .feed, .site-footer {
 position: relative;
 z-index: 1
+}
+.theme-toggle {
+position: absolute;
+top: 12px;
+right: 0;
+background-color: transparent;
+border: 1px solid var(--border-color);
+color: var(--text-main);
+width: 40px;
+height: 40px;
+border-radius: 50%;
+font-size: 18px;
+cursor: pointer;
+display: flex;
+align-items: center;
+justify-content: center
+}
+.search-box {
+width: 100%;
+max-width: 600px;
+margin: 0 0 10px;
+position: relative;
+z-index: 1
+}
+.search-box input {
+width: 100%;
+padding: 12px 16px;
+border-radius: 12px;
+border: 1px solid var(--border-color);
+background-color: var(--card-bg);
+color: var(--text-main);
+font-size: 15px;
+outline: none
+}
+.search-box input::placeholder {
+color: var(--text-muted-alt)
 }
 .header {
 text-align: center;
@@ -155,8 +203,8 @@ background-color: var(--card-bg);
 border-radius: 16px;
 padding: 18px;
 margin-bottom: 18px;
-border: 1px solid #0088cc;
-transition: opacity 0.2s, transform 0.2s
+border: 1px solid var(--border-color);
+transition: opacity 0.2s, transform 0.2s, background-color 0.3s
 }
 .article-card.is-hidden {
 display: none !important
@@ -177,7 +225,7 @@ line-height: 1.3
 }
 .article-excerpt {
 font-size: 14px;
-color: #d1d1d6;
+color: var(--text-muted-alt);
 margin-bottom: 14px
 }
 .read-more {
@@ -247,6 +295,7 @@ max-width: 380px
 <canvas id="bg-canvas"></canvas>
 
 <header class="header">
+<button class="theme-toggle" id="theme-toggle" aria-label="Переключить тему">🌙</button>
 <h1>Живой ИИ</h1>
 <div class="site-links">
 <a href="https://vk.ru/zhivoy_ai" target="_blank" rel="noopener noreferrer" class="btn-link vk">Мы в ВК</a>
@@ -254,6 +303,10 @@ max-width: 380px
 </div>
 <a href="https://t.me/zhivoy_ii" target="_blank" rel="noopener noreferrer" class="btn-telegram">Вступить в Telegram [Ключ в закрепе]</a>
 </header>
+
+<div class="search-box">
+<input type="text" id="search-input" placeholder="Поиск статей...">
+</div>
 
 <div class="tag-filter">
 <button class="tag-btn active-tag" data-tag="все">Все</button>
@@ -276,6 +329,31 @@ max-width: 380px
 </footer>
 
 <script>
+// --- Тёмная/светлая тема ---
+(function() {
+var toggle = document.getElementById('theme-toggle');
+var saved = localStorage.getItem('zhivoy-theme') || 'dark';
+applyTheme(saved);
+
+function applyTheme(theme) {
+if (theme === 'light') {
+document.documentElement.setAttribute('data-theme', 'light');
+toggle.textContent = '☀️';
+} else {
+document.documentElement.removeAttribute('data-theme');
+toggle.textContent = '🌙';
+}
+localStorage.setItem('zhivoy-theme', theme);
+}
+
+toggle.addEventListener('click', function() {
+var current = document.documentElement.getAttribute('data-theme') === 'light' ? 'light' : 'dark';
+applyTheme(current === 'light' ? 'dark' : 'light');
+});
+})();
+</script>
+
+<script>
 // --- Фоновая сеть частиц: живёт сама по себе, а на десктопе реагирует на курсор ---
 (function() {
 var canvas = document.getElementById('bg-canvas');
@@ -292,6 +370,10 @@ H = canvas.height = window.innerHeight;
 }
 window.addEventListener('resize', resize);
 resize();
+
+function getLineColor() {
+return getComputedStyle(document.documentElement).getPropertyValue('--line-color').trim() || '220, 225, 235';
+}
 
 function Particle() {
 this.x = Math.random() * W;
@@ -349,7 +431,7 @@ if (dist < LINK_DIST) {
 ctx.beginPath();
 ctx.moveTo(particles[a].x, particles[a].y);
 ctx.lineTo(particles[b].x, particles[b].y);
-ctx.strokeStyle = 'rgba(220, 225, 235, ' + (1 - dist / LINK_DIST) * 0.35 + ')';
+ctx.strokeStyle = 'rgba(' + getLineColor() + ', ' + (1 - dist / LINK_DIST) * 0.35 + ')';
 ctx.lineWidth = 1;
 ctx.stroke();
 }
@@ -364,8 +446,10 @@ draw();
 (function() {
 var feed = document.getElementById('feed');
 var tagButtons = document.querySelectorAll('.tag-btn');
+var searchInput = document.getElementById('search-input');
 var allCards = [];
 var currentTag = 'все';
+var currentSearch = '';
 
 function formatDate(dateString) {
 var months = [
@@ -383,6 +467,7 @@ function createCard(article) {
 var card = document.createElement('article');
 card.className = 'article-card';
 card.setAttribute('data-tag', article.tag);
+card.setAttribute('data-search', (article.title + ' ' + article.excerpt).toLowerCase());
 
 var time = document.createElement('time');
 time.className = 'article-date';
@@ -408,20 +493,30 @@ card.appendChild(link);
 return card;
 }
 
-function applyFilter(tag) {
-currentTag = tag;
+function applyFilter() {
+var visibleCount = 0;
 allCards.forEach(function(card) {
-if (tag === 'все') {
+var matchesTag = currentTag === 'все' || card.getAttribute('data-tag') === currentTag;
+var matchesSearch = currentSearch === '' || card.getAttribute('data-search').indexOf(currentSearch) !== -1;
+if (matchesTag && matchesSearch) {
 card.classList.remove('is-hidden');
-} else {
-var cardTag = card.getAttribute('data-tag');
-if (cardTag === tag) {
-card.classList.remove('is-hidden');
+visibleCount++;
 } else {
 card.classList.add('is-hidden');
 }
-}
 });
+var emptyMsg = document.getElementById('empty-search-msg');
+if (visibleCount === 0) {
+if (!emptyMsg) {
+emptyMsg = document.createElement('p');
+emptyMsg.id = 'empty-search-msg';
+emptyMsg.className = 'feed-loading';
+emptyMsg.textContent = 'Ничего не найдено.';
+feed.appendChild(emptyMsg);
+}
+} else if (emptyMsg) {
+emptyMsg.remove();
+}
 }
 
 function setActiveButton(activeBtn) {
@@ -433,10 +528,15 @@ activeBtn.classList.add('active-tag');
 
 tagButtons.forEach(function(btn) {
 btn.addEventListener('click', function() {
-var tag = this.getAttribute('data-tag');
+currentTag = this.getAttribute('data-tag');
 setActiveButton(this);
-applyFilter(tag);
+applyFilter();
 });
+});
+
+searchInput.addEventListener('input', function() {
+currentSearch = this.value.trim().toLowerCase();
+applyFilter();
 });
 
 fetch('articles/manifest.json')
@@ -458,7 +558,7 @@ var card = createCard(article);
 allCards.push(card);
 feed.appendChild(card);
 });
-applyFilter(currentTag);
+applyFilter();
 })
 .catch(function() {
 feed.innerHTML = '<p class="feed-error">⚠️ Не удалось загрузить статьи. Проверьте подключение к интернету.</p>';
