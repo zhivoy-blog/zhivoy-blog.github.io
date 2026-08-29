@@ -1,83 +1,160 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title id="page-title">Живой ИИ</title>
-    <link rel="stylesheet" href="article-style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title id="page-title">Живой ИИ</title>
+<link rel="stylesheet" href="article-style.css">
+<style>
+/* --- Общий header/footer (та же логика, что на index.html) --- */
+.site-header {
+text-align: center;
+padding: 16px;
+max-width: 600px;
+margin: 0 auto
+}
+.site-header h1 {
+font-size: 20px;
+font-weight: 700;
+margin-bottom: 12px;
+color: #fff
+}
+.site-links {
+display: flex;
+flex-wrap: wrap;
+gap: 10px;
+justify-content: center
+}
+.btn-link {
+display: inline-flex;
+align-items: center;
+justify-content: center;
+flex: 1 1 120px;
+max-width: 170px;
+color: white;
+text-align: center;
+padding: 12px 14px;
+border-radius: 12px;
+font-weight: 700;
+text-decoration: none;
+font-size: 13px
+}
+.btn-link.vk { background-color: #0077ff; }
+.btn-link.vc { background-color: #ff5c00; }
+.btn-link.tg { background-color: #007aff; }
+
+.site-footer {
+max-width: 600px;
+margin: 32px auto 10px;
+padding: 20px 16px 10px;
+border-top: 1px solid rgba(255,255,255,0.1);
+text-align: center;
+color: #8e9eaf;
+font-size: 13px
+}
+.site-footer .footer-links {
+display: flex;
+flex-wrap: wrap;
+gap: 14px;
+justify-content: center;
+margin-bottom: 10px
+}
+.site-footer .footer-links a {
+color: #007aff;
+text-decoration: none;
+font-weight: 600;
+font-size: 14px
+}
+</style>
 </head>
 <body>
-    <a href="index.html" class="back-link">← Назад к статьям</a>
 
-    <article id="article-content">
-        <p>Загрузка статьи...</p>
-    </article>
+<header class="site-header">
+<h1>Живой ИИ</h1>
+<div class="site-links">
+<a href="https://vk.ru/zhivoy_ai" target="_blank" rel="noopener noreferrer" class="btn-link vk">Мы в ВК</a>
+<a href="https://vc.ru/id6025411" target="_blank" rel="noopener noreferrer" class="btn-link vc">vc.ru</a>
+<a href="https://t.me/zhivoy_ii" target="_blank" rel="noopener noreferrer" class="btn-link tg">Telegram</a>
+</div>
+</header>
 
-    <script src="article-script.js"></script>
-    <script>
-        (function() {
-            const slug = new URLSearchParams(window.location.search).get('article');
-            if (!slug) {
-                document.getElementById('article-content').innerHTML = '<p style="color:#d1d1d6; text-align:center; padding:40px 0;">❓ Статья не найдена. <a href="index.html" style="color:var(--accent-blue);">Вернуться к списку</a></p>';
-                return;
-            }
+<a href="index.html" class="back-link">← Назад к статьям</a>
 
-            fetch('articles/' + slug + '/data.json')
-                .then(function(response) {
-                    if (!response.ok) throw new Error('Not found');
-                    return response.json();
-                })
-                .then(function(data) {
-                    document.getElementById('page-title').textContent = data.title + ' — Живой ИИ';
+<article id="article-content">
+<p>Загрузка статьи...</p>
+</article>
 
-                    var tempDiv = document.createElement('div');
-                    tempDiv.innerHTML = data.content;
+<footer class="site-footer">
+<div class="footer-links">
+<a href="https://vk.ru/zhivoy_ai" target="_blank" rel="noopener noreferrer">ВКонтакте</a>
+<a href="https://vc.ru/id6025411" target="_blank" rel="noopener noreferrer">vc.ru</a>
+<a href="https://t.me/zhivoy_ii" target="_blank" rel="noopener noreferrer">Telegram</a>
+</div>
+<p>© Живой ИИ</p>
+</footer>
 
-                    // Исправляем пути у всех картинок
-                    tempDiv.querySelectorAll('img').forEach(function(img) {
-                        var src = img.getAttribute('src');
-                        if (src && !src.startsWith('http') && !src.startsWith('articles/')) {
-                            img.setAttribute('src', 'articles/' + slug + '/' + src);
-                        }
-                    });
+<script src="article-script.js"></script>
+<script>
+(function() {
+const slug = new URLSearchParams(window.location.search).get('article');
+if (!slug) {
+document.getElementById('article-content').innerHTML = '<p style="color:#d1d1d6; text-align:center; padding:40px 0;">❓ Статья не найдена. <a href="index.html" style="color:var(--accent-blue);">Вернуться к списку</a></p>';
+return;
+}
+fetch('articles/' + slug + '/data.json')
+.then(function(response) {
+if (!response.ok) throw new Error('Not found');
+return response.json();
+})
+.then(function(data) {
+document.getElementById('page-title').textContent = data.title + ' — Живой ИИ';
+var tempDiv = document.createElement('div');
+tempDiv.innerHTML = data.content;
 
-                    // Исправляем пути и атрибуты у всех видео
-                    tempDiv.querySelectorAll('video').forEach(function(video) {
-                        var src = video.getAttribute('src');
-                        if (src && !src.startsWith('http') && !src.startsWith('articles/')) {
-                            video.setAttribute('src', 'articles/' + slug + '/' + src);
-                        }
-                        // Принудительно добавляем атрибуты для мобильных
-                        video.setAttribute('playsinline', '');
-                        video.setAttribute('webkit-playsinline', '');
-                        video.setAttribute('loop', '');
-                        video.setAttribute('muted', '');
-                        video.setAttribute('controls', '');
-                        video.setAttribute('preload', 'auto');
-                        video.style.width = '100%';
-                        video.style.maxWidth = '100%';
-                    });
+// Исправляем пути у всех картинок
+tempDiv.querySelectorAll('img').forEach(function(img) {
+var src = img.getAttribute('src');
+if (src && !src.startsWith('http') && !src.startsWith('articles/')) {
+img.setAttribute('src', 'articles/' + slug + '/' + src);
+}
+});
 
-                    // Исправляем пути у source внутри video
-                    tempDiv.querySelectorAll('video source').forEach(function(source) {
-                        var src = source.getAttribute('src');
-                        if (src && !src.startsWith('http') && !src.startsWith('articles/')) {
-                            source.setAttribute('src', 'articles/' + slug + '/' + src);
-                        }
-                    });
+// Исправляем пути и атрибуты у всех видео
+tempDiv.querySelectorAll('video').forEach(function(video) {
+var src = video.getAttribute('src');
+if (src && !src.startsWith('http') && !src.startsWith('articles/')) {
+video.setAttribute('src', 'articles/' + slug + '/' + src);
+}
+video.setAttribute('playsinline', '');
+video.setAttribute('webkit-playsinline', '');
+video.setAttribute('loop', '');
+video.setAttribute('muted', '');
+video.setAttribute('controls', '');
+video.setAttribute('preload', 'auto');
+video.style.width = '100%';
+video.style.maxWidth = '100%';
+});
 
-                    document.getElementById('article-content').innerHTML = tempDiv.innerHTML;
+// Исправляем пути у source внутри video
+tempDiv.querySelectorAll('video source').forEach(function(source) {
+var src = source.getAttribute('src');
+if (src && !src.startsWith('http') && !src.startsWith('articles/')) {
+source.setAttribute('src', 'articles/' + slug + '/' + src);
+}
+});
 
-                    setTimeout(function() {
-                        if (typeof initAll === 'function') {
-                            initAll();
-                        }
-                    }, 100);
-                })
-                .catch(function() {
-                    document.getElementById('article-content').innerHTML = '<p style="color:#d1d1d6; text-align:center; padding:40px 0;">❌ Ошибка загрузки статьи. <a href="index.html" style="color:var(--accent-blue);">Вернуться к списку</a></p>';
-                });
-        })();
-    </script>
+document.getElementById('article-content').innerHTML = tempDiv.innerHTML;
+
+setTimeout(function() {
+if (typeof initAll === 'function') {
+initAll();
+}
+}, 100);
+})
+.catch(function() {
+document.getElementById('article-content').innerHTML = '<p style="color:#d1d1d6; text-align:center; padding:40px 0;">❌ Ошибка загрузки статьи. <a href="index.html" style="color:var(--accent-blue);">Вернуться к списку</a></p>';
+});
+})();
+</script>
 </body>
 </html>
