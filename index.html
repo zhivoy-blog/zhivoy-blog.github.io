@@ -71,7 +71,8 @@ font-size: 18px;
 cursor: pointer;
 display: flex;
 align-items: center;
-justify-content: center
+justify-content: center;
+box-shadow: 0 0 14px rgba(0, 122, 255, 0.25)
 }
 .search-box {
 width: 100%;
@@ -88,7 +89,8 @@ border: 1px solid var(--border-color);
 background-color: var(--card-bg);
 color: var(--text-main);
 font-size: 15px;
-outline: none
+outline: none;
+box-shadow: 0 0 14px rgba(0, 122, 255, 0.2)
 }
 .search-box input::placeholder {
 color: var(--text-muted-alt)
@@ -129,7 +131,7 @@ font-weight: 700;
 text-decoration: none;
 font-size: 14px;
 letter-spacing: 0.3px;
-box-shadow: 0 4px 14px rgba(0, 122, 255, 0.35);
+box-shadow: 0 0 16px rgba(0, 122, 255, 0.45);
 transition: transform 0.1s ease
 }
 .btn-link.vk {
@@ -137,32 +139,15 @@ background-color: #0077ff;
 }
 .btn-link.vc {
 background-color: #ff5c00;
-box-shadow: 0 4px 14px rgba(255, 92, 0, 0.35);
+box-shadow: 0 0 16px rgba(255, 92, 0, 0.45);
+}
+.btn-link.tg {
+background-color: #007aff;
 }
 .btn-link:active {
 transform: scale(0.97)
 }
 
-.btn-telegram {
-display: block;
-width: 100%;
-max-width: 360px;
-margin: 0 auto;
-background-color: var(--accent-blue);
-color: white;
-text-align: center;
-padding: 14px 20px;
-border-radius: 12px;
-font-weight: 700;
-text-decoration: none;
-font-size: 15px;
-letter-spacing: 0.3px;
-box-shadow: 0 4px 14px rgba(0, 122, 255, 0.35);
-transition: transform 0.1s ease
-}
-.btn-telegram:active {
-transform: scale(0.97)
-}
 .tag-filter {
 display: flex;
 flex-wrap: wrap;
@@ -187,7 +172,8 @@ display: inline-flex;
 align-items: center;
 justify-content: center;
 text-align: center;
-white-space: nowrap
+white-space: nowrap;
+box-shadow: 0 0 10px rgba(0, 122, 255, 0.15)
 }
 .tag-btn.active-tag {
 background-color: var(--accent-blue);
@@ -204,6 +190,7 @@ border-radius: 16px;
 padding: 18px;
 margin-bottom: 18px;
 border: 1px solid var(--border-color);
+box-shadow: 0 0 16px rgba(0, 122, 255, 0.18);
 transition: opacity 0.2s, transform 0.2s, background-color 0.3s
 }
 .article-card.is-hidden {
@@ -240,7 +227,8 @@ border-radius: 12px;
 font-weight: 600;
 text-decoration: none;
 font-size: 15px;
-transition: background-color 0.2s, color 0.2s
+transition: background-color 0.2s, color 0.2s;
+box-shadow: 0 0 10px rgba(0, 122, 255, 0.15)
 }
 .read-more:active {
 background-color: var(--accent-blue);
@@ -300,8 +288,8 @@ max-width: 380px
 <div class="site-links">
 <a href="https://vk.ru/zhivoy_ai" target="_blank" rel="noopener noreferrer" class="btn-link vk">Мы в ВК</a>
 <a href="https://vc.ru/id6025411" target="_blank" rel="noopener noreferrer" class="btn-link vc">Блог на vc.ru</a>
+<a href="https://t.me/zhivoy_ii" target="_blank" rel="noopener noreferrer" class="btn-link tg">Мы в ТГ</a>
 </div>
-<a href="https://t.me/zhivoy_ii" target="_blank" rel="noopener noreferrer" class="btn-telegram">Вступить в Telegram [Ключ в закрепе]</a>
 </header>
 
 <div class="search-box">
