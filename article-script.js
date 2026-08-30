@@ -1,6 +1,124 @@
 (function() {
     'use strict';
 
+    /* Внедряем стили, которые нужны новым блокам, — не завязываемся на внешний CSS-файл */
+    function injectStyles() {
+        if (document.getElementById('zhivoy-extra-styles')) return;
+        const style = document.createElement('style');
+        style.id = 'zhivoy-extra-styles';
+        style.textContent = `
+            .read-more-block {
+                max-width: 600px;
+                margin: 24px auto;
+                padding: 18px;
+                background-color: var(--card-bg, #1b436d);
+                border: 1px solid var(--border-color, #0088cc);
+                border-radius: 16px;
+            }
+            .read-more-block h3 {
+                font-size: 17px;
+                margin-bottom: 12px;
+                color: var(--text-main, #fff);
+            }
+            .read-more-link {
+                display: block;
+                padding: 10px 0;
+                color: var(--accent-blue, #007aff);
+                text-decoration: none;
+                font-size: 15px;
+                border-top: 1px solid rgba(255,255,255,0.08);
+            }
+            .read-more-link:first-of-type {
+                border-top: none;
+            }
+            .article-reactions {
+                max-width: 600px;
+                margin: 20px auto;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                flex-wrap: wrap;
+                gap: 12px;
+                padding: 0 4px;
+            }
+            .reactions-buttons {
+                display: flex;
+                gap: 10px;
+            }
+            .reaction-btn {
+                background: transparent;
+                border: 1px solid var(--border-color, #0088cc);
+                color: var(--text-main, #fff);
+                padding: 8px 14px;
+                border-radius: 10px;
+                font-size: 14px;
+                cursor: pointer;
+            }
+            .reaction-btn.active {
+                background-color: var(--accent-blue, #007aff);
+                border-color: var(--accent-blue, #007aff);
+            }
+            .views-counter {
+                font-size: 14px;
+                color: var(--text-muted-alt, #8e9eaf);
+            }
+            .share-block {
+                max-width: 600px;
+                margin: 16px auto;
+                display: flex;
+                gap: 10px;
+                flex-wrap: wrap;
+            }
+            .share-btn {
+                flex: 1 1 auto;
+                text-align: center;
+                padding: 12px 16px;
+                border-radius: 12px;
+                color: #fff;
+                text-decoration: none;
+                font-weight: 600;
+                font-size: 14px;
+            }
+            .share-btn.vk { background-color: #0077ff; }
+            .share-btn.tg { background-color: #29a9eb; }
+            .share-btn.copy { background-color: #445b7c; cursor: pointer; border: none; }
+            .scroll-top-btn {
+                position: fixed;
+                bottom: 24px;
+                right: 20px;
+                width: 46px;
+                height: 46px;
+                border-radius: 50%;
+                background-color: var(--accent-blue, #007aff);
+                color: #fff;
+                border: none;
+                font-size: 20px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                box-shadow: 0 4px 14px rgba(0,0,0,0.3);
+                opacity: 0;
+                pointer-events: none;
+                transition: opacity 0.2s;
+                z-index: 999;
+            }
+            .scroll-top-btn.visible {
+                opacity: 1;
+                pointer-events: auto;
+            }
+            .reading-progress-bar {
+                position: fixed;
+                top: 0;
+                left: 0;
+                height: 3px;
+                background-color: var(--accent-blue, #007aff);
+                z-index: 1000;
+                width: 0%;
+            }
+        `;
+        document.head.appendChild(style);
+    }
+
     /* Резервное копирование через textarea */
     function fallbackCopy(button, text, originalHTML) {
         const textarea = document.createElement('textarea');
@@ -27,12 +145,10 @@
     /* Инициализация кнопок копирования + ПРИНУДИТЕЛЬНОЕ ИСПРАВЛЕНИЕ ВЁРСТКИ */
     function initCopyButtons() {
         document.querySelectorAll('.prompt-wrapper').forEach(wrapper => {
-            // 1. Принудительно ставим column, чтобы кнопка была НАД блоком
             wrapper.style.display = 'flex';
             wrapper.style.flexDirection = 'column';
             wrapper.style.gap = '12px';
 
-            // 2. Ищем или создаём тулбар для кнопки
             let toolbar = wrapper.querySelector('.copy-toolbar, .copy-textbox');
             if (!toolbar) {
                 toolbar = document.createElement('div');
@@ -49,7 +165,6 @@
                 }
             }
 
-            // 3. Принудительно выравниваем тулбар вправо
             toolbar.style.display = 'flex';
             toolbar.style.justifyContent = 'flex-end';
             toolbar.style.width = '100%';
@@ -57,14 +172,12 @@
             toolbar.style.padding = '0';
             toolbar.style.order = '0';
 
-            // 4. Блок с кодом идёт вторым
             const promptBox = wrapper.querySelector('.prompt-box');
             if (promptBox) {
                 promptBox.style.order = '1';
                 promptBox.style.marginTop = '0';
             }
 
-            // 5. Вешаем обработчик на кнопку
             const btn = toolbar.querySelector('.btn-copy');
             if (btn && !btn.dataset.copyInitialized) {
                 btn.dataset.copyInitialized = 'true';
@@ -161,39 +274,70 @@
         update();
     }
 
-    /* Блок "Читать также" */
-    function initReadMore() {
-        if (document.querySelector('.read-more-block')) return;
+    /* Кнопка "Наверх" */
+    function initScrollTop() {
+        if (document.querySelector('.scroll-top-btn')) return;
+        const btn = document.createElement('button');
+        btn.className = 'scroll-top-btn';
+        btn.innerHTML = '↑';
+        btn.setAttribute('aria-label', 'Наверх');
+        document.body.appendChild(btn);
 
-        const allArticles = [
-            { title: 'GigaChat против Kling AI [Сравнение 2-х видео внутри]', url: 'article-template.html?article=gigachat-vs-kling' },
-            { title: 'Как я пытался создать постоянного ИИ-персонажа для блога, и почему нейросеть раздела его от стресса', url: 'article-template.html?article=ai-striptiz' },
-            { title: 'Музыкальный сериал – Часть 2', url: 'article-template.html?article=music-part-2' },
-            { title: 'Краш-тест ИИ на окраине цивилизации', url: 'article-template.html?article=crash-test-3g' },
-            { title: 'Музыкальный сериал — Часть 1', url: 'article-template.html?article=suno-music' },
-            { title: 'Топ-3 бесплатных ИИ', url: 'article-template.html?article=top-3-free-ai' },
-            { title: 'Промпт-репетитор английского языка', url: 'article-template.html?article=english-tutor-prompt' },
-            { title: 'Пакет выживания на 3G', url: 'article-template.html?article=survival-pack-3g' }
-        ];
-
-        const currentSlug = new URLSearchParams(window.location.search).get('article') || '';
-        const otherArticles = allArticles.filter(a => !a.url.includes(currentSlug));
-        if (!otherArticles.length) return;
-
-        const selected = otherArticles.sort(() => 0.5 - Math.random()).slice(0, 3);
-        const block = document.createElement('div');
-        block.className = 'read-more-block';
-        const heading = document.createElement('h3');
-        heading.textContent = 'Читать также';
-        block.appendChild(heading);
-
-        selected.forEach(a => {
-            const link = document.createElement('a');
-            link.className = 'read-more-link';
-            link.href = a.url;
-            link.textContent = a.title;
-            block.appendChild(link);
+        btn.addEventListener('click', function() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         });
+
+        window.addEventListener('scroll', function() {
+            if (window.scrollY > 400) {
+                btn.classList.add('visible');
+            } else {
+                btn.classList.remove('visible');
+            }
+        }, { passive: true });
+    }
+
+    /* Кнопки "Поделиться" */
+    function initShareButtons() {
+        if (document.querySelector('.share-block')) return;
+
+        const pageTitle = document.getElementById('page-title') ? document.getElementById('page-title').textContent : document.title;
+        const pageUrl = window.location.href;
+
+        const block = document.createElement('div');
+        block.className = 'share-block';
+
+        const vkLink = document.createElement('a');
+        vkLink.className = 'share-btn vk';
+        vkLink.target = '_blank';
+        vkLink.rel = 'noopener noreferrer';
+        vkLink.href = 'https://vk.com/share.php?url=' + encodeURIComponent(pageUrl) + '&title=' + encodeURIComponent(pageTitle);
+        vkLink.textContent = 'Поделиться в ВК';
+
+        const tgLink = document.createElement('a');
+        tgLink.className = 'share-btn tg';
+        tgLink.target = '_blank';
+        tgLink.rel = 'noopener noreferrer';
+        tgLink.href = 'https://t.me/share/url?url=' + encodeURIComponent(pageUrl) + '&text=' + encodeURIComponent(pageTitle);
+        tgLink.textContent = 'В Telegram';
+
+        const copyBtn = document.createElement('button');
+        copyBtn.className = 'share-btn copy';
+        copyBtn.textContent = '🔗 Скопировать ссылку';
+        copyBtn.addEventListener('click', function() {
+            const originalText = copyBtn.textContent;
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(pageUrl).then(function() {
+                    copyBtn.textContent = '✅ Ссылка скопирована';
+                    setTimeout(() => { copyBtn.textContent = originalText; }, 2000);
+                });
+            } else {
+                fallbackCopy(copyBtn, pageUrl, originalText);
+            }
+        });
+
+        block.appendChild(vkLink);
+        block.appendChild(tgLink);
+        block.appendChild(copyBtn);
 
         const articleEl = document.querySelector('article');
         if (articleEl) {
@@ -203,7 +347,53 @@
         }
     }
 
-    /* Реакции и счётчик просмотров */
+    /* Блок "Читать также" — теперь берёт реальные статьи из manifest.json, а не из зашитого списка */
+    function initReadMore() {
+        if (document.querySelector('.read-more-block')) return;
+
+        fetch('articles/manifest.json')
+            .then(function(response) {
+                if (!response.ok) throw new Error('Network error');
+                return response.json();
+            })
+            .then(function(articles) {
+                const currentSlug = new URLSearchParams(window.location.search).get('article') || '';
+                const otherArticles = articles.filter(a => a.slug !== currentSlug);
+                if (!otherArticles.length) return;
+
+                const selected = otherArticles.sort(() => 0.5 - Math.random()).slice(0, 3);
+                const block = document.createElement('div');
+                block.className = 'read-more-block';
+                const heading = document.createElement('h3');
+                heading.textContent = 'Читать также';
+                block.appendChild(heading);
+
+                selected.forEach(a => {
+                    const link = document.createElement('a');
+                    link.className = 'read-more-link';
+                    link.href = 'article-template.html?article=' + a.slug;
+                    link.textContent = a.title;
+                    block.appendChild(link);
+                });
+
+                const shareBlock = document.querySelector('.share-block');
+                if (shareBlock) {
+                    shareBlock.insertAdjacentElement('afterend', block);
+                } else {
+                    const articleEl = document.querySelector('article');
+                    if (articleEl) {
+                        articleEl.insertAdjacentElement('afterend', block);
+                    } else {
+                        document.body.appendChild(block);
+                    }
+                }
+            })
+            .catch(function() {
+                /* тихо ничего не показываем, если manifest недоступен */
+            });
+    }
+
+    /* Реакции и счётчик просмотров (локально, по устройству посетителя) */
     function initReactions() {
         const currentSlug = new URLSearchParams(window.location.search).get('article') || 'index';
         const storageKey = 'article_' + currentSlug;
@@ -220,9 +410,9 @@
             <div class="views-counter">👁️ <span class="count">0</span> просмотров</div>
         `;
 
-        const readMoreBlock = document.querySelector('.read-more-block');
-        if (readMoreBlock) {
-            readMoreBlock.parentNode.insertBefore(reactionsDiv, readMoreBlock);
+        const shareBlock = document.querySelector('.share-block');
+        if (shareBlock) {
+            shareBlock.insertAdjacentElement('beforebegin', reactionsDiv);
         } else {
             const articleEl = document.querySelector('article');
             (articleEl || document.body).appendChild(reactionsDiv);
@@ -301,9 +491,12 @@
 
     /* Запуск всего */
     function initAll() {
+        injectStyles();
         initCopyButtons();
         initImageSliders();
         initProgressBar();
+        initScrollTop();
+        initShareButtons();
         initReadMore();
         initReactions();
     }
