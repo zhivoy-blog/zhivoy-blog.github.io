@@ -197,6 +197,18 @@ border: 1px solid var(--border-color); border-radius: 20px; padding: 8px 8px 8px
 .status-msg { font-size: 13px; color: var(--accent-green); margin-top: 8px; min-height: 16px }
 .status-msg.err { color: #ff6b6b }
 
+/* пакетная обработка */
+.batch-list { display: flex; flex-direction: column; gap: 8px; margin: 14px 0 }
+.batch-item {
+display: flex; align-items: center; gap: 10px; background-color: var(--card-bg-2);
+border: 1px solid var(--border-color); border-radius: 12px; padding: 10px 12px
+}
+.batch-item .b-name { flex: 1 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 13px }
+.batch-item .b-status { flex: 0 0 auto; font-size: 12px; color: var(--text-muted-alt); white-space: nowrap }
+.batch-item .b-status.ok { color: var(--accent-green) }
+.batch-item .b-status.err { color: #ff6b6b }
+.batch-item .b-dl { flex: 0 0 auto; min-height: 40px; padding: 8px 12px; font-size: 13px }
+
 .site-footer { margin-top: 24px; padding: 20px 0 10px; border-top: 1px solid rgba(255,255,255,0.1); text-align: center; color: var(--text-muted-alt); font-size: 13px }
 .site-footer .footer-links { display: flex; flex-wrap: wrap; gap: 14px; justify-content: center; margin-bottom: 10px }
 .site-footer .footer-links a { color: var(--accent-blue); text-decoration: none; font-weight: 600; font-size: 14px }
@@ -225,22 +237,21 @@ border: 1px solid var(--border-color); border-radius: 20px; padding: 8px 8px 8px
 <button class="tab-btn" data-tab="rotate">🔄 Поворот</button>
 <button class="tab-btn" data-tab="convert">🔁 Формат</button>
 <button class="tab-btn" data-tab="text">🔤 Текст на картинке</button>
+<button class="tab-btn" data-tab="meme">😂 Мемы</button>
 </div>
 
 <!-- ================= СЖАТИЕ ================= -->
 <section class="panel active" id="panel-compress">
 <div class="card">
 <h2>Сжатие картинки</h2>
-<p class="hint">Уменьшает вес файла почти без потери качества на глаз. Подходит для JPG, PNG, WEBP.</p>
+<p class="hint">Уменьшает вес файла почти без потери качества на глаз. Подходит для JPG, PNG, WEBP, HEIC. Можно выбрать сразу несколько фото.</p>
 <label class="dropzone" id="compress-dropzone">
 <div class="dz-icon">📷</div>
-<span id="compress-dz-text">Нажмите, чтобы выбрать фото</span>
-<input type="file" accept="image/*" id="compress-file">
+<span id="compress-dz-text">Нажмите, чтобы выбрать одно или несколько фото</span>
+<input type="file" accept="image/*,.heic,.heif" id="compress-file" multiple>
 </label>
 
 <div id="compress-controls" hidden>
-<div class="preview-img-wrap"><canvas id="compress-canvas"></canvas></div>
-
 <div class="field">
 <label>Качество: <span id="compress-quality-val">70</span>%</label>
 <div class="preset-row">
@@ -260,12 +271,22 @@ border: 1px solid var(--border-color); border-radius: 20px; padding: 8px 8px 8px
 </select>
 </div>
 
+<div id="compress-single" hidden>
+<div class="preview-img-wrap"><canvas id="compress-canvas"></canvas></div>
 <div class="size-compare">
 <div class="size-box"><div class="val" id="compress-before">—</div><div class="lbl">было</div></div>
 <div class="size-box smaller"><div class="val" id="compress-after">—</div><div class="lbl">станет</div></div>
 </div>
-
 <button class="btn success" id="compress-download">Скачать результат</button>
+</div>
+
+<div id="compress-batch" hidden>
+<p class="hint">Выбрано файлов: <b id="compress-batch-count">0</b>. Настройте качество и формат выше, затем нажмите «Обработать все».</p>
+<button class="btn primary" id="compress-batch-process">Обработать все файлы</button>
+<div class="batch-list" id="compress-batch-list"></div>
+<button class="btn success" id="compress-batch-zip" disabled>Скачать всё в ZIP</button>
+</div>
+
 <div class="status-msg" id="compress-status"></div>
 </div>
 </div>
@@ -279,7 +300,7 @@ border: 1px solid var(--border-color); border-radius: 20px; padding: 8px 8px 8px
 <label class="dropzone" id="resize-dropzone">
 <div class="dz-icon">📷</div>
 <span id="resize-dz-text">Нажмите, чтобы выбрать фото</span>
-<input type="file" accept="image/*" id="resize-file">
+<input type="file" accept="image/*,.heic,.heif" id="resize-file">
 </label>
 
 <div id="resize-controls" hidden>
@@ -317,7 +338,7 @@ border: 1px solid var(--border-color); border-radius: 20px; padding: 8px 8px 8px
 <label class="dropzone" id="crop-dropzone">
 <div class="dz-icon">📷</div>
 <span id="crop-dz-text">Нажмите, чтобы выбрать фото</span>
-<input type="file" accept="image/*" id="crop-file">
+<input type="file" accept="image/*,.heic,.heif" id="crop-file">
 </label>
 
 <div id="crop-controls" hidden>
@@ -352,7 +373,7 @@ border: 1px solid var(--border-color); border-radius: 20px; padding: 8px 8px 8px
 <label class="dropzone" id="rotate-dropzone">
 <div class="dz-icon">📷</div>
 <span id="rotate-dz-text">Нажмите, чтобы выбрать фото</span>
-<input type="file" accept="image/*" id="rotate-file">
+<input type="file" accept="image/*,.heic,.heif" id="rotate-file">
 </label>
 
 <div id="rotate-controls" hidden>
@@ -379,17 +400,14 @@ border: 1px solid var(--border-color); border-radius: 20px; padding: 8px 8px 8px
 <section class="panel" id="panel-convert">
 <div class="card">
 <h2>Конвертация формата</h2>
-<p class="hint">Учтите: если сохраняете прозрачную картинку в JPG/BMP, прозрачные места станут белыми.</p>
+<p class="hint">Учтите: если сохраняете прозрачную картинку в JPG/BMP, прозрачные места станут белыми. Поддерживается HEIC (фото с iPhone). Можно выбрать сразу несколько фото.</p>
 <label class="dropzone" id="convert-dropzone">
 <div class="dz-icon">📷</div>
-<span id="convert-dz-text">Нажмите, чтобы выбрать фото</span>
-<input type="file" accept="image/*" id="convert-file">
+<span id="convert-dz-text">Нажмите, чтобы выбрать одно или несколько фото</span>
+<input type="file" accept="image/*,.heic,.heif" id="convert-file" multiple>
 </label>
 
 <div id="convert-controls" hidden>
-<div class="preview-img-wrap"><canvas id="convert-canvas"></canvas></div>
-<p class="hint" id="convert-orig-info"></p>
-
 <div class="field">
 <label>Сохранить как</label>
 <select id="convert-format">
@@ -409,7 +427,19 @@ border: 1px solid var(--border-color); border-radius: 20px; padding: 8px 8px 8px
 </div>
 <p class="hint" id="convert-format-note"></p>
 
+<div id="convert-single" hidden>
+<div class="preview-img-wrap"><canvas id="convert-canvas"></canvas></div>
+<p class="hint" id="convert-orig-info"></p>
 <button class="btn success" id="convert-download">Скачать результат</button>
+</div>
+
+<div id="convert-batch" hidden>
+<p class="hint">Выбрано файлов: <b id="convert-batch-count">0</b>. Настройте формат и качество выше, затем нажмите «Обработать все».</p>
+<button class="btn primary" id="convert-batch-process">Обработать все файлы</button>
+<div class="batch-list" id="convert-batch-list"></div>
+<button class="btn success" id="convert-batch-zip" disabled>Скачать всё в ZIP</button>
+</div>
+
 <div class="status-msg" id="convert-status"></div>
 </div>
 </div>
@@ -423,7 +453,7 @@ border: 1px solid var(--border-color); border-radius: 20px; padding: 8px 8px 8px
 <label class="dropzone" id="text-dropzone">
 <div class="dz-icon">📷</div>
 <span id="text-dz-text">Нажмите, чтобы выбрать фото</span>
-<input type="file" accept="image/*" id="text-file">
+<input type="file" accept="image/*,.heic,.heif" id="text-file">
 </label>
 
 <div id="text-controls" hidden>
@@ -482,6 +512,37 @@ border: 1px solid var(--border-color); border-radius: 20px; padding: 8px 8px 8px
 </div>
 </section>
 
+<!-- ================= МЕМЫ ================= -->
+<section class="panel" id="panel-meme">
+<div class="card">
+<h2>Мем-генератор</h2>
+<p class="hint">Классический формат: крупный белый текст с чёрной обводкой сверху и снизу. Загрузите картинку и впишите текст — никаких лишних настроек.</p>
+<label class="dropzone" id="meme-dropzone">
+<div class="dz-icon">📷</div>
+<span id="meme-dz-text">Нажмите, чтобы выбрать картинку</span>
+<input type="file" accept="image/*,.heic,.heif" id="meme-file">
+</label>
+
+<div id="meme-controls" hidden>
+<div class="canvas-wrap" id="meme-canvas-wrap" style="touch-action:auto">
+<canvas id="meme-canvas"></canvas>
+</div>
+
+<div class="field">
+<label>Текст сверху</label>
+<input type="text" id="meme-top-text" maxlength="80" placeholder="ВЕРХНИЙ ТЕКСТ">
+</div>
+<div class="field">
+<label>Текст снизу</label>
+<input type="text" id="meme-bottom-text" maxlength="80" placeholder="НИЖНИЙ ТЕКСТ">
+</div>
+
+<button class="btn success" id="meme-download">Скачать мем</button>
+<div class="status-msg" id="meme-status"></div>
+</div>
+</div>
+</section>
+
 </div>
 
 <footer class="site-footer">
@@ -532,7 +593,46 @@ document.getElementById('panel-' + btn.getAttribute('data-tab')).classList.add('
 // ===================== ОБЩИЕ УТИЛИТЫ =====================
 var MAX_DIM = 3000;
 
+// ---- HEIC/HEIF (фото с iPhone) — браузеры не умеют декодировать их сами, кроме Safari,
+// поэтому при обнаружении такого файла подключаем декодер heic2any (загружается только когда
+// он реально нужен, чтобы не тянуть лишний вес для всех остальных пользователей) ----
+
+function isHeicFile(file) {
+var name = (file.name || '').toLowerCase();
+if (name.endsWith('.heic') || name.endsWith('.heif')) return true;
+var type = (file.type || '').toLowerCase();
+return type === 'image/heic' || type === 'image/heif' || type === 'image/heic-sequence' || type === 'image/heif-sequence';
+}
+
+var heic2anyLoadPromise = null;
+function ensureHeic2Any() {
+if (window.heic2any) return Promise.resolve();
+if (heic2anyLoadPromise) return heic2anyLoadPromise;
+heic2anyLoadPromise = new Promise(function(resolve, reject) {
+var script = document.createElement('script');
+script.src = 'https://cdn.jsdelivr.net/npm/heic2any@0.0.4/dist/heic2any.min.js';
+script.onload = function() { resolve(); };
+script.onerror = function() { heic2anyLoadPromise = null; reject(new Error('Не удалось загрузить конвертер HEIC (нужен интернет для первого HEIC-файла)')); };
+document.head.appendChild(script);
+});
+return heic2anyLoadPromise;
+}
+
+// Если файл — HEIC/HEIF, конвертирует его в обычный JPEG-файл тем же именем (для остального
+// кода это после этого просто ещё один JPEG). Для всех прочих форматов возвращает файл как есть.
+function normalizeHeicFile(file) {
+if (!isHeicFile(file)) return Promise.resolve(file);
+return ensureHeic2Any().then(function() {
+return window.heic2any({ blob: file, toType: 'image/jpeg', quality: 0.92 });
+}).then(function(result) {
+var blob = Array.isArray(result) ? result[0] : result;
+var newName = (file.name || 'photo').replace(/\.(heic|heif)$/i, '') + '.jpg';
+return new File([blob], newName, { type: 'image/jpeg' });
+});
+}
+
 function loadImageToCanvas(file) {
+return normalizeHeicFile(file).then(function(normFile) {
 return new Promise(function(resolve, reject) {
 function fromDrawable(drawable, w, h) {
 var scale = Math.min(1, MAX_DIM / Math.max(w, h));
@@ -545,7 +645,7 @@ if (drawable.close) { try { drawable.close(); } catch (e) {} }
 resolve(canvas);
 }
 if (window.createImageBitmap) {
-createImageBitmap(file, { imageOrientation: 'from-image' }).then(function(bmp) {
+createImageBitmap(normFile, { imageOrientation: 'from-image' }).then(function(bmp) {
 fromDrawable(bmp, bmp.width, bmp.height);
 }).catch(function() {
 fallback();
@@ -554,7 +654,7 @@ fallback();
 fallback();
 }
 function fallback() {
-var url = URL.createObjectURL(file);
+var url = URL.createObjectURL(normFile);
 var img = new Image();
 img.onload = function() {
 fromDrawable(img, img.naturalWidth, img.naturalHeight);
@@ -564,6 +664,12 @@ img.onerror = function() { reject(new Error('load failed')); URL.revokeObjectURL
 img.src = url;
 }
 });
+});
+}
+
+function effectiveMime(file) {
+if (isHeicFile(file)) return 'image/jpeg';
+return file.type && file.type.indexOf('image/') === 0 ? file.type : 'image/jpeg';
 }
 
 function formatKB(bytes) {
@@ -976,6 +1082,162 @@ if (mime === 'application/pdf') return canvasToPDFBlob(canvas);
 return canvasToBlob(canvas, 'image/jpeg', quality);
 }
 
+// ---- ZIP (метод store, без сжатия — картинки и так уже сжаты своим форматом) ----
+
+var crc32Table = null;
+function crc32(bytes) {
+if (!crc32Table) {
+crc32Table = new Uint32Array(256);
+for (var n = 0; n < 256; n++) {
+var c = n;
+for (var k = 0; k < 8; k++) c = (c & 1) ? (0xEDB88320 ^ (c >>> 1)) : (c >>> 1);
+crc32Table[n] = c;
+}
+}
+var crc = 0xFFFFFFFF;
+for (var i = 0; i < bytes.length; i++) {
+crc = crc32Table[(crc ^ bytes[i]) & 0xFF] ^ (crc >>> 8);
+}
+return (crc ^ 0xFFFFFFFF) >>> 0;
+}
+
+function buildZipBlob(files) {
+// files: [{ name: string, data: Uint8Array }]
+var enc = new TextEncoder();
+var localParts = [];
+var centralParts = [];
+var offset = 0;
+
+files.forEach(function(f) {
+var nameBytes = enc.encode(f.name);
+var data = f.data;
+var crc = crc32(data);
+var size = data.length;
+var localOffset = offset;
+
+var lh = new DataView(new ArrayBuffer(30));
+lh.setUint32(0, 0x04034b50, true);
+lh.setUint16(4, 20, true);
+lh.setUint16(6, 0, true);
+lh.setUint16(8, 0, true);
+lh.setUint16(10, 0, true);
+lh.setUint16(12, 0x21, true);
+lh.setUint32(14, crc, true);
+lh.setUint32(18, size, true);
+lh.setUint32(22, size, true);
+lh.setUint16(26, nameBytes.length, true);
+lh.setUint16(28, 0, true);
+localParts.push(new Uint8Array(lh.buffer), nameBytes, data);
+offset += 30 + nameBytes.length + size;
+
+var ch = new DataView(new ArrayBuffer(46));
+ch.setUint32(0, 0x02014b50, true);
+ch.setUint16(4, 20, true);
+ch.setUint16(6, 20, true);
+ch.setUint16(8, 0, true);
+ch.setUint16(10, 0, true);
+ch.setUint16(12, 0x21, true);
+ch.setUint32(16, crc, true);
+ch.setUint32(20, size, true);
+ch.setUint32(24, size, true);
+ch.setUint16(28, nameBytes.length, true);
+ch.setUint16(30, 0, true);
+ch.setUint16(32, 0, true);
+ch.setUint16(34, 0, true);
+ch.setUint16(36, 0, true);
+ch.setUint32(38, 0, true);
+ch.setUint32(42, localOffset, true);
+centralParts.push(new Uint8Array(ch.buffer), nameBytes);
+});
+
+var centralStart = offset;
+var centralSize = centralParts.reduce(function(s, p) { return s + p.length; }, 0);
+
+var eocd = new DataView(new ArrayBuffer(22));
+eocd.setUint32(0, 0x06054b50, true);
+eocd.setUint16(4, 0, true);
+eocd.setUint16(6, 0, true);
+eocd.setUint16(8, files.length, true);
+eocd.setUint16(10, files.length, true);
+eocd.setUint32(12, centralSize, true);
+eocd.setUint32(16, centralStart, true);
+eocd.setUint16(20, 0, true);
+
+var parts = localParts.concat(centralParts, [new Uint8Array(eocd.buffer)]);
+var totalLen = parts.reduce(function(s, p) { return s + p.length; }, 0);
+var out = new Uint8Array(totalLen);
+var pos = 0;
+parts.forEach(function(p) { out.set(p, pos); pos += p.length; });
+return new Blob([out], { type: 'application/zip' });
+}
+
+// ---- Общий помощник для пакетной обработки (вкладки «Сжатие» и «Формат») ----
+// processOne(file) должен вернуть Promise<{blob, filename}>
+function runBatch(files, listEl, zipBtn, statusEl, processOne) {
+listEl.innerHTML = '';
+zipBtn.disabled = true;
+var rows = files.map(function(file) {
+var row = document.createElement('div');
+row.className = 'batch-item';
+var nameEl = document.createElement('span');
+nameEl.className = 'b-name';
+nameEl.textContent = file.name;
+var statusSpan = document.createElement('span');
+statusSpan.className = 'b-status';
+statusSpan.textContent = 'ожидает…';
+var dlBtn = document.createElement('button');
+dlBtn.className = 'btn small b-dl';
+dlBtn.textContent = 'Скачать';
+dlBtn.disabled = true;
+row.appendChild(nameEl);
+row.appendChild(statusSpan);
+row.appendChild(dlBtn);
+listEl.appendChild(row);
+return { file: file, statusSpan: statusSpan, dlBtn: dlBtn, result: null };
+});
+
+var chain = Promise.resolve();
+rows.forEach(function(row) {
+chain = chain.then(function() {
+row.statusSpan.textContent = 'обрабатываю…';
+return processOne(row.file).then(function(res) {
+row.result = res;
+row.statusSpan.textContent = 'готово: ' + formatKB(res.blob.size);
+row.statusSpan.className = 'b-status ok';
+row.dlBtn.disabled = false;
+row.dlBtn.addEventListener('click', function() { downloadBlob(res.blob, res.filename); });
+}).catch(function(err) {
+row.statusSpan.textContent = 'ошибка: ' + err.message;
+row.statusSpan.className = 'b-status err';
+});
+});
+});
+
+chain.then(function() {
+var okRows = rows.filter(function(r) { return r.result; });
+if (okRows.length > 0) {
+zipBtn.disabled = false;
+zipBtn.onclick = function() {
+var used = {};
+var zipFiles = okRows.map(function(r) {
+var base = r.result.filename;
+var nameToUse = base;
+var counter = 2;
+while (used[nameToUse]) { nameToUse = base.replace(/(\.[^.]+)?$/, '-' + counter + '$1'); counter++; }
+used[nameToUse] = true;
+return { name: nameToUse, data: null, blob: r.result.blob };
+});
+Promise.all(zipFiles.map(function(zf) { return zf.blob.arrayBuffer().then(function(buf) { zf.data = new Uint8Array(buf); }); })).then(function() {
+var zipBlob = buildZipBlob(zipFiles);
+downloadBlob(zipBlob, 'images.zip');
+});
+};
+}
+statusEl.textContent = 'Обработка завершена: ' + okRows.length + ' из ' + rows.length + ' файлов.';
+statusEl.className = 'status-msg';
+});
+}
+
 function downloadBlob(blob, filename) {
 var url = URL.createObjectURL(blob);
 var a = document.createElement('a');
@@ -985,6 +1247,85 @@ document.body.appendChild(a);
 a.click();
 a.remove();
 setTimeout(function() { URL.revokeObjectURL(url); }, 3000);
+}
+
+// ---- Мем-генератор: подбор размера шрифта и перенос строк под ширину картинки ----
+
+function wrapMemeLines(ctx, text, maxWidth, baseFontPx, fontFamily, weight) {
+var fontSize = baseFontPx;
+var minFontSize = Math.max(8, baseFontPx * 0.3);
+var words = text.split(/\s+/).filter(Boolean);
+while (fontSize >= minFontSize) {
+ctx.font = weight + ' ' + fontSize + 'px ' + fontFamily;
+var lines = [];
+var current = '';
+for (var i = 0; i < words.length; i++) {
+var test = current ? current + ' ' + words[i] : words[i];
+if (ctx.measureText(test).width <= maxWidth || !current) {
+current = test;
+} else {
+lines.push(current);
+current = words[i];
+}
+}
+if (current) lines.push(current);
+var allFit = lines.every(function(l) { return ctx.measureText(l).width <= maxWidth; });
+if (allFit && lines.length <= 3) {
+return { lines: lines, fontSize: fontSize };
+}
+fontSize -= Math.max(1, Math.round(baseFontPx * 0.05));
+}
+ctx.font = weight + ' ' + minFontSize + 'px ' + fontFamily;
+return { lines: [text], fontSize: minFontSize };
+}
+
+function drawMemeCanvas(canvas, ctx, srcCanvas, topText, bottomText) {
+canvas.width = srcCanvas.width;
+canvas.height = srcCanvas.height;
+ctx.clearRect(0, 0, canvas.width, canvas.height);
+ctx.drawImage(srcCanvas, 0, 0);
+
+var fontFamily = '"Passion One", Impact, sans-serif';
+var weight = '900';
+var maxWidth = canvas.width * 0.92;
+var baseFontPx = canvas.width * 0.13;
+var padding = canvas.width * 0.035;
+var strokeW = Math.max(2, canvas.width * 0.008);
+
+ctx.textAlign = 'center';
+ctx.lineJoin = 'round';
+ctx.miterLimit = 2;
+
+function drawBlock(text, fromTop) {
+if (!text || !text.trim()) return;
+var upper = text.toUpperCase();
+var result = wrapMemeLines(ctx, upper, maxWidth, baseFontPx, fontFamily, weight);
+var lineHeight = result.fontSize * 1.15;
+ctx.font = weight + ' ' + result.fontSize + 'px ' + fontFamily;
+ctx.lineWidth = strokeW;
+ctx.strokeStyle = '#000000';
+ctx.fillStyle = '#ffffff';
+if (fromTop) {
+ctx.textBaseline = 'top';
+var y = padding;
+result.lines.forEach(function(line) {
+ctx.strokeText(line, canvas.width / 2, y);
+ctx.fillText(line, canvas.width / 2, y);
+y += lineHeight;
+});
+} else {
+ctx.textBaseline = 'bottom';
+var yB = canvas.height - padding;
+result.lines.slice().reverse().forEach(function(line) {
+ctx.strokeText(line, canvas.width / 2, yB);
+ctx.fillText(line, canvas.width / 2, yB);
+yB -= lineHeight;
+});
+}
+}
+
+drawBlock(topText, true);
+drawBlock(bottomText, false);
 }
 
 function setupDropzone(zoneId, inputId, textId, onFile) {
@@ -1000,6 +1341,23 @@ onFile(file);
 });
 }
 
+// Вариант дропзоны, поддерживающий выбор нескольких файлов сразу (для пакетной обработки).
+// onFiles получает массив File — один элемент, если пользователь выбрал одно фото.
+function setupDropzoneMulti(zoneId, inputId, textId, onFiles) {
+var zone = document.getElementById(zoneId);
+var input = document.getElementById(inputId);
+var text = document.getElementById(textId);
+input.addEventListener('change', function() {
+var files = input.files ? Array.prototype.slice.call(input.files) : [];
+if (!files.length) return;
+zone.classList.add('has-file');
+text.textContent = files.length === 1
+? 'Файл выбран: ' + files[0].name + ' (нажмите, чтобы заменить)'
+: 'Выбрано файлов: ' + files.length + ' (нажмите, чтобы заменить)';
+onFiles(files);
+});
+}
+
 function setActivePreset(container, selector, value, attr) {
 container.querySelectorAll(selector).forEach(function(btn) {
 btn.classList.toggle('active', btn.getAttribute(attr) === String(value));
@@ -1011,6 +1369,12 @@ btn.classList.toggle('active', btn.getAttribute(attr) === String(value));
 var canvas = document.getElementById('compress-canvas');
 var ctx = canvas.getContext('2d');
 var controls = document.getElementById('compress-controls');
+var singleEl = document.getElementById('compress-single');
+var batchEl = document.getElementById('compress-batch');
+var batchCountEl = document.getElementById('compress-batch-count');
+var batchListEl = document.getElementById('compress-batch-list');
+var batchZipBtn = document.getElementById('compress-batch-zip');
+var batchProcessBtn = document.getElementById('compress-batch-process');
 var qualitySlider = document.getElementById('compress-quality');
 var formatSelect = document.getElementById('compress-format');
 var beforeEl = document.getElementById('compress-before');
@@ -1021,30 +1385,50 @@ var downloadBtn = document.getElementById('compress-download');
 var originalBytes = 0;
 var originalName = 'image';
 var debounceTimer = null;
+var pendingBatchFiles = [];
 
-setupDropzone('compress-dropzone', 'compress-file', 'compress-dz-text', function(file) {
-originalBytes = file.size;
-originalName = file.name.replace(/\.[^.]+$/, '');
-statusEl.textContent = '';
-statusEl.className = 'status-msg';
-// сбрасываем настройки на дефолт при каждой новой загрузке, чтобы не переносить
-// незаметно для пользователя значения качества из прошлого сжатия
+function resetQualityDefault() {
 qualitySlider.value = 70;
 qualityValEl.textContent = 70;
 setActivePreset(document.getElementById('panel-compress'), '.preset-btn', '0.7', 'data-q');
+}
+
+setupDropzoneMulti('compress-dropzone', 'compress-file', 'compress-dz-text', function(files) {
+statusEl.textContent = '';
+statusEl.className = 'status-msg';
+controls.hidden = false;
+resetQualityDefault();
+
+if (files.length === 1) {
+batchEl.hidden = true;
+singleEl.hidden = false;
+var file = files[0];
+originalBytes = file.size;
+originalName = file.name.replace(/\.[^.]+$/, '');
 loadImageToCanvas(file).then(function(srcCanvas) {
 canvas.width = srcCanvas.width;
 canvas.height = srcCanvas.height;
 ctx.drawImage(srcCanvas, 0, 0);
-if (file.type === 'image/png' || file.type === 'image/webp') {
+if (file.type === 'image/png' || file.type === 'image/webp' || isHeicFile(file)) {
 formatSelect.value = 'image/webp';
 } else {
 formatSelect.value = 'image/jpeg';
 }
 beforeEl.textContent = formatKB(originalBytes);
-controls.hidden = false;
 updatePreview();
+}).catch(function(err) {
+statusEl.textContent = 'Не удалось открыть файл: ' + err.message;
+statusEl.className = 'status-msg err';
 });
+} else {
+singleEl.hidden = true;
+batchEl.hidden = false;
+pendingBatchFiles = files;
+batchCountEl.textContent = files.length;
+batchListEl.innerHTML = '';
+batchZipBtn.disabled = true;
+formatSelect.value = 'image/jpeg';
+}
 });
 
 document.querySelectorAll('#panel-compress .preset-btn').forEach(function(btn) {
@@ -1052,16 +1436,17 @@ btn.addEventListener('click', function() {
 setActivePreset(document.getElementById('panel-compress'), '.preset-btn', btn.getAttribute('data-q'), 'data-q');
 qualitySlider.value = Math.round(parseFloat(btn.getAttribute('data-q')) * 100);
 qualityValEl.textContent = qualitySlider.value;
-updatePreview();
+if (!singleEl.hidden) updatePreview();
 });
 });
 qualitySlider.addEventListener('input', function() {
 document.querySelectorAll('#panel-compress .preset-btn').forEach(function(b) { b.classList.remove('active'); });
 qualityValEl.textContent = qualitySlider.value;
+if (singleEl.hidden) return;
 clearTimeout(debounceTimer);
 debounceTimer = setTimeout(updatePreview, 150);
 });
-formatSelect.addEventListener('change', updatePreview);
+formatSelect.addEventListener('change', function() { if (!singleEl.hidden) updatePreview(); });
 
 function updatePreview() {
 var mime = formatSelect.value;
@@ -1091,6 +1476,22 @@ if (!blob) { statusEl.textContent = 'Не удалось сохранить в �
 downloadBlob(blob, originalName + '-compressed.' + extForMime(mime));
 });
 });
+
+batchProcessBtn.addEventListener('click', function() {
+var mime = formatSelect.value;
+var q = Math.max(0.05, Math.min(1, qualitySlider.value / 100));
+statusEl.textContent = 'Обрабатываю файлы…';
+statusEl.className = 'status-msg';
+runBatch(pendingBatchFiles, batchListEl, batchZipBtn, statusEl, function(file) {
+return loadImageToCanvas(file).then(function(srcCanvas) {
+return canvasToBlob(srcCanvas, mime, q).then(function(blob) {
+if (!blob) throw new Error('формат не поддержан браузером');
+var base = file.name.replace(/\.(heic|heif|[^.]+)$/i, '');
+return { blob: blob, filename: base + '-compressed.' + extForMime(mime) };
+});
+});
+});
+});
 })();
 
 // ===================== 2. РАЗМЕР =====================
@@ -1111,7 +1512,7 @@ var aspect = 1;
 
 setupDropzone('resize-dropzone', 'resize-file', 'resize-dz-text', function(file) {
 originalName = file.name.replace(/\.[^.]+$/, '');
-originalMime = file.type && file.type.indexOf('image/') === 0 ? file.type : 'image/jpeg';
+originalMime = effectiveMime(file);
 loadImageToCanvas(file).then(function(c) {
 srcCanvas = c;
 aspect = c.width / c.height;
@@ -1124,6 +1525,9 @@ ctx.drawImage(c, 0, 0);
 controls.hidden = false;
 document.querySelectorAll('#panel-resize .preset-btn').forEach(function(b) { b.classList.remove('active'); });
 document.querySelector('#panel-resize .preset-btn[data-pct="100"]').classList.add('active');
+}).catch(function(err) {
+statusEl.textContent = 'Не удалось открыть файл: ' + err.message;
+statusEl.className = 'status-msg err';
 });
 });
 
@@ -1189,7 +1593,7 @@ var rect = { x: 0.1, y: 0.1, w: 0.8, h: 0.8 }; // доли от канваса
 
 setupDropzone('crop-dropzone', 'crop-file', 'crop-dz-text', function(file) {
 originalName = file.name.replace(/\.[^.]+$/, '');
-originalMime = file.type && file.type.indexOf('image/') === 0 ? file.type : 'image/jpeg';
+originalMime = effectiveMime(file);
 loadImageToCanvas(file).then(function(c) {
 srcCanvas = c;
 canvas.width = c.width;
@@ -1199,6 +1603,9 @@ rect = { x: 0.1, y: 0.1, w: 0.8, h: 0.8 };
 applyAspectToRect();
 drawBox();
 controls.hidden = false;
+}).catch(function(err) {
+statusEl.textContent = 'Не удалось открыть файл: ' + err.message;
+statusEl.className = 'status-msg err';
 });
 });
 
@@ -1340,7 +1747,7 @@ var fineAngle = 0; // точный угол сверху
 
 setupDropzone('rotate-dropzone', 'rotate-file', 'rotate-dz-text', function(file) {
 originalName = file.name.replace(/\.[^.]+$/, '');
-originalMime = file.type && file.type.indexOf('image/') === 0 ? file.type : 'image/jpeg';
+originalMime = effectiveMime(file);
 loadImageToCanvas(file).then(function(c) {
 srcCanvas = c;
 baseRotation = 0;
@@ -1349,6 +1756,9 @@ angleSlider.value = 0;
 angleVal.textContent = '0';
 render();
 controls.hidden = false;
+}).catch(function(err) {
+statusEl.textContent = 'Не удалось открыть файл: ' + err.message;
+statusEl.className = 'status-msg err';
 });
 });
 
@@ -1406,6 +1816,12 @@ statusEl.className = 'status-msg';
 var canvas = document.getElementById('convert-canvas');
 var ctx = canvas.getContext('2d');
 var controls = document.getElementById('convert-controls');
+var singleEl = document.getElementById('convert-single');
+var batchEl = document.getElementById('convert-batch');
+var batchCountEl = document.getElementById('convert-batch-count');
+var batchListEl = document.getElementById('convert-batch-list');
+var batchZipBtn = document.getElementById('convert-batch-zip');
+var batchProcessBtn = document.getElementById('convert-batch-process');
 var formatSelect = document.getElementById('convert-format');
 var qualityField = document.getElementById('convert-quality-field');
 var qualitySlider = document.getElementById('convert-quality');
@@ -1415,6 +1831,7 @@ var statusEl = document.getElementById('convert-status');
 var downloadBtn = document.getElementById('convert-download');
 var originalName = 'image';
 var originalMime = 'image/jpeg';
+var pendingBatchFiles = [];
 
 var QUALITY_FORMATS = { 'image/jpeg': 1, 'image/webp': 1, 'application/pdf': 1 };
 var FORMAT_NOTES = {
@@ -1425,17 +1842,36 @@ var FORMAT_NOTES = {
 'application/pdf': 'Картинка станет одностраничным PDF-документом того же размера в пикселях.'
 };
 
-setupDropzone('convert-dropzone', 'convert-file', 'convert-dz-text', function(file) {
+setupDropzoneMulti('convert-dropzone', 'convert-file', 'convert-dz-text', function(files) {
+controls.hidden = false;
+statusEl.textContent = '';
+statusEl.className = 'status-msg';
+
+if (files.length === 1) {
+batchEl.hidden = true;
+singleEl.hidden = false;
+var file = files[0];
 originalName = file.name.replace(/\.[^.]+$/, '');
-originalMime = file.type && file.type.indexOf('image/') === 0 ? file.type : 'image/jpeg';
+originalMime = effectiveMime(file);
 loadImageToCanvas(file).then(function(c) {
 canvas.width = c.width;
 canvas.height = c.height;
 ctx.drawImage(c, 0, 0);
-origInfo.textContent = 'Текущий формат: ' + originalMime.replace('image/', '').toUpperCase() + ', ' + formatKB(file.size);
-controls.hidden = false;
+origInfo.textContent = 'Текущий формат: ' + (isHeicFile(file) ? 'HEIC' : originalMime.replace('image/', '').toUpperCase()) + ', ' + formatKB(file.size);
 updateFormatUI();
+}).catch(function(err) {
+statusEl.textContent = 'Не удалось открыть файл: ' + err.message;
+statusEl.className = 'status-msg err';
 });
+} else {
+singleEl.hidden = true;
+batchEl.hidden = false;
+pendingBatchFiles = files;
+batchCountEl.textContent = files.length;
+batchListEl.innerHTML = '';
+batchZipBtn.disabled = true;
+updateFormatUI();
+}
 });
 
 function updateFormatUI() {
@@ -1459,6 +1895,22 @@ return;
 downloadBlob(blob, originalName + '.' + extForMime(mime));
 statusEl.textContent = 'Готово: ' + formatKB(blob.size);
 statusEl.className = 'status-msg';
+});
+});
+
+batchProcessBtn.addEventListener('click', function() {
+var mime = formatSelect.value;
+var q = Math.max(0.05, Math.min(1, qualitySlider.value / 100));
+statusEl.textContent = 'Обрабатываю файлы…';
+statusEl.className = 'status-msg';
+runBatch(pendingBatchFiles, batchListEl, batchZipBtn, statusEl, function(file) {
+return loadImageToCanvas(file).then(function(srcCanvas) {
+return encodeCanvasToFormat(srcCanvas, mime, QUALITY_FORMATS[mime] ? q : undefined).then(function(blob) {
+if (!blob) throw new Error('формат не поддержан браузером');
+var base = file.name.replace(/\.(heic|heif|[^.]+)$/i, '');
+return { blob: blob, filename: base + '.' + extForMime(mime) };
+});
+});
 });
 });
 })();
@@ -1516,6 +1968,9 @@ controls.hidden = false;
 if (document.fonts && document.fonts.ready) {
 document.fonts.ready.then(function() { render(); });
 }
+}).catch(function(err) {
+statusEl.textContent = 'Не удалось открыть файл: ' + err.message;
+statusEl.className = 'status-msg err';
 });
 });
 
@@ -1709,6 +2164,54 @@ canvasToBlob(canvas, 'image/png').then(function(blob) {
 render(true);
 if (!blob) { statusEl.textContent = 'Не удалось сохранить.'; statusEl.className = 'status-msg err'; return; }
 downloadBlob(blob, originalName + '-text.png');
+statusEl.textContent = 'Готово!';
+statusEl.className = 'status-msg';
+});
+});
+})();
+
+// ===================== 7. МЕМЫ =====================
+(function() {
+var canvas = document.getElementById('meme-canvas');
+var ctx = canvas.getContext('2d');
+var controls = document.getElementById('meme-controls');
+var topInput = document.getElementById('meme-top-text');
+var bottomInput = document.getElementById('meme-bottom-text');
+var statusEl = document.getElementById('meme-status');
+var downloadBtn = document.getElementById('meme-download');
+var srcCanvas = null;
+var originalName = 'meme';
+
+setupDropzone('meme-dropzone', 'meme-file', 'meme-dz-text', function(file) {
+originalName = file.name.replace(/\.[^.]+$/, '') || 'meme';
+statusEl.textContent = '';
+statusEl.className = 'status-msg';
+loadImageToCanvas(file).then(function(c) {
+srcCanvas = c;
+render();
+controls.hidden = false;
+if (document.fonts && document.fonts.ready) {
+document.fonts.ready.then(render);
+}
+}).catch(function(err) {
+statusEl.textContent = 'Не удалось открыть файл: ' + err.message;
+statusEl.className = 'status-msg err';
+});
+});
+
+function render() {
+if (!srcCanvas) return;
+drawMemeCanvas(canvas, ctx, srcCanvas, topInput.value, bottomInput.value);
+}
+
+topInput.addEventListener('input', render);
+bottomInput.addEventListener('input', render);
+
+downloadBtn.addEventListener('click', function() {
+if (!srcCanvas) return;
+canvasToBlob(canvas, 'image/png').then(function(blob) {
+if (!blob) { statusEl.textContent = 'Не удалось сохранить.'; statusEl.className = 'status-msg err'; return; }
+downloadBlob(blob, originalName + '-meme.png');
 statusEl.textContent = 'Готово!';
 statusEl.className = 'status-msg';
 });
