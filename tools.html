@@ -468,7 +468,7 @@ border: 1px solid var(--border-color); border-radius: 12px; padding: 10px 12px
 <div id="text-layer-editor" hidden>
 <div class="field">
 <label>Текст</label>
-<input type="text" id="text-layer-content" maxlength="120">
+<input type="text" id="text-layer-content" maxlength="120" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
 </div>
 <div class="row">
 <div class="field">
@@ -530,11 +530,11 @@ border: 1px solid var(--border-color); border-radius: 12px; padding: 10px 12px
 
 <div class="field">
 <label>Текст сверху</label>
-<input type="text" id="meme-top-text" maxlength="80" placeholder="ВЕРХНИЙ ТЕКСТ">
+<input type="text" id="meme-top-text" maxlength="80" placeholder="ВЕРХНИЙ ТЕКСТ" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
 </div>
 <div class="field">
 <label>Текст снизу</label>
-<input type="text" id="meme-bottom-text" maxlength="80" placeholder="НИЖНИЙ ТЕКСТ">
+<input type="text" id="meme-bottom-text" maxlength="80" placeholder="НИЖНИЙ ТЕКСТ" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
 </div>
 
 <button class="btn success" id="meme-download">Скачать мем</button>
@@ -1251,12 +1251,8 @@ setTimeout(function() { URL.revokeObjectURL(url); }, 3000);
 
 // ---- Мем-генератор: подбор размера шрифта и перенос строк под ширину картинки ----
 
-function wrapMemeLines(ctx, text, maxWidth, baseFontPx, fontFamily, weight) {
-var fontSize = baseFontPx;
-var minFontSize = Math.max(8, baseFontPx * 0.3);
+function wrapWordsToWidth(ctx, text, maxWidth) {
 var words = text.split(/\s+/).filter(Boolean);
-while (fontSize >= minFontSize) {
-ctx.font = weight + ' ' + fontSize + 'px ' + fontFamily;
 var lines = [];
 var current = '';
 for (var i = 0; i < words.length; i++) {
@@ -1269,14 +1265,30 @@ current = words[i];
 }
 }
 if (current) lines.push(current);
-var allFit = lines.every(function(l) { return ctx.measureText(l).width <= maxWidth; });
-if (allFit && lines.length <= 3) {
-return { lines: lines, fontSize: fontSize };
+return lines;
 }
-fontSize -= Math.max(1, Math.round(baseFontPx * 0.05));
+
+// Подбирает размер шрифта так, чтобы блок текста (с переносом строк) поместился
+// и по ширине (maxWidth), и по высоте (maxHeight) — то есть никогда не вылезал
+// за отведённую ему зону и не мог наехать на второй блок.
+function wrapMemeLines(ctx, text, maxWidth, maxHeight, baseFontPx, fontFamily, weight) {
+var fontSize = baseFontPx;
+var minFontSize = 6;
+var lines, lineHeight;
+while (fontSize > minFontSize) {
+ctx.font = weight + ' ' + fontSize + 'px ' + fontFamily;
+lines = wrapWordsToWidth(ctx, text, maxWidth);
+lineHeight = fontSize * 1.15;
+var widthOk = lines.every(function(l) { return ctx.measureText(l).width <= maxWidth; });
+var heightOk = lines.length * lineHeight <= maxHeight;
+if (widthOk && heightOk) {
+return { lines: lines, fontSize: fontSize, lineHeight: lineHeight };
+}
+fontSize -= Math.max(1, Math.round(baseFontPx * 0.04));
 }
 ctx.font = weight + ' ' + minFontSize + 'px ' + fontFamily;
-return { lines: [text], fontSize: minFontSize };
+lines = wrapWordsToWidth(ctx, text, maxWidth);
+return { lines: lines, fontSize: minFontSize, lineHeight: minFontSize * 1.15 };
 }
 
 function drawMemeCanvas(canvas, ctx, srcCanvas, topText, bottomText) {
@@ -1291,6 +1303,10 @@ var maxWidth = canvas.width * 0.92;
 var baseFontPx = canvas.width * 0.13;
 var padding = canvas.width * 0.035;
 var strokeW = Math.max(2, canvas.width * 0.008);
+// Верхний блок не может выйти ниже верхней трети картинки, нижний — не выше
+// нижней трети. Между ними всегда остаётся как минимум треть картинки —
+// поэтому блоки физически не могут наехать друг на друга.
+var zoneHeight = canvas.height / 3 - padding;
 
 ctx.textAlign = 'center';
 ctx.lineJoin = 'round';
@@ -1299,8 +1315,7 @@ ctx.miterLimit = 2;
 function drawBlock(text, fromTop) {
 if (!text || !text.trim()) return;
 var upper = text.toUpperCase();
-var result = wrapMemeLines(ctx, upper, maxWidth, baseFontPx, fontFamily, weight);
-var lineHeight = result.fontSize * 1.15;
+var result = wrapMemeLines(ctx, upper, maxWidth, zoneHeight, baseFontPx, fontFamily, weight);
 ctx.font = weight + ' ' + result.fontSize + 'px ' + fontFamily;
 ctx.lineWidth = strokeW;
 ctx.strokeStyle = '#000000';
@@ -1311,7 +1326,7 @@ var y = padding;
 result.lines.forEach(function(line) {
 ctx.strokeText(line, canvas.width / 2, y);
 ctx.fillText(line, canvas.width / 2, y);
-y += lineHeight;
+y += result.lineHeight;
 });
 } else {
 ctx.textBaseline = 'bottom';
@@ -1319,7 +1334,7 @@ var yB = canvas.height - padding;
 result.lines.slice().reverse().forEach(function(line) {
 ctx.strokeText(line, canvas.width / 2, yB);
 ctx.fillText(line, canvas.width / 2, yB);
-yB -= lineHeight;
+yB -= result.lineHeight;
 });
 }
 }
