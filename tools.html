@@ -1,0 +1,1274 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+<title>Инструменты для картинок — Живой ИИ</title>
+<meta name="description" content="Бесплатные инструменты для работы с картинками прямо в браузере: сжатие, изменение размера, обрезка, поворот, конвертация формата и наложение текста на обложку. Без сервера — файлы не покидают ваше устройство.">
+
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%23113154'/%3E%3Ctext x='50' y='68' font-size='58' font-family='Arial, sans-serif' font-weight='bold' fill='%23007aff' text-anchor='middle'%3EЖ%3C/text%3E%3C/svg%3E">
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Живой ИИ">
+<meta property="og:title" content="Инструменты для картинок — Живой ИИ">
+<meta property="og:description" content="Сжатие, resize, обрезка, поворот, конвертация формата и текст на обложке — прямо в браузере, без сервера.">
+<meta property="og:url" content="https://zhivoy-ai.ru/tools.html">
+<meta property="og:image" content="https://zhivoy-ai.ru/og-cover.jpg">
+<meta name="twitter:card" content="summary_large_image">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Oswald:wght@600;700&family=Caveat:wght@700&display=swap" rel="stylesheet">
+
+<style>
+:root {
+--bg-color: #113154;
+--card-bg: #1b436d;
+--card-bg-2: #16395c;
+--accent-blue: #007aff;
+--accent-green: #34c759;
+--text-main: #ffffff;
+--text-muted: #8e9e93;
+--text-muted-alt: #8e9eaf;
+--border-color: #0088cc
+}
+[data-theme="light"] {
+--bg-color: #eef2f7;
+--card-bg: #ffffff;
+--card-bg-2: #f3f6fa;
+--text-main: #11213a;
+--text-muted: #5b6b82;
+--text-muted-alt: #5b6b82;
+--border-color: #cfd8e3
+}
+* {
+box-sizing: border-box;
+margin: 0;
+padding: 0
+}
+html {
+-webkit-text-size-adjust: 100%
+}
+body {
+font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+background-color: var(--bg-color);
+color: var(--text-main);
+line-height: 1.5;
+padding: 16px;
+min-height: 100vh;
+display: flex;
+flex-direction: column;
+align-items: center;
+transition: background-color 0.3s ease, color 0.3s ease
+}
+a { color: var(--accent-blue) }
+
+/* --- Шапка (как на остальном сайте) --- */
+.header, .page-wrap, .site-footer { width: 100%; max-width: 700px }
+.header { text-align: center; padding: 12px 0 16px; position: relative }
+.theme-toggle {
+position: absolute; top: 12px; right: 0;
+background-color: transparent; border: 1px solid var(--border-color);
+color: var(--text-main); width: 40px; height: 40px; border-radius: 50%;
+font-size: 18px; cursor: pointer; display: flex; align-items: center; justify-content: center;
+box-shadow: 0 0 14px rgba(0, 122, 255, 0.25)
+}
+.header h1 { font-size: 22px; font-weight: 700; margin-bottom: 14px }
+.site-links { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-bottom: 8px }
+.btn-link {
+display: inline-flex; align-items: center; justify-content: center;
+flex: 1 1 140px; max-width: 180px; background-color: var(--accent-blue); color: #fff;
+text-align: center; padding: 14px 16px; border-radius: 12px; font-weight: 700;
+text-decoration: none; font-size: 14px; letter-spacing: 0.3px;
+box-shadow: 0 0 16px rgba(0, 122, 255, 0.45)
+}
+.btn-link.vk { background-color: #0077ff }
+.btn-link.vc { background-color: #ff5c00; box-shadow: 0 0 16px rgba(255, 92, 0, 0.45) }
+.btn-link.tools { background-color: var(--accent-green); box-shadow: 0 0 16px rgba(52, 199, 89, 0.45) }
+.btn-link:active { transform: scale(0.97) }
+.back-link { display: inline-flex; align-items: center; color: var(--accent-blue); text-decoration: none; font-size: 15px; font-weight: 600; margin: 4px 0 18px; gap: 4px }
+
+.page-intro { text-align: center; margin-bottom: 18px; color: var(--text-muted-alt); font-size: 14px; padding: 0 4px }
+.page-intro strong { color: var(--text-main) }
+
+/* --- Вкладки --- */
+.tabs {
+display: flex; gap: 8px; overflow-x: auto; -webkit-overflow-scrolling: touch;
+padding: 4px 2px 12px; margin-bottom: 6px; scrollbar-width: none
+}
+.tabs::-webkit-scrollbar { display: none }
+.tab-btn {
+flex: 0 0 auto; background-color: var(--card-bg); border: 1px solid var(--border-color);
+color: var(--text-main); padding: 12px 16px; border-radius: 12px; font-size: 14px; font-weight: 600;
+cursor: pointer; white-space: nowrap; min-height: 46px; display: inline-flex; align-items: center; gap: 6px
+}
+.tab-btn.active { background-color: var(--accent-blue); border-color: var(--accent-blue); color: #fff }
+
+.panel { display: none }
+.panel.active { display: block }
+
+.card { background-color: var(--card-bg); border: 1px solid var(--border-color); border-radius: 16px; padding: 18px; margin-bottom: 16px; box-shadow: 0 0 16px rgba(0,122,255,0.12) }
+.card h2 { font-size: 17px; margin-bottom: 6px }
+.card .hint { font-size: 13px; color: var(--text-muted-alt); margin-bottom: 14px }
+
+/* --- Загрузка файла --- */
+.dropzone {
+display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px;
+border: 2px dashed var(--border-color); border-radius: 14px; padding: 28px 16px; text-align: center;
+cursor: pointer; min-height: 110px; background-color: var(--card-bg-2)
+}
+.dropzone .dz-icon { font-size: 28px }
+.dropzone span { font-size: 14px; color: var(--text-muted-alt) }
+.dropzone input[type=file] { display: none }
+.dropzone.has-file { border-style: solid; border-color: var(--accent-green) }
+
+/* --- Общие элементы управления --- */
+.field { margin: 14px 0 }
+.field label { display: block; font-size: 13px; font-weight: 600; color: var(--text-muted-alt); margin-bottom: 8px }
+.row { display: flex; gap: 10px; flex-wrap: wrap }
+.row > * { flex: 1 1 120px }
+
+.btn {
+min-height: 50px; border-radius: 12px; font-weight: 700; font-size: 15px; cursor: pointer;
+border: 1px solid var(--accent-blue); background-color: transparent; color: var(--accent-blue);
+padding: 12px 18px; width: 100%; -webkit-tap-highlight-color: transparent
+}
+.btn:active { transform: scale(0.98) }
+.btn.primary { background-color: var(--accent-blue); color: #fff }
+.btn.success { background-color: var(--accent-green); border-color: var(--accent-green); color: #fff }
+.btn.small { width: auto; min-height: 44px; padding: 10px 16px; font-size: 14px }
+.btn:disabled { opacity: 0.4; cursor: not-allowed }
+
+.preset-row { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 4px }
+.preset-btn {
+flex: 1 1 auto; min-height: 46px; border-radius: 10px; border: 1px solid var(--border-color);
+background-color: var(--card-bg-2); color: var(--text-main); font-size: 14px; font-weight: 600; cursor: pointer
+}
+.preset-btn.active { background-color: var(--accent-blue); border-color: var(--accent-blue); color: #fff }
+
+input[type=range] {
+width: 100%; height: 36px; -webkit-appearance: none; background: transparent
+}
+input[type=range]::-webkit-slider-runnable-track { height: 6px; border-radius: 3px; background: var(--border-color) }
+input[type=range]::-webkit-slider-thumb {
+-webkit-appearance: none; width: 28px; height: 28px; border-radius: 50%;
+background: var(--accent-blue); margin-top: -11px; border: 3px solid #fff; box-shadow: 0 0 6px rgba(0,0,0,0.3)
+}
+input[type=range]::-moz-range-track { height: 6px; border-radius: 3px; background: var(--border-color) }
+input[type=range]::-moz-range-thumb { width: 26px; height: 26px; border-radius: 50%; background: var(--accent-blue); border: 3px solid #fff }
+
+input[type=number], input[type=text], select {
+width: 100%; min-height: 48px; border-radius: 10px; border: 1px solid var(--border-color);
+background-color: var(--card-bg-2); color: var(--text-main); font-size: 15px; padding: 0 14px
+}
+input[type=color] { width: 56px; height: 48px; border-radius: 10px; border: 1px solid var(--border-color); background: none; padding: 2px }
+
+.size-compare { display: flex; gap: 16px; justify-content: center; margin: 14px 0; flex-wrap: wrap }
+.size-box { text-align: center; background-color: var(--card-bg-2); border-radius: 12px; padding: 10px 18px; min-width: 110px }
+.size-box .val { font-size: 20px; font-weight: 700 }
+.size-box .lbl { font-size: 12px; color: var(--text-muted-alt) }
+.size-box.smaller .val { color: var(--accent-green) }
+
+.canvas-wrap { position: relative; width: 100%; margin: 10px 0; touch-action: none; border-radius: 10px; overflow: hidden; background: repeating-conic-gradient(#0000 0 25%, rgba(255,255,255,0.04) 0 50%) 0 0/24px 24px }
+.canvas-wrap canvas { display: block; width: 100%; height: auto; touch-action: none }
+
+.preview-img-wrap { text-align: center; margin: 10px 0 }
+.preview-img-wrap canvas { max-width: 100%; border-radius: 10px; background: repeating-conic-gradient(#0000 0 25%, rgba(255,255,255,0.04) 0 50%) 0 0/24px 24px }
+
+/* crop box */
+.crop-box { position: absolute; border: 2px solid var(--accent-green); box-shadow: 0 0 0 9999px rgba(0,0,0,0.45); touch-action: none }
+.crop-handle { position: absolute; width: 30px; height: 30px; background: var(--accent-green); border: 3px solid #fff; border-radius: 50%; touch-action: none }
+.crop-handle[data-h=nw] { left: -15px; top: -15px }
+.crop-handle[data-h=ne] { right: -15px; top: -15px }
+.crop-handle[data-h=sw] { left: -15px; bottom: -15px }
+.crop-handle[data-h=se] { right: -15px; bottom: -15px }
+
+/* layers chips (text tool) */
+.layers-list { display: flex; gap: 8px; flex-wrap: wrap; margin: 12px 0 }
+.layer-chip {
+display: inline-flex; align-items: center; gap: 8px; background-color: var(--card-bg-2);
+border: 1px solid var(--border-color); border-radius: 20px; padding: 8px 8px 8px 14px; font-size: 14px; min-height: 40px; cursor: pointer
+}
+.layer-chip.active { border-color: var(--accent-blue); background-color: rgba(0,122,255,0.15) }
+.layer-chip .del { width: 26px; height: 26px; border-radius: 50%; background: rgba(255,255,255,0.12); display: flex; align-items: center; justify-content: center; font-size: 14px }
+
+.font-preview-option { padding: 4px 0 }
+
+.status-msg { font-size: 13px; color: var(--accent-green); margin-top: 8px; min-height: 16px }
+.status-msg.err { color: #ff6b6b }
+
+.site-footer { margin-top: 24px; padding: 20px 0 10px; border-top: 1px solid rgba(255,255,255,0.1); text-align: center; color: var(--text-muted-alt); font-size: 13px }
+.site-footer .footer-links { display: flex; flex-wrap: wrap; gap: 14px; justify-content: center; margin-bottom: 10px }
+.site-footer .footer-links a { color: var(--accent-blue); text-decoration: none; font-weight: 600; font-size: 14px }
+</style>
+</head>
+<body>
+<header class="header">
+<button class="theme-toggle" id="theme-toggle" aria-label="Переключить тему">🌙</button>
+<h1>Живой ИИ</h1>
+<div class="site-links">
+<a href="https://vk.ru/zhivoy_ai" target="_blank" rel="noopener noreferrer" class="btn-link vk">Мы в ВК</a>
+<a href="https://vc.ru/id6025411" target="_blank" rel="noopener noreferrer" class="btn-link vc">Блог на vc.ru</a>
+<a href="https://t.me/zhivoy_ii" target="_blank" rel="noopener noreferrer" class="btn-link tg">Мы в ТГ</a>
+</div>
+</header>
+
+<div class="page-wrap">
+<a href="index.html" class="back-link">← На главную</a>
+
+<p class="page-intro"><strong>Инструменты для картинок.</strong> Всё считается прямо в вашем браузере — фото никуда не отправляется и не сохраняется на сервере. Для стабильной работы на телефоне очень большие фото (шире 3000&nbsp;px) автоматически немного уменьшаются.</p>
+
+<div class="tabs" id="tabs">
+<button class="tab-btn active" data-tab="compress">🗜️ Сжатие</button>
+<button class="tab-btn" data-tab="resize">📐 Размер</button>
+<button class="tab-btn" data-tab="crop">✂️ Обрезка</button>
+<button class="tab-btn" data-tab="rotate">🔄 Поворот</button>
+<button class="tab-btn" data-tab="convert">🔁 Формат</button>
+<button class="tab-btn" data-tab="text">🔤 Текст на картинке</button>
+</div>
+
+<!-- ================= СЖАТИЕ ================= -->
+<section class="panel active" id="panel-compress">
+<div class="card">
+<h2>Сжатие картинки</h2>
+<p class="hint">Уменьшает вес файла почти без потери качества на глаз. Подходит для JPG, PNG, WEBP.</p>
+<label class="dropzone" id="compress-dropzone">
+<div class="dz-icon">📷</div>
+<span id="compress-dz-text">Нажмите, чтобы выбрать фото</span>
+<input type="file" accept="image/*" id="compress-file">
+</label>
+
+<div id="compress-controls" hidden>
+<div class="preview-img-wrap"><canvas id="compress-canvas"></canvas></div>
+
+<div class="field">
+<label>Качество</label>
+<div class="preset-row">
+<button class="preset-btn" data-q="0.9">Высокое</button>
+<button class="preset-btn active" data-q="0.7">Среднее</button>
+<button class="preset-btn" data-q="0.45">Максимальная экономия</button>
+</div>
+<input type="range" id="compress-quality" min="5" max="100" value="70">
+</div>
+
+<div class="field" id="compress-format-field">
+<label>Формат результата</label>
+<select id="compress-format">
+<option value="image/jpeg">JPEG</option>
+<option value="image/webp">WebP (меньше вес, поддерживает прозрачность)</option>
+</select>
+</div>
+
+<div class="size-compare">
+<div class="size-box"><div class="val" id="compress-before">—</div><div class="lbl">было</div></div>
+<div class="size-box smaller"><div class="val" id="compress-after">—</div><div class="lbl">станет</div></div>
+</div>
+
+<button class="btn success" id="compress-download">Скачать результат</button>
+<div class="status-msg" id="compress-status"></div>
+</div>
+</div>
+</section>
+
+<!-- ================= РАЗМЕР ================= -->
+<section class="panel" id="panel-resize">
+<div class="card">
+<h2>Изменение размера</h2>
+<p class="hint">Задайте новые пиксели или выберите процент от исходного размера.</p>
+<label class="dropzone" id="resize-dropzone">
+<div class="dz-icon">📷</div>
+<span id="resize-dz-text">Нажмите, чтобы выбрать фото</span>
+<input type="file" accept="image/*" id="resize-file">
+</label>
+
+<div id="resize-controls" hidden>
+<div class="preview-img-wrap"><canvas id="resize-canvas"></canvas></div>
+<p class="hint" id="resize-orig-info"></p>
+
+<div class="preset-row">
+<button class="preset-btn" data-pct="100">100%</button>
+<button class="preset-btn" data-pct="75">75%</button>
+<button class="preset-btn" data-pct="50">50%</button>
+<button class="preset-btn" data-pct="25">25%</button>
+</div>
+
+<div class="row">
+<div class="field"><label>Ширина, px</label><input type="number" id="resize-width" min="1"></div>
+<div class="field"><label>Высота, px</label><input type="number" id="resize-height" min="1"></div>
+</div>
+<div class="field">
+<label style="display:flex; align-items:center; gap:8px; cursor:pointer">
+<input type="checkbox" id="resize-lock" checked style="width:22px; height:22px; min-height:0"> Сохранять пропорции
+</label>
+</div>
+
+<button class="btn success" id="resize-download">Скачать результат</button>
+<div class="status-msg" id="resize-status"></div>
+</div>
+</div>
+</section>
+
+<!-- ================= ОБРЕЗКА ================= -->
+<section class="panel" id="panel-crop">
+<div class="card">
+<h2>Обрезка (кроп)</h2>
+<p class="hint">Потяните рамку или углы пальцем. Можно выбрать готовую пропорцию.</p>
+<label class="dropzone" id="crop-dropzone">
+<div class="dz-icon">📷</div>
+<span id="crop-dz-text">Нажмите, чтобы выбрать фото</span>
+<input type="file" accept="image/*" id="crop-file">
+</label>
+
+<div id="crop-controls" hidden>
+<div class="preset-row">
+<button class="preset-btn active" data-ar="free">Свободно</button>
+<button class="preset-btn" data-ar="1">1:1</button>
+<button class="preset-btn" data-ar="1.778">16:9</button>
+<button class="preset-btn" data-ar="0.8">4:5</button>
+</div>
+
+<div class="canvas-wrap" id="crop-canvas-wrap">
+<canvas id="crop-canvas"></canvas>
+<div class="crop-box" id="crop-box">
+<div class="crop-handle" data-h="nw"></div>
+<div class="crop-handle" data-h="ne"></div>
+<div class="crop-handle" data-h="sw"></div>
+<div class="crop-handle" data-h="se"></div>
+</div>
+</div>
+
+<button class="btn success" id="crop-download">Обрезать и скачать</button>
+<div class="status-msg" id="crop-status"></div>
+</div>
+</div>
+</section>
+
+<!-- ================= ПОВОРОТ ================= -->
+<section class="panel" id="panel-rotate">
+<div class="card">
+<h2>Поворот</h2>
+<p class="hint">Быстрый поворот на 90° или точный угол ползунком.</p>
+<label class="dropzone" id="rotate-dropzone">
+<div class="dz-icon">📷</div>
+<span id="rotate-dz-text">Нажмите, чтобы выбрать фото</span>
+<input type="file" accept="image/*" id="rotate-file">
+</label>
+
+<div id="rotate-controls" hidden>
+<div class="preview-img-wrap"><canvas id="rotate-canvas"></canvas></div>
+
+<div class="row">
+<button class="btn" id="rotate-left90">⟲ Повернуть на 90°</button>
+<button class="btn" id="rotate-right90">⟳ Повернуть на 90°</button>
+<button class="btn" id="rotate-180">↻ На 180°</button>
+</div>
+
+<div class="field">
+<label>Точный угол: <span id="rotate-angle-val">0</span>°</label>
+<input type="range" id="rotate-angle" min="-180" max="180" value="0">
+</div>
+
+<button class="btn success" id="rotate-download">Скачать результат</button>
+<div class="status-msg" id="rotate-status"></div>
+</div>
+</div>
+</section>
+
+<!-- ================= ФОРМАТ ================= -->
+<section class="panel" id="panel-convert">
+<div class="card">
+<h2>Конвертация формата</h2>
+<p class="hint">JPG ⇄ PNG ⇄ WebP. Учтите: если сохраняете прозрачную картинку в JPG, прозрачные места станут белыми.</p>
+<label class="dropzone" id="convert-dropzone">
+<div class="dz-icon">📷</div>
+<span id="convert-dz-text">Нажмите, чтобы выбрать фото</span>
+<input type="file" accept="image/*" id="convert-file">
+</label>
+
+<div id="convert-controls" hidden>
+<div class="preview-img-wrap"><canvas id="convert-canvas"></canvas></div>
+<p class="hint" id="convert-orig-info"></p>
+
+<div class="field">
+<label>Сохранить как</label>
+<select id="convert-format">
+<option value="image/jpeg">JPEG</option>
+<option value="image/png">PNG</option>
+<option value="image/webp">WebP</option>
+</select>
+</div>
+<div class="field" id="convert-quality-field">
+<label>Качество</label>
+<input type="range" id="convert-quality" min="5" max="100" value="90">
+</div>
+
+<button class="btn success" id="convert-download">Скачать результат</button>
+<div class="status-msg" id="convert-status"></div>
+</div>
+</div>
+</section>
+
+<!-- ================= ТЕКСТ НА КАРТИНКЕ ================= -->
+<section class="panel" id="panel-text">
+<div class="card">
+<h2>Текст на картинке</h2>
+<p class="hint">Редактор обложек: добавляйте несколько подписей, двигайте их пальцем, настраивайте шрифт, цвет и обводку.</p>
+<label class="dropzone" id="text-dropzone">
+<div class="dz-icon">📷</div>
+<span id="text-dz-text">Нажмите, чтобы выбрать фото</span>
+<input type="file" accept="image/*" id="text-file">
+</label>
+
+<div id="text-controls" hidden>
+<button class="btn primary" id="text-add-layer" style="margin-bottom:12px">+ Добавить текстовый блок</button>
+
+<div class="canvas-wrap" id="text-canvas-wrap">
+<canvas id="text-canvas"></canvas>
+</div>
+
+<div class="layers-list" id="text-layers-list"></div>
+
+<div id="text-layer-editor" hidden>
+<div class="field">
+<label>Текст</label>
+<input type="text" id="text-layer-content" maxlength="120">
+</div>
+<div class="row">
+<div class="field">
+<label>Шрифт</label>
+<select id="text-layer-font">
+<option value="system">Обычный</option>
+<option value="oswald">Жирный (Oswald)</option>
+<option value="anton">Плакатный (Anton)</option>
+<option value="caveat">Рукописный (Caveat)</option>
+</select>
+</div>
+<div class="field">
+<label>Цвет текста</label>
+<input type="color" id="text-layer-color" value="#ffffff">
+</div>
+</div>
+<div class="field">
+<label>Размер текста</label>
+<input type="range" id="text-layer-size" min="4" max="100" value="45">
+</div>
+<div class="row">
+<div class="field">
+<label>Цвет обводки</label>
+<input type="color" id="text-layer-stroke-color" value="#000000">
+</div>
+<div class="field">
+<label>Толщина обводки</label>
+<input type="range" id="text-layer-stroke-width" min="0" max="100" value="25">
+</div>
+</div>
+<button class="btn" id="text-layer-delete">Удалить этот блок</button>
+</div>
+
+<button class="btn success" id="text-download" style="margin-top:16px">Скачать готовую картинку</button>
+<div class="status-msg" id="text-status"></div>
+</div>
+</div>
+</section>
+
+</div>
+
+<footer class="site-footer">
+<div class="footer-links">
+<a href="https://vk.ru/zhivoy_ai" target="_blank" rel="noopener noreferrer">ВКонтакте</a>
+<a href="https://vc.ru/id6025411" target="_blank" rel="noopener noreferrer">vc.ru</a>
+<a href="https://t.me/zhivoy_ii" target="_blank" rel="noopener noreferrer">Telegram</a>
+</div>
+<p>© Живой ИИ</p>
+</footer>
+
+<script>
+// ===================== ТЕМА (как на index.html) =====================
+(function() {
+var toggle = document.getElementById('theme-toggle');
+var saved = localStorage.getItem('zhivoy-theme') || 'dark';
+applyTheme(saved);
+function applyTheme(theme) {
+if (theme === 'light') {
+document.documentElement.setAttribute('data-theme', 'light');
+toggle.textContent = '☀️';
+} else {
+document.documentElement.removeAttribute('data-theme');
+toggle.textContent = '🌙';
+}
+}
+toggle.addEventListener('click', function() {
+var current = document.documentElement.getAttribute('data-theme') === 'light' ? 'light' : 'dark';
+var next = current === 'light' ? 'dark' : 'light';
+localStorage.setItem('zhivoy-theme', next);
+applyTheme(next);
+});
+})();
+
+// ===================== ВКЛАДКИ =====================
+(function() {
+var buttons = document.querySelectorAll('.tab-btn');
+buttons.forEach(function(btn) {
+btn.addEventListener('click', function() {
+buttons.forEach(function(b) { b.classList.remove('active'); });
+btn.classList.add('active');
+document.querySelectorAll('.panel').forEach(function(p) { p.classList.remove('active'); });
+document.getElementById('panel-' + btn.getAttribute('data-tab')).classList.add('active');
+});
+});
+})();
+
+// ===================== ОБЩИЕ УТИЛИТЫ =====================
+var MAX_DIM = 3000;
+
+function loadImageToCanvas(file) {
+return new Promise(function(resolve, reject) {
+function fromDrawable(drawable, w, h) {
+var scale = Math.min(1, MAX_DIM / Math.max(w, h));
+var canvas = document.createElement('canvas');
+canvas.width = Math.max(1, Math.round(w * scale));
+canvas.height = Math.max(1, Math.round(h * scale));
+var ctx = canvas.getContext('2d');
+ctx.drawImage(drawable, 0, 0, canvas.width, canvas.height);
+if (drawable.close) { try { drawable.close(); } catch (e) {} }
+resolve(canvas);
+}
+if (window.createImageBitmap) {
+createImageBitmap(file, { imageOrientation: 'from-image' }).then(function(bmp) {
+fromDrawable(bmp, bmp.width, bmp.height);
+}).catch(function() {
+fallback();
+});
+} else {
+fallback();
+}
+function fallback() {
+var url = URL.createObjectURL(file);
+var img = new Image();
+img.onload = function() {
+fromDrawable(img, img.naturalWidth, img.naturalHeight);
+URL.revokeObjectURL(url);
+};
+img.onerror = function() { reject(new Error('load failed')); URL.revokeObjectURL(url); };
+img.src = url;
+}
+});
+}
+
+function formatKB(bytes) {
+if (bytes < 1024) return bytes + ' Б';
+return (bytes / 1024).toFixed(1) + ' КБ';
+}
+
+function extForMime(mime) {
+if (mime === 'image/png') return 'png';
+if (mime === 'image/webp') return 'webp';
+return 'jpg';
+}
+
+function canvasToBlob(canvas, mime, quality) {
+return new Promise(function(resolve) {
+canvas.toBlob(function(blob) { resolve(blob); }, mime, quality);
+});
+}
+
+function downloadBlob(blob, filename) {
+var url = URL.createObjectURL(blob);
+var a = document.createElement('a');
+a.href = url;
+a.download = filename;
+document.body.appendChild(a);
+a.click();
+a.remove();
+setTimeout(function() { URL.revokeObjectURL(url); }, 3000);
+}
+
+function setupDropzone(zoneId, inputId, textId, onFile) {
+var zone = document.getElementById(zoneId);
+var input = document.getElementById(inputId);
+var text = document.getElementById(textId);
+input.addEventListener('change', function() {
+var file = input.files && input.files[0];
+if (!file) return;
+zone.classList.add('has-file');
+text.textContent = 'Файл выбран: ' + file.name + ' (нажмите, чтобы заменить)';
+onFile(file);
+});
+}
+
+function setActivePreset(container, selector, value, attr) {
+container.querySelectorAll(selector).forEach(function(btn) {
+btn.classList.toggle('active', btn.getAttribute(attr) === String(value));
+});
+}
+
+// ===================== 1. СЖАТИЕ =====================
+(function() {
+var canvas = document.getElementById('compress-canvas');
+var ctx = canvas.getContext('2d');
+var controls = document.getElementById('compress-controls');
+var qualitySlider = document.getElementById('compress-quality');
+var formatSelect = document.getElementById('compress-format');
+var beforeEl = document.getElementById('compress-before');
+var afterEl = document.getElementById('compress-after');
+var statusEl = document.getElementById('compress-status');
+var downloadBtn = document.getElementById('compress-download');
+var originalBytes = 0;
+var originalName = 'image';
+var debounceTimer = null;
+
+setupDropzone('compress-dropzone', 'compress-file', 'compress-dz-text', function(file) {
+originalBytes = file.size;
+originalName = file.name.replace(/\.[^.]+$/, '');
+statusEl.textContent = '';
+statusEl.className = 'status-msg';
+loadImageToCanvas(file).then(function(srcCanvas) {
+canvas.width = srcCanvas.width;
+canvas.height = srcCanvas.height;
+ctx.drawImage(srcCanvas, 0, 0);
+if (file.type === 'image/png' || file.type === 'image/webp') {
+formatSelect.value = 'image/webp';
+} else {
+formatSelect.value = 'image/jpeg';
+}
+beforeEl.textContent = formatKB(originalBytes);
+controls.hidden = false;
+updatePreview();
+});
+});
+
+document.querySelectorAll('#panel-compress .preset-btn').forEach(function(btn) {
+btn.addEventListener('click', function() {
+setActivePreset(document.getElementById('panel-compress'), '.preset-btn', btn.getAttribute('data-q'), 'data-q');
+qualitySlider.value = Math.round(parseFloat(btn.getAttribute('data-q')) * 100);
+updatePreview();
+});
+});
+qualitySlider.addEventListener('input', function() {
+document.querySelectorAll('#panel-compress .preset-btn').forEach(function(b) { b.classList.remove('active'); });
+clearTimeout(debounceTimer);
+debounceTimer = setTimeout(updatePreview, 150);
+});
+formatSelect.addEventListener('change', updatePreview);
+
+function updatePreview() {
+var mime = formatSelect.value;
+var q = Math.max(0.05, Math.min(1, qualitySlider.value / 100));
+canvasToBlob(canvas, mime, q).then(function(blob) {
+if (!blob) {
+afterEl.textContent = '—';
+statusEl.textContent = 'Браузер не поддержал этот формат, попробуйте другой.';
+statusEl.className = 'status-msg err';
+return;
+}
+afterEl.textContent = formatKB(blob.size);
+statusEl.textContent = '';
+});
+}
+
+downloadBtn.addEventListener('click', function() {
+var mime = formatSelect.value;
+var q = Math.max(0.05, Math.min(1, qualitySlider.value / 100));
+canvasToBlob(canvas, mime, q).then(function(blob) {
+if (!blob) { statusEl.textContent = 'Не удалось сохранить в этом формате.'; statusEl.className = 'status-msg err'; return; }
+downloadBlob(blob, originalName + '-compressed.' + extForMime(mime));
+});
+});
+})();
+
+// ===================== 2. РАЗМЕР =====================
+(function() {
+var canvas = document.getElementById('resize-canvas');
+var ctx = canvas.getContext('2d');
+var controls = document.getElementById('resize-controls');
+var widthInput = document.getElementById('resize-width');
+var heightInput = document.getElementById('resize-height');
+var lockCheckbox = document.getElementById('resize-lock');
+var origInfo = document.getElementById('resize-orig-info');
+var statusEl = document.getElementById('resize-status');
+var downloadBtn = document.getElementById('resize-download');
+var srcCanvas = null;
+var originalName = 'image';
+var originalMime = 'image/jpeg';
+var aspect = 1;
+
+setupDropzone('resize-dropzone', 'resize-file', 'resize-dz-text', function(file) {
+originalName = file.name.replace(/\.[^.]+$/, '');
+originalMime = file.type && file.type.indexOf('image/') === 0 ? file.type : 'image/jpeg';
+loadImageToCanvas(file).then(function(c) {
+srcCanvas = c;
+aspect = c.width / c.height;
+widthInput.value = c.width;
+heightInput.value = c.height;
+origInfo.textContent = 'Исходный размер: ' + c.width + ' × ' + c.height + ' px';
+canvas.width = c.width;
+canvas.height = c.height;
+ctx.drawImage(c, 0, 0);
+controls.hidden = false;
+document.querySelectorAll('#panel-resize .preset-btn').forEach(function(b) { b.classList.remove('active'); });
+document.querySelector('#panel-resize .preset-btn[data-pct="100"]').classList.add('active');
+});
+});
+
+widthInput.addEventListener('input', function() {
+if (lockCheckbox.checked) {
+heightInput.value = Math.round(widthInput.value / aspect);
+}
+renderPreview();
+});
+heightInput.addEventListener('input', function() {
+if (lockCheckbox.checked) {
+widthInput.value = Math.round(heightInput.value * aspect);
+}
+renderPreview();
+});
+
+document.querySelectorAll('#panel-resize .preset-btn').forEach(function(btn) {
+btn.addEventListener('click', function() {
+if (!srcCanvas) return;
+setActivePreset(document.getElementById('panel-resize'), '.preset-btn', btn.getAttribute('data-pct'), 'data-pct');
+var pct = parseInt(btn.getAttribute('data-pct'), 10) / 100;
+widthInput.value = Math.round(srcCanvas.width * pct);
+heightInput.value = Math.round(srcCanvas.height * pct);
+renderPreview();
+});
+});
+
+function renderPreview() {
+if (!srcCanvas) return;
+var w = Math.max(1, parseInt(widthInput.value, 10) || srcCanvas.width);
+var h = Math.max(1, parseInt(heightInput.value, 10) || srcCanvas.height);
+canvas.width = w;
+canvas.height = h;
+ctx.clearRect(0, 0, w, h);
+ctx.drawImage(srcCanvas, 0, 0, w, h);
+}
+
+downloadBtn.addEventListener('click', function() {
+if (!srcCanvas) return;
+canvasToBlob(canvas, originalMime, 0.92).then(function(blob) {
+if (!blob) { statusEl.textContent = 'Не удалось сохранить.'; statusEl.className = 'status-msg err'; return; }
+downloadBlob(blob, originalName + '-' + canvas.width + 'x' + canvas.height + '.' + extForMime(originalMime));
+statusEl.textContent = 'Готово: ' + canvas.width + '×' + canvas.height + ' px';
+statusEl.className = 'status-msg';
+});
+});
+})();
+
+// ===================== 3. ОБРЕЗКА =====================
+(function() {
+var canvas = document.getElementById('crop-canvas');
+var ctx = canvas.getContext('2d');
+var wrap = document.getElementById('crop-canvas-wrap');
+var box = document.getElementById('crop-box');
+var controls = document.getElementById('crop-controls');
+var statusEl = document.getElementById('crop-status');
+var downloadBtn = document.getElementById('crop-download');
+var srcCanvas = null;
+var originalName = 'image';
+var originalMime = 'image/jpeg';
+var aspectLock = null; // null = свободно, число = w/h
+var rect = { x: 0.1, y: 0.1, w: 0.8, h: 0.8 }; // доли от канваса
+
+setupDropzone('crop-dropzone', 'crop-file', 'crop-dz-text', function(file) {
+originalName = file.name.replace(/\.[^.]+$/, '');
+originalMime = file.type && file.type.indexOf('image/') === 0 ? file.type : 'image/jpeg';
+loadImageToCanvas(file).then(function(c) {
+srcCanvas = c;
+canvas.width = c.width;
+canvas.height = c.height;
+ctx.drawImage(c, 0, 0);
+rect = { x: 0.1, y: 0.1, w: 0.8, h: 0.8 };
+applyAspectToRect();
+drawBox();
+controls.hidden = false;
+});
+});
+
+document.querySelectorAll('#panel-crop .preset-btn').forEach(function(btn) {
+btn.addEventListener('click', function() {
+setActivePreset(document.getElementById('panel-crop'), '.preset-btn', btn.getAttribute('data-ar'), 'data-ar');
+var v = btn.getAttribute('data-ar');
+aspectLock = v === 'free' ? null : parseFloat(v);
+applyAspectToRect();
+drawBox();
+});
+});
+
+function applyAspectToRect() {
+if (!srcCanvas || aspectLock === null) return;
+var cx = rect.x + rect.w / 2;
+var cy = rect.y + rect.h / 2;
+var canvasAspect = srcCanvas.width / srcCanvas.height;
+var boxAspect = aspectLock / canvasAspect; // перевод в доли (0..1) координат
+var w = rect.w;
+var h = w / boxAspect;
+if (h > 1) { h = Math.min(1, rect.h); w = h * boxAspect; }
+w = Math.min(w, 1); h = Math.min(h, 1);
+rect.x = clamp(cx - w / 2, 0, 1 - w);
+rect.y = clamp(cy - h / 2, 0, 1 - h);
+rect.w = w;
+rect.h = h;
+}
+
+function clamp(v, min, max) { return Math.max(min, Math.min(max, v)); }
+
+function drawBox() {
+box.style.left = (rect.x * 100) + '%';
+box.style.top = (rect.y * 100) + '%';
+box.style.width = (rect.w * 100) + '%';
+box.style.height = (rect.h * 100) + '%';
+}
+
+var dragMode = null; // 'move' | 'nw' | 'ne' | 'sw' | 'se'
+var dragStartFrac = { x: 0, y: 0 };
+var dragStartRect = null;
+
+function fracFromEvent(e) {
+var wrapRect = wrap.getBoundingClientRect();
+var clientX = e.touches ? e.touches[0].clientX : e.clientX;
+var clientY = e.touches ? e.touches[0].clientY : e.clientY;
+return { x: (clientX - wrapRect.left) / wrapRect.width, y: (clientY - wrapRect.top) / wrapRect.height };
+}
+
+function startDrag(mode) {
+return function(e) {
+e.preventDefault();
+dragMode = mode;
+dragStartFrac = fracFromEvent(e);
+dragStartRect = { x: rect.x, y: rect.y, w: rect.w, h: rect.h };
+};
+}
+
+box.addEventListener('mousedown', startDrag('move'));
+box.addEventListener('touchstart', startDrag('move'), { passive: false });
+box.querySelectorAll('.crop-handle').forEach(function(h) {
+var corner = h.getAttribute('data-h');
+h.addEventListener('mousedown', startDrag(corner));
+h.addEventListener('touchstart', startDrag(corner), { passive: false });
+});
+
+function onDragMove(e) {
+if (!dragMode || !srcCanvas) return;
+e.preventDefault();
+var f = fracFromEvent(e);
+var dx = f.x - dragStartFrac.x;
+var dy = f.y - dragStartFrac.y;
+
+if (dragMode === 'move') {
+rect.x = clamp(dragStartRect.x + dx, 0, 1 - rect.w);
+rect.y = clamp(dragStartRect.y + dy, 0, 1 - rect.h);
+} else {
+var canvasAspect = srcCanvas.width / srcCanvas.height;
+var anchorX = dragMode.indexOf('w') !== -1 ? dragStartRect.x + dragStartRect.w : dragStartRect.x;
+var anchorY = dragMode.indexOf('n') !== -1 ? dragStartRect.y + dragStartRect.h : dragStartRect.y;
+var curX = clamp(f.x, 0, 1);
+var curY = clamp(f.y, 0, 1);
+var w = Math.abs(curX - anchorX);
+var h = Math.abs(curY - anchorY);
+if (aspectLock !== null) {
+var boxAspect = aspectLock / canvasAspect;
+if (w / h > boxAspect) { w = h * boxAspect; } else { h = w / boxAspect; }
+}
+w = Math.max(0.05, Math.min(w, 1));
+h = Math.max(0.05, Math.min(h, 1));
+var newX = dragMode.indexOf('w') !== -1 ? anchorX - w : anchorX;
+var newY = dragMode.indexOf('n') !== -1 ? anchorY - h : anchorY;
+newX = clamp(newX, 0, 1 - w);
+newY = clamp(newY, 0, 1 - h);
+rect.x = newX; rect.y = newY; rect.w = w; rect.h = h;
+}
+drawBox();
+}
+function endDrag() { dragMode = null; }
+
+window.addEventListener('mousemove', onDragMove);
+window.addEventListener('touchmove', onDragMove, { passive: false });
+window.addEventListener('mouseup', endDrag);
+window.addEventListener('touchend', endDrag);
+
+downloadBtn.addEventListener('click', function() {
+if (!srcCanvas) return;
+var sx = Math.round(rect.x * srcCanvas.width);
+var sy = Math.round(rect.y * srcCanvas.height);
+var sw = Math.round(rect.w * srcCanvas.width);
+var sh = Math.round(rect.h * srcCanvas.height);
+var out = document.createElement('canvas');
+out.width = sw; out.height = sh;
+out.getContext('2d').drawImage(srcCanvas, sx, sy, sw, sh, 0, 0, sw, sh);
+canvasToBlob(out, originalMime, 0.92).then(function(blob) {
+if (!blob) { statusEl.textContent = 'Не удалось сохранить.'; statusEl.className = 'status-msg err'; return; }
+downloadBlob(blob, originalName + '-crop.' + extForMime(originalMime));
+statusEl.textContent = 'Готово: ' + sw + '×' + sh + ' px';
+statusEl.className = 'status-msg';
+});
+});
+})();
+
+// ===================== 4. ПОВОРОТ =====================
+(function() {
+var canvas = document.getElementById('rotate-canvas');
+var ctx = canvas.getContext('2d');
+var controls = document.getElementById('rotate-controls');
+var angleSlider = document.getElementById('rotate-angle');
+var angleVal = document.getElementById('rotate-angle-val');
+var statusEl = document.getElementById('rotate-status');
+var downloadBtn = document.getElementById('rotate-download');
+var srcCanvas = null;
+var originalName = 'image';
+var originalMime = 'image/jpeg';
+var baseRotation = 0; // кратно 90, накопительно
+var fineAngle = 0; // точный угол сверху
+
+setupDropzone('rotate-dropzone', 'rotate-file', 'rotate-dz-text', function(file) {
+originalName = file.name.replace(/\.[^.]+$/, '');
+originalMime = file.type && file.type.indexOf('image/') === 0 ? file.type : 'image/jpeg';
+loadImageToCanvas(file).then(function(c) {
+srcCanvas = c;
+baseRotation = 0;
+fineAngle = 0;
+angleSlider.value = 0;
+angleVal.textContent = '0';
+render();
+controls.hidden = false;
+});
+});
+
+function render() {
+if (!srcCanvas) return;
+var totalDeg = baseRotation + fineAngle;
+var rad = totalDeg * Math.PI / 180;
+var w = srcCanvas.width, h = srcCanvas.height;
+var absCos = Math.abs(Math.cos(rad));
+var absSin = Math.abs(Math.sin(rad));
+var newW = Math.round(w * absCos + h * absSin);
+var newH = Math.round(w * absSin + h * absCos);
+canvas.width = newW;
+canvas.height = newH;
+ctx.clearRect(0, 0, newW, newH);
+ctx.save();
+ctx.translate(newW / 2, newH / 2);
+ctx.rotate(rad);
+ctx.drawImage(srcCanvas, -w / 2, -h / 2);
+ctx.restore();
+}
+
+document.getElementById('rotate-left90').addEventListener('click', function() {
+baseRotation = (baseRotation - 90) % 360;
+render();
+});
+document.getElementById('rotate-right90').addEventListener('click', function() {
+baseRotation = (baseRotation + 90) % 360;
+render();
+});
+document.getElementById('rotate-180').addEventListener('click', function() {
+baseRotation = (baseRotation + 180) % 360;
+render();
+});
+angleSlider.addEventListener('input', function() {
+fineAngle = parseInt(angleSlider.value, 10);
+angleVal.textContent = fineAngle;
+render();
+});
+
+downloadBtn.addEventListener('click', function() {
+if (!srcCanvas) return;
+var mime = originalMime === 'image/png' || originalMime === 'image/webp' ? originalMime : 'image/jpeg';
+canvasToBlob(canvas, mime, 0.92).then(function(blob) {
+if (!blob) { statusEl.textContent = 'Не удалось сохранить.'; statusEl.className = 'status-msg err'; return; }
+downloadBlob(blob, originalName + '-rotated.' + extForMime(mime));
+statusEl.textContent = 'Готово';
+statusEl.className = 'status-msg';
+});
+});
+})();
+
+// ===================== 5. КОНВЕРТАЦИЯ ФОРМАТА =====================
+(function() {
+var canvas = document.getElementById('convert-canvas');
+var ctx = canvas.getContext('2d');
+var controls = document.getElementById('convert-controls');
+var formatSelect = document.getElementById('convert-format');
+var qualityField = document.getElementById('convert-quality-field');
+var qualitySlider = document.getElementById('convert-quality');
+var origInfo = document.getElementById('convert-orig-info');
+var statusEl = document.getElementById('convert-status');
+var downloadBtn = document.getElementById('convert-download');
+var originalName = 'image';
+var originalMime = 'image/jpeg';
+
+setupDropzone('convert-dropzone', 'convert-file', 'convert-dz-text', function(file) {
+originalName = file.name.replace(/\.[^.]+$/, '');
+originalMime = file.type && file.type.indexOf('image/') === 0 ? file.type : 'image/jpeg';
+loadImageToCanvas(file).then(function(c) {
+canvas.width = c.width;
+canvas.height = c.height;
+ctx.drawImage(c, 0, 0);
+origInfo.textContent = 'Текущий формат: ' + originalMime.replace('image/', '').toUpperCase() + ', ' + formatKB(file.size);
+controls.hidden = false;
+updateQualityVisibility();
+});
+});
+
+function updateQualityVisibility() {
+qualityField.style.display = formatSelect.value === 'image/png' ? 'none' : '';
+}
+formatSelect.addEventListener('change', updateQualityVisibility);
+
+downloadBtn.addEventListener('click', function() {
+var mime = formatSelect.value;
+var q = Math.max(0.05, Math.min(1, qualitySlider.value / 100));
+canvasToBlob(canvas, mime, mime === 'image/png' ? undefined : q).then(function(blob) {
+if (!blob) {
+statusEl.textContent = 'Ваш браузер не смог сохранить в этом формате, попробуйте JPEG.';
+statusEl.className = 'status-msg err';
+return;
+}
+downloadBlob(blob, originalName + '.' + extForMime(mime));
+statusEl.textContent = 'Готово: ' + formatKB(blob.size);
+statusEl.className = 'status-msg';
+});
+});
+})();
+
+// ===================== 6. ТЕКСТ НА КАРТИНКЕ =====================
+(function() {
+var canvas = document.getElementById('text-canvas');
+var ctx = canvas.getContext('2d');
+var wrap = document.getElementById('text-canvas-wrap');
+var controls = document.getElementById('text-controls');
+var layersListEl = document.getElementById('text-layers-list');
+var editorEl = document.getElementById('text-layer-editor');
+var statusEl = document.getElementById('text-status');
+
+var contentInput = document.getElementById('text-layer-content');
+var fontSelect = document.getElementById('text-layer-font');
+var colorInput = document.getElementById('text-layer-color');
+var sizeSlider = document.getElementById('text-layer-size');
+var strokeColorInput = document.getElementById('text-layer-stroke-color');
+var strokeWidthSlider = document.getElementById('text-layer-stroke-width');
+
+var srcCanvas = null;
+var originalName = 'cover';
+var layers = [];
+var nextId = 1;
+var selectedId = null;
+
+var FONTS = {
+system: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif',
+oswald: '"Oswald", sans-serif',
+anton: '"Anton", sans-serif',
+caveat: '"Caveat", cursive'
+};
+var FONT_WEIGHT = { system: '700', oswald: '700', anton: '400', caveat: '700' };
+
+setupDropzone('text-dropzone', 'text-file', 'text-dz-text', function(file) {
+originalName = file.name.replace(/\.[^.]+$/, '') || 'cover';
+loadImageToCanvas(file).then(function(c) {
+srcCanvas = c;
+canvas.width = c.width;
+canvas.height = c.height;
+layers = [];
+selectedId = null;
+render();
+renderLayersList();
+editorEl.hidden = true;
+controls.hidden = false;
+});
+});
+
+document.getElementById('text-add-layer').addEventListener('click', function() {
+if (!srcCanvas) return;
+var count = layers.length;
+var layer = {
+id: nextId++,
+text: 'Ваш текст',
+x: 0.5,
+y: 0.2 + (count % 4) * 0.18,
+fontKey: 'anton',
+color: '#ffffff',
+fontSize: 0.09,
+strokeColor: '#000000',
+strokeWidth: 0.012
+};
+layers.push(layer);
+selectLayer(layer.id);
+render();
+renderLayersList();
+});
+
+function selectLayer(id) {
+selectedId = id;
+var layer = layers.find(function(l) { return l.id === id; });
+if (!layer) { editorEl.hidden = true; render(); renderLayersList(); return; }
+editorEl.hidden = false;
+contentInput.value = layer.text;
+fontSelect.value = layer.fontKey;
+colorInput.value = layer.color;
+sizeSlider.value = Math.round(layer.fontSize * 1000);
+strokeColorInput.value = layer.strokeColor;
+strokeWidthSlider.value = Math.round(layer.strokeWidth * 1000);
+render();
+renderLayersList();
+}
+
+function currentLayer() {
+return layers.find(function(l) { return l.id === selectedId; });
+}
+
+[
+[contentInput, 'input', function(l, v) { l.text = v; }],
+[fontSelect, 'change', function(l, v) { l.fontKey = v; }],
+[colorInput, 'input', function(l, v) { l.color = v; }],
+[sizeSlider, 'input', function(l, v) { l.fontSize = v / 1000; }],
+[strokeColorInput, 'input', function(l, v) { l.strokeColor = v; }],
+[strokeWidthSlider, 'input', function(l, v) { l.strokeWidth = v / 1000; }]
+].forEach(function(pair) {
+pair[0].addEventListener(pair[1], function() {
+var l = currentLayer();
+if (!l) return;
+pair[2](l, pair[0].value);
+render();
+});
+});
+
+document.getElementById('text-layer-delete').addEventListener('click', function() {
+layers = layers.filter(function(l) { return l.id !== selectedId; });
+selectedId = layers.length ? layers[layers.length - 1].id : null;
+if (selectedId) { selectLayer(selectedId); } else { editorEl.hidden = true; render(); renderLayersList(); }
+});
+
+function renderLayersList() {
+layersListEl.innerHTML = '';
+layers.forEach(function(l, idx) {
+var chip = document.createElement('div');
+chip.className = 'layer-chip' + (l.id === selectedId ? ' active' : '');
+var label = document.createElement('span');
+label.textContent = 'Блок ' + (idx + 1) + (l.text ? ': ' + l.text.slice(0, 12) : '');
+chip.appendChild(label);
+var del = document.createElement('span');
+del.className = 'del';
+del.textContent = '✕';
+del.addEventListener('click', function(e) {
+e.stopPropagation();
+layers = layers.filter(function(x) { return x.id !== l.id; });
+if (selectedId === l.id) { selectedId = layers.length ? layers[0].id : null; }
+if (selectedId) { selectLayer(selectedId); } else { editorEl.hidden = true; render(); renderLayersList(); }
+});
+chip.appendChild(del);
+chip.addEventListener('click', function() { selectLayer(l.id); });
+layersListEl.appendChild(chip);
+});
+}
+
+function measureLayerBox(l) {
+var fpx = l.fontSize * canvas.width;
+ctx.font = FONT_WEIGHT[l.fontKey] + ' ' + fpx + 'px ' + FONTS[l.fontKey];
+var w = ctx.measureText(l.text || ' ').width;
+var h = fpx * 1.25;
+return { w: w, h: h, fpx: fpx };
+}
+
+function render(showSelection) {
+if (!srcCanvas) return;
+if (showSelection === undefined) showSelection = true;
+ctx.clearRect(0, 0, canvas.width, canvas.height);
+ctx.drawImage(srcCanvas, 0, 0);
+layers.forEach(function(l) {
+var px = l.x * canvas.width;
+var py = l.y * canvas.height;
+var box = measureLayerBox(l);
+ctx.textAlign = 'center';
+ctx.textBaseline = 'middle';
+ctx.font = FONT_WEIGHT[l.fontKey] + ' ' + box.fpx + 'px ' + FONTS[l.fontKey];
+ctx.lineJoin = 'round';
+ctx.miterLimit = 2;
+if (l.strokeWidth > 0) {
+ctx.lineWidth = l.strokeWidth * canvas.width;
+ctx.strokeStyle = l.strokeColor;
+ctx.strokeText(l.text, px, py);
+}
+ctx.fillStyle = l.color;
+ctx.fillText(l.text, px, py);
+if (showSelection && l.id === selectedId) {
+ctx.save();
+ctx.setLineDash([canvas.width * 0.01, canvas.width * 0.008]);
+ctx.lineWidth = Math.max(2, canvas.width * 0.002);
+ctx.strokeStyle = '#34c759';
+ctx.strokeRect(px - box.w / 2 - 10, py - box.h / 2 - 6, box.w + 20, box.h + 12);
+ctx.restore();
+}
+});
+}
+
+// --- Перетаскивание пальцем/мышью ---
+var dragLayer = null;
+var dragOffset = { x: 0, y: 0 };
+
+function pointFromEvent(e) {
+var r = canvas.getBoundingClientRect();
+var clientX = e.touches ? e.touches[0].clientX : e.clientX;
+var clientY = e.touches ? e.touches[0].clientY : e.clientY;
+var cx = (clientX - r.left) * (canvas.width / r.width);
+var cy = (clientY - r.top) * (canvas.height / r.height);
+return { x: cx / canvas.width, y: cy / canvas.height };
+}
+
+function hitTest(fx, fy) {
+for (var i = layers.length - 1; i >= 0; i--) {
+var l = layers[i];
+var box = measureLayerBox(l);
+var px = l.x * canvas.width;
+var py = l.y * canvas.height;
+var x = fx * canvas.width, y = fy * canvas.height;
+if (x >= px - box.w / 2 - 14 && x <= px + box.w / 2 + 14 && y >= py - box.h / 2 - 10 && y <= py + box.h / 2 + 10) {
+return l;
+}
+}
+return null;
+}
+
+function onPointerDown(e) {
+if (!srcCanvas) return;
+var f = pointFromEvent(e);
+var l = hitTest(f.x, f.y);
+if (l) {
+e.preventDefault();
+dragLayer = l;
+dragOffset.x = f.x - l.x;
+dragOffset.y = f.y - l.y;
+selectLayer(l.id);
+}
+}
+function onPointerMove(e) {
+if (!dragLayer) return;
+e.preventDefault();
+var f = pointFromEvent(e);
+dragLayer.x = Math.max(0, Math.min(1, f.x - dragOffset.x));
+dragLayer.y = Math.max(0, Math.min(1, f.y - dragOffset.y));
+render();
+}
+function onPointerUp() { dragLayer = null; }
+
+canvas.addEventListener('mousedown', onPointerDown);
+canvas.addEventListener('touchstart', onPointerDown, { passive: false });
+window.addEventListener('mousemove', onPointerMove);
+window.addEventListener('touchmove', onPointerMove, { passive: false });
+window.addEventListener('mouseup', onPointerUp);
+window.addEventListener('touchend', onPointerUp);
+
+document.getElementById('text-download').addEventListener('click', function() {
+if (!srcCanvas) return;
+render(false);
+canvasToBlob(canvas, 'image/png').then(function(blob) {
+render(true);
+if (!blob) { statusEl.textContent = 'Не удалось сохранить.'; statusEl.className = 'status-msg err'; return; }
+downloadBlob(blob, originalName + '-text.png');
+statusEl.textContent = 'Готово!';
+statusEl.className = 'status-msg';
+});
+});
+})();
+</script>
+</body>
+</html>
