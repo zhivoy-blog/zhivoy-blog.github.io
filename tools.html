@@ -18,7 +18,7 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Anton&family=Oswald:wght@600;700&family=Caveat:wght@700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Oswald:wght@600;700&family=Caveat:wght@700&family=Montserrat:wght@800;900&family=Marck+Script&family=Playfair+Display:wght@400;600&family=Passion+One:wght@700;900&display=swap" rel="stylesheet">
 
 <style>
 :root {
@@ -242,13 +242,14 @@ border: 1px solid var(--border-color); border-radius: 20px; padding: 8px 8px 8px
 <div class="preview-img-wrap"><canvas id="compress-canvas"></canvas></div>
 
 <div class="field">
-<label>Качество</label>
+<label>Качество: <span id="compress-quality-val">70</span>%</label>
 <div class="preset-row">
 <button class="preset-btn" data-q="0.9">Высокое</button>
 <button class="preset-btn active" data-q="0.7">Среднее</button>
 <button class="preset-btn" data-q="0.45">Максимальная экономия</button>
 </div>
 <input type="range" id="compress-quality" min="5" max="100" value="70">
+<p class="hint">Хотите сжать этот же файл ещё сильнее? Просто уменьшите значение качества относительно того, что было в прошлый раз.</p>
 </div>
 
 <div class="field" id="compress-format-field">
@@ -378,7 +379,7 @@ border: 1px solid var(--border-color); border-radius: 20px; padding: 8px 8px 8px
 <section class="panel" id="panel-convert">
 <div class="card">
 <h2>Конвертация формата</h2>
-<p class="hint">JPG ⇄ PNG ⇄ WebP. Учтите: если сохраняете прозрачную картинку в JPG, прозрачные места станут белыми.</p>
+<p class="hint">Учтите: если сохраняете прозрачную картинку в JPG/BMP, прозрачные места станут белыми.</p>
 <label class="dropzone" id="convert-dropzone">
 <div class="dz-icon">📷</div>
 <span id="convert-dz-text">Нажмите, чтобы выбрать фото</span>
@@ -395,12 +396,18 @@ border: 1px solid var(--border-color); border-radius: 20px; padding: 8px 8px 8px
 <option value="image/jpeg">JPEG</option>
 <option value="image/png">PNG</option>
 <option value="image/webp">WebP</option>
+<option value="image/gif">GIF</option>
+<option value="image/bmp">BMP</option>
+<option value="image/x-icon">ICO (иконка)</option>
+<option value="image/tiff">TIFF</option>
+<option value="application/pdf">PDF (документ)</option>
 </select>
 </div>
 <div class="field" id="convert-quality-field">
 <label>Качество</label>
 <input type="range" id="convert-quality" min="5" max="100" value="90">
 </div>
+<p class="hint" id="convert-format-note"></p>
 
 <button class="btn success" id="convert-download">Скачать результат</button>
 <div class="status-msg" id="convert-status"></div>
@@ -441,6 +448,10 @@ border: 1px solid var(--border-color); border-radius: 20px; padding: 8px 8px 8px
 <option value="oswald">Жирный (Oswald)</option>
 <option value="anton">Плакатный (Anton)</option>
 <option value="caveat">Рукописный (Caveat)</option>
+<option value="montserrat">Акцентный жирный (Montserrat)</option>
+<option value="marck">Рукописный 2 (Marck Script)</option>
+<option value="playfair">Элегантный (Playfair Display)</option>
+<option value="passion">Мемный (Passion One)</option>
 </select>
 </div>
 <div class="field">
@@ -563,6 +574,11 @@ return (bytes / 1024).toFixed(1) + ' КБ';
 function extForMime(mime) {
 if (mime === 'image/png') return 'png';
 if (mime === 'image/webp') return 'webp';
+if (mime === 'image/gif') return 'gif';
+if (mime === 'image/bmp') return 'bmp';
+if (mime === 'image/x-icon') return 'ico';
+if (mime === 'image/tiff') return 'tiff';
+if (mime === 'application/pdf') return 'pdf';
 return 'jpg';
 }
 
@@ -570,6 +586,394 @@ function canvasToBlob(canvas, mime, quality) {
 return new Promise(function(resolve) {
 canvas.toBlob(function(blob) { resolve(blob); }, mime, quality);
 });
+}
+
+// ---- Форматы, которые canvas.toBlob не умеет сам: пишем файлы вручную по спецификации ----
+
+function canvasToBMPBlob(canvas) {
+var w = canvas.width, h = canvas.height;
+var ctx = canvas.getContext('2d');
+var img = ctx.getImageData(0, 0, w, h).data;
+var rowSize = Math.floor((24 * w + 31) / 32) * 4;
+var pixelArraySize = rowSize * h;
+var fileSize = 54 + pixelArraySize;
+var buffer = new ArrayBuffer(fileSize);
+var view = new DataView(buffer);
+view.setUint8(0, 0x42); view.setUint8(1, 0x4D);
+view.setUint32(2, fileSize, true);
+view.setUint32(6, 0, true);
+view.setUint32(10, 54, true);
+view.setUint32(14, 40, true);
+view.setInt32(18, w, true);
+view.setInt32(22, h, true);
+view.setUint16(26, 1, true);
+view.setUint16(28, 24, true);
+view.setUint32(30, 0, true);
+view.setUint32(34, pixelArraySize, true);
+view.setUint32(38, 2835, true);
+view.setUint32(42, 2835, true);
+view.setUint32(46, 0, true);
+view.setUint32(50, 0, true);
+for (var fileRow = 0; fileRow < h; fileRow++) {
+var imageY = h - 1 - fileRow;
+var rowStart = 54 + fileRow * rowSize;
+for (var x = 0; x < w; x++) {
+var srcIdx = (imageY * w + x) * 4;
+var dstIdx = rowStart + x * 3;
+view.setUint8(dstIdx, img[srcIdx + 2]);
+view.setUint8(dstIdx + 1, img[srcIdx + 1]);
+view.setUint8(dstIdx + 2, img[srcIdx]);
+}
+}
+return Promise.resolve(new Blob([buffer], { type: 'image/bmp' }));
+}
+
+function canvasToICOBlob(canvas) {
+return new Promise(function(resolve) {
+var maxIcoDim = 256;
+var scale = Math.min(1, maxIcoDim / Math.max(canvas.width, canvas.height));
+var iw = Math.max(1, Math.round(canvas.width * scale));
+var ih = Math.max(1, Math.round(canvas.height * scale));
+var tmp = document.createElement('canvas');
+tmp.width = iw; tmp.height = ih;
+tmp.getContext('2d').drawImage(canvas, 0, 0, iw, ih);
+tmp.toBlob(function(pngBlob) {
+pngBlob.arrayBuffer().then(function(pngBuf) {
+var pngBytes = new Uint8Array(pngBuf);
+var headerSize = 22;
+var buffer = new ArrayBuffer(headerSize + pngBytes.length);
+var view = new DataView(buffer);
+view.setUint16(0, 0, true);
+view.setUint16(2, 1, true);
+view.setUint16(4, 1, true);
+view.setUint8(6, iw >= 256 ? 0 : iw);
+view.setUint8(7, ih >= 256 ? 0 : ih);
+view.setUint8(8, 0);
+view.setUint8(9, 0);
+view.setUint16(10, 1, true);
+view.setUint16(12, 32, true);
+view.setUint32(14, pngBytes.length, true);
+view.setUint32(18, headerSize, true);
+new Uint8Array(buffer, headerSize).set(pngBytes);
+resolve(new Blob([buffer], { type: 'image/x-icon' }));
+});
+}, 'image/png');
+});
+}
+
+function medianCutQuantize(pixels, maxColors) {
+if (pixels.length === 0) return [[0, 0, 0]];
+var buckets = [pixels];
+function range(bucket, channel) {
+var min = 255, max = 0;
+for (var i = 0; i < bucket.length; i++) {
+var v = bucket[i][channel];
+if (v < min) min = v;
+if (v > max) max = v;
+}
+return max - min;
+}
+while (buckets.length < maxColors) {
+var bucketIdx = -1, bucketRange = -1, bucketChannel = 0;
+for (var b = 0; b < buckets.length; b++) {
+if (buckets[b].length < 2) continue;
+for (var c = 0; c < 3; c++) {
+var r = range(buckets[b], c);
+if (r > bucketRange) { bucketRange = r; bucketIdx = b; bucketChannel = c; }
+}
+}
+if (bucketIdx === -1 || bucketRange === 0) break;
+var bucket = buckets[bucketIdx];
+bucket.sort(function(a, b2) { return a[bucketChannel] - b2[bucketChannel]; });
+var mid = Math.floor(bucket.length / 2);
+buckets.splice(bucketIdx, 1, bucket.slice(0, mid), bucket.slice(mid));
+}
+return buckets.map(function(bucket) {
+var n = bucket.length, r = 0, g = 0, b = 0;
+for (var i = 0; i < n; i++) { r += bucket[i][0]; g += bucket[i][1]; b += bucket[i][2]; }
+return [Math.round(r / n), Math.round(g / n), Math.round(b / n)];
+});
+}
+
+function lzwEncodeGif(indices, minCodeSize) {
+var clearCode = 1 << minCodeSize;
+var eoiCode = clearCode + 1;
+var maxCodeSize = 12;
+var codeSize, nextCode, dict;
+function resetDict() {
+dict = new Map();
+for (var i = 0; i < clearCode; i++) dict.set(String(i), i);
+nextCode = eoiCode + 1;
+codeSize = minCodeSize + 1;
+}
+resetDict();
+var bitBuffer = 0, bitCount = 0;
+var out = [];
+function emit(code) {
+bitBuffer |= (code << bitCount);
+bitCount += codeSize;
+while (bitCount >= 8) {
+out.push(bitBuffer & 0xff);
+bitBuffer >>= 8;
+bitCount -= 8;
+}
+}
+emit(clearCode);
+var w = String(indices[0]);
+for (var i = 1; i < indices.length; i++) {
+var k = String(indices[i]);
+var wk = w + ',' + k;
+if (dict.has(wk)) {
+w = wk;
+} else {
+emit(dict.get(w));
+if (nextCode < (1 << maxCodeSize)) {
+dict.set(wk, nextCode);
+nextCode++;
+if (nextCode > (1 << codeSize) && codeSize < maxCodeSize) codeSize++;
+} else {
+emit(clearCode);
+resetDict();
+}
+w = k;
+}
+}
+emit(dict.get(w));
+emit(eoiCode);
+if (bitCount > 0) out.push(bitBuffer & 0xff);
+return new Uint8Array(out);
+}
+
+function canvasToGIFBlob(canvas) {
+return new Promise(function(resolve) {
+var maxGifDim = 1000;
+var scale = Math.min(1, maxGifDim / Math.max(canvas.width, canvas.height));
+var w = Math.max(1, Math.round(canvas.width * scale));
+var h = Math.max(1, Math.round(canvas.height * scale));
+var tmp = document.createElement('canvas');
+tmp.width = w; tmp.height = h;
+var tctx = tmp.getContext('2d');
+tctx.drawImage(canvas, 0, 0, w, h);
+var data = tctx.getImageData(0, 0, w, h).data;
+
+var totalPixels = w * h;
+var samplePixels = [];
+var step = Math.max(1, Math.floor(totalPixels / 15000));
+for (var i = 0; i < totalPixels; i += step) {
+var o = i * 4;
+samplePixels.push([data[o], data[o + 1], data[o + 2]]);
+}
+var palette = medianCutQuantize(samplePixels, 256);
+var palBits = Math.max(1, Math.ceil(Math.log2(Math.max(2, palette.length))));
+var palSize = 1 << palBits;
+while (palette.length < palSize) palette.push([0, 0, 0]);
+
+var cache = new Map();
+function nearestIndex(r, g, b) {
+var key = (r >> 2) << 12 | (g >> 2) << 6 | (b >> 2);
+var cached = cache.get(key);
+if (cached !== undefined) return cached;
+var best = 0, bestDist = Infinity;
+for (var p = 0; p < palette.length; p++) {
+var dr = r - palette[p][0], dg = g - palette[p][1], db = b - palette[p][2];
+var dist = dr * dr + dg * dg + db * db;
+if (dist < bestDist) { bestDist = dist; best = p; }
+}
+cache.set(key, best);
+return best;
+}
+var indices = new Uint8Array(totalPixels);
+for (var px = 0; px < totalPixels; px++) {
+var o2 = px * 4;
+indices[px] = nearestIndex(data[o2], data[o2 + 1], data[o2 + 2]);
+}
+
+var parts = [];
+var enc = new TextEncoder();
+function pushStr(s) { parts.push(enc.encode(s)); }
+function pushBytes(arr) { parts.push(new Uint8Array(arr)); }
+
+pushStr('GIF89a');
+pushBytes([w & 0xff, (w >> 8) & 0xff]);
+pushBytes([h & 0xff, (h >> 8) & 0xff]);
+var packed = 0x80 | ((palBits - 1) << 4) | (palBits - 1);
+pushBytes([packed, 0, 0]);
+var gct = new Uint8Array(palette.length * 3);
+for (var pi = 0; pi < palette.length; pi++) {
+gct[pi * 3] = palette[pi][0];
+gct[pi * 3 + 1] = palette[pi][1];
+gct[pi * 3 + 2] = palette[pi][2];
+}
+parts.push(gct);
+pushBytes([0x2C]);
+pushBytes([0, 0, 0, 0]);
+pushBytes([w & 0xff, (w >> 8) & 0xff]);
+pushBytes([h & 0xff, (h >> 8) & 0xff]);
+pushBytes([0]);
+var lzwMinCodeSize = Math.max(2, palBits);
+pushBytes([lzwMinCodeSize]);
+var lzwData = lzwEncodeGif(indices, lzwMinCodeSize);
+var offset = 0;
+while (offset < lzwData.length) {
+var chunkLen = Math.min(255, lzwData.length - offset);
+pushBytes([chunkLen]);
+parts.push(lzwData.subarray(offset, offset + chunkLen));
+offset += chunkLen;
+}
+pushBytes([0]);
+pushBytes([0x3B]);
+
+var totalLen = parts.reduce(function(s, p) { return s + p.length; }, 0);
+var out = new Uint8Array(totalLen);
+var pos = 0;
+parts.forEach(function(p) { out.set(p, pos); pos += p.length; });
+resolve(new Blob([out], { type: 'image/gif' }));
+});
+}
+
+function canvasToTIFFBlob(canvas) {
+var w = canvas.width, h = canvas.height;
+var ctx = canvas.getContext('2d');
+var img = ctx.getImageData(0, 0, w, h).data;
+
+var numEntries = 11;
+var ifdOffset = 8;
+var ifdSize = 2 + numEntries * 12 + 4;
+var extraOffset = ifdOffset + ifdSize;
+var bitsPerSampleOffset = extraOffset;
+var xResOffset = bitsPerSampleOffset + 6;
+var yResOffset = xResOffset + 8;
+var pixelDataOffset = yResOffset + 8;
+var pixelDataSize = w * h * 3;
+var totalSize = pixelDataOffset + pixelDataSize;
+
+var buffer = new ArrayBuffer(totalSize);
+var view = new DataView(buffer);
+
+view.setUint8(0, 0x49); view.setUint8(1, 0x49);
+view.setUint16(2, 42, true);
+view.setUint32(4, ifdOffset, true);
+
+var p = ifdOffset;
+view.setUint16(p, numEntries, true); p += 2;
+
+function writeEntry(tag, type, count, value) {
+view.setUint16(p, tag, true);
+view.setUint16(p + 2, type, true);
+view.setUint32(p + 4, count, true);
+if (type === 3 && count === 1) {
+view.setUint16(p + 8, value, true);
+view.setUint16(p + 10, 0, true);
+} else {
+view.setUint32(p + 8, value, true);
+}
+p += 12;
+}
+
+writeEntry(256, 4, 1, w);
+writeEntry(257, 4, 1, h);
+writeEntry(258, 3, 3, bitsPerSampleOffset);
+writeEntry(259, 3, 1, 1);
+writeEntry(262, 3, 1, 2);
+writeEntry(273, 4, 1, pixelDataOffset);
+writeEntry(277, 3, 1, 3);
+writeEntry(278, 4, 1, h);
+writeEntry(279, 4, 1, pixelDataSize);
+writeEntry(282, 5, 1, xResOffset);
+writeEntry(283, 5, 1, yResOffset);
+view.setUint32(p, 0, true); p += 4;
+
+view.setUint16(bitsPerSampleOffset, 8, true);
+view.setUint16(bitsPerSampleOffset + 2, 8, true);
+view.setUint16(bitsPerSampleOffset + 4, 8, true);
+view.setUint32(xResOffset, 72, true);
+view.setUint32(xResOffset + 4, 1, true);
+view.setUint32(yResOffset, 72, true);
+view.setUint32(yResOffset + 4, 1, true);
+
+var dst = pixelDataOffset;
+for (var i = 0; i < w * h; i++) {
+var srcIdx = i * 4;
+view.setUint8(dst++, img[srcIdx]);
+view.setUint8(dst++, img[srcIdx + 1]);
+view.setUint8(dst++, img[srcIdx + 2]);
+}
+
+return Promise.resolve(new Blob([buffer], { type: 'image/tiff' }));
+}
+
+function canvasToPDFBlob(canvas) {
+return new Promise(function(resolve) {
+canvas.toBlob(function(jpegBlob) {
+jpegBlob.arrayBuffer().then(function(buf) {
+var jpegBytes = new Uint8Array(buf);
+var w = canvas.width, h = canvas.height;
+var enc = new TextEncoder();
+var chunks = [];
+var offset = 0;
+var objOffsets = [];
+function push(strOrBytes) {
+var bytes = (typeof strOrBytes === 'string') ? enc.encode(strOrBytes) : strOrBytes;
+chunks.push(bytes);
+offset += bytes.length;
+}
+function startObj(num) {
+objOffsets[num] = offset;
+push(num + ' 0 obj\n');
+}
+
+push('%PDF-1.4\n');
+
+startObj(1);
+push('<< /Type /Catalog /Pages 2 0 R >>\nendobj\n');
+
+startObj(2);
+push('<< /Type /Pages /Kids [3 0 R] /Count 1 >>\nendobj\n');
+
+startObj(3);
+push('<< /Type /Page /Parent 2 0 R /MediaBox [0 0 ' + w + ' ' + h + '] /Resources << /XObject << /Im0 4 0 R >> >> /Contents 5 0 R >>\nendobj\n');
+
+startObj(4);
+push('<< /Type /XObject /Subtype /Image /Width ' + w + ' /Height ' + h + ' /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length ' + jpegBytes.length + ' >>\nstream\n');
+push(jpegBytes);
+push('\nendstream\nendobj\n');
+
+var contentStream = 'q ' + w + ' 0 0 ' + h + ' 0 0 cm /Im0 Do Q';
+var contentBytes = enc.encode(contentStream);
+startObj(5);
+push('<< /Length ' + contentBytes.length + ' >>\nstream\n');
+push(contentBytes);
+push('\nendstream\nendobj\n');
+
+var xrefOffset = offset;
+var totalObjs = 6;
+var xref = 'xref\n0 ' + totalObjs + '\n0000000000 65535 f \n';
+for (var i = 1; i <= 5; i++) {
+xref += String(objOffsets[i]).padStart(10, '0') + ' 00000 n \n';
+}
+push(xref);
+push('trailer\n<< /Size ' + totalObjs + ' /Root 1 0 R >>\nstartxref\n' + xrefOffset + '\n%%EOF');
+
+var totalLen = chunks.reduce(function(s, c) { return s + c.length; }, 0);
+var out = new Uint8Array(totalLen);
+var pos = 0;
+chunks.forEach(function(c) { out.set(c, pos); pos += c.length; });
+resolve(new Blob([out], { type: 'application/pdf' }));
+});
+}, 'image/jpeg', 0.92);
+});
+}
+
+function encodeCanvasToFormat(canvas, mime, quality) {
+if (mime === 'image/jpeg' || mime === 'image/png' || mime === 'image/webp') {
+return canvasToBlob(canvas, mime, quality);
+}
+if (mime === 'image/bmp') return canvasToBMPBlob(canvas);
+if (mime === 'image/x-icon') return canvasToICOBlob(canvas);
+if (mime === 'image/gif') return canvasToGIFBlob(canvas);
+if (mime === 'image/tiff') return canvasToTIFFBlob(canvas);
+if (mime === 'application/pdf') return canvasToPDFBlob(canvas);
+return canvasToBlob(canvas, 'image/jpeg', quality);
 }
 
 function downloadBlob(blob, filename) {
@@ -611,6 +1015,7 @@ var qualitySlider = document.getElementById('compress-quality');
 var formatSelect = document.getElementById('compress-format');
 var beforeEl = document.getElementById('compress-before');
 var afterEl = document.getElementById('compress-after');
+var qualityValEl = document.getElementById('compress-quality-val');
 var statusEl = document.getElementById('compress-status');
 var downloadBtn = document.getElementById('compress-download');
 var originalBytes = 0;
@@ -622,6 +1027,11 @@ originalBytes = file.size;
 originalName = file.name.replace(/\.[^.]+$/, '');
 statusEl.textContent = '';
 statusEl.className = 'status-msg';
+// сбрасываем настройки на дефолт при каждой новой загрузке, чтобы не переносить
+// незаметно для пользователя значения качества из прошлого сжатия
+qualitySlider.value = 70;
+qualityValEl.textContent = 70;
+setActivePreset(document.getElementById('panel-compress'), '.preset-btn', '0.7', 'data-q');
 loadImageToCanvas(file).then(function(srcCanvas) {
 canvas.width = srcCanvas.width;
 canvas.height = srcCanvas.height;
@@ -641,11 +1051,13 @@ document.querySelectorAll('#panel-compress .preset-btn').forEach(function(btn) {
 btn.addEventListener('click', function() {
 setActivePreset(document.getElementById('panel-compress'), '.preset-btn', btn.getAttribute('data-q'), 'data-q');
 qualitySlider.value = Math.round(parseFloat(btn.getAttribute('data-q')) * 100);
+qualityValEl.textContent = qualitySlider.value;
 updatePreview();
 });
 });
 qualitySlider.addEventListener('input', function() {
 document.querySelectorAll('#panel-compress .preset-btn').forEach(function(b) { b.classList.remove('active'); });
+qualityValEl.textContent = qualitySlider.value;
 clearTimeout(debounceTimer);
 debounceTimer = setTimeout(updatePreview, 150);
 });
@@ -662,7 +1074,12 @@ statusEl.className = 'status-msg err';
 return;
 }
 afterEl.textContent = formatKB(blob.size);
+if (blob.size >= originalBytes * 0.97) {
+statusEl.textContent = 'Вес почти не изменился — картинка уже сжата на таком уровне качества. Уменьшите значение качества, чтобы сжать сильнее.';
+statusEl.className = 'status-msg err';
+} else {
 statusEl.textContent = '';
+}
 });
 }
 
@@ -834,6 +1251,7 @@ return { x: (clientX - wrapRect.left) / wrapRect.width, y: (clientY - wrapRect.t
 function startDrag(mode) {
 return function(e) {
 e.preventDefault();
+e.stopPropagation();
 dragMode = mode;
 dragStartFrac = fracFromEvent(e);
 dragStartRect = { x: rect.x, y: rect.y, w: rect.w, h: rect.h };
@@ -992,10 +1410,20 @@ var formatSelect = document.getElementById('convert-format');
 var qualityField = document.getElementById('convert-quality-field');
 var qualitySlider = document.getElementById('convert-quality');
 var origInfo = document.getElementById('convert-orig-info');
+var formatNoteEl = document.getElementById('convert-format-note');
 var statusEl = document.getElementById('convert-status');
 var downloadBtn = document.getElementById('convert-download');
 var originalName = 'image';
 var originalMime = 'image/jpeg';
+
+var QUALITY_FORMATS = { 'image/jpeg': 1, 'image/webp': 1, 'application/pdf': 1 };
+var FORMAT_NOTES = {
+'image/gif': 'GIF ограничен 256 цветами и подходит для простых картинок/скринов, не для фото. Большие фото уменьшаются до 1000 px для скорости.',
+'image/bmp': 'BMP хранится без сжатия — файл получится заметно больше, чем JPEG/PNG.',
+'image/x-icon': 'Иконка ограничена размером 256×256 px, картинка будет уменьшена под это.',
+'image/tiff': 'TIFF без сжатия — файл будет большим. Открывается не во всех приложениях на телефоне, нужен просмотрщик с поддержкой TIFF.',
+'application/pdf': 'Картинка станет одностраничным PDF-документом того же размера в пикселях.'
+};
 
 setupDropzone('convert-dropzone', 'convert-file', 'convert-dz-text', function(file) {
 originalName = file.name.replace(/\.[^.]+$/, '');
@@ -1006,19 +1434,23 @@ canvas.height = c.height;
 ctx.drawImage(c, 0, 0);
 origInfo.textContent = 'Текущий формат: ' + originalMime.replace('image/', '').toUpperCase() + ', ' + formatKB(file.size);
 controls.hidden = false;
-updateQualityVisibility();
+updateFormatUI();
 });
 });
 
-function updateQualityVisibility() {
-qualityField.style.display = formatSelect.value === 'image/png' ? 'none' : '';
+function updateFormatUI() {
+var mime = formatSelect.value;
+qualityField.style.display = QUALITY_FORMATS[mime] ? '' : 'none';
+formatNoteEl.textContent = FORMAT_NOTES[mime] || '';
 }
-formatSelect.addEventListener('change', updateQualityVisibility);
+formatSelect.addEventListener('change', updateFormatUI);
 
 downloadBtn.addEventListener('click', function() {
 var mime = formatSelect.value;
 var q = Math.max(0.05, Math.min(1, qualitySlider.value / 100));
-canvasToBlob(canvas, mime, mime === 'image/png' ? undefined : q).then(function(blob) {
+statusEl.textContent = 'Готовим файл…';
+statusEl.className = 'status-msg';
+encodeCanvasToFormat(canvas, mime, QUALITY_FORMATS[mime] ? q : undefined).then(function(blob) {
 if (!blob) {
 statusEl.textContent = 'Ваш браузер не смог сохранить в этом формате, попробуйте JPEG.';
 statusEl.className = 'status-msg err';
@@ -1058,9 +1490,16 @@ var FONTS = {
 system: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif',
 oswald: '"Oswald", sans-serif',
 anton: '"Anton", sans-serif',
-caveat: '"Caveat", cursive'
+caveat: '"Caveat", cursive',
+montserrat: '"Montserrat", sans-serif',
+marck: '"Marck Script", cursive',
+playfair: '"Playfair Display", serif',
+passion: '"Passion One", sans-serif'
 };
-var FONT_WEIGHT = { system: '700', oswald: '700', anton: '400', caveat: '700' };
+var FONT_WEIGHT = {
+system: '700', oswald: '700', anton: '400', caveat: '700',
+montserrat: '900', marck: '400', playfair: '600', passion: '900'
+};
 
 setupDropzone('text-dropzone', 'text-file', 'text-dz-text', function(file) {
 originalName = file.name.replace(/\.[^.]+$/, '') || 'cover';
@@ -1074,6 +1513,9 @@ render();
 renderLayersList();
 editorEl.hidden = true;
 controls.hidden = false;
+if (document.fonts && document.fonts.ready) {
+document.fonts.ready.then(function() { render(); });
+}
 });
 });
 
@@ -1129,6 +1571,9 @@ var l = currentLayer();
 if (!l) return;
 pair[2](l, pair[0].value);
 render();
+if (document.fonts && document.fonts.ready) {
+document.fonts.ready.then(function() { render(); });
+}
 });
 });
 
