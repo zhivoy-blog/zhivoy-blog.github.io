@@ -85,19 +85,28 @@
   // Письма с постами иногда содержат служебную заметку в конце (источник, обоснование
   // промта и т.п.), отделённую строкой из дефисов или явной пометкой — это не для публикации
   // ни в одну площадку, поэтому отрезаем всё после такой строки.
+  // \p{Pd} — юникод-категория «тире» (включает -, –, —, ― и т.п.), чтобы ловить
+  // любой символ-разделитель, каким бы его ни написали в письме.
+  const DIVIDER_RE = /^[\p{Pd}_=~]{3,}$/u;
   function stripInternalNote(text) {
     const lines = String(text || '').split('\n');
     let cutIndex = lines.length;
     for (let i = 0; i < lines.length; i++) {
       const line = lines[i].trim();
-      if (/^[-–—_]{3,}$/.test(line) || /^служебная заметка/i.test(line)) { cutIndex = i; break; }
+      if (DIVIDER_RE.test(line) || /^служебная заметка/i.test(line)) { cutIndex = i; break; }
     }
     return lines.slice(0, cutIndex).join('\n').trim();
   }
-  // Хэштеги нужны в Telegram/ВК, но не на сайте — убираем хвостовые строки из одних хэштегов.
-  function stripTrailingHashtags(text) {
+  // Хэштеги и строки-разделители нужны в Telegram/ВК, но не на сайте — убираем их
+  // с конца текста (в любом порядке, могут чередоваться).
+  function stripTrailingDecoration(text) {
     const lines = String(text || '').split('\n');
-    while (lines.length && /^(#\S+\s*)+$/.test(lines[lines.length - 1].trim())) lines.pop();
+    const isHashtagLine = (l) => /^(#\S+\s*)+$/.test(l);
+    while (lines.length) {
+      const last = lines[lines.length - 1].trim();
+      if (isHashtagLine(last) || DIVIDER_RE.test(last)) { lines.pop(); continue; }
+      break;
+    }
     return lines.join('\n').trim();
   }
   // Строки полностью в кавычках (обычно готовый промт) оформляем как цитату,
@@ -781,7 +790,7 @@
 
   function prepareSiteRewrite() {
     const post = syncDraftFromForm();
-    const cleaned = stripTrailingHashtags(stripInternalNote(post.bodyText));
+    const cleaned = stripTrailingDecoration(stripInternalNote(post.bodyText));
     let html = '';
     const cover = post.images.find((i) => i.role === 'cover');
     if (cover) html += `<img src="cover.${extOf(cover.name)}" alt="Обложка статьи" style="max-width: 100%; border-radius: 12px; margin: 20px 0;">`;
