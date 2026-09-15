@@ -186,9 +186,18 @@
   }
 
   /* ===================== Проверка дублей ===================== */
-  function topicWords(topic) {
-    const norm = String(topic || '').toLowerCase().replace(/[^\p{L}\p{N}\s]/gu, ' ');
-    return new Set(norm.split(/\s+/).filter((w) => w.length >= 3));
+  // Служебные слова письма/шаблона ("Утренний пост Telegram на 15.09.2026") встречаются
+  // в теме каждого письма и не должны влиять на сравнение — поэтому дубли ищем по
+  // содержимому поста (contentForDupCheck), а не по строке темы письма.
+  const STOPWORDS = new Set(['что', 'это', 'для', 'как', 'но', 'или', 'если', 'так', 'тоже', 'еще', 'ещё', 'очень', 'все', 'всех', 'всем', 'всего', 'его', 'ее', 'её', 'их', 'они', 'она', 'он', 'вы', 'мы', 'ты', 'был', 'была', 'были', 'будет', 'чтобы', 'при', 'после', 'из', 'от', 'до', 'под', 'над', 'про', 'через', 'между', 'только', 'уже', 'где', 'когда', 'почему', 'который', 'которая', 'которое', 'которые', 'этот', 'эта', 'эти', 'тот', 'та', 'те', 'пост', 'telegram', 'вконтакте', 'утренний', 'вечерний', 'утро', 'вечер', 'на']);
+
+  function contentForDupCheck(post) {
+    const body = String(post.bodyText || '').trim();
+    return body.length >= 20 ? body : String(post.topic || '');
+  }
+  function textWords(text) {
+    const norm = String(text || '').toLowerCase().replace(/[^\p{L}\p{N}\s]/gu, ' ');
+    return new Set(norm.split(/\s+/).filter((w) => w.length >= 3 && !STOPWORDS.has(w)));
   }
   function jaccard(a, b) {
     if (!a.size || !b.size) return 0;
@@ -197,14 +206,15 @@
     return inter / (a.size + b.size - inter);
   }
   function findPossibleDuplicate(post, allPosts) {
-    if (!post.topic) return null;
-    const words = topicWords(post.topic);
-    if (!words.size) return null;
+    const words = textWords(contentForDupCheck(post));
+    if (words.size < 5) return null; // слишком мало текста для надёжного сравнения
     let best = null;
     for (const other of allPosts) {
-      if (other.id === post.id || !other.topic) continue;
+      if (other.id === post.id) continue;
       if (Math.abs(daysBetween(other.scheduledDate, post.scheduledDate)) > 30) continue;
-      const sim = jaccard(words, topicWords(other.topic));
+      const otherWords = textWords(contentForDupCheck(other));
+      if (otherWords.size < 5) continue;
+      const sim = jaccard(words, otherWords);
       if (sim >= 0.5 && (!best || sim > best.sim)) best = { post: other, sim };
     }
     return best;
