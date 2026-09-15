@@ -229,6 +229,13 @@
     } else if (type === 'italic') {
       inserted = `_${selected}_`;
       selStart = start + 1; selEnd = start + 1 + selected.length;
+    } else if (type === 'clear') {
+      // Снимает *жирный*/_курсив_ внутри выделения и «кавычки» цитаты по краям.
+      inserted = selected
+        .replace(/\*([^*\n]+)\*/g, '$1')
+        .replace(/_([^_\n]+)_/g, '$1')
+        .replace(/^[«"“]\s*/, '').replace(/\s*[»"”]$/, '');
+      selStart = start; selEnd = start + inserted.length;
     } else {
       const gapBefore = before.length === 0 ? '' : before.endsWith('\n\n') ? '' : before.endsWith('\n') ? '\n' : '\n\n';
       const gapAfter = after.length === 0 ? '' : after.startsWith('\n\n') ? '' : after.startsWith('\n') ? '\n' : '\n\n';
