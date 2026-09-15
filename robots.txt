@@ -1,4 +1,5 @@
 User-agent: *
 Allow: /
+Disallow: /shtab-d14558/
 
 Sitemap: https://zhivoy-ai.ru/sitemap.xml
