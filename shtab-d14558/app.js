@@ -109,6 +109,14 @@
     }
     return lines.join('\n').trim();
   }
+  // Эмодзи уместны в Telegram/ВК, но не на сайте — убираем их из версии для сайта целиком,
+  // включая варианты с модификаторами тона кожи и ZWJ-последовательности.
+  function stripEmojis(text) {
+    return String(text || '')
+      .replace(/(\p{Extended_Pictographic}|\p{Emoji_Modifier}|️|‍)+/gu, '')
+      .split('\n').map((l) => l.replace(/[ \t]{2,}/g, ' ').trim()).join('\n')
+      .replace(/\n{3,}/g, '\n\n');
+  }
   // Строки полностью в кавычках (обычно готовый промт) оформляем как цитату,
   // остальной текст группируем в абзацы по пустым строкам.
   function textToArticleHtml(text) {
@@ -790,7 +798,7 @@
 
   function prepareSiteRewrite() {
     const post = syncDraftFromForm();
-    const cleaned = stripTrailingDecoration(stripInternalNote(post.bodyText));
+    const cleaned = stripEmojis(stripTrailingDecoration(stripInternalNote(post.bodyText)));
     let html = '';
     const cover = post.images.find((i) => i.role === 'cover');
     if (cover) html += `<img src="cover.${extOf(cover.name)}" alt="Обложка статьи" style="max-width: 100%; border-radius: 12px; margin: 20px 0;">`;
