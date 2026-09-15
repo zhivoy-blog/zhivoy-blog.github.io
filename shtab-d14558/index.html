@@ -195,7 +195,13 @@
           <label for="editor-text">Текст поста</label>
           <button type="button" class="btn-fullscreen" data-target="editor-text" data-title="Текст поста">⛶ Во весь экран</button>
         </div>
+        <div class="format-toolbar" data-target="editor-text">
+          <button type="button" class="fmt-btn" data-fmt="bold"><b>Ж</b> Жирный</button>
+          <button type="button" class="fmt-btn" data-fmt="italic"><i>К</i> Курсив</button>
+          <button type="button" class="fmt-btn" data-fmt="quote">" Цитата</button>
+        </div>
         <textarea id="editor-text"></textarea>
+        <p class="hint-sm">Выделите текст и нажмите кнопку форматирования выше.</p>
       </div>
       <div class="field">
         <label>Предпросмотр (как увидят в Telegram/ВК)</label>
@@ -254,6 +260,11 @@
           <label for="site-content">Текст статьи (абзацы — через пустую строку)</label>
           <button type="button" class="btn-fullscreen" data-target="site-content" data-title="Текст статьи">⛶ Во весь экран</button>
         </div>
+        <div class="format-toolbar" data-target="site-content">
+          <button type="button" class="fmt-btn" data-fmt="bold"><b>Ж</b> Жирный</button>
+          <button type="button" class="fmt-btn" data-fmt="italic"><i>К</i> Курсив</button>
+          <button type="button" class="fmt-btn" data-fmt="quote">" Цитата</button>
+        </div>
         <textarea id="site-content" style="min-height:220px"></textarea>
         <p class="hint-sm">Строка целиком в «кавычках» станет цитатой. HTML-теги вписывать не нужно — расставятся сами при публикации.</p>
       </div>
@@ -284,6 +295,11 @@
   <div class="fs-editor-header">
     <span id="fullscreen-editor-title">Текст</span>
     <button class="btn primary small" id="fullscreen-editor-done">Готово</button>
+  </div>
+  <div class="format-toolbar fs-format-toolbar" data-target="fullscreen-editor-textarea">
+    <button type="button" class="fmt-btn" data-fmt="bold"><b>Ж</b> Жирный</button>
+    <button type="button" class="fmt-btn" data-fmt="italic"><i>К</i> Курсив</button>
+    <button type="button" class="fmt-btn" data-fmt="quote">" Цитата</button>
   </div>
   <textarea id="fullscreen-editor-textarea"></textarea>
 </div>
