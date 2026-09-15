@@ -543,7 +543,7 @@ currentSearch = this.value.trim().toLowerCase();
 applyFilter();
 });
 
-fetch('articles/manifest.json')
+fetch('articles/manifest.json?v=' + Date.now(), { cache: 'no-store' })
 .then(function(response) {
 if (!response.ok) throw new Error('Network error');
 return response.json();
