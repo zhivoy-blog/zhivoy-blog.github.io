@@ -117,6 +117,27 @@
       .split('\n').map((l) => l.replace(/[ \t]{2,}/g, ' ').trim()).join('\n')
       .replace(/\n{3,}/g, '\n\n');
   }
+  // Вопрос + варианты-реакции с эмодзи-буллетами ("Попробуете...? 🎯 — вариант") — формат
+  // вовлечения для соцсетей, на статичной странице сайта не работает (не на что нажать),
+  // поэтому такой блок целиком убирается из версии для сайта. Запускать до stripEmojis —
+  // наличие эмодзи в начале строки-варианта помогает надёжно отличить его от обычного текста.
+  function stripPollBlock(text) {
+    const lines = String(text || '').split('\n');
+    const optionRe = /^(\p{Extended_Pictographic}[️‍\p{Emoji_Modifier}]*\s*)+[-–—]\s+\S/u;
+    const out = [];
+    let i = 0;
+    while (i < lines.length) {
+      const trimmed = lines[i].trim();
+      if (/\?\s*$/.test(trimmed)) {
+        let j = i + 1;
+        while (j < lines.length && optionRe.test(lines[j].trim())) j++;
+        if (j - i - 1 >= 2) { i = j; continue; }
+      }
+      out.push(lines[i]);
+      i++;
+    }
+    return out.join('\n');
+  }
   // Строки полностью в кавычках (обычно готовый промт) оформляем как цитату,
   // остальной текст группируем в абзацы по пустым строкам.
   function textToArticleHtml(text) {
@@ -798,7 +819,7 @@
 
   function prepareSiteRewrite() {
     const post = syncDraftFromForm();
-    const cleaned = stripEmojis(stripTrailingDecoration(stripInternalNote(post.bodyText)));
+    const cleaned = stripEmojis(stripPollBlock(stripTrailingDecoration(stripInternalNote(post.bodyText))));
     let html = '';
     const cover = post.images.find((i) => i.role === 'cover');
     if (cover) html += `<img src="cover.${extOf(cover.name)}" alt="Обложка статьи" style="max-width: 100%; border-radius: 12px; margin: 20px 0;">`;
