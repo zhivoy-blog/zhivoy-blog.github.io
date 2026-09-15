@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover">
+<title>Живой ИИ: Контроль</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#0b1a2d">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="ЖИ Контроль">
+<link rel="stylesheet" href="app.css">
+</head>
+<body>
+
+<div id="gate">
+  <div class="gate-card">
+    <div class="mark">Ж</div>
+    <h1 id="gate-title">Живой ИИ: Контроль</h1>
+    <p id="gate-text">Личный трекер контент-проекта. Пароль хранится только в этом браузере.</p>
+    <div class="field">
+      <input type="password" id="gate-password" placeholder="Пароль" autocomplete="current-password">
+    </div>
+    <div class="field" id="gate-password2-wrap" hidden>
+      <input type="password" id="gate-password2" placeholder="Повторите пароль" autocomplete="new-password">
+    </div>
+    <div id="gate-error" class="warn-box" hidden></div>
+    <button class="btn primary" id="gate-submit" style="margin-top:6px">Войти</button>
+    <p class="hint-sm" id="gate-reset-hint" style="margin-top:14px">Забыли пароль? Сбросить можно только на этом устройстве — все локальные настройки будут удалены.<br><a href="#" id="gate-reset">Сбросить пароль на этом устройстве</a></p>
+  </div>
+</div>
+
+<div id="app" hidden>
+  <header class="app-header">
+    <div class="brand">
+      <div class="mark">Ж</div>
+      <div>
+        <h1>Живой ИИ: Контроль</h1>
+        <div class="subtitle" id="header-sub">—</div>
+      </div>
+    </div>
+    <button class="icon-btn" id="btn-lock" title="Заблокировать">🔒</button>
+  </header>
+
+  <!-- СЕГОДНЯ -->
+  <section class="view" id="view-today">
+    <div class="day-banner">
+      <div>
+        <div class="date" id="today-date">—</div>
+        <div class="day-n" id="today-day-n">День —</div>
+      </div>
+      <button class="btn blue small" id="btn-sync">↻ Обновить</button>
+    </div>
+    <div id="today-sync-status"></div>
+    <div class="section-title">Сегодня по графику</div>
+    <div id="today-list"></div>
+    <div class="section-title" id="site-transfer-title" hidden>Перенос на сайт</div>
+    <div id="site-transfer-block"></div>
+  </section>
+
+  <!-- СЧЁТЧИКИ -->
+  <section class="view" id="view-counters">
+    <div class="card">
+      <h2>Счётчики по площадкам</h2>
+      <p class="hint">Telegram и ВКонтакте — автоматически, vc.ru — раз в неделю вручную.</p>
+    </div>
+    <div class="counter-grid" id="counter-grid"></div>
+    <div class="card" id="vc-manual-card">
+      <h2>vc.ru — подписчики вручную</h2>
+      <div class="field">
+        <label for="vc-input">Текущее число подписчиков</label>
+        <input type="number" id="vc-input" inputmode="numeric" min="0">
+      </div>
+      <button class="btn primary" id="btn-vc-save">Сохранить</button>
+      <p class="hint-sm" id="vc-updated"></p>
+    </div>
+    <button class="btn ghost" id="btn-refresh-stats">↻ Обновить TG / ВК автоматически</button>
+  </section>
+
+  <!-- ИСТОРИЯ -->
+  <section class="view" id="view-history">
+    <div class="card">
+      <h2>История за неделю</h2>
+      <p class="hint">Что и когда вышло за последние 7 дней, по площадкам.</p>
+    </div>
+    <div id="history-list"></div>
+  </section>
+
+  <!-- НАСТРОЙКИ -->
+  <section class="view" id="view-settings">
+    <div class="card">
+      <h2>Подключение к данным</h2>
+      <p class="hint">Данные (черновики, история, счётчики) хранятся в приватном GitHub-репозитории.</p>
+      <div class="field">
+        <label for="set-gh-token">GitHub Personal Access Token</label>
+        <input type="password" id="set-gh-token" autocomplete="off" placeholder="ghp_… (scope: repo)">
+        <p class="hint-sm">Хранится только в этом браузере (localStorage), никогда не попадает в репозитории.</p>
+      </div>
+      <div class="field">
+        <label for="set-data-owner">Владелец приватного репозитория данных</label>
+        <input type="text" id="set-data-owner" placeholder="zhivoy-blog">
+      </div>
+      <div class="field">
+        <label for="set-data-repo">Имя репозитория данных</label>
+        <input type="text" id="set-data-repo" placeholder="zi-control-data">
+      </div>
+      <div class="field">
+        <label for="set-data-branch">Ветка репозитория данных</label>
+        <input type="text" id="set-data-branch" placeholder="main">
+      </div>
+      <hr class="sep">
+      <div class="field">
+        <label for="set-site-owner">Владелец репозитория сайта</label>
+        <input type="text" id="set-site-owner" placeholder="zhivoy-blog">
+      </div>
+      <div class="field">
+        <label for="set-site-repo">Имя репозитория сайта</label>
+        <input type="text" id="set-site-repo" placeholder="zhivoy-blog.github.io">
+      </div>
+      <div class="field">
+        <label for="set-site-branch">Ветка репозитория сайта</label>
+        <input type="text" id="set-site-branch" placeholder="main">
+      </div>
+      <button class="btn blue" id="btn-test-github">Проверить подключение к GitHub</button>
+      <p class="hint-sm" id="github-test-result"></p>
+    </div>
+
+    <div class="card">
+      <h2>Google Apps Script (почта, публикация)</h2>
+      <p class="hint">URL развёрнутого Web App и общий секретный токен — см. инструкцию в apps-script/README.md.</p>
+      <div class="field">
+        <label for="set-gas-url">URL Web App</label>
+        <input type="text" id="set-gas-url" placeholder="https://script.google.com/macros/s/…/exec">
+      </div>
+      <div class="field">
+        <label for="set-gas-token">Секретный токен (APP_TOKEN)</label>
+        <input type="password" id="set-gas-token" autocomplete="off">
+      </div>
+      <button class="btn blue" id="btn-test-gas">Проверить соединение</button>
+      <p class="hint-sm" id="gas-test-result"></p>
+    </div>
+
+    <div class="card">
+      <h2>Публикация</h2>
+      <div class="field">
+        <label for="set-tg-chat">Telegram chat_id канала</label>
+        <input type="text" id="set-tg-chat" placeholder="@zhivoy_ii или -100…">
+      </div>
+      <div class="field">
+        <label for="set-vk-group">ВКонтакте — id группы (без минуса)</label>
+        <input type="text" id="set-vk-group" placeholder="123456789">
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Расписание проекта</h2>
+      <div class="field">
+        <label for="set-tg-start">Telegram — старт</label>
+        <input type="date" id="set-tg-start">
+      </div>
+      <div class="field">
+        <label for="set-vk-start">ВКонтакте — старт</label>
+        <input type="date" id="set-vk-start">
+      </div>
+      <div class="field">
+        <label for="set-vc-start">vc.ru — старт</label>
+        <input type="date" id="set-vc-start">
+      </div>
+    </div>
+
+    <button class="btn primary" id="btn-save-settings">Сохранить настройки</button>
+    <button class="btn ghost" id="btn-change-password">Сменить пароль</button>
+    <div id="settings-save-status"></div>
+  </section>
+
+  <!-- РЕДАКТОР -->
+  <section class="view" id="view-editor">
+    <div class="back-row">
+      <button class="btn ghost small" id="btn-editor-back">← Назад</button>
+      <span class="badge" id="editor-badge">черновик</span>
+    </div>
+    <div class="card">
+      <h2 id="editor-plat-name">—</h2>
+      <p class="hint" id="editor-date">—</p>
+      <div id="editor-dup-warning"></div>
+      <div class="field">
+        <label for="editor-topic">Тема / заголовок (для проверки на дубли)</label>
+        <input type="text" id="editor-topic">
+      </div>
+      <div class="field">
+        <label for="editor-text">Текст поста</label>
+        <textarea id="editor-text"></textarea>
+      </div>
+      <div class="field">
+        <label>Обложка</label>
+        <div class="image-grid" id="editor-cover-grid"></div>
+        <label class="dropzone" id="editor-cover-drop">
+          <span>+ добавить обложку</span>
+          <input type="file" accept="image/*" id="editor-cover-input">
+        </label>
+      </div>
+      <div class="field">
+        <label>Внутренние картинки</label>
+        <div class="image-grid" id="editor-inline-grid"></div>
+        <label class="dropzone" id="editor-inline-drop">
+          <span>+ добавить картинку</span>
+          <input type="file" accept="image/*" id="editor-inline-input">
+        </label>
+      </div>
+      <button class="btn primary" id="btn-editor-save">Сохранить (отредактировано)</button>
+    </div>
+
+    <div class="card" id="editor-publish-card">
+      <h2>Публикация</h2>
+      <p class="hint">Публикуете сами — ничего не уходит автоматически.</p>
+      <div class="btn-row">
+        <button class="btn blue" id="btn-publish-tg" hidden>Опубликовать в Telegram</button>
+        <button class="btn blue" id="btn-publish-vk" hidden>Опубликовать в ВК</button>
+        <button class="btn ghost" id="btn-copy-vc" hidden>Скопировать готовое (vc.ru)</button>
+      </div>
+      <p class="hint-sm" id="editor-publish-status"></p>
+    </div>
+
+    <div class="card" id="editor-site-card">
+      <h2>Перенос на сайт zhivoy-ai.ru</h2>
+      <div class="field">
+        <label for="site-title">Заголовок (SEO)</label>
+        <input type="text" id="site-title">
+      </div>
+      <div class="field">
+        <label for="site-slug">URL (латиницей, без пробелов)</label>
+        <input type="text" id="site-slug">
+      </div>
+      <div class="field">
+        <label for="site-excerpt">Описание для мета-тегов</label>
+        <textarea id="site-excerpt" style="min-height:70px"></textarea>
+      </div>
+      <div class="field">
+        <label>Рубрика</label>
+        <div class="chip-row" id="site-tag-chips"></div>
+      </div>
+      <div class="field">
+        <label for="site-content">HTML-текст статьи</label>
+        <textarea id="site-content" style="min-height:220px"></textarea>
+      </div>
+      <div class="btn-row">
+        <button class="btn ghost" id="btn-site-prepare">Подготовить рерайт</button>
+        <button class="btn primary" id="btn-site-publish">Опубликовать на сайт</button>
+      </div>
+      <p class="hint-sm" id="site-publish-status"></p>
+    </div>
+  </section>
+
+  <div style="height:1px"></div>
+</div>
+
+<nav class="tab-bar" id="tab-bar" hidden>
+  <div class="tab-bar-inner">
+    <button class="tab-btn active" data-view="today"><span class="tab-icon">📅</span>Сегодня</button>
+    <button class="tab-btn" data-view="counters"><span class="tab-icon">📊</span>Счётчики</button>
+    <button class="tab-btn" data-view="history"><span class="tab-icon">🗂️</span>История</button>
+    <button class="tab-btn" data-view="settings"><span class="tab-icon">⚙️</span>Настройки</button>
+  </div>
+</nav>
+
+<div id="toast-root"></div>
+
+<script src="github-store.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
