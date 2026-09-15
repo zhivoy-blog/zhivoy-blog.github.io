@@ -137,13 +137,21 @@
   }
   // Строки полностью в кавычках (обычно готовый промт) оформляем как цитату,
   // остальной текст группируем в абзацы по пустым строкам.
+  // *текст* → жирный, _текст_ → курсив — простая разметка, которую расставляет панель
+  // форматирования (выделить → «Жирный»/«Курсив»). Применяется к уже экранированной строке,
+  // так как * и _ не задействованы в HTML-экранировании — порядок безопасен.
+  function applyInlineMarkers(escapedText) {
+    return escapedText
+      .replace(/\*([^*\n]+)\*/g, '<strong>$1</strong>')
+      .replace(/_([^_\n]+)_/g, '<em>$1</em>');
+  }
   function textToArticleHtml(text) {
     const lines = String(text || '').split('\n');
     let html = '';
     let buffer = [];
     const flush = () => {
       if (buffer.length) {
-        html += `<p>${buffer.map(escapeHtml).join('<br>')}</p>`;
+        html += `<p>${buffer.map((l) => applyInlineMarkers(escapeHtml(l))).join('<br>')}</p>`;
         buffer = [];
       }
     };
@@ -153,7 +161,7 @@
       if (/^[«"“].+[»"”]$/.test(line) && line.length > 15) {
         flush();
         const inner = line.replace(/^[«"“]/, '').replace(/[»"”]$/, '');
-        html += `<blockquote style="margin:16px 0;padding:10px 16px;border-left:3px solid #007aff;background:rgba(0,122,255,0.08);border-radius:8px;font-style:italic;">${escapeHtml(inner)}</blockquote>`;
+        html += `<blockquote style="margin:16px 0;padding:10px 16px;border-left:3px solid #007aff;background:rgba(0,122,255,0.08);border-radius:8px;font-style:italic;">${applyInlineMarkers(escapeHtml(inner))}</blockquote>`;
       } else {
         buffer.push(line);
       }
@@ -162,8 +170,9 @@
     return html;
   }
   // Превью в стиле Telegram/ВК: первая строка — жирным заголовком, строки в «кавычках» —
-  // цитатой (зелёная рамка, как нативная цитата в Telegram), остальное — обычные абзацы.
-  // Эмодзи/хэштеги здесь не убираются — они и есть часть поста для соцсетей.
+  // цитатой (зелёная рамка, как нативная цитата в Telegram), *жирный*/_курсив_ — инлайн,
+  // остальное — обычные абзацы. Эмодзи/хэштеги здесь не убираются — это часть поста для соцсетей.
+  // Тот же HTML идёт в буфер обмена при копировании (см. copyPostText).
   function textToPreviewHtml(text) {
     const lines = String(text || '').split('\n');
     let html = '';
@@ -171,7 +180,7 @@
     let isFirstLine = true;
     const flush = () => {
       if (buffer.length) {
-        html += `<p>${buffer.map(escapeHtml).join('<br>')}</p>`;
+        html += `<p>${buffer.map((l) => applyInlineMarkers(escapeHtml(l))).join('<br>')}</p>`;
         buffer = [];
       }
     };
@@ -181,13 +190,13 @@
       if (/^[«"“].+[»"”]$/.test(line) && line.length > 15) {
         flush();
         const inner = line.replace(/^[«"“]/, '').replace(/[»"”]$/, '');
-        html += `<blockquote>${escapeHtml(inner)}</blockquote>`;
+        html += `<blockquote>${applyInlineMarkers(escapeHtml(inner))}</blockquote>`;
         isFirstLine = false;
         return;
       }
       if (isFirstLine) {
         flush();
-        html += `<p><strong>${escapeHtml(line)}</strong></p>`;
+        html += `<p><strong>${applyInlineMarkers(escapeHtml(line))}</strong></p>`;
         isFirstLine = false;
         return;
       }
@@ -195,6 +204,43 @@
     });
     flush();
     return html || '<span class="preview-empty">Текст пока пуст</span>';
+  }
+  // Для plain-text копии/фолбэка — убираем служебные звёздочки/подчёркивания разметки,
+  // оставляя «кавычки» как есть (и в чистом виде читаются как цитата).
+  function stripFormatMarkersToPlain(text) {
+    return String(text || '')
+      .replace(/\*([^*\n]+)\*/g, '$1')
+      .replace(/_([^_\n]+)_/g, '$1');
+  }
+  // Выделили текст в поле → обернули *жирным*/_курсивом_ либо вынесли отдельной строкой
+  // в «кавычки» как цитату. Работает через selectionStart/End обычного textarea.
+  function applyFormat(textareaId, type) {
+    const el = document.getElementById(textareaId);
+    if (!el) return;
+    const start = el.selectionStart, end = el.selectionEnd;
+    const selected = el.value.slice(start, end);
+    if (!selected) { toast('Сначала выделите текст', 'error'); return; }
+    let before = el.value.slice(0, start);
+    let after = el.value.slice(end);
+    let inserted, selStart, selEnd;
+    if (type === 'bold') {
+      inserted = `*${selected}*`;
+      selStart = start + 1; selEnd = start + 1 + selected.length;
+    } else if (type === 'italic') {
+      inserted = `_${selected}_`;
+      selStart = start + 1; selEnd = start + 1 + selected.length;
+    } else {
+      const gapBefore = before.length === 0 ? '' : before.endsWith('\n\n') ? '' : before.endsWith('\n') ? '\n' : '\n\n';
+      const gapAfter = after.length === 0 ? '' : after.startsWith('\n\n') ? '' : after.startsWith('\n') ? '\n' : '\n\n';
+      before += gapBefore;
+      after = gapAfter + after;
+      inserted = `«${selected.trim()}»`;
+      selStart = before.length; selEnd = before.length + inserted.length;
+    }
+    el.value = before + inserted + after;
+    el.focus();
+    el.setSelectionRange(selStart, selEnd);
+    el.dispatchEvent(new Event('input', { bubbles: true }));
   }
   function readFileAsBase64(file) {
     return new Promise((resolve, reject) => {
@@ -790,11 +836,26 @@
   /** Публикация везде — вручную: копируем текст, вставляют и отмечают опубликованным сами. */
   async function copyPostText(platformLabel) {
     const post = syncDraftFromForm();
+    const cleaned = stripInternalNote(post.bodyText);
+    const plainText = stripFormatMarkersToPlain(cleaned);
     try {
-      await navigator.clipboard.writeText(stripInternalNote(post.bodyText));
+      if (navigator.clipboard.write && window.ClipboardItem) {
+        const html = textToPreviewHtml(cleaned);
+        await navigator.clipboard.write([new ClipboardItem({
+          'text/plain': new Blob([plainText], { type: 'text/plain' }),
+          'text/html': new Blob([html], { type: 'text/html' }),
+        })]);
+      } else {
+        await navigator.clipboard.writeText(plainText);
+      }
       toast(`Текст скопирован — вставьте в ${platformLabel}, затем отметьте как опубликовано`, 'success');
     } catch (e) {
-      toast('Не удалось скопировать: ' + e.message, 'error');
+      try {
+        await navigator.clipboard.writeText(plainText);
+        toast(`Текст скопирован — вставьте в ${platformLabel}, затем отметьте как опубликовано`, 'success');
+      } catch (e2) {
+        toast('Не удалось скопировать: ' + e2.message, 'error');
+      }
     }
   }
 
@@ -1009,6 +1070,11 @@
 
     $all('.btn-fullscreen').forEach((b) => b.addEventListener('click', () => openFullscreenEditor(b.dataset.target, b.dataset.title)));
     $('#fullscreen-editor-done').addEventListener('click', closeFullscreenEditor);
+
+    $all('.fmt-btn').forEach((b) => b.addEventListener('click', () => {
+      const toolbar = b.closest('.format-toolbar');
+      applyFormat(toolbar.dataset.target, b.dataset.fmt);
+    }));
   }
 
   document.addEventListener('DOMContentLoaded', () => {
