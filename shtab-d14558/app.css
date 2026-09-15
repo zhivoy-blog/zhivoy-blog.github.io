@@ -200,6 +200,8 @@ img { max-width: 100%; }
   font-size: 12.5px; font-weight: 600; cursor: pointer;
 }
 .fmt-btn:active { background: var(--blue-soft); border-color: var(--blue); }
+.fmt-btn-clear { color: var(--text-muted); }
+.fmt-btn-clear:active { background: var(--danger-soft); border-color: var(--danger); color: var(--danger); }
 .fs-format-toolbar { padding: 8px 16px 0; flex: 0 0 auto; }
 input[type="text"], input[type="password"], input[type="date"], input[type="number"], textarea, select {
   width: 100%; background: var(--card-2); border: 1px solid var(--border); border-radius: 10px;
