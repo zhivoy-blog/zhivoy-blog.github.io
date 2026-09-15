@@ -198,6 +198,10 @@
         <textarea id="editor-text"></textarea>
       </div>
       <div class="field">
+        <label>Предпросмотр (как увидят в Telegram/ВК)</label>
+        <div class="preview-bubble" id="editor-preview"></div>
+      </div>
+      <div class="field">
         <label>Обложка</label>
         <div class="image-grid" id="editor-cover-grid"></div>
         <label class="dropzone" id="editor-cover-drop">
@@ -218,10 +222,10 @@
 
     <div class="card" id="editor-publish-card">
       <h2>Публикация</h2>
-      <p class="hint">Публикуете сами — ничего не уходит автоматически.</p>
+      <p class="hint">Копируете текст и вставляете на площадке сами — ничего не уходит автоматически.</p>
       <div class="btn-row">
-        <button class="btn blue" id="btn-publish-tg" hidden>Опубликовать в Telegram</button>
-        <button class="btn blue" id="btn-publish-vk" hidden>Опубликовать в ВК</button>
+        <button class="btn blue" id="btn-publish-tg" hidden>Скопировать для Telegram</button>
+        <button class="btn blue" id="btn-publish-vk" hidden>Скопировать для ВК</button>
         <button class="btn ghost" id="btn-copy-vc" hidden>Скопировать готовое (vc.ru)</button>
       </div>
       <p class="hint-sm" id="editor-publish-status"></p>

@@ -72,9 +72,6 @@
     const m = /\.([a-zA-Z0-9]+)$/.exec(filename || '');
     return m ? m[1].toLowerCase() : 'jpg';
   }
-  function mimeFromExt(ext) {
-    return { jpg: 'image/jpeg', jpeg: 'image/jpeg', png: 'image/png', webp: 'image/webp', gif: 'image/gif' }[ext] || 'image/jpeg';
-  }
   function transliterate(str) {
     const map = { а: 'a', б: 'b', в: 'v', г: 'g', д: 'd', е: 'e', ё: 'e', ж: 'zh', з: 'z', и: 'i', й: 'y', к: 'k', л: 'l', м: 'm', н: 'n', о: 'o', п: 'p', р: 'r', с: 's', т: 't', у: 'u', ф: 'f', х: 'h', ц: 'c', ч: 'ch', ш: 'sh', щ: 'sch', ъ: '', ы: 'y', ь: '', э: 'e', ю: 'yu', я: 'ya' };
     return String(str).toLowerCase().split('').map((ch) => (map[ch] !== undefined ? map[ch] : ch)).join('');
@@ -163,6 +160,41 @@
     });
     flush();
     return html;
+  }
+  // Превью в стиле Telegram/ВК: первая строка — жирным заголовком, строки в «кавычках» —
+  // цитатой (зелёная рамка, как нативная цитата в Telegram), остальное — обычные абзацы.
+  // Эмодзи/хэштеги здесь не убираются — они и есть часть поста для соцсетей.
+  function textToPreviewHtml(text) {
+    const lines = String(text || '').split('\n');
+    let html = '';
+    let buffer = [];
+    let isFirstLine = true;
+    const flush = () => {
+      if (buffer.length) {
+        html += `<p>${buffer.map(escapeHtml).join('<br>')}</p>`;
+        buffer = [];
+      }
+    };
+    lines.forEach((raw) => {
+      const line = raw.trim();
+      if (!line) { flush(); return; }
+      if (/^[«"“].+[»"”]$/.test(line) && line.length > 15) {
+        flush();
+        const inner = line.replace(/^[«"“]/, '').replace(/[»"”]$/, '');
+        html += `<blockquote>${escapeHtml(inner)}</blockquote>`;
+        isFirstLine = false;
+        return;
+      }
+      if (isFirstLine) {
+        flush();
+        html += `<p><strong>${escapeHtml(line)}</strong></p>`;
+        isFirstLine = false;
+        return;
+      }
+      buffer.push(line);
+    });
+    flush();
+    return html || '<span class="preview-empty">Текст пока пуст</span>';
   }
   function readFileAsBase64(file) {
     return new Promise((resolve, reject) => {
@@ -629,6 +661,7 @@
     $('#editor-badge').className = 'badge ' + post.status;
     $('#editor-topic').value = post.topic || '';
     $('#editor-text').value = post.bodyText || '';
+    updateEditorPreview();
 
     const dupBox = $('#editor-dup-warning');
     if (post.possibleDuplicateOf) {
@@ -657,6 +690,10 @@
     markBtn.hidden = post.status === 'published';
 
     renderSiteTransferForm(post);
+  }
+
+  function updateEditorPreview() {
+    $('#editor-preview').innerHTML = textToPreviewHtml(stripInternalNote($('#editor-text').value));
   }
 
   function renderImageGrid(sel, images, role) {
@@ -750,51 +787,12 @@
     return b64;
   }
 
-  async function publishTelegram() {
-    const post = syncDraftFromForm();
-    if (!state.settings.tgChatId) { toast('Укажите chat_id Telegram в настройках', 'error'); return; }
-    $('#editor-publish-status').innerHTML = '<span class="spinner"></span> Публикую в Telegram…';
-    try {
-      const images = [];
-      for (const img of post.images) {
-        images.push({ filename: img.name, mimeType: mimeFromExt(extOf(img.name)), base64: await fetchImageBase64(img) });
-      }
-      await callGas('publishTelegram', { chatId: state.settings.tgChatId, text: stripInternalNote(post.bodyText), images });
-      post.status = 'published'; post.publishedAt = nowIso();
-      await saveEditorPostSilently(post);
-      toast('Опубликовано в Telegram', 'success');
-      renderEditor(); renderToday(); renderHistory();
-    } catch (e) {
-      toast('Ошибка публикации в Telegram: ' + e.message, 'error');
-      $('#editor-publish-status').textContent = '';
-    }
-  }
-
-  async function publishVk() {
-    const post = syncDraftFromForm();
-    if (!state.settings.vkGroupId) { toast('Укажите id группы ВКонтакте в настройках', 'error'); return; }
-    $('#editor-publish-status').innerHTML = '<span class="spinner"></span> Публикую в ВК…';
-    try {
-      const images = [];
-      for (const img of post.images) {
-        images.push({ filename: img.name, mimeType: mimeFromExt(extOf(img.name)), base64: await fetchImageBase64(img) });
-      }
-      await callGas('publishVk', { groupId: state.settings.vkGroupId, text: stripInternalNote(post.bodyText), images });
-      post.status = 'published'; post.publishedAt = nowIso();
-      await saveEditorPostSilently(post);
-      toast('Опубликовано в ВК', 'success');
-      renderEditor(); renderToday(); renderHistory();
-    } catch (e) {
-      toast('Ошибка публикации в ВК: ' + e.message, 'error');
-      $('#editor-publish-status').textContent = '';
-    }
-  }
-
-  async function copyForVc() {
+  /** Публикация везде — вручную: копируем текст, вставляют и отмечают опубликованным сами. */
+  async function copyPostText(platformLabel) {
     const post = syncDraftFromForm();
     try {
       await navigator.clipboard.writeText(stripInternalNote(post.bodyText));
-      toast('Текст скопирован — вставьте на vc.ru, затем отметьте как опубликовано', 'success');
+      toast(`Текст скопирован — вставьте в ${platformLabel}, затем отметьте как опубликовано`, 'success');
     } catch (e) {
       toast('Не удалось скопировать: ' + e.message, 'error');
     }
@@ -924,7 +922,10 @@
     $('#fullscreen-editor-textarea').focus();
   }
   function closeFullscreenEditor() {
-    if (fullscreenTargetId) $('#' + fullscreenTargetId).value = $('#fullscreen-editor-textarea').value;
+    if (fullscreenTargetId) {
+      $('#' + fullscreenTargetId).value = $('#fullscreen-editor-textarea').value;
+      if (fullscreenTargetId === 'editor-text') updateEditorPreview();
+    }
     $('#fullscreen-editor').hidden = true;
     fullscreenTargetId = null;
   }
@@ -993,15 +994,16 @@
       lockApp();
     });
 
+    $('#editor-text').addEventListener('input', updateEditorPreview);
     $('#editor-cover-drop').addEventListener('click', () => $('#editor-cover-input').click());
     $('#editor-cover-input').addEventListener('change', (e) => { handleImageUpload(e.target.files[0], 'cover'); e.target.value = ''; });
     $('#editor-inline-drop').addEventListener('click', () => $('#editor-inline-input').click());
     $('#editor-inline-input').addEventListener('change', (e) => { handleImageUpload(e.target.files[0], 'inline'); e.target.value = ''; });
 
     $('#btn-editor-save').addEventListener('click', saveEditorPost);
-    $('#btn-publish-tg').addEventListener('click', publishTelegram);
-    $('#btn-publish-vk').addEventListener('click', publishVk);
-    $('#btn-copy-vc').addEventListener('click', copyForVc);
+    $('#btn-publish-tg').addEventListener('click', () => copyPostText('Telegram'));
+    $('#btn-publish-vk').addEventListener('click', () => copyPostText('ВК'));
+    $('#btn-copy-vc').addEventListener('click', () => copyPostText('vc.ru'));
     $('#btn-site-prepare').addEventListener('click', prepareSiteRewrite);
     $('#btn-site-publish').addEventListener('click', publishToSite);
 
