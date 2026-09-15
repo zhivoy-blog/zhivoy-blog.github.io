@@ -82,6 +82,50 @@
   function slugify(str) {
     return transliterate(str).replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 60) || 'post-' + Date.now();
   }
+  // Письма с постами иногда содержат служебную заметку в конце (источник, обоснование
+  // промта и т.п.), отделённую строкой из дефисов или явной пометкой — это не для публикации
+  // ни в одну площадку, поэтому отрезаем всё после такой строки.
+  function stripInternalNote(text) {
+    const lines = String(text || '').split('\n');
+    let cutIndex = lines.length;
+    for (let i = 0; i < lines.length; i++) {
+      const line = lines[i].trim();
+      if (/^[-–—_]{3,}$/.test(line) || /^служебная заметка/i.test(line)) { cutIndex = i; break; }
+    }
+    return lines.slice(0, cutIndex).join('\n').trim();
+  }
+  // Хэштеги нужны в Telegram/ВК, но не на сайте — убираем хвостовые строки из одних хэштегов.
+  function stripTrailingHashtags(text) {
+    const lines = String(text || '').split('\n');
+    while (lines.length && /^(#\S+\s*)+$/.test(lines[lines.length - 1].trim())) lines.pop();
+    return lines.join('\n').trim();
+  }
+  // Строки полностью в кавычках (обычно готовый промт) оформляем как цитату,
+  // остальной текст группируем в абзацы по пустым строкам.
+  function textToArticleHtml(text) {
+    const lines = String(text || '').split('\n');
+    let html = '';
+    let buffer = [];
+    const flush = () => {
+      if (buffer.length) {
+        html += `<p>${buffer.map(escapeHtml).join('<br>')}</p>`;
+        buffer = [];
+      }
+    };
+    lines.forEach((raw) => {
+      const line = raw.trim();
+      if (!line) { flush(); return; }
+      if (/^[«"“].+[»"”]$/.test(line) && line.length > 15) {
+        flush();
+        const inner = line.replace(/^[«"“]/, '').replace(/[»"”]$/, '');
+        html += `<blockquote style="margin:16px 0;padding:10px 16px;border-left:3px solid #007aff;background:rgba(0,122,255,0.08);border-radius:8px;font-style:italic;">${escapeHtml(inner)}</blockquote>`;
+      } else {
+        buffer.push(line);
+      }
+    });
+    flush();
+    return html;
+  }
   function readFileAsBase64(file) {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
@@ -677,7 +721,7 @@
       for (const img of post.images) {
         images.push({ filename: img.name, mimeType: mimeFromExt(extOf(img.name)), base64: await fetchImageBase64(img) });
       }
-      await callGas('publishTelegram', { chatId: state.settings.tgChatId, text: post.bodyText, images });
+      await callGas('publishTelegram', { chatId: state.settings.tgChatId, text: stripInternalNote(post.bodyText), images });
       post.status = 'published'; post.publishedAt = nowIso();
       await saveEditorPostSilently(post);
       toast('Опубликовано в Telegram', 'success');
@@ -697,7 +741,7 @@
       for (const img of post.images) {
         images.push({ filename: img.name, mimeType: mimeFromExt(extOf(img.name)), base64: await fetchImageBase64(img) });
       }
-      await callGas('publishVk', { groupId: state.settings.vkGroupId, text: post.bodyText, images });
+      await callGas('publishVk', { groupId: state.settings.vkGroupId, text: stripInternalNote(post.bodyText), images });
       post.status = 'published'; post.publishedAt = nowIso();
       await saveEditorPostSilently(post);
       toast('Опубликовано в ВК', 'success');
@@ -711,7 +755,7 @@
   async function copyForVc() {
     const post = syncDraftFromForm();
     try {
-      await navigator.clipboard.writeText(post.bodyText || '');
+      await navigator.clipboard.writeText(stripInternalNote(post.bodyText));
       toast('Текст скопирован — вставьте на vc.ru, затем отметьте как опубликовано', 'success');
     } catch (e) {
       toast('Не удалось скопировать: ' + e.message, 'error');
@@ -737,17 +781,18 @@
 
   function prepareSiteRewrite() {
     const post = syncDraftFromForm();
-    const paragraphs = String(post.bodyText || '').split(/\n{2,}/).map((p) => p.trim()).filter(Boolean);
+    const cleaned = stripTrailingHashtags(stripInternalNote(post.bodyText));
     let html = '';
     const cover = post.images.find((i) => i.role === 'cover');
     if (cover) html += `<img src="cover.${extOf(cover.name)}" alt="Обложка статьи" style="max-width: 100%; border-radius: 12px; margin: 20px 0;">`;
-    html += paragraphs.map((p) => `<p>${escapeHtml(p).replace(/\n/g, '<br>')}</p>`).join('');
+    html += textToArticleHtml(cleaned);
     post.images.filter((i) => i.role === 'inline').forEach((img, i) => {
       html += `<img src="image${i + 1}.${extOf(img.name)}" alt="" style="max-width: 100%; border-radius: 12px; margin: 20px 0;">`;
     });
     html += CTA_HTML;
 
-    const firstParaText = paragraphs[0] ? paragraphs[0].replace(/<[^>]+>/g, '') : '';
+    const firstPara = cleaned.split(/\n{2,}/)[0] || '';
+    const firstParaText = firstPara.split('\n').map((l) => l.trim().replace(/^[«"“]|[»"”]$/g, '')).join(' ').trim();
     const excerpt = firstParaText.length > 155 ? firstParaText.slice(0, 152) + '…' : firstParaText;
     const slug = slugify(post.topic || 'post-' + post.scheduledDate);
 
@@ -787,7 +832,7 @@
       await site.putJson(`articles/${slug}/data.json`, { title, date: todayStr(), tag, excerpt, content }, `Публикация статьи: ${title}`);
 
       const manifestRes = await site.getJson('articles/manifest.json');
-      const manifest = manifestRes ? manifestRes.json : [];
+      const manifest = (manifestRes ? manifestRes.json : []).filter((a) => a.slug !== slug);
       manifest.unshift({ slug, title, date: todayStr(), tag, excerpt });
       await site.putJson('articles/manifest.json', manifest, `Добавление статьи в manifest: ${title}`, manifestRes ? manifestRes.sha : undefined);
 
