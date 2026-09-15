@@ -801,12 +801,28 @@
   }
 
   /* ===================== Перенос на сайт ===================== */
+  // Для статей, опубликованных до перехода поля на обычный текст: грубо стягиваем
+  // HTML обратно в читаемый текст, чтобы редактор не показывал сырые теги.
+  function htmlToPlainFallback(html) {
+    if (!html) return '';
+    return String(html)
+      .replace(/<blockquote[^>]*>/gi, '«').replace(/<\/blockquote>/gi, '»\n\n')
+      .replace(/<img[^>]*>/gi, '')
+      .replace(/<a[^>]*>[\s\S]*?<\/a>/gi, '')
+      .replace(/<p[^>]*>/gi, '').replace(/<\/p>/gi, '\n\n')
+      .replace(/<br\s*\/?>/gi, '\n')
+      .replace(/<[^>]+>/g, '')
+      .replace(/&nbsp;/g, ' ').replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/&#39;/g, "'")
+      .replace(/\n{3,}/g, '\n\n')
+      .trim();
+  }
+
   function renderSiteTransferForm(post) {
     const st = post.siteTransfer || { status: 'none' };
     $('#site-title').value = st.title || post.topic || '';
     $('#site-slug').value = st.slug || '';
     $('#site-excerpt').value = st.excerpt || '';
-    $('#site-content').value = st.content || '';
+    $('#site-content').value = st.contentText != null ? st.contentText : htmlToPlainFallback(st.content);
     const chips = $('#site-tag-chips');
     chips.innerHTML = TAGS.map((t) => `<button type="button" class="chip${st.tag === t ? ' active' : ''}" data-tag="${t}">${t}</button>`).join('');
     chips.querySelectorAll('.chip').forEach((c) => c.addEventListener('click', () => {
@@ -815,19 +831,19 @@
     }));
     $('#site-publish-status').textContent = st.status === 'published'
       ? `Опубликовано на сайте ${formatDateTimeRu(st.publishedAt)}: ${st.articleUrl || ''}` : '';
+
+    const cover = post.images.find((i) => i.role === 'cover');
+    const inlineCount = post.images.filter((i) => i.role === 'inline').length;
+    $('#site-structure-preview').innerHTML =
+      '<strong>Добавится в статью автоматически (правится не здесь, а выше — через обложку/картинки поста):</strong><br>'
+      + `Обложка: ${cover ? '✓ есть' : '— не добавлена'}<br>`
+      + `Внутренних картинок: ${inlineCount}<br>`
+      + 'Кнопка в конце статьи: «Перейти в Telegram «ЖИВОЙ ИИ»»';
   }
 
   function prepareSiteRewrite() {
     const post = syncDraftFromForm();
     const cleaned = stripEmojis(stripPollBlock(stripTrailingDecoration(stripInternalNote(post.bodyText))));
-    let html = '';
-    const cover = post.images.find((i) => i.role === 'cover');
-    if (cover) html += `<img src="cover.${extOf(cover.name)}" alt="Обложка статьи" style="max-width: 100%; border-radius: 12px; margin: 20px 0;">`;
-    html += textToArticleHtml(cleaned);
-    post.images.filter((i) => i.role === 'inline').forEach((img, i) => {
-      html += `<img src="image${i + 1}.${extOf(img.name)}" alt="" style="max-width: 100%; border-radius: 12px; margin: 20px 0;">`;
-    });
-    html += CTA_HTML;
 
     const firstPara = cleaned.split(/\n{2,}/)[0] || '';
     const firstParaText = firstPara.split('\n').map((l) => l.trim().replace(/^[«"“]|[»"”]$/g, '')).join(' ').trim();
@@ -836,7 +852,7 @@
 
     post.siteTransfer = {
       status: 'pending', title: post.topic || 'Без названия', slug, excerpt, tag: post.siteTransfer && post.siteTransfer.tag || TAGS[0],
-      content: html, preparedAt: nowIso(),
+      contentText: cleaned, preparedAt: nowIso(),
     };
     renderSiteTransferForm(post);
     saveEditorPostSilently(post);
@@ -848,10 +864,10 @@
     const title = $('#site-title').value.trim();
     const slug = $('#site-slug').value.trim();
     const excerpt = $('#site-excerpt').value.trim();
-    const content = $('#site-content').value;
+    const contentText = $('#site-content').value;
     const tagChip = $('#site-tag-chips .chip.active');
     const tag = tagChip ? tagChip.dataset.tag : TAGS[0];
-    if (!title || !slug || !content) { toast('Заполните заголовок, URL и текст статьи', 'error'); return; }
+    if (!title || !slug || !contentText.trim()) { toast('Заполните заголовок, URL и текст статьи', 'error'); return; }
     if (!/^[a-z0-9-]+$/.test(slug)) { toast('URL должен быть латиницей, цифрами и дефисами', 'error'); return; }
 
     $('#site-publish-status').innerHTML = '<span class="spinner"></span> Переношу на сайт…';
@@ -867,6 +883,15 @@
         const b64 = await fetchImageBase64(inlineImages[i]);
         await site.putBinary(`articles/${slug}/image${i + 1}.${extOf(inlineImages[i].name)}`, b64, `Картинка статьи ${slug}`);
       }
+
+      let content = '';
+      if (cover) content += `<img src="cover.${extOf(cover.name)}" alt="Обложка статьи" style="max-width: 100%; border-radius: 12px; margin: 20px 0;">`;
+      content += textToArticleHtml(contentText);
+      inlineImages.forEach((img, i) => {
+        content += `<img src="image${i + 1}.${extOf(img.name)}" alt="" style="max-width: 100%; border-radius: 12px; margin: 20px 0;">`;
+      });
+      content += CTA_HTML;
+
       const existingData = await site.getJson(`articles/${slug}/data.json`);
       await site.putJson(`articles/${slug}/data.json`, { title, date: todayStr(), tag, excerpt, content }, `Публикация статьи: ${title}`, existingData ? existingData.sha : undefined);
 
@@ -876,7 +901,7 @@
       await site.putJson('articles/manifest.json', manifest, `Добавление статьи в manifest: ${title}`, manifestRes ? manifestRes.sha : undefined);
 
       post.siteTransfer = {
-        status: 'published', title, slug, excerpt, tag, content,
+        status: 'published', title, slug, excerpt, tag, contentText,
         publishedAt: nowIso(), articleUrl: `https://zhivoy-ai.ru/article-template.html?article=${slug}`,
       };
       await saveEditorPostSilently(post);
@@ -887,6 +912,21 @@
       toast('Ошибка переноса на сайт: ' + e.message, 'error');
       $('#site-publish-status').textContent = '';
     }
+  }
+
+  /* ===================== Полноэкранный редактор текста ===================== */
+  let fullscreenTargetId = null;
+  function openFullscreenEditor(targetId, title) {
+    fullscreenTargetId = targetId;
+    $('#fullscreen-editor-title').textContent = title || 'Текст';
+    $('#fullscreen-editor-textarea').value = $('#' + targetId).value;
+    $('#fullscreen-editor').hidden = false;
+    $('#fullscreen-editor-textarea').focus();
+  }
+  function closeFullscreenEditor() {
+    if (fullscreenTargetId) $('#' + fullscreenTargetId).value = $('#fullscreen-editor-textarea').value;
+    $('#fullscreen-editor').hidden = true;
+    fullscreenTargetId = null;
   }
 
   /* ===================== Навигация ===================== */
@@ -964,6 +1004,9 @@
     $('#btn-copy-vc').addEventListener('click', copyForVc);
     $('#btn-site-prepare').addEventListener('click', prepareSiteRewrite);
     $('#btn-site-publish').addEventListener('click', publishToSite);
+
+    $all('.btn-fullscreen').forEach((b) => b.addEventListener('click', () => openFullscreenEditor(b.dataset.target, b.dataset.title)));
+    $('#fullscreen-editor-done').addEventListener('click', closeFullscreenEditor);
   }
 
   document.addEventListener('DOMContentLoaded', () => {

@@ -191,7 +191,10 @@
         <input type="text" id="editor-topic">
       </div>
       <div class="field">
-        <label for="editor-text">Текст поста</label>
+        <div class="field-label-row">
+          <label for="editor-text">Текст поста</label>
+          <button type="button" class="btn-fullscreen" data-target="editor-text" data-title="Текст поста">⛶ Во весь экран</button>
+        </div>
         <textarea id="editor-text"></textarea>
       </div>
       <div class="field">
@@ -243,9 +246,14 @@
         <div class="chip-row" id="site-tag-chips"></div>
       </div>
       <div class="field">
-        <label for="site-content">HTML-текст статьи</label>
+        <div class="field-label-row">
+          <label for="site-content">Текст статьи (абзацы — через пустую строку)</label>
+          <button type="button" class="btn-fullscreen" data-target="site-content" data-title="Текст статьи">⛶ Во весь экран</button>
+        </div>
         <textarea id="site-content" style="min-height:220px"></textarea>
+        <p class="hint-sm">Строка целиком в «кавычках» станет цитатой. HTML-теги вписывать не нужно — расставятся сами при публикации.</p>
       </div>
+      <div class="info-box" id="site-structure-preview"></div>
       <div class="btn-row">
         <button class="btn ghost" id="btn-site-prepare">Подготовить рерайт</button>
         <button class="btn primary" id="btn-site-publish">Опубликовать на сайт</button>
@@ -267,6 +275,14 @@
 </nav>
 
 <div id="toast-root"></div>
+
+<div id="fullscreen-editor" hidden>
+  <div class="fs-editor-header">
+    <span id="fullscreen-editor-title">Текст</span>
+    <button class="btn primary small" id="fullscreen-editor-done">Готово</button>
+  </div>
+  <textarea id="fullscreen-editor-textarea"></textarea>
+</div>
 
 <script src="github-store.js"></script>
 <script src="app.js"></script>
