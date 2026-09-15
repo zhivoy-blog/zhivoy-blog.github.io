@@ -178,6 +178,20 @@ img { max-width: 100%; }
   flex: 0 0 auto; background: none; border: 1px solid var(--border); color: var(--blue);
   font-size: 11.5px; font-weight: 700; padding: 5px 9px; border-radius: 8px; cursor: pointer; white-space: nowrap;
 }
+
+.preview-bubble {
+  background: var(--card-2); border: 1px solid var(--border); border-radius: 14px;
+  padding: 14px 16px; font-size: 14.5px; line-height: 1.55; color: var(--text);
+}
+.preview-bubble p { margin: 10px 0; }
+.preview-bubble p:first-child { margin-top: 0; }
+.preview-bubble p:last-child { margin-bottom: 0; }
+.preview-bubble strong { font-weight: 800; }
+.preview-bubble blockquote {
+  margin: 10px 0; padding: 8px 12px; border-left: 3px solid #4fae4e;
+  background: rgba(79, 174, 78, 0.12); border-radius: 6px;
+}
+.preview-bubble .preview-empty { color: var(--text-faint); }
 input[type="text"], input[type="password"], input[type="date"], input[type="number"], textarea, select {
   width: 100%; background: var(--card-2); border: 1px solid var(--border); border-radius: 10px;
   padding: 11px 12px; color: var(--text); font-size: 14.5px; font-family: inherit;
