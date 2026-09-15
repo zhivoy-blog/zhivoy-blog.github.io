@@ -829,7 +829,8 @@
         const b64 = await fetchImageBase64(inlineImages[i]);
         await site.putBinary(`articles/${slug}/image${i + 1}.${extOf(inlineImages[i].name)}`, b64, `Картинка статьи ${slug}`);
       }
-      await site.putJson(`articles/${slug}/data.json`, { title, date: todayStr(), tag, excerpt, content }, `Публикация статьи: ${title}`);
+      const existingData = await site.getJson(`articles/${slug}/data.json`);
+      await site.putJson(`articles/${slug}/data.json`, { title, date: todayStr(), tag, excerpt, content }, `Публикация статьи: ${title}`, existingData ? existingData.sha : undefined);
 
       const manifestRes = await site.getJson('articles/manifest.json');
       const manifest = (manifestRes ? manifestRes.json : []).filter((a) => a.slug !== slug);
