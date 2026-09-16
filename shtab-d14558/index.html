@@ -65,7 +65,7 @@
   <section class="view" id="view-counters">
     <div class="card">
       <h2>Счётчики по площадкам</h2>
-      <p class="hint">Telegram и ВКонтакте — автоматически, vc.ru — раз в неделю вручную.</p>
+      <p class="hint">Telegram — автоматически. ВКонтакте и vc.ru — раз в неделю вручную.</p>
     </div>
     <div class="counter-grid" id="counter-grid"></div>
     <div class="card" id="baseline-card">
@@ -81,6 +81,16 @@
         <input type="number" id="vk-baseline-input" inputmode="numeric" min="0">
       </div>
       <button class="btn ghost" id="btn-vk-baseline-save">Сохранить ВКонтакте</button>
+    </div>
+    <div class="card" id="vk-manual-card">
+      <h2>ВКонтакте — подписчики вручную</h2>
+      <p class="hint">Пока не настроен автоматический токен ВК — впишите число сами, когда удобно (видно прямо на странице сообщества).</p>
+      <div class="field">
+        <label for="vk-subs-input">Текущее число подписчиков</label>
+        <input type="number" id="vk-subs-input" inputmode="numeric" min="0">
+      </div>
+      <button class="btn primary" id="btn-vk-subs-save">Сохранить</button>
+      <p class="hint-sm" id="vk-subs-updated"></p>
     </div>
     <div class="card" id="vc-manual-card">
       <h2>vc.ru — подписчики вручную</h2>

@@ -525,6 +525,19 @@
     } catch (e) { toast('Ошибка сохранения: ' + e.message, 'error'); }
   }
 
+  // Подписчики ВК — пока вручную (см. baseline/manualCount на этом же объекте для числа
+  // постов, их не трогаем). Если позже заработает автообновление через Apps Script,
+  // оно пишет в те же subscribers/updatedAt — переключение произойдёт само.
+  async function saveVkSubscribersManually() {
+    const val = parseInt($('#vk-subs-input').value, 10);
+    if (Number.isNaN(val) || val < 0) { toast('Введите число подписчиков', 'error'); return; }
+    try {
+      await persistCounters((c) => ({ ...c, vk: { ...(c.vk || {}), subscribers: val, updatedAt: nowIso() } }), 'Обновление счётчика ВК вручную');
+      toast('Сохранено', 'success');
+      renderCounters();
+    } catch (e) { toast('Ошибка сохранения: ' + e.message, 'error'); }
+  }
+
   /* ===================== Рендер: Сегодня ===================== */
   function renderToday() {
     const today = todayStr();
@@ -625,6 +638,9 @@
 
     $('#vc-input').value = (state.counters.vc && state.counters.vc.subscribers) || '';
     $('#vc-updated').textContent = state.counters.vc && state.counters.vc.updatedAt ? 'Обновлено ' + formatDateTimeRu(state.counters.vc.updatedAt) : 'Ещё не вводилось';
+
+    $('#vk-subs-input').value = (state.counters.vk && state.counters.vk.subscribers) || '';
+    $('#vk-subs-updated').textContent = state.counters.vk && state.counters.vk.updatedAt ? 'Обновлено ' + formatDateTimeRu(state.counters.vk.updatedAt) : 'Ещё не вводилось';
 
     const tgBaseline = state.counters.tg && state.counters.tg.baseline;
     const vkBaseline = state.counters.vk && state.counters.vk.baseline;
@@ -1076,6 +1092,7 @@
     $('#btn-sync').addEventListener('click', syncGmail);
     $('#btn-refresh-stats').addEventListener('click', refreshStats);
     $('#btn-vc-save').addEventListener('click', saveVcCounter);
+    $('#btn-vk-subs-save').addEventListener('click', saveVkSubscribersManually);
     $('#btn-tg-baseline-save').addEventListener('click', () => saveBaseline('tg', '#tg-baseline-input'));
     $('#btn-vk-baseline-save').addEventListener('click', () => saveBaseline('vk', '#vk-baseline-input'));
 
