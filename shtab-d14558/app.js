@@ -621,18 +621,17 @@
     const grid = $('#counter-grid');
     const sitePosts = state.posts.filter((p) => p.siteTransfer && p.siteTransfer.status === 'published').length;
     const cards = [
-      { key: 'tg', label: 'Telegram', subs: state.counters.tg && state.counters.tg.subscribers, updatedAt: state.counters.tg && state.counters.tg.updatedAt, count: manualCount('tg'), total: 74 },
-      { key: 'vk', label: 'ВКонтакте', subs: state.counters.vk && state.counters.vk.subscribers, updatedAt: state.counters.vk && state.counters.vk.updatedAt, count: manualCount('vk'), total: 26 },
-      { key: 'vc', label: 'vc.ru', subs: state.counters.vc && state.counters.vc.subscribers, updatedAt: state.counters.vc && state.counters.vc.updatedAt, count: countPublished('vc'), total: 19 },
-      { key: 'site', label: 'Сайт zhivoy-ai.ru', subs: null, count: sitePosts, total: SITE_DEF.total },
+      { key: 'tg', label: 'Telegram', subs: state.counters.tg && state.counters.tg.subscribers, updatedAt: state.counters.tg && state.counters.tg.updatedAt, count: manualCount('tg') },
+      { key: 'vk', label: 'ВКонтакте', subs: state.counters.vk && state.counters.vk.subscribers, updatedAt: state.counters.vk && state.counters.vk.updatedAt, count: manualCount('vk') },
+      { key: 'vc', label: 'vc.ru', subs: state.counters.vc && state.counters.vc.subscribers, updatedAt: state.counters.vc && state.counters.vc.updatedAt, count: countPublished('vc') },
+      { key: 'site', label: 'Сайт zhivoy-ai.ru', subs: null, count: sitePosts },
     ];
     grid.innerHTML = cards.map((c) => `
       <div class="counter-card">
         <div class="plat">${c.label}</div>
         <div class="num">${c.subs != null ? c.subs.toLocaleString('ru-RU') : c.count}</div>
-        <div class="sub">${c.subs != null ? `подписчиков${c.updatedAt ? ' · ' + formatDateTimeRu(c.updatedAt) : ''}` : `постов из ~${c.total}`}</div>
-        ${c.subs != null ? `<div class="sub" style="margin-top:2px">постов: ${c.count} / ~${c.total}</div>` : ''}
-        <div class="progress-track"><div class="progress-fill" style="width:${Math.min(100, Math.round((c.count / c.total) * 100))}%"></div></div>
+        <div class="sub">${c.subs != null ? `подписчиков${c.updatedAt ? ' · ' + formatDateTimeRu(c.updatedAt) : ''}` : 'постов'}</div>
+        ${c.subs != null ? `<div class="sub" style="margin-top:2px">постов: ${c.count}</div>` : ''}
       </div>
     `).join('');
 
@@ -671,13 +670,12 @@
 
   /* ===================== Рендер: История ===================== */
   function renderHistory() {
-    const cutoff = new Date(Date.now() - 7 * 86400000);
     const events = [];
     state.posts.forEach((p) => {
-      if (p.status === 'published' && p.publishedAt && new Date(p.publishedAt) >= cutoff) {
+      if (p.status === 'published' && p.publishedAt) {
         events.push({ date: p.publishedAt.slice(0, 10), time: p.publishedAt, label: PLATFORM_DEFS[p.platform].label, topic: p.topic });
       }
-      if (p.siteTransfer && p.siteTransfer.status === 'published' && p.siteTransfer.publishedAt && new Date(p.siteTransfer.publishedAt) >= cutoff) {
+      if (p.siteTransfer && p.siteTransfer.status === 'published' && p.siteTransfer.publishedAt) {
         events.push({ date: p.siteTransfer.publishedAt.slice(0, 10), time: p.siteTransfer.publishedAt, label: 'Сайт zhivoy-ai.ru', topic: p.siteTransfer.title || p.topic });
       }
     });
@@ -686,7 +684,7 @@
     events.forEach((e) => { (byDate[e.date] = byDate[e.date] || []).push(e); });
     const dates = Object.keys(byDate).sort().reverse();
     const list = $('#history-list');
-    if (!dates.length) { list.innerHTML = '<div class="empty-state">За последние 7 дней публикаций не было.</div>'; return; }
+    if (!dates.length) { list.innerHTML = '<div class="empty-state">Публикаций пока не было.</div>'; return; }
     list.innerHTML = dates.map((d) => `
       <div class="history-day">
         <div class="h-date">${formatDateRu(d)}</div>
