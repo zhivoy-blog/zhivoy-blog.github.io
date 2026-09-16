@@ -502,7 +502,7 @@
 
   async function refreshStats() {
     try {
-      const res = await callGas('getStats', {});
+      const res = await callGas('getStats', { chatId: state.settings.tgChatId, groupId: state.settings.vkGroupId });
       await persistCounters((c) => ({
         ...c,
         tg: { ...c.tg, subscribers: res.telegram ? res.telegram.subscribers : c.tg.subscribers, updatedAt: nowIso() },
