@@ -14,7 +14,7 @@
  *   PROCESSED_LABEL         — опционально, имя ярлыка «обработано» (по умолчанию ниже)
  */
 
-const DEFAULT_GMAIL_QUERY = 'label:ЖИ -label:ЖИ-обработано';
+const DEFAULT_GMAIL_QUERY = '(label:ЖИ OR subject:"Утренний пост Telegram" OR subject:"Вечерний пост Telegram" OR subject:"Пост ВКонтакте" OR subject:"Пост vc.ru") -label:ЖИ-обработано';
 const DEFAULT_PROCESSED_LABEL = 'ЖИ-обработано';
 const DEFAULT_VK_VERSION = '5.199';
 const MAX_THREADS = 25;
