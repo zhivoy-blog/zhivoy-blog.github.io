@@ -68,6 +68,20 @@
       <p class="hint">Telegram и ВКонтакте — автоматически, vc.ru — раз в неделю вручную.</p>
     </div>
     <div class="counter-grid" id="counter-grid"></div>
+    <div class="card" id="baseline-card">
+      <h2>Стартовое число постов</h2>
+      <p class="hint">Впишите один раз, сколько постов реально уже вышло к этому моменту (до того, как счётчик начал считать). Дальше он будет расти на 1 за каждое нажатие «Опубликовано» в посте — хоть по нескольку раз в день.</p>
+      <div class="field">
+        <label for="tg-baseline-input">Telegram — уже опубликовано</label>
+        <input type="number" id="tg-baseline-input" inputmode="numeric" min="0">
+      </div>
+      <button class="btn ghost" id="btn-tg-baseline-save">Сохранить Telegram</button>
+      <div class="field" style="margin-top:14px">
+        <label for="vk-baseline-input">ВКонтакте — уже опубликовано</label>
+        <input type="number" id="vk-baseline-input" inputmode="numeric" min="0">
+      </div>
+      <button class="btn ghost" id="btn-vk-baseline-save">Сохранить ВКонтакте</button>
+    </div>
     <div class="card" id="vc-manual-card">
       <h2>vc.ru — подписчики вручную</h2>
       <div class="field">

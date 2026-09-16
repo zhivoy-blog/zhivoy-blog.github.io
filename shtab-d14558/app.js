@@ -596,12 +596,20 @@
   function countPublished(group) {
     return state.posts.filter((p) => PLATFORM_DEFS[p.platform] && PLATFORM_DEFS[p.platform].group === group && p.status === 'published').length;
   }
+  // TG/ВК: счётчик постов = стартовое число (введено вручную один раз) + сколько раз
+  // нажали «Опубликовано» с тех пор (см. bumpManualCounter) — а не подсчёт по одному
+  // посту в день на площадку, как раньше, потому что в реальности в один день по одной
+  // площадке публикуется несколько отдельных постов (текст, видео, музыка).
+  function manualCount(group) {
+    const c = state.counters[group] || {};
+    return (c.baseline || 0) + (c.manualCount || 0);
+  }
   function renderCounters() {
     const grid = $('#counter-grid');
     const sitePosts = state.posts.filter((p) => p.siteTransfer && p.siteTransfer.status === 'published').length;
     const cards = [
-      { key: 'tg', label: 'Telegram', subs: state.counters.tg && state.counters.tg.subscribers, updatedAt: state.counters.tg && state.counters.tg.updatedAt, count: countPublished('tg'), total: 74 },
-      { key: 'vk', label: 'ВКонтакте', subs: state.counters.vk && state.counters.vk.subscribers, updatedAt: state.counters.vk && state.counters.vk.updatedAt, count: countPublished('vk'), total: 26 },
+      { key: 'tg', label: 'Telegram', subs: state.counters.tg && state.counters.tg.subscribers, updatedAt: state.counters.tg && state.counters.tg.updatedAt, count: manualCount('tg'), total: 74 },
+      { key: 'vk', label: 'ВКонтакте', subs: state.counters.vk && state.counters.vk.subscribers, updatedAt: state.counters.vk && state.counters.vk.updatedAt, count: manualCount('vk'), total: 26 },
       { key: 'vc', label: 'vc.ru', subs: state.counters.vc && state.counters.vc.subscribers, updatedAt: state.counters.vc && state.counters.vc.updatedAt, count: countPublished('vc'), total: 19 },
       { key: 'site', label: 'Сайт zhivoy-ai.ru', subs: null, count: sitePosts, total: SITE_DEF.total },
     ];
@@ -617,6 +625,32 @@
 
     $('#vc-input').value = (state.counters.vc && state.counters.vc.subscribers) || '';
     $('#vc-updated').textContent = state.counters.vc && state.counters.vc.updatedAt ? 'Обновлено ' + formatDateTimeRu(state.counters.vc.updatedAt) : 'Ещё не вводилось';
+
+    const tgBaseline = state.counters.tg && state.counters.tg.baseline;
+    const vkBaseline = state.counters.vk && state.counters.vk.baseline;
+    $('#tg-baseline-input').value = tgBaseline != null ? tgBaseline : '';
+    $('#vk-baseline-input').value = vkBaseline != null ? vkBaseline : '';
+  }
+  async function saveBaseline(group, inputSel) {
+    const val = parseInt($(inputSel).value, 10);
+    if (Number.isNaN(val) || val < 0) { toast('Введите число', 'error'); return; }
+    try {
+      await persistCounters((c) => ({ ...c, [group]: { ...(c[group] || {}), baseline: val } }), `Стартовое число постов: ${group}`);
+      toast('Сохранено', 'success');
+      renderCounters();
+    } catch (e) { toast('Ошибка сохранения: ' + e.message, 'error'); }
+  }
+  // Каждое нажатие «Опубликовано» на TG/ВК-посте добавляет 1 к счётчику — можно нажимать
+  // несколько раз за день (отдельно для текста, видео, музыки и т.п.).
+  async function bumpManualCounter(group) {
+    try {
+      await persistCounters((c) => ({
+        ...c,
+        [group]: { ...(c[group] || {}), manualCount: ((c[group] && c[group].manualCount) || 0) + 1 },
+      }), `+1 опубликовано: ${group}`);
+    } catch (e) {
+      toast('Пост сохранён, но счётчик не обновился: ' + e.message, 'error');
+    }
   }
 
   /* ===================== Рендер: История ===================== */
@@ -736,11 +770,18 @@
       markBtn.className = 'btn ghost';
       markBtn.id = 'btn-mark-published';
       markBtn.style.marginTop = '10px';
-      markBtn.textContent = 'Отметить как опубликовано (вручную)';
       markBtn.addEventListener('click', markPublishedManually);
       $('#editor-publish-card').appendChild(markBtn);
     }
-    markBtn.hidden = post.status === 'published';
+    // TG/ВК: кнопка не прячется после публикации — жмите ещё раз на каждую отдельную
+    // публикацию за день (текст, видео, музыка), это плюс 1 к счётчику каждый раз.
+    if (def.group === 'tg' || def.group === 'vk') {
+      markBtn.hidden = false;
+      markBtn.textContent = post.status === 'published' ? 'Ещё публикация сегодня (+1 к счётчику)' : 'Отметить как опубликовано';
+    } else {
+      markBtn.hidden = post.status === 'published';
+      markBtn.textContent = 'Отметить как опубликовано (вручную)';
+    }
 
     renderSiteTransferForm(post);
   }
@@ -818,10 +859,12 @@
 
   async function markPublishedManually() {
     const post = syncDraftFromForm();
+    const group = PLATFORM_DEFS[post.platform].group;
     post.status = 'published';
     post.publishedAt = nowIso();
     await saveEditorPostSilently(post);
-    renderEditor(); renderToday(); renderHistory();
+    if (group === 'tg' || group === 'vk') await bumpManualCounter(group);
+    renderEditor(); renderToday(); renderHistory(); renderCounters();
   }
 
   async function saveEditorPostSilently(post) {
@@ -1033,6 +1076,8 @@
     $('#btn-sync').addEventListener('click', syncGmail);
     $('#btn-refresh-stats').addEventListener('click', refreshStats);
     $('#btn-vc-save').addEventListener('click', saveVcCounter);
+    $('#btn-tg-baseline-save').addEventListener('click', () => saveBaseline('tg', '#tg-baseline-input'));
+    $('#btn-vk-baseline-save').addEventListener('click', () => saveBaseline('vk', '#vk-baseline-input'));
 
     $('#btn-save-settings').addEventListener('click', () => {
       saveSettings(readSettingsForm());
