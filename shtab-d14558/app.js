@@ -185,6 +185,10 @@ document.getElementById('article-content').innerHTML = '<p style="color:#d1d1d6;
     const d = new Date(iso);
     return new Intl.DateTimeFormat('ru-RU', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }).format(d);
   }
+  function formatDateShortRu(dateStr) {
+    const d = new Date(dateStr + 'T00:00:00');
+    return new Intl.DateTimeFormat('ru-RU', { day: 'numeric', month: 'short' }).format(d);
+  }
   function daysBetween(a, b) {
     return Math.round((new Date(b + 'T00:00:00') - new Date(a + 'T00:00:00')) / 86400000);
   }
@@ -525,6 +529,58 @@ document.getElementById('article-content').innerHTML = '<p style="color:#d1d1d6;
     });
   }
 
+  /* ===================== Журнал подписчиков (для динамики по дням) ===================== */
+  // Точка отсчёта нового журнала — актуальные цифры на момент, когда его завели.
+  // Подставляется один раз, при первом запуске обновлённого приложения (пока в
+  // counters.json нет counters.history вообще); дальше журнал живёт сам через
+  // withHistoryEntry ниже и эта функция больше ничего не трогает.
+  const SEED_HISTORY_AT = '2026-09-17T14:06:00.000Z'; // 17 сентября 2026, 17:06 (МСК)
+  const SEED_HISTORY_VALUES = { tg: 30, vk: 38, vc: 15 };
+  function ensureSeedHistory(counters) {
+    if (counters.history) return counters;
+    const history = {};
+    Object.keys(SEED_HISTORY_VALUES).forEach((group) => {
+      history[group] = [{ date: SEED_HISTORY_AT.slice(0, 10), at: SEED_HISTORY_AT, value: SEED_HISTORY_VALUES[group] }];
+    });
+    return { ...counters, history };
+  }
+
+  // Добавляет запись в журнал площадки group, только если значение реально изменилось
+  // относительно последней записи — иначе повторные автообновления (TG/ВК) заваливали бы
+  // журнал одинаковыми строками.
+  function withHistoryEntry(counters, group, value, atIso) {
+    if (value == null) return counters;
+    const history = counters.history || {};
+    const list = history[group] || [];
+    const last = list[list.length - 1];
+    if (last && last.value === value) return counters;
+    const entry = { date: atIso.slice(0, 10), at: atIso, value };
+    return { ...counters, history: { ...history, [group]: [...list, entry] } };
+  }
+
+  // Изменение числа подписчиков для карточки на экране «Счётчики»: сравниваем текущее
+  // значение с последней записью журнала, датированной СТРОГО раньше сегодня. Если
+  // это была именно вчерашняя запись — подписываем «за сегодня» как в примере из
+  // задачи; если разрыв больше суток (обычная ситуация для vc.ru, где ввод не
+  // ежедневный) — честно подписываем «с 10 сен» вместо того, чтобы выдавать
+  // накопленную за несколько дней разницу за дневную.
+  function subscriberDeltaInfo(group) {
+    const c = state.counters[group] || {};
+    const current = c.subscribers;
+    if (current == null) return null;
+    const history = (state.counters.history && state.counters.history[group]) || [];
+    const today = todayStr();
+    const prevEntries = history.filter((e) => e.date < today);
+    if (!prevEntries.length) return null;
+    const prev = prevEntries[prevEntries.length - 1];
+    const delta = current - prev.value;
+    const gap = daysBetween(prev.date, today);
+    const period = gap === 1 ? 'за сегодня' : `с ${formatDateShortRu(prev.date)}`;
+    if (delta === 0) return { text: `без изменений ${gap === 1 ? '' : period}`.trim(), cls: 'flat' };
+    const sign = delta > 0 ? '+' : '−';
+    return { text: `${sign}${Math.abs(delta)} ${period}`, cls: delta > 0 ? 'up' : 'down' };
+  }
+
   /* ===================== Данные (GitHub) ===================== */
   async function loadAll() {
     renderAll(); // сразу показать расписание на сегодня, даже без данных из GitHub
@@ -544,6 +600,11 @@ document.getElementById('article-content').innerHTML = '<p style="color:#d1d1d6;
       annotateDuplicates();
       state.loaded = true;
       $('#header-sub').textContent = 'Синхронизировано ' + new Intl.DateTimeFormat('ru-RU', { hour: '2-digit', minute: '2-digit' }).format(new Date());
+      if (!state.counters.history) {
+        try {
+          await persistCounters((c) => ensureSeedHistory(c), 'Инициализация журнала подписчиков');
+        } catch (e) { console.warn('Не удалось завести журнал подписчиков', e); }
+      }
       renderAll();
     } catch (e) {
       console.error(e);
@@ -635,13 +696,22 @@ document.getElementById('article-content').innerHTML = '<p style="color:#d1d1d6;
   async function refreshStats() {
     try {
       const res = await callGas('getStats', { chatId: state.settings.tgChatId, groupId: state.settings.vkGroupId });
-      await persistCounters((c) => ({
-        ...c,
-        tg: { ...c.tg, subscribers: res.telegram ? res.telegram.subscribers : c.tg.subscribers, updatedAt: nowIso() },
-        vk: { ...c.vk, subscribers: res.vk ? res.vk.subscribers : c.vk.subscribers, updatedAt: nowIso() },
-      }), 'Обновление счётчиков TG/ВК');
+      const at = nowIso();
+      await persistCounters((c) => {
+        const tgSubs = res.telegram ? res.telegram.subscribers : (c.tg && c.tg.subscribers);
+        const vkSubs = res.vk ? res.vk.subscribers : (c.vk && c.vk.subscribers);
+        let next = {
+          ...c,
+          tg: { ...c.tg, subscribers: tgSubs, updatedAt: at },
+          vk: { ...c.vk, subscribers: vkSubs, updatedAt: at },
+        };
+        if (res.telegram) next = withHistoryEntry(next, 'tg', tgSubs, at);
+        if (res.vk) next = withHistoryEntry(next, 'vk', vkSubs, at);
+        return next;
+      }, 'Обновление счётчиков TG/ВК');
       toast('Счётчики обновлены', 'success');
       renderCounters();
+      renderHistory();
     } catch (e) {
       toast('Не удалось обновить счётчики: ' + e.message, 'error');
     }
@@ -651,9 +721,11 @@ document.getElementById('article-content').innerHTML = '<p style="color:#d1d1d6;
     const val = parseInt($('#vc-input').value, 10);
     if (Number.isNaN(val) || val < 0) { toast('Введите число подписчиков', 'error'); return; }
     try {
-      await persistCounters((c) => ({ ...c, vc: { manual: true, subscribers: val, updatedAt: nowIso() } }), 'Обновление счётчика vc.ru вручную');
+      const at = nowIso();
+      await persistCounters((c) => withHistoryEntry({ ...c, vc: { manual: true, subscribers: val, updatedAt: at } }, 'vc', val, at), 'Обновление счётчика vc.ru вручную');
       toast('Сохранено', 'success');
       renderCounters();
+      renderHistory();
     } catch (e) { toast('Ошибка сохранения: ' + e.message, 'error'); }
   }
 
@@ -664,9 +736,11 @@ document.getElementById('article-content').innerHTML = '<p style="color:#d1d1d6;
     const val = parseInt($('#vk-subs-input').value, 10);
     if (Number.isNaN(val) || val < 0) { toast('Введите число подписчиков', 'error'); return; }
     try {
-      await persistCounters((c) => ({ ...c, vk: { ...(c.vk || {}), subscribers: val, updatedAt: nowIso() } }), 'Обновление счётчика ВК вручную');
+      const at = nowIso();
+      await persistCounters((c) => withHistoryEntry({ ...c, vk: { ...(c.vk || {}), subscribers: val, updatedAt: at } }, 'vk', val, at), 'Обновление счётчика ВК вручную');
       toast('Сохранено', 'success');
       renderCounters();
+      renderHistory();
     } catch (e) { toast('Ошибка сохранения: ' + e.message, 'error'); }
   }
 
@@ -758,14 +832,17 @@ document.getElementById('article-content').innerHTML = '<p style="color:#d1d1d6;
       { key: 'vc', label: 'vc.ru', subs: state.counters.vc && state.counters.vc.subscribers, updatedAt: state.counters.vc && state.counters.vc.updatedAt, count: countPublished('vc') },
       { key: 'site', label: 'Сайт zhivoy-ai.ru', subs: null, count: sitePosts },
     ];
-    grid.innerHTML = cards.map((c) => `
+    grid.innerHTML = cards.map((c) => {
+      const delta = c.subs != null ? subscriberDeltaInfo(c.key) : null;
+      return `
       <div class="counter-card">
         <div class="plat">${c.label}</div>
-        <div class="num">${c.subs != null ? c.subs.toLocaleString('ru-RU') : c.count}</div>
+        <div class="num">${c.subs != null ? c.subs.toLocaleString('ru-RU') : c.count}${delta ? ` <span class="delta ${delta.cls}">${delta.text}</span>` : ''}</div>
         <div class="sub">${c.subs != null ? `подписчиков${c.updatedAt ? ' · ' + formatDateTimeRu(c.updatedAt) : ''}` : 'постов'}</div>
         ${c.subs != null ? `<div class="sub" style="margin-top:2px">постов: ${c.count}</div>` : ''}
       </div>
-    `).join('');
+    `;
+    }).join('');
 
     $('#vc-input').value = (state.counters.vc && state.counters.vc.subscribers) || '';
     $('#vc-updated').textContent = state.counters.vc && state.counters.vc.updatedAt ? 'Обновлено ' + formatDateTimeRu(state.counters.vc.updatedAt) : 'Ещё не вводилось';
@@ -801,7 +878,42 @@ document.getElementById('article-content').innerHTML = '<p style="color:#d1d1d6;
   }
 
   /* ===================== Рендер: История ===================== */
+  // Простой список по дням для каждой площадки: дата, число подписчиков на тот день,
+  // разница от предыдущей записи в журнале (а не обязательно от вчера — для vc.ru
+  // соседние записи могут быть разнесены на недели, это ожидаемо).
+  function renderSubscriberHistory() {
+    const container = $('#history-subs-list');
+    if (!container) return;
+    const groups = [
+      { key: 'tg', label: 'Telegram' },
+      { key: 'vk', label: 'ВКонтакте' },
+      { key: 'vc', label: 'vc.ru' },
+    ];
+    const blocks = groups.map((g) => {
+      const history = (state.counters.history && state.counters.history[g.key]) || [];
+      if (!history.length) return '';
+      const rows = history.slice().reverse().map((entry, i, arr) => {
+        const prev = arr[i + 1];
+        const diffHtml = !prev
+          ? ''
+          : entry.value === prev.value
+            ? '<span class="delta flat">без изменений</span>'
+            : `<span class="delta ${entry.value > prev.value ? 'up' : 'down'}">${entry.value > prev.value ? '+' : '−'}${Math.abs(entry.value - prev.value)}</span>`;
+        return `
+          <div class="history-item">
+            <span class="topic">${formatDateShortRu(entry.date)}</span>
+            <span class="time">${entry.value.toLocaleString('ru-RU')}</span>
+            ${diffHtml}
+          </div>
+        `;
+      }).join('');
+      return `<div class="history-day"><div class="h-date">${g.label}</div>${rows}</div>`;
+    }).join('');
+    container.innerHTML = blocks || '<div class="empty-state">Пока нет записей об изменении подписчиков.</div>';
+  }
+
   function renderHistory() {
+    renderSubscriberHistory();
     const events = [];
     state.posts.forEach((p) => {
       if (p.status === 'published' && p.publishedAt) {
