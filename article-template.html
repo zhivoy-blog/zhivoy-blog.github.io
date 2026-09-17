@@ -108,9 +108,20 @@ font-size: 14px
 <script src="article-script.js"></script>
 <script>
 (function() {
+function setCanonical(url) {
+var link = document.querySelector('link[rel="canonical"]');
+if (!link) {
+link = document.createElement('link');
+link.setAttribute('rel', 'canonical');
+document.head.appendChild(link);
+}
+link.setAttribute('href', url);
+}
+
 const slug = new URLSearchParams(window.location.search).get('article');
 if (!slug) {
 document.getElementById('article-content').innerHTML = '<p style="color:#d1d1d6; text-align:center; padding:40px 0;">❓ Статья не найдена. <a href="index.html" style="color:var(--accent-blue);">Вернуться к списку</a></p>';
+setCanonical('https://zhivoy-ai.ru/index.html');
 return;
 }
 fetch('articles/' + slug + '/data.json?v=' + Date.now(), { cache: 'no-store' })
@@ -120,6 +131,7 @@ return response.json();
 })
 .then(function(data) {
 document.getElementById('page-title').textContent = data.title + ' — Живой ИИ';
+setCanonical('https://zhivoy-ai.ru/article-template.html?article=' + encodeURIComponent(slug));
 var tempDiv = document.createElement('div');
 tempDiv.innerHTML = data.content;
 
@@ -165,6 +177,7 @@ initAll();
 })
 .catch(function() {
 document.getElementById('article-content').innerHTML = '<p style="color:#d1d1d6; text-align:center; padding:40px 0;">❌ Ошибка загрузки статьи. <a href="index.html" style="color:var(--accent-blue);">Вернуться к списку</a></p>';
+setCanonical('https://zhivoy-ai.ru/index.html');
 });
 })();
 </script>
