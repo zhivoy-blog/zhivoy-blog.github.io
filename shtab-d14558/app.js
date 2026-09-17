@@ -536,13 +536,19 @@ document.getElementById('article-content').innerHTML = '<p style="color:#d1d1d6;
   // withHistoryEntry ниже и эта функция больше ничего не трогает.
   const SEED_HISTORY_AT = '2026-09-17T14:06:00.000Z'; // 17 сентября 2026, 17:06 (МСК)
   const SEED_HISTORY_VALUES = { tg: 30, vk: 38, vc: 15 };
+  // Сидирует по группам, а не «весь counters.history целиком или ничего» — так журнал
+  // сам восстанавливается, если история отсутствует только у части площадок (например,
+  // из-за прерванной записи), а не только при полностью пустом counters.history.
   function ensureSeedHistory(counters) {
-    if (counters.history) return counters;
-    const history = {};
+    const history = { ...(counters.history || {}) };
+    let changed = false;
     Object.keys(SEED_HISTORY_VALUES).forEach((group) => {
-      history[group] = [{ date: SEED_HISTORY_AT.slice(0, 10), at: SEED_HISTORY_AT, value: SEED_HISTORY_VALUES[group] }];
+      if (!history[group] || !history[group].length) {
+        history[group] = [{ date: SEED_HISTORY_AT.slice(0, 10), at: SEED_HISTORY_AT, value: SEED_HISTORY_VALUES[group] }];
+        changed = true;
+      }
     });
-    return { ...counters, history };
+    return changed ? { ...counters, history } : counters;
   }
 
   // Добавляет запись в журнал площадки group, только если значение реально изменилось
@@ -581,6 +587,42 @@ document.getElementById('article-content').innerHTML = '<p style="color:#d1d1d6;
     return { text: `${sign}${Math.abs(delta)} ${period}`, cls: delta > 0 ? 'up' : 'down' };
   }
 
+  // Вставляет запись в отсортированный по дате журнал (по возрастанию), заменяя
+  // существующую запись за ту же дату, если она уже есть — так форма «задним числом»
+  // безопасно исправляет опечатку, а не плодит дубли на одну дату.
+  function insertSortedEntry(list, entry) {
+    const next = list.filter((e) => e.date !== entry.date);
+    next.push(entry);
+    next.sort((a, b) => a.date.localeCompare(b.date) || a.at.localeCompare(b.at));
+    return next;
+  }
+
+  // Форма «Добавить запись задним числом» на вкладке «История» — для случаев вроде
+  // «журнал завели только сегодня, а вчерашнее значение помню и хочу видеть дельту
+  // уже сейчас», а не ждать следующего реального обновления. Трогает только
+  // counters.history[group] — текущие subscribers/updatedAt (то, что показывается на
+  // «Счётчиках» как самое свежее значение) этой формой не меняются.
+  async function saveBackdatedEntry() {
+    const group = $('#backfill-platform').value;
+    const dateStr = $('#backfill-date').value;
+    const val = parseInt($('#backfill-value').value, 10);
+    if (!dateStr) { toast('Выберите дату', 'error'); return; }
+    if (dateStr >= todayStr()) { toast('Эта форма только для прошедших дат — сегодняшнее значение сохраняется кнопками на «Счётчиках»', 'error'); return; }
+    if (Number.isNaN(val) || val < 0) { toast('Введите число подписчиков', 'error'); return; }
+    try {
+      const at = dateStr + 'T12:00:00.000Z';
+      await persistCounters((c) => {
+        const history = { ...(c.history || {}) };
+        history[group] = insertSortedEntry(history[group] || [], { date: dateStr, at, value: val });
+        return { ...c, history };
+      }, `Запись задним числом: ${group} ${dateStr} = ${val}`);
+      toast('Запись добавлена', 'success');
+      $('#backfill-value').value = '';
+      renderHistory();
+      renderCounters();
+    } catch (e) { toast('Ошибка сохранения: ' + e.message, 'error'); }
+  }
+
   /* ===================== Данные (GitHub) ===================== */
   async function loadAll() {
     renderAll(); // сразу показать расписание на сегодня, даже без данных из GitHub
@@ -600,10 +642,13 @@ document.getElementById('article-content').innerHTML = '<p style="color:#d1d1d6;
       annotateDuplicates();
       state.loaded = true;
       $('#header-sub').textContent = 'Синхронизировано ' + new Intl.DateTimeFormat('ru-RU', { hour: '2-digit', minute: '2-digit' }).format(new Date());
-      if (!state.counters.history) {
+      if (ensureSeedHistory(state.counters) !== state.counters) {
         try {
           await persistCounters((c) => ensureSeedHistory(c), 'Инициализация журнала подписчиков');
-        } catch (e) { console.warn('Не удалось завести журнал подписчиков', e); }
+        } catch (e) {
+          console.warn('Не удалось завести журнал подписчиков', e);
+          toast('Не удалось создать журнал подписчиков: ' + e.message, 'error');
+        }
       }
       renderAll();
     } catch (e) {
@@ -1341,6 +1386,8 @@ document.getElementById('article-content').innerHTML = '<p style="color:#d1d1d6;
     $('#btn-vk-subs-save').addEventListener('click', saveVkSubscribersManually);
     $('#btn-tg-baseline-save').addEventListener('click', () => saveBaseline('tg', '#tg-baseline-input'));
     $('#btn-vk-baseline-save').addEventListener('click', () => saveBaseline('vk', '#vk-baseline-input'));
+    $('#backfill-date').max = new Date(Date.now() - 86400000).toISOString().slice(0, 10);
+    $('#btn-backfill-save').addEventListener('click', saveBackdatedEntry);
 
     $('#btn-save-settings').addEventListener('click', () => {
       saveSettings(readSettingsForm());
