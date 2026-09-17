@@ -536,13 +536,19 @@ document.getElementById('article-content').innerHTML = '<p style="color:#d1d1d6;
   // withHistoryEntry ниже и эта функция больше ничего не трогает.
   const SEED_HISTORY_AT = '2026-09-17T14:06:00.000Z'; // 17 сентября 2026, 17:06 (МСК)
   const SEED_HISTORY_VALUES = { tg: 30, vk: 38, vc: 15 };
+  // Сидирует по группам, а не «весь counters.history целиком или ничего» — так журнал
+  // сам восстанавливается, если история отсутствует только у части площадок (например,
+  // из-за прерванной записи), а не только при полностью пустом counters.history.
   function ensureSeedHistory(counters) {
-    if (counters.history) return counters;
-    const history = {};
+    const history = { ...(counters.history || {}) };
+    let changed = false;
     Object.keys(SEED_HISTORY_VALUES).forEach((group) => {
-      history[group] = [{ date: SEED_HISTORY_AT.slice(0, 10), at: SEED_HISTORY_AT, value: SEED_HISTORY_VALUES[group] }];
+      if (!history[group] || !history[group].length) {
+        history[group] = [{ date: SEED_HISTORY_AT.slice(0, 10), at: SEED_HISTORY_AT, value: SEED_HISTORY_VALUES[group] }];
+        changed = true;
+      }
     });
-    return { ...counters, history };
+    return changed ? { ...counters, history } : counters;
   }
 
   // Добавляет запись в журнал площадки group, только если значение реально изменилось
@@ -600,10 +606,13 @@ document.getElementById('article-content').innerHTML = '<p style="color:#d1d1d6;
       annotateDuplicates();
       state.loaded = true;
       $('#header-sub').textContent = 'Синхронизировано ' + new Intl.DateTimeFormat('ru-RU', { hour: '2-digit', minute: '2-digit' }).format(new Date());
-      if (!state.counters.history) {
+      if (ensureSeedHistory(state.counters) !== state.counters) {
         try {
           await persistCounters((c) => ensureSeedHistory(c), 'Инициализация журнала подписчиков');
-        } catch (e) { console.warn('Не удалось завести журнал подписчиков', e); }
+        } catch (e) {
+          console.warn('Не удалось завести журнал подписчиков', e);
+          toast('Не удалось создать журнал подписчиков: ' + e.message, 'error');
+        }
       }
       renderAll();
     } catch (e) {
