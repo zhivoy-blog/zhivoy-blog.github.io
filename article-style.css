@@ -213,14 +213,14 @@ strong {
 .inline-cta {
     background-color: #1e2a3a;
     border: 1px solid var(--accent-blue);
-    border-radius: 12px;
-    padding: 16px;
-    margin: 20px 0;
+    border-radius: 6px;
+    padding: 8px;
+    margin: 10px 0;
     text-align: center
 }
 .inline-cta p {
-    margin: 0 0 10px;
-    font-size: 14px;
+    margin: 0 0 5px;
+    font-size: 11px;
     color: #d1d1d6
 }
 .inline-cta-btn {
@@ -229,7 +229,7 @@ strong {
     color: #fff;
     text-decoration: none;
     font-weight: 700;
-    font-size: 14px;
-    padding: 10px 18px;
-    border-radius: 10px
+    font-size: 11px;
+    padding: 5px 9px;
+    border-radius: 5px
 }

@@ -89,7 +89,7 @@
                 font-size: 14px;
             }
             .share-btn.vk { background-color: #0077ff; }
-            .share-btn.tg { background-color: #29a9eb; }
+            .share-btn.tg { background-color: var(--accent-blue, #007aff); }
             .share-btn.copy { background-color: #445b7c; cursor: pointer; border: none; }
             .scroll-top-btn {
                 position: fixed;
