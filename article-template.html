@@ -23,11 +23,34 @@ padding: 16px;
 max-width: 600px;
 margin: 0 auto
 }
-.site-header h1 {
+.site-header .site-logo {
 font-size: 20px;
 font-weight: 700;
 margin-bottom: 12px;
 color: #fff
+}
+.inline-cta {
+background-color: #1e2a3a;
+border: 1px solid var(--accent-blue, #007aff);
+border-radius: 12px;
+padding: 16px;
+margin: 20px 0;
+text-align: center
+}
+.inline-cta p {
+margin: 0 0 10px;
+font-size: 14px;
+color: #d1d1d6
+}
+.inline-cta-btn {
+display: inline-block;
+background-color: var(--accent-blue, #007aff);
+color: #fff;
+text-decoration: none;
+font-weight: 700;
+font-size: 14px;
+padding: 10px 18px;
+border-radius: 10px
 }
 .site-links {
 display: flex;
@@ -81,7 +104,7 @@ font-size: 14px
 <body>
 
 <header class="site-header">
-<h1>Живой ИИ</h1>
+<p class="site-logo">Живой ИИ</p>
 <div class="site-links">
 <a href="https://vk.ru/zhivoy_ai" target="_blank" rel="noopener noreferrer" class="btn-link vk">Мы в ВК</a>
 <a href="https://vc.ru/id6025411" target="_blank" rel="noopener noreferrer" class="btn-link vc">vc.ru</a>
@@ -166,6 +189,16 @@ if (src && !src.startsWith('http') && !src.startsWith('articles/')) {
 source.setAttribute('src', 'articles/' + slug + '/' + src);
 }
 });
+
+// Ранний CTA в Telegram сразу после первого абзаца — его видят и те, кто не дочитал статью до конца
+var firstP = tempDiv.querySelector('p');
+if (firstP) {
+var ctaHtml = '<div class="inline-cta">' +
+'<p>Такие разборы выходят у нас в Telegram каждый день</p>' +
+'<a href="https://t.me/zhivoy_ii" target="_blank" rel="noopener noreferrer" class="inline-cta-btn">Перейти в Telegram →</a>' +
+'</div>';
+firstP.insertAdjacentHTML('afterend', ctaHtml);
+}
 
 document.getElementById('article-content').innerHTML = tempDiv.innerHTML;
 

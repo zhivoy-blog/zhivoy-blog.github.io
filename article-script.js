@@ -348,8 +348,10 @@
     }
 
     /* Блок "Читать также" — теперь берёт реальные статьи из manifest.json, а не из зашитого списка */
+    let readMorePending = false;
     function initReadMore() {
-        if (document.querySelector('.read-more-block')) return;
+        if (readMorePending || document.querySelector('.read-more-block')) return;
+        readMorePending = true;
 
         fetch('articles/manifest.json')
             .then(function(response) {
@@ -389,6 +391,7 @@
                 }
             })
             .catch(function() {
+                readMorePending = false;
                 /* тихо ничего не показываем, если manifest недоступен */
             });
     }
