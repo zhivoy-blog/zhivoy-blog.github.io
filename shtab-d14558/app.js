@@ -13,6 +13,138 @@
   const TAGS = ['промпты', 'реальные-истории', 'лайфхаки', 'разбор'];
   const CTA_HTML = '<p align="center"><a href="https://t.me/zhivoy_ii" target="_blank" style="background-color: #0088cc; color: #ffffff; padding: 10px 20px; border-radius: 15px; text-decoration: none; display: inline-block;">Перейти в Telegram «ЖИВОЙ ИИ»</a></p>';
 
+  /* ===================== Генератор статической страницы статьи ===================== */
+  /* Раньше все статьи открывались через один article-template.html?article=slug и
+     подтягивали контент через JS уже после загрузки — из-за этого title/description/og:*
+     оставались одинаковыми (общими) для всех статей в сыром HTML, который видят
+     соцсети и часть поисковиков. Эта функция строит отдельную статическую страницу
+     articles/<slug>/index.html с правильными мета-тегами конкретной статьи; сам текст
+     статьи она по-прежнему подгружает через fetch('data.json') — как единственный
+     источник правды остаётся data.json, а не дублирующаяся копия HTML. */
+  function escapeHtmlAttr(str) {
+    return String(str || '')
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+  }
+  function truncateForMeta(text, maxLen) {
+    const clean = String(text || '').replace(/\s+/g, ' ').trim();
+    if (clean.length <= maxLen) return clean;
+    const cut = clean.slice(0, maxLen);
+    const lastSpace = cut.lastIndexOf(' ');
+    return (lastSpace > maxLen * 0.6 ? cut.slice(0, lastSpace) : cut).trim() + '…';
+  }
+  const SITE_FAVICON = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%23113154'/%3E%3Ctext x='50' y='68' font-size='58' font-family='Arial, sans-serif' font-weight='bold' fill='%23007aff' text-anchor='middle'%3EЖ%3C/text%3E%3C/svg%3E";
+
+  function buildArticlePageHtml({ slug, title, excerpt, ogImageFile }) {
+    const safeTitle = escapeHtmlAttr(title);
+    const description = escapeHtmlAttr(truncateForMeta(excerpt, 155));
+    const canonicalUrl = `https://zhivoy-ai.ru/articles/${slug}/`;
+    const ogImage = ogImageFile
+      ? `https://zhivoy-ai.ru/articles/${slug}/${ogImageFile}`
+      : 'https://zhivoy-ai.ru/og-cover.jpg';
+
+    return `<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title id="page-title">${safeTitle} — Живой ИИ</title>
+<meta name="description" content="${description}">
+
+<link rel="icon" href="${SITE_FAVICON}">
+
+<link rel="canonical" href="${canonicalUrl}">
+
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Живой ИИ">
+<meta property="og:title" content="${safeTitle}">
+<meta property="og:description" content="${description}">
+<meta property="og:image" content="${ogImage}">
+<meta property="og:url" content="${canonicalUrl}">
+<meta name="twitter:card" content="summary_large_image">
+
+<link rel="stylesheet" href="../../article-style.css">
+</head>
+<body>
+
+<header class="site-header">
+<p class="site-logo">Живой ИИ</p>
+<div class="site-links">
+<a href="https://vk.ru/zhivoy_ai" target="_blank" rel="noopener noreferrer" class="btn-link vk">Мы в ВК</a>
+<a href="https://vc.ru/id6025411" target="_blank" rel="noopener noreferrer" class="btn-link vc">vc.ru</a>
+<a href="https://t.me/zhivoy_ii" target="_blank" rel="noopener noreferrer" class="btn-link tg">Telegram</a>
+<a href="../../tools.html" class="btn-link tools">🛠️ Инструменты</a>
+</div>
+</header>
+
+<a href="../../index.html" class="back-link">← Назад к статьям</a>
+
+<article id="article-content">
+<p>Загрузка статьи...</p>
+</article>
+
+<footer class="site-footer">
+<div class="footer-links">
+<a href="https://vk.ru/zhivoy_ai" target="_blank" rel="noopener noreferrer">ВКонтакте</a>
+<a href="https://vc.ru/id6025411" target="_blank" rel="noopener noreferrer">vc.ru</a>
+<a href="https://t.me/zhivoy_ii" target="_blank" rel="noopener noreferrer">Telegram</a>
+</div>
+<p>© Живой ИИ</p>
+</footer>
+
+<script src="../../article-script.js"></script>
+<script>
+(function() {
+fetch('data.json?v=' + Date.now(), { cache: 'no-store' })
+.then(function(response) {
+if (!response.ok) throw new Error('Not found');
+return response.json();
+})
+.then(function(data) {
+var tempDiv = document.createElement('div');
+tempDiv.innerHTML = data.content;
+
+tempDiv.querySelectorAll('video').forEach(function(video) {
+video.setAttribute('playsinline', '');
+video.setAttribute('webkit-playsinline', '');
+video.setAttribute('loop', '');
+video.setAttribute('muted', '');
+video.setAttribute('controls', '');
+video.setAttribute('preload', 'auto');
+video.style.width = '100%';
+video.style.maxWidth = '100%';
+});
+
+var firstP = tempDiv.querySelector('p');
+if (firstP) {
+var ctaHtml = '<div class="inline-cta">' +
+'<p>Такие разборы выходят у нас в Telegram каждый день</p>' +
+'<a href="https://t.me/zhivoy_ii" target="_blank" rel="noopener noreferrer" class="inline-cta-btn">Перейти в Telegram →</a>' +
+'</div>';
+firstP.insertAdjacentHTML('afterend', ctaHtml);
+}
+
+document.getElementById('article-content').innerHTML = tempDiv.innerHTML;
+
+setTimeout(function() {
+if (typeof initAll === 'function') {
+initAll();
+}
+}, 100);
+})
+.catch(function() {
+document.getElementById('article-content').innerHTML = '<p style="color:#d1d1d6; text-align:center; padding:40px 0;">❌ Ошибка загрузки статьи. <a href="../../index.html" style="color:var(--accent-blue);">Вернуться к списку</a></p>';
+});
+})();
+</script>
+</body>
+</html>
+`;
+  }
+
   const LS_SETTINGS = 'zi_ctrl_settings_v1';
   const LS_PWHASH = 'zi_ctrl_pwhash_v1';
 
@@ -1023,9 +1155,13 @@
       manifest.unshift({ slug, title, date: todayStr(), tag, excerpt });
       await site.putJson('articles/manifest.json', manifest, `Добавление статьи в manifest: ${title}`, manifestRes ? manifestRes.sha : undefined);
 
+      const ogImageFile = cover ? `cover.${extOf(cover.name)}` : (inlineImages[0] ? `image1.${extOf(inlineImages[0].name)}` : null);
+      const pageHtml = buildArticlePageHtml({ slug, title, excerpt, ogImageFile });
+      await site.putText(`articles/${slug}/index.html`, pageHtml, `Страница статьи (мета-теги): ${title}`);
+
       post.siteTransfer = {
         status: 'published', title, slug, excerpt, tag, contentText,
-        publishedAt: nowIso(), articleUrl: `https://zhivoy-ai.ru/article-template.html?article=${slug}`,
+        publishedAt: nowIso(), articleUrl: `https://zhivoy-ai.ru/articles/${slug}/`,
       };
       await saveEditorPostSilently(post);
       toast('Статья опубликована на сайте', 'success');

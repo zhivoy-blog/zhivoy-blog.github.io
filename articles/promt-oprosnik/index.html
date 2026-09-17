@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title id="page-title">Промт-опрос: как получить от ИИ идеальный результат, если сам не знаешь, чего хочешь — Живой ИИ</title>
+<meta name="description" content="Переверните игру и заставьте ИИ самого допросить вас по одному простому вопросу за раз — и идеальный результат готов с первой попытки.">
+
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%23113154'/%3E%3Ctext x='50' y='68' font-size='58' font-family='Arial, sans-serif' font-weight='bold' fill='%23007aff' text-anchor='middle'%3EЖ%3C/text%3E%3C/svg%3E">
+
+<link rel="canonical" href="https://zhivoy-ai.ru/articles/promt-oprosnik/">
+
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Живой ИИ">
+<meta property="og:title" content="Промт-опрос: как получить от ИИ идеальный результат, если сам не знаешь, чего хочешь">
+<meta property="og:description" content="Переверните игру и заставьте ИИ самого допросить вас по одному простому вопросу за раз — и идеальный результат готов с первой попытки.">
+<meta property="og:image" content="https://zhivoy-ai.ru/articles/promt-oprosnik/promt-oprosnik.jpg">
+<meta property="og:url" content="https://zhivoy-ai.ru/articles/promt-oprosnik/">
+<meta name="twitter:card" content="summary_large_image">
+
+<link rel="stylesheet" href="../../article-style.css">
+</head>
+<body>
+
+<header class="site-header">
+<p class="site-logo">Живой ИИ</p>
+<div class="site-links">
+<a href="https://vk.ru/zhivoy_ai" target="_blank" rel="noopener noreferrer" class="btn-link vk">Мы в ВК</a>
+<a href="https://vc.ru/id6025411" target="_blank" rel="noopener noreferrer" class="btn-link vc">vc.ru</a>
+<a href="https://t.me/zhivoy_ii" target="_blank" rel="noopener noreferrer" class="btn-link tg">Telegram</a>
+<a href="../../tools.html" class="btn-link tools">🛠️ Инструменты</a>
+</div>
+</header>
+
+<a href="../../index.html" class="back-link">← Назад к статьям</a>
+
+<article id="article-content">
+<p>Загрузка статьи...</p>
+</article>
+
+<footer class="site-footer">
+<div class="footer-links">
+<a href="https://vk.ru/zhivoy_ai" target="_blank" rel="noopener noreferrer">ВКонтакте</a>
+<a href="https://vc.ru/id6025411" target="_blank" rel="noopener noreferrer">vc.ru</a>
+<a href="https://t.me/zhivoy_ii" target="_blank" rel="noopener noreferrer">Telegram</a>
+</div>
+<p>© Живой ИИ</p>
+</footer>
+
+<script src="../../article-script.js"></script>
+<script>
+(function() {
+fetch('data.json?v=' + Date.now(), { cache: 'no-store' })
+.then(function(response) {
+if (!response.ok) throw new Error('Not found');
+return response.json();
+})
+.then(function(data) {
+var tempDiv = document.createElement('div');
+tempDiv.innerHTML = data.content;
+
+tempDiv.querySelectorAll('video').forEach(function(video) {
+video.setAttribute('playsinline', '');
+video.setAttribute('webkit-playsinline', '');
+video.setAttribute('loop', '');
+video.setAttribute('muted', '');
+video.setAttribute('controls', '');
+video.setAttribute('preload', 'auto');
+video.style.width = '100%';
+video.style.maxWidth = '100%';
+});
+
+var firstP = tempDiv.querySelector('p');
+if (firstP) {
+var ctaHtml = '<div class="inline-cta">' +
+'<p>Такие разборы выходят у нас в Telegram каждый день</p>' +
+'<a href="https://t.me/zhivoy_ii" target="_blank" rel="noopener noreferrer" class="inline-cta-btn">Перейти в Telegram →</a>' +
+'</div>';
+firstP.insertAdjacentHTML('afterend', ctaHtml);
+}
+
+document.getElementById('article-content').innerHTML = tempDiv.innerHTML;
+
+setTimeout(function() {
+if (typeof initAll === 'function') {
+initAll();
+}
+}, 100);
+})
+.catch(function() {
+document.getElementById('article-content').innerHTML = '<p style="color:#d1d1d6; text-align:center; padding:40px 0;">❌ Ошибка загрузки статьи. <a href="../../index.html" style="color:var(--accent-blue);">Вернуться к списку</a></p>';
+});
+})();
+</script>
+</body>
+</html>

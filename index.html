@@ -489,7 +489,7 @@ excerpt.textContent = article.excerpt;
 
 var link = document.createElement('a');
 link.className = 'read-more';
-link.href = 'article-template.html?article=' + article.slug;
+link.href = 'articles/' + article.slug + '/';
 link.textContent = 'Читать полностью';
 
 card.appendChild(time);

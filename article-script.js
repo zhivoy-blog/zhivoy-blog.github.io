@@ -1,6 +1,15 @@
 (function() {
     'use strict';
 
+    /* Текущая статья открывается либо по /articles/<slug>/ (актуальная схема),
+       либо по старому article-template.html?article=<slug> (обратная совместимость) */
+    function getCurrentSlug() {
+        const qs = new URLSearchParams(window.location.search).get('article');
+        if (qs) return qs;
+        const m = window.location.pathname.match(/\/articles\/([^\/]+)\/?/);
+        return m ? m[1] : '';
+    }
+
     /* Внедряем стили, которые нужны новым блокам, — не завязываемся на внешний CSS-файл */
     function injectStyles() {
         if (document.getElementById('zhivoy-extra-styles')) return;
@@ -353,13 +362,13 @@
         if (readMorePending || document.querySelector('.read-more-block')) return;
         readMorePending = true;
 
-        fetch('articles/manifest.json')
+        fetch('../manifest.json')
             .then(function(response) {
                 if (!response.ok) throw new Error('Network error');
                 return response.json();
             })
             .then(function(articles) {
-                const currentSlug = new URLSearchParams(window.location.search).get('article') || '';
+                const currentSlug = getCurrentSlug();
                 const otherArticles = articles.filter(a => a.slug !== currentSlug);
                 if (!otherArticles.length) return;
 
@@ -373,7 +382,7 @@
                 selected.forEach(a => {
                     const link = document.createElement('a');
                     link.className = 'read-more-link';
-                    link.href = 'article-template.html?article=' + a.slug;
+                    link.href = '../' + a.slug + '/';
                     link.textContent = a.title;
                     block.appendChild(link);
                 });
@@ -398,7 +407,7 @@
 
     /* Реакции и счётчик просмотров (локально, по устройству посетителя) */
     function initReactions() {
-        const currentSlug = new URLSearchParams(window.location.search).get('article') || 'index';
+        const currentSlug = getCurrentSlug() || 'index';
         const storageKey = 'article_' + currentSlug;
 
         if (document.querySelector('.article-reactions')) return;
