@@ -79,6 +79,28 @@
       return data.content.sha;
     }
 
+    /** Создаёт или обновляет текстовый файл (например, готовую HTML-страницу). Возвращает новый sha. */
+    async putText(path, text, message, sha) {
+      let currentSha = sha;
+      if (currentSha === undefined) {
+        const existing = await this._request(`${this.apiUrl(path)}?ref=${encodeURIComponent(this.branch)}`);
+        if (existing.status === 200) {
+          const data = await existing.json();
+          currentSha = data.sha;
+        }
+      }
+      const body = { message, content: utf8ToBase64(text), branch: this.branch };
+      if (currentSha) body.sha = currentSha;
+      const res = await this._request(this.apiUrl(path), {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body),
+      });
+      if (!res.ok) throw await this._err('Не удалось сохранить ' + path, res);
+      const data = await res.json();
+      return data.content.sha;
+    }
+
     /** Читает JSON, если нет — создаёт со значением по умолчанию. */
     async ensureJson(path, defaultObj, message) {
       const existing = await this.getJson(path);

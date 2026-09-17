@@ -148,3 +148,88 @@ strong {
     line-height: 1.5;
     overflow-x: auto
 }
+
+/* ===== Общая шапка/подвал статьи (используется во всех articles/<slug>/index.html) ===== */
+.site-header {
+    text-align: center;
+    padding: 16px;
+    max-width: 600px;
+    margin: 0 auto
+}
+.site-header .site-logo {
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 12px;
+    color: #fff
+}
+.site-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center
+}
+.btn-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 1 1 120px;
+    max-width: 170px;
+    color: white;
+    text-align: center;
+    padding: 12px 14px;
+    border-radius: 12px;
+    font-weight: 700;
+    text-decoration: none;
+    font-size: 13px
+}
+.btn-link.vk { background-color: #0077ff; }
+.btn-link.vc { background-color: #ff5c00; }
+.btn-link.tg { background-color: #007aff; }
+.btn-link.tools { background-color: #34c759; }
+
+.site-footer {
+    max-width: 600px;
+    margin: 32px auto 10px;
+    padding: 20px 16px 10px;
+    border-top: 1px solid rgba(255,255,255,0.1);
+    text-align: center;
+    color: #8e9eaf;
+    font-size: 13px
+}
+.site-footer .footer-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    justify-content: center;
+    margin-bottom: 10px
+}
+.site-footer .footer-links a {
+    color: #007aff;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 14px
+}
+
+.inline-cta {
+    background-color: #1e2a3a;
+    border: 1px solid var(--accent-blue);
+    border-radius: 12px;
+    padding: 16px;
+    margin: 20px 0;
+    text-align: center
+}
+.inline-cta p {
+    margin: 0 0 10px;
+    font-size: 14px;
+    color: #d1d1d6
+}
+.inline-cta-btn {
+    display: inline-block;
+    background-color: var(--accent-blue);
+    color: #fff;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 14px;
+    padding: 10px 18px;
+    border-radius: 10px
+}
