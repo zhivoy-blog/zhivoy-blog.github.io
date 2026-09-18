@@ -36,10 +36,65 @@
     const lastSpace = cut.lastIndexOf(' ');
     return (lastSpace > maxLen * 0.6 ? cut.slice(0, lastSpace) : cut).trim() + '…';
   }
+  /* <title>/og:title не должны обрезаться поисковой выдачей на середине слова —
+     Google обычно показывает не больше ~60 символов. Полный заголовок при этом
+     остаётся в <h1> статьи как есть, эта функция трогает только мета-теги.
+     Ищем самую длинную точку обрезки (граница слова, «:»/«—»/открывающая «[»,
+     или конец предложения/закрывающая «»), которая не рвёт слово пополам,
+     не оставляет незакрытую скобку/кавычку и не обрывается на предлоге,
+     местоимении или числе без единицы — такое хвостовое слово тоже отбрасываем. */
+  const TITLE_DANGLING_WORDS = new Set([
+    'и', 'а', 'но', 'не', 'на', 'из', 'за', 'для', 'что', 'как', 'это', 'у', 'к', 'с', 'в', 'о', 'об', 'обо', 'со', 'во',
+    'до', 'от', 'по', 'же', 'ли', 'бы', 'то', 'из-за', 'из-под', 'ради', 'вроде', 'кроме', 'чуть',
+    'какой', 'какая', 'какое', 'какие', 'чей', 'чья', 'чьё', 'чьи', 'любой', 'любая', 'любое', 'любые',
+    'всех', 'всей', 'всего', 'весь', 'вся', 'всё', 'одной', 'одного', 'этой', 'этого', 'той', 'того',
+    'твою', 'твой', 'твоё', 'его', 'её', 'их', 'свою', 'своего', 'своей',
+    'он', 'она', 'оно', 'они', 'ему', 'ей', 'им', 'нём', 'ней',
+    'который', 'которая', 'которое', 'которые', 'которых', 'которым', 'которой',
+    'чтобы', 'если', 'когда', 'пока', 'хотя', 'потому', 'поэтому', 'словно', 'будто', 'лишь', 'только',
+    'ещё', 'уже', 'такой', 'такая', 'такое', 'такие', 'так', 'надо', 'нужно', 'можно', 'нельзя',
+  ]);
+  function shortenTitle(title, maxLen) {
+    const clean = String(title || '').replace(/\s+/g, ' ').trim();
+    if (clean.length <= maxLen) return clean;
+    const MIN_KEEP = 12;
+    const budget = clean.slice(0, maxLen);
+    const positions = new Set();
+    let m;
+    const spaceRe = /\s/g;
+    while ((m = spaceRe.exec(budget))) positions.add(m.index);
+    const beforeRe = /[:—[]/g;
+    while ((m = beforeRe.exec(budget))) positions.add(m.index);
+    const afterRe = /[.!?»]/g;
+    while ((m = afterRe.exec(budget))) positions.add(m.index + 1);
+
+    const isBalanced = (s) => s.split('[').length - 1 <= s.split(']').length - 1
+      && s.split('«').length - 1 <= s.split('»').length - 1;
+    const lastWordOk = (s) => {
+      const words = s.trim().split(' ');
+      const w = words[words.length - 1].toLowerCase().replace(/^[«"]+|[»":,.!?—]+$/g, '');
+      return w !== '' && !TITLE_DANGLING_WORDS.has(w) && !/^\d+$/.test(w);
+    };
+
+    let best = null;
+    for (const pos of Array.from(positions).sort((a, b) => b - a)) {
+      if (pos < MIN_KEEP || pos > maxLen) continue;
+      const cand = budget.slice(0, pos).trim();
+      if (!cand || !isBalanced(cand) || !lastWordOk(cand)) continue;
+      best = cand;
+      break;
+    }
+    let trimmed = best || budget.trim();
+    if (!trimmed.endsWith('»')) trimmed = trimmed.replace(/[:,;.\-–—]+$/, '').trim();
+    trimmed = trimmed.replace(/\.{2,}$/, '').trim();
+    return trimmed;
+  }
   const SITE_FAVICON = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%23113154'/%3E%3Ctext x='50' y='68' font-size='58' font-family='Arial, sans-serif' font-weight='bold' fill='%23007aff' text-anchor='middle'%3EЖ%3C/text%3E%3C/svg%3E";
 
+  const TITLE_TAG_SUFFIX = ' — Живой ИИ';
+
   function buildArticlePageHtml({ slug, title, excerpt, ogImageFile }) {
-    const safeTitle = escapeHtmlAttr(title);
+    const safeShortTitle = escapeHtmlAttr(shortenTitle(title, 60 - TITLE_TAG_SUFFIX.length));
     const description = escapeHtmlAttr(truncateForMeta(excerpt, 155));
     const canonicalUrl = `https://zhivoy-ai.ru/articles/${slug}/`;
     const ogImage = ogImageFile
@@ -51,7 +106,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title id="page-title">${safeTitle} — Живой ИИ</title>
+<title id="page-title">${safeShortTitle}${TITLE_TAG_SUFFIX}</title>
 <meta name="description" content="${description}">
 
 <link rel="icon" href="${SITE_FAVICON}">
@@ -60,7 +115,7 @@
 
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="Живой ИИ">
-<meta property="og:title" content="${safeTitle}">
+<meta property="og:title" content="${safeShortTitle}">
 <meta property="og:description" content="${description}">
 <meta property="og:image" content="${ogImage}">
 <meta property="og:url" content="${canonicalUrl}">
