@@ -1234,6 +1234,7 @@ document.getElementById('article-content').innerHTML = '<p style="color:#d1d1d6;
     $('#site-title').value = st.title || post.topic || '';
     $('#site-slug').value = st.slug || '';
     $('#site-excerpt').value = st.excerpt || '';
+    $('#site-cover-alt').value = st.coverAlt || '';
     $('#site-content').value = st.contentText != null ? st.contentText : htmlToPlainFallback(st.content);
     const chips = $('#site-tag-chips');
     chips.innerHTML = TAGS.map((t) => `<button type="button" class="chip${st.tag === t ? ' active' : ''}" data-tag="${t}">${t}</button>`).join('');
@@ -1276,6 +1277,7 @@ document.getElementById('article-content').innerHTML = '<p style="color:#d1d1d6;
     const title = $('#site-title').value.trim();
     const slug = $('#site-slug').value.trim();
     const excerpt = $('#site-excerpt').value.trim();
+    const coverAlt = $('#site-cover-alt').value.trim() || title;
     const contentText = $('#site-content').value;
     const tagChip = $('#site-tag-chips .chip.active');
     const tag = tagChip ? tagChip.dataset.tag : TAGS[0];
@@ -1297,7 +1299,7 @@ document.getElementById('article-content').innerHTML = '<p style="color:#d1d1d6;
       }
 
       let content = '';
-      if (cover) content += `<img src="cover.${extOf(cover.name)}" alt="Обложка статьи" style="max-width: 100%; border-radius: 12px; margin: 20px 0;">`;
+      if (cover) content += `<img src="cover.${extOf(cover.name)}" alt="${escapeHtmlAttr(coverAlt)}" style="max-width: 100%; border-radius: 12px; margin: 20px 0;">`;
       content += textToArticleHtml(contentText);
       inlineImages.forEach((img, i) => {
         content += `<img src="image${i + 1}.${extOf(img.name)}" alt="" style="max-width: 100%; border-radius: 12px; margin: 20px 0;">`;
@@ -1317,7 +1319,7 @@ document.getElementById('article-content').innerHTML = '<p style="color:#d1d1d6;
       await site.putText(`articles/${slug}/index.html`, pageHtml, `Страница статьи (мета-теги): ${title}`);
 
       post.siteTransfer = {
-        status: 'published', title, slug, excerpt, tag, contentText,
+        status: 'published', title, slug, excerpt, tag, contentText, coverAlt,
         publishedAt: nowIso(), articleUrl: `https://zhivoy-ai.ru/articles/${slug}/`,
       };
       await saveEditorPostSilently(post);
