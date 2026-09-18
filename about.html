@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>О нас — Живой ИИ</title>
+<meta name="description" content="Кто и как делает «Живой ИИ»: сайт, Telegram-канал и сообщество ВКонтакте про нейросети, собранные с телефона без опыта программирования.">
+
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%23113154'/%3E%3Ctext x='50' y='68' font-size='58' font-family='Arial, sans-serif' font-weight='bold' fill='%23007aff' text-anchor='middle'%3EЖ%3C/text%3E%3C/svg%3E">
+
+<link rel="canonical" href="https://zhivoy-ai.ru/about.html">
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Живой ИИ">
+<meta property="og:title" content="О нас — Живой ИИ">
+<meta property="og:description" content="Кто и как делает «Живой ИИ»: сайт, Telegram-канал и сообщество ВКонтакте про нейросети, собранные с телефона без опыта программирования.">
+<meta property="og:url" content="https://zhivoy-ai.ru/about.html">
+<meta property="og:image" content="https://zhivoy-ai.ru/og-cover.jpg">
+<meta name="twitter:card" content="summary_large_image">
+
+<style>
+:root {
+--bg-color: #113154;
+--card-bg: #1b436d;
+--accent-blue: #007aff;
+--accent-green: #34c759;
+--text-main: #ffffff;
+--text-muted: #8e9e93;
+--text-muted-alt: #8e9eaf;
+--border-color: #0088cc
+}
+[data-theme="light"] {
+--bg-color: #eef2f7;
+--card-bg: #ffffff;
+--text-main: #11213a;
+--text-muted: #5b6b82;
+--text-muted-alt: #5b6b82;
+--border-color: #cfd8e3
+}
+* {
+box-sizing: border-box;
+margin: 0;
+padding: 0
+}
+body {
+font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+background-color: var(--bg-color);
+color: var(--text-main);
+line-height: 1.5;
+padding: 16px;
+min-height: 100vh;
+display: flex;
+flex-direction: column;
+align-items: center;
+transition: background-color 0.3s ease, color 0.3s ease
+}
+.header, .page-wrap, .site-footer {
+width: 100%;
+max-width: 640px
+}
+.header {
+text-align: center;
+padding: 12px 0 16px;
+position: relative
+}
+.theme-toggle {
+position: absolute;
+top: 12px;
+right: 0;
+background-color: transparent;
+border: 1px solid var(--border-color);
+color: var(--text-main);
+width: 40px;
+height: 40px;
+border-radius: 50%;
+font-size: 18px;
+cursor: pointer;
+display: flex;
+align-items: center;
+justify-content: center;
+box-shadow: 0 0 14px rgba(0, 122, 255, 0.25)
+}
+.header h1 {
+font-size: 22px;
+font-weight: 700;
+margin-bottom: 14px
+}
+.site-links {
+display: flex;
+flex-wrap: wrap;
+gap: 10px;
+justify-content: center
+}
+.btn-link {
+display: inline-flex;
+align-items: center;
+justify-content: center;
+flex: 1 1 140px;
+max-width: 180px;
+background-color: var(--accent-blue);
+color: #fff;
+text-align: center;
+padding: 14px 16px;
+border-radius: 12px;
+font-weight: 700;
+text-decoration: none;
+font-size: 14px;
+letter-spacing: 0.3px;
+box-shadow: 0 0 16px rgba(0, 122, 255, 0.45)
+}
+.btn-link.vk { background-color: #0077ff }
+.btn-link.vc { background-color: #ff5c00; box-shadow: 0 0 16px rgba(255, 92, 0, 0.45) }
+.btn-link.tools { background-color: var(--accent-green); box-shadow: 0 0 16px rgba(52, 199, 89, 0.45) }
+.btn-link:active { transform: scale(0.97) }
+.back-link {
+display: inline-flex;
+align-items: center;
+color: var(--accent-blue);
+text-decoration: none;
+font-size: 15px;
+font-weight: 600;
+margin: 4px 0 18px;
+gap: 4px
+}
+.about-card {
+background-color: var(--card-bg);
+border-radius: 16px;
+padding: 24px 20px;
+border: 1px solid var(--border-color);
+box-shadow: 0 0 16px rgba(0, 122, 255, 0.18)
+}
+.about-card h2 {
+font-size: 20px;
+font-weight: 700;
+margin-bottom: 16px
+}
+.about-card p {
+font-size: 15px;
+color: var(--text-main);
+margin-bottom: 16px
+}
+.about-card p:last-child {
+margin-bottom: 0
+}
+.site-footer {
+margin-top: 24px;
+padding: 20px 0 10px;
+border-top: 1px solid rgba(255,255,255,0.1);
+text-align: center;
+color: var(--text-muted-alt);
+font-size: 13px
+}
+.site-footer .footer-links {
+display: flex;
+flex-wrap: wrap;
+gap: 14px;
+justify-content: center;
+margin-bottom: 10px
+}
+.site-footer .footer-links a {
+color: var(--accent-blue);
+text-decoration: none;
+font-weight: 600;
+font-size: 14px
+}
+</style>
+</head>
+<body>
+<header class="header">
+<button class="theme-toggle" id="theme-toggle" aria-label="Переключить тему">🌙</button>
+<h1>Живой ИИ</h1>
+<div class="site-links">
+<a href="https://vk.ru/zhivoy_ai" target="_blank" rel="noopener noreferrer" class="btn-link vk">Мы в ВК</a>
+<a href="https://vc.ru/id6025411" target="_blank" rel="noopener noreferrer" class="btn-link vc">Блог на vc.ru</a>
+<a href="https://t.me/zhivoy_ii" target="_blank" rel="noopener noreferrer" class="btn-link tg">Мы в ТГ</a>
+<a href="tools.html" class="btn-link tools">🛠️ Инструменты</a>
+</div>
+</header>
+
+<div class="page-wrap">
+<a href="index.html" class="back-link">← На главную</a>
+
+<div class="about-card">
+<h2>О нас</h2>
+<p>Меня зовут Вадим. Я не программист и не эксперт по нейросетям — обычный человек, который случайно наткнулся на AI Mode в поиске Google Chrome, разговорился с нейросетью — и понеслось. За месяц с небольшим появился этот сайт, Telegram-канал и сообщество ВКонтакте — и то, и другое я завёл впервые в жизни.</p>
+<p>Я веду весь проект с телефона и планшета — без компьютера, без клавиатуры и мыши. Даже домен для сайта покупал с телефона. Сам сайт построен и обновляется через Claude Code — я объясняю нейросети, что нужно сделать, а код пишет она.</p>
+<p>Здесь я делюсь только тем, что сам изучил, прошёл и прощупал руками — ничего с чужих слов и ничего непроверенного. Не сверху вниз как учитель — я такой же новичок, как и вы, просто чуть дальше по пути.</p>
+</div>
+</div>
+
+<footer class="site-footer">
+<div class="footer-links">
+<a href="https://vk.ru/zhivoy_ai" target="_blank" rel="noopener noreferrer">ВКонтакте</a>
+<a href="https://vc.ru/id6025411" target="_blank" rel="noopener noreferrer">vc.ru</a>
+<a href="https://t.me/zhivoy_ii" target="_blank" rel="noopener noreferrer">Telegram</a>
+<a href="about.html">О нас</a>
+</div>
+<p>© Живой ИИ</p>
+</footer>
+
+<script>
+(function() {
+var toggle = document.getElementById('theme-toggle');
+var saved = localStorage.getItem('zhivoy-theme') || 'dark';
+applyTheme(saved);
+function applyTheme(theme) {
+if (theme === 'light') {
+document.documentElement.setAttribute('data-theme', 'light');
+toggle.textContent = '☀️';
+} else {
+document.documentElement.removeAttribute('data-theme');
+toggle.textContent = '🌙';
+}
+}
+toggle.addEventListener('click', function() {
+var current = document.documentElement.getAttribute('data-theme') === 'light' ? 'light' : 'dark';
+var next = current === 'light' ? 'dark' : 'light';
+localStorage.setItem('zhivoy-theme', next);
+applyTheme(next);
+});
+})();
+</script>
+</body>
+</html>
