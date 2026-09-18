@@ -1117,6 +1117,7 @@ document.getElementById('article-content').innerHTML = '<p style="color:#d1d1d6;
 
     renderImageGrid('#editor-cover-grid', post.images.filter((i) => i.role === 'cover'), 'cover');
     renderImageGrid('#editor-inline-grid', post.images.filter((i) => i.role === 'inline'), 'inline');
+    renderInlineAltList(post);
 
     $('#btn-publish-tg').hidden = def.group !== 'tg';
     $('#btn-publish-vk').hidden = def.group !== 'vk';
@@ -1166,6 +1167,23 @@ document.getElementById('article-content').innerHTML = '<p style="color:#d1d1d6;
         const target = inRole[idx];
         post.images = post.images.filter((i) => i !== target);
         renderEditor();
+      });
+    });
+  }
+
+  function renderInlineAltList(post) {
+    const list = $('#editor-inline-alt-list');
+    const inlineImages = post.images.filter((i) => i.role === 'inline');
+    list.innerHTML = inlineImages.map((img, i) => `
+      <div class="inline-alt-row">
+        <img src="${img.url}" alt="">
+        <input type="text" data-inline-alt-idx="${i}" value="${escapeHtmlAttr(img.alt || '')}" placeholder="Что на картинке (необязательно)">
+      </div>
+    `).join('');
+    list.querySelectorAll('[data-inline-alt-idx]').forEach((input) => {
+      input.addEventListener('change', () => {
+        const idx = Number(input.dataset.inlineAltIdx);
+        inlineImages[idx].alt = input.value.trim();
       });
     });
   }
@@ -1358,7 +1376,7 @@ document.getElementById('article-content').innerHTML = '<p style="color:#d1d1d6;
       if (cover) content += `<img src="cover.${extOf(cover.name)}" alt="${escapeHtmlAttr(coverAlt)}" style="max-width: 100%; border-radius: 12px; margin: 20px 0;">`;
       content += textToArticleHtml(contentText);
       inlineImages.forEach((img, i) => {
-        content += `<img src="image${i + 1}.${extOf(img.name)}" alt="" style="max-width: 100%; border-radius: 12px; margin: 20px 0;">`;
+        content += `<img src="image${i + 1}.${extOf(img.name)}" alt="${escapeHtmlAttr(img.alt || '')}" style="max-width: 100%; border-radius: 12px; margin: 20px 0;">`;
       });
       content += CTA_HTML;
 
