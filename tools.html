@@ -93,14 +93,13 @@ box-shadow: 0 0 16px rgba(0, 122, 255, 0.45)
 
 /* --- Вкладки --- */
 .tabs {
-display: flex; gap: 8px; overflow-x: auto; -webkit-overflow-scrolling: touch;
-padding: 4px 2px 12px; margin-bottom: 6px; scrollbar-width: none
+display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 8px;
+padding: 4px 2px 12px; margin-bottom: 6px
 }
-.tabs::-webkit-scrollbar { display: none }
 .tab-btn {
-flex: 0 0 auto; background-color: var(--card-bg); border: 1px solid var(--border-color);
-color: var(--text-main); padding: 12px 16px; border-radius: 12px; font-size: 14px; font-weight: 600;
-cursor: pointer; white-space: nowrap; min-height: 46px; display: inline-flex; align-items: center; gap: 6px
+background-color: var(--card-bg); border: 1px solid var(--border-color);
+color: var(--text-main); padding: 12px 10px; border-radius: 12px; font-size: 14px; font-weight: 600;
+cursor: pointer; min-height: 46px; display: inline-flex; align-items: center; justify-content: center; gap: 6px; text-align: center
 }
 .tab-btn.active { background-color: var(--accent-blue); border-color: var(--accent-blue); color: #fff }
 
@@ -265,13 +264,13 @@ ym(112807526, "init", {ssr:true, webvisor:true, clickmap:true, referrer: documen
 <div id="compress-controls" hidden>
 <div class="field">
 <label>Качество: <span id="compress-quality-val">70</span>%</label>
-<div class="preset-row">
+<div class="preset-row" id="compress-quality-presets">
 <button class="preset-btn" data-q="0.9">Высокое</button>
 <button class="preset-btn active" data-q="0.7">Среднее</button>
 <button class="preset-btn" data-q="0.45">Максимальная экономия</button>
 </div>
 <input type="range" id="compress-quality" min="5" max="100" value="70">
-<p class="hint">Хотите сжать этот же файл ещё сильнее? Просто уменьшите значение качества относительно того, что было в прошлый раз.</p>
+<p class="hint">Чем ниже качество, тем меньше файл, но хуже картинка.</p>
 </div>
 
 <div class="field" id="compress-format-field">
@@ -283,6 +282,10 @@ ym(112807526, "init", {ssr:true, webvisor:true, clickmap:true, referrer: documen
 </div>
 
 <div id="compress-single" hidden>
+<div class="preset-row" id="compress-view-toggle">
+<button class="preset-btn" data-view="original">Оригинал</button>
+<button class="preset-btn active" data-view="compressed">Сжатое</button>
+</div>
 <div class="preview-img-wrap"><canvas id="compress-canvas"></canvas></div>
 <div class="size-compare">
 <div class="size-box"><div class="val" id="compress-before">—</div><div class="lbl">было</div></div>
@@ -436,16 +439,25 @@ ym(112807526, "init", {ssr:true, webvisor:true, clickmap:true, referrer: documen
 <label>Качество</label>
 <input type="range" id="convert-quality" min="5" max="100" value="90">
 </div>
+<div class="field" id="convert-pdf-pagesize-field" hidden>
+<label>Размер страницы PDF</label>
+<select id="convert-pdf-pagesize">
+<option value="a4" selected>A4</option>
+<option value="image">Как у картинки</option>
+</select>
+</div>
 <p class="hint" id="convert-format-note"></p>
 
 <div id="convert-single" hidden>
 <div class="preview-img-wrap"><canvas id="convert-canvas"></canvas></div>
 <p class="hint" id="convert-orig-info"></p>
+<p class="hint" id="convert-size-estimate"></p>
 <button class="btn success" id="convert-download">Скачать результат</button>
 </div>
 
 <div id="convert-batch" hidden>
 <p class="hint">Выбрано файлов: <b id="convert-batch-count">0</b>. Настройте формат и качество выше, затем нажмите «Обработать все».</p>
+<p class="hint" id="convert-batch-pdf-note" hidden>Для PDF все выбранные фото объединятся в один файл — по одному фото на странице, в том порядке, в котором вы их выбрали.</p>
 <button class="btn primary" id="convert-batch-process">Обработать все файлы</button>
 <div class="batch-list" id="convert-batch-list"></div>
 <button class="btn success" id="convert-batch-zip" disabled>Скачать всё в ZIP</button>
@@ -1020,12 +1032,17 @@ view.setUint8(dst++, img[srcIdx + 2]);
 return Promise.resolve(new Blob([buffer], { type: 'image/tiff' }));
 }
 
-function canvasToPDFBlob(canvas) {
-return new Promise(function(resolve) {
-canvas.toBlob(function(jpegBlob) {
-jpegBlob.arrayBuffer().then(function(buf) {
-var jpegBytes = new Uint8Array(buf);
-var w = canvas.width, h = canvas.height;
+// pageSizeMode: 'image' (страница = размер картинки в px) или 'a4' (лист A4, картинка
+// вписывается с полями по центру, пропорции сохраняются, без обрезки).
+function buildMultiPagePdfBlob(canvases, pageSizeMode, quality) {
+var jpegQuality = typeof quality === 'number' ? quality : 0.92;
+return Promise.all(canvases.map(function(c) {
+return canvasToBlob(c, 'image/jpeg', jpegQuality).then(function(blob) {
+return blob.arrayBuffer();
+}).then(function(buf) {
+return new Uint8Array(buf);
+});
+})).then(function(jpegByteArrays) {
 var enc = new TextEncoder();
 var chunks = [];
 var offset = 0;
@@ -1040,49 +1057,84 @@ objOffsets[num] = offset;
 push(num + ' 0 obj\n');
 }
 
+var A4_PORTRAIT = [595, 842];
+var A4_LANDSCAPE = [842, 595];
+var MARGIN = 36;
+var n = canvases.length;
+var numRealObjs = 2 + n * 3;
+
 push('%PDF-1.4\n');
 
 startObj(1);
 push('<< /Type /Catalog /Pages 2 0 R >>\nendobj\n');
 
+var kidsRefs = [];
+for (var i = 0; i < n; i++) { kidsRefs.push((3 + i * 3) + ' 0 R'); }
 startObj(2);
-push('<< /Type /Pages /Kids [3 0 R] /Count 1 >>\nendobj\n');
+push('<< /Type /Pages /Kids [' + kidsRefs.join(' ') + '] /Count ' + n + ' >>\nendobj\n');
 
-startObj(3);
-push('<< /Type /Page /Parent 2 0 R /MediaBox [0 0 ' + w + ' ' + h + '] /Resources << /XObject << /Im0 4 0 R >> >> /Contents 5 0 R >>\nendobj\n');
+for (var pIdx = 0; pIdx < n; pIdx++) {
+var c = canvases[pIdx];
+var w = c.width, h = c.height;
+var pageObjNum = 3 + pIdx * 3;
+var imgObjNum = pageObjNum + 1;
+var contentObjNum = pageObjNum + 2;
 
-startObj(4);
+var pageW, pageH, drawW, drawH, drawX, drawY;
+if (pageSizeMode === 'a4') {
+var dims = (w > h) ? A4_LANDSCAPE : A4_PORTRAIT;
+pageW = dims[0]; pageH = dims[1];
+var availW = pageW - MARGIN * 2;
+var availH = pageH - MARGIN * 2;
+var scale = Math.min(availW / w, availH / h);
+drawW = w * scale;
+drawH = h * scale;
+drawX = (pageW - drawW) / 2;
+drawY = (pageH - drawH) / 2;
+} else {
+pageW = w; pageH = h;
+drawW = w; drawH = h;
+drawX = 0; drawY = 0;
+}
+
+startObj(pageObjNum);
+push('<< /Type /Page /Parent 2 0 R /MediaBox [0 0 ' + pageW + ' ' + pageH + '] /Resources << /XObject << /Im0 ' + imgObjNum + ' 0 R >> >> /Contents ' + contentObjNum + ' 0 R >>\nendobj\n');
+
+var jpegBytes = jpegByteArrays[pIdx];
+startObj(imgObjNum);
 push('<< /Type /XObject /Subtype /Image /Width ' + w + ' /Height ' + h + ' /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length ' + jpegBytes.length + ' >>\nstream\n');
 push(jpegBytes);
 push('\nendstream\nendobj\n');
 
-var contentStream = 'q ' + w + ' 0 0 ' + h + ' 0 0 cm /Im0 Do Q';
+var contentStream = 'q ' + drawW + ' 0 0 ' + drawH + ' ' + drawX + ' ' + drawY + ' cm /Im0 Do Q';
 var contentBytes = enc.encode(contentStream);
-startObj(5);
+startObj(contentObjNum);
 push('<< /Length ' + contentBytes.length + ' >>\nstream\n');
 push(contentBytes);
 push('\nendstream\nendobj\n');
+}
 
 var xrefOffset = offset;
-var totalObjs = 6;
-var xref = 'xref\n0 ' + totalObjs + '\n0000000000 65535 f \n';
-for (var i = 1; i <= 5; i++) {
-xref += String(objOffsets[i]).padStart(10, '0') + ' 00000 n \n';
+var xref = 'xref\n0 ' + (numRealObjs + 1) + '\n0000000000 65535 f \n';
+for (var oi = 1; oi <= numRealObjs; oi++) {
+xref += String(objOffsets[oi]).padStart(10, '0') + ' 00000 n \n';
 }
 push(xref);
-push('trailer\n<< /Size ' + totalObjs + ' /Root 1 0 R >>\nstartxref\n' + xrefOffset + '\n%%EOF');
+push('trailer\n<< /Size ' + (numRealObjs + 1) + ' /Root 1 0 R >>\nstartxref\n' + xrefOffset + '\n%%EOF');
 
 var totalLen = chunks.reduce(function(s, c) { return s + c.length; }, 0);
 var out = new Uint8Array(totalLen);
 var pos = 0;
 chunks.forEach(function(c) { out.set(c, pos); pos += c.length; });
-resolve(new Blob([out], { type: 'application/pdf' }));
-});
-}, 'image/jpeg', 0.92);
+return new Blob([out], { type: 'application/pdf' });
 });
 }
 
-function encodeCanvasToFormat(canvas, mime, quality) {
+function canvasToPDFBlob(canvas, pageSizeMode, quality) {
+return buildMultiPagePdfBlob([canvas], pageSizeMode, quality);
+}
+
+function encodeCanvasToFormat(canvas, mime, quality, pdfPageSize) {
 if (mime === 'image/jpeg' || mime === 'image/png' || mime === 'image/webp') {
 return canvasToBlob(canvas, mime, quality);
 }
@@ -1090,7 +1142,7 @@ if (mime === 'image/bmp') return canvasToBMPBlob(canvas);
 if (mime === 'image/x-icon') return canvasToICOBlob(canvas);
 if (mime === 'image/gif') return canvasToGIFBlob(canvas);
 if (mime === 'image/tiff') return canvasToTIFFBlob(canvas);
-if (mime === 'application/pdf') return canvasToPDFBlob(canvas);
+if (mime === 'application/pdf') return canvasToPDFBlob(canvas, pdfPageSize || 'image', quality);
 return canvasToBlob(canvas, 'image/jpeg', quality);
 }
 
@@ -1242,6 +1294,8 @@ return { name: nameToUse, data: null, blob: r.result.blob };
 Promise.all(zipFiles.map(function(zf) { return zf.blob.arrayBuffer().then(function(buf) { zf.data = new Uint8Array(buf); }); })).then(function() {
 var zipBlob = buildZipBlob(zipFiles);
 downloadBlob(zipBlob, 'images.zip');
+statusEl.textContent = 'Файл сохранён в папку «Загрузки».';
+statusEl.className = 'status-msg';
 });
 };
 }
@@ -1409,15 +1463,19 @@ var afterEl = document.getElementById('compress-after');
 var qualityValEl = document.getElementById('compress-quality-val');
 var statusEl = document.getElementById('compress-status');
 var downloadBtn = document.getElementById('compress-download');
+var viewToggle = document.getElementById('compress-view-toggle');
 var originalBytes = 0;
 var originalName = 'image';
 var debounceTimer = null;
 var pendingBatchFiles = [];
+var origCanvas = null;
+var showOriginal = false;
+var lastCompressedImg = null;
 
 function resetQualityDefault() {
 qualitySlider.value = 70;
 qualityValEl.textContent = 70;
-setActivePreset(document.getElementById('panel-compress'), '.preset-btn', '0.7', 'data-q');
+setActivePreset(document.getElementById('compress-quality-presets'), '.preset-btn', '0.7', 'data-q');
 }
 
 setupDropzoneMulti('compress-dropzone', 'compress-file', 'compress-dz-text', function(files) {
@@ -1433,9 +1491,13 @@ var file = files[0];
 originalBytes = file.size;
 originalName = file.name.replace(/\.[^.]+$/, '');
 loadImageToCanvas(file).then(function(srcCanvas) {
-canvas.width = srcCanvas.width;
-canvas.height = srcCanvas.height;
-ctx.drawImage(srcCanvas, 0, 0);
+origCanvas = srcCanvas;
+lastCompressedImg = null;
+showOriginal = false;
+setActivePreset(viewToggle, '.preset-btn', 'compressed', 'data-view');
+canvas.width = origCanvas.width;
+canvas.height = origCanvas.height;
+ctx.drawImage(origCanvas, 0, 0);
 if (file.type === 'image/png' || file.type === 'image/webp' || isHeicFile(file)) {
 formatSelect.value = 'image/webp';
 } else {
@@ -1458,16 +1520,16 @@ formatSelect.value = 'image/jpeg';
 }
 });
 
-document.querySelectorAll('#panel-compress .preset-btn').forEach(function(btn) {
+document.querySelectorAll('#compress-quality-presets .preset-btn').forEach(function(btn) {
 btn.addEventListener('click', function() {
-setActivePreset(document.getElementById('panel-compress'), '.preset-btn', btn.getAttribute('data-q'), 'data-q');
+setActivePreset(document.getElementById('compress-quality-presets'), '.preset-btn', btn.getAttribute('data-q'), 'data-q');
 qualitySlider.value = Math.round(parseFloat(btn.getAttribute('data-q')) * 100);
 qualityValEl.textContent = qualitySlider.value;
 if (!singleEl.hidden) updatePreview();
 });
 });
 qualitySlider.addEventListener('input', function() {
-document.querySelectorAll('#panel-compress .preset-btn').forEach(function(b) { b.classList.remove('active'); });
+document.querySelectorAll('#compress-quality-presets .preset-btn').forEach(function(b) { b.classList.remove('active'); });
 qualityValEl.textContent = qualitySlider.value;
 if (singleEl.hidden) return;
 clearTimeout(debounceTimer);
@@ -1475,10 +1537,30 @@ debounceTimer = setTimeout(updatePreview, 150);
 });
 formatSelect.addEventListener('change', function() { if (!singleEl.hidden) updatePreview(); });
 
+viewToggle.querySelectorAll('.preset-btn').forEach(function(btn) {
+btn.addEventListener('click', function() {
+setActivePreset(viewToggle, '.preset-btn', btn.getAttribute('data-view'), 'data-view');
+showOriginal = btn.getAttribute('data-view') === 'original';
+renderDisplay();
+});
+});
+
+function renderDisplay() {
+if (!origCanvas) return;
+canvas.width = origCanvas.width;
+canvas.height = origCanvas.height;
+ctx.clearRect(0, 0, canvas.width, canvas.height);
+if (showOriginal || !lastCompressedImg) {
+ctx.drawImage(origCanvas, 0, 0);
+} else {
+ctx.drawImage(lastCompressedImg, 0, 0, canvas.width, canvas.height);
+}
+}
+
 function updatePreview() {
 var mime = formatSelect.value;
 var q = Math.max(0.05, Math.min(1, qualitySlider.value / 100));
-canvasToBlob(canvas, mime, q).then(function(blob) {
+canvasToBlob(origCanvas, mime, q).then(function(blob) {
 if (!blob) {
 afterEl.textContent = '—';
 statusEl.textContent = 'Браузер не поддержал этот формат, попробуйте другой.';
@@ -1492,15 +1574,26 @@ statusEl.className = 'status-msg err';
 } else {
 statusEl.textContent = '';
 }
+var url = URL.createObjectURL(blob);
+var img = new Image();
+img.onload = function() {
+URL.revokeObjectURL(url);
+lastCompressedImg = img;
+renderDisplay();
+};
+img.onerror = function() { URL.revokeObjectURL(url); };
+img.src = url;
 });
 }
 
 downloadBtn.addEventListener('click', function() {
 var mime = formatSelect.value;
 var q = Math.max(0.05, Math.min(1, qualitySlider.value / 100));
-canvasToBlob(canvas, mime, q).then(function(blob) {
+canvasToBlob(origCanvas, mime, q).then(function(blob) {
 if (!blob) { statusEl.textContent = 'Не удалось сохранить в этом формате.'; statusEl.className = 'status-msg err'; return; }
 downloadBlob(blob, originalName + '-compressed.' + extForMime(mime));
+statusEl.textContent = 'Файл сохранён в папку «Загрузки».';
+statusEl.className = 'status-msg';
 });
 });
 
@@ -1597,7 +1690,7 @@ if (!srcCanvas) return;
 canvasToBlob(canvas, originalMime, 0.92).then(function(blob) {
 if (!blob) { statusEl.textContent = 'Не удалось сохранить.'; statusEl.className = 'status-msg err'; return; }
 downloadBlob(blob, originalName + '-' + canvas.width + 'x' + canvas.height + '.' + extForMime(originalMime));
-statusEl.textContent = 'Готово: ' + canvas.width + '×' + canvas.height + ' px';
+statusEl.textContent = 'Готово: ' + canvas.width + '×' + canvas.height + ' px. Файл сохранён в папку «Загрузки».';
 statusEl.className = 'status-msg';
 });
 });
@@ -1751,7 +1844,7 @@ out.getContext('2d').drawImage(srcCanvas, sx, sy, sw, sh, 0, 0, sw, sh);
 canvasToBlob(out, originalMime, 0.92).then(function(blob) {
 if (!blob) { statusEl.textContent = 'Не удалось сохранить.'; statusEl.className = 'status-msg err'; return; }
 downloadBlob(blob, originalName + '-crop.' + extForMime(originalMime));
-statusEl.textContent = 'Готово: ' + sw + '×' + sh + ' px';
+statusEl.textContent = 'Готово: ' + sw + '×' + sh + ' px. Файл сохранён в папку «Загрузки».';
 statusEl.className = 'status-msg';
 });
 });
@@ -1832,7 +1925,7 @@ var mime = originalMime === 'image/png' || originalMime === 'image/webp' ? origi
 canvasToBlob(canvas, mime, 0.92).then(function(blob) {
 if (!blob) { statusEl.textContent = 'Не удалось сохранить.'; statusEl.className = 'status-msg err'; return; }
 downloadBlob(blob, originalName + '-rotated.' + extForMime(mime));
-statusEl.textContent = 'Готово';
+statusEl.textContent = 'Готово. Файл сохранён в папку «Загрузки».';
 statusEl.className = 'status-msg';
 });
 });
@@ -1852,13 +1945,18 @@ var batchProcessBtn = document.getElementById('convert-batch-process');
 var formatSelect = document.getElementById('convert-format');
 var qualityField = document.getElementById('convert-quality-field');
 var qualitySlider = document.getElementById('convert-quality');
+var pdfPageSizeField = document.getElementById('convert-pdf-pagesize-field');
+var pdfPageSizeSelect = document.getElementById('convert-pdf-pagesize');
+var sizeEstimateEl = document.getElementById('convert-size-estimate');
 var origInfo = document.getElementById('convert-orig-info');
 var formatNoteEl = document.getElementById('convert-format-note');
+var batchPdfNoteEl = document.getElementById('convert-batch-pdf-note');
 var statusEl = document.getElementById('convert-status');
 var downloadBtn = document.getElementById('convert-download');
 var originalName = 'image';
 var originalMime = 'image/jpeg';
 var pendingBatchFiles = [];
+var sizeEstimateTimer = null;
 
 var QUALITY_FORMATS = { 'image/jpeg': 1, 'image/webp': 1, 'application/pdf': 1 };
 var FORMAT_NOTES = {
@@ -1866,13 +1964,14 @@ var FORMAT_NOTES = {
 'image/bmp': 'BMP хранится без сжатия — файл получится заметно больше, чем JPEG/PNG.',
 'image/x-icon': 'Иконка ограничена размером 256×256 px, картинка будет уменьшена под это.',
 'image/tiff': 'TIFF без сжатия — файл будет большим. Открывается не во всех приложениях на телефоне, нужен просмотрщик с поддержкой TIFF.',
-'application/pdf': 'Картинка станет одностраничным PDF-документом того же размера в пикселях.'
+'application/pdf': 'Каждое фото — отдельная страница PDF, в том же порядке, что вы их выбрали.'
 };
 
 setupDropzoneMulti('convert-dropzone', 'convert-file', 'convert-dz-text', function(files) {
 controls.hidden = false;
 statusEl.textContent = '';
 statusEl.className = 'status-msg';
+batchZipBtn.textContent = 'Скачать всё в ZIP';
 
 if (files.length === 1) {
 batchEl.hidden = true;
@@ -1905,22 +2004,44 @@ function updateFormatUI() {
 var mime = formatSelect.value;
 qualityField.style.display = QUALITY_FORMATS[mime] ? '' : 'none';
 formatNoteEl.textContent = FORMAT_NOTES[mime] || '';
+pdfPageSizeField.hidden = (mime !== 'application/pdf');
+batchPdfNoteEl.hidden = (mime !== 'application/pdf');
+if (mime !== 'application/pdf') batchZipBtn.textContent = 'Скачать всё в ZIP';
+scheduleSizeEstimate();
 }
 formatSelect.addEventListener('change', updateFormatUI);
+qualitySlider.addEventListener('input', scheduleSizeEstimate);
+pdfPageSizeSelect.addEventListener('change', scheduleSizeEstimate);
+
+// Оценка веса результата считается заранее только для PDF (одна лёгкая перекодировка
+// в JPEG внутри уже открытого фото) — для остальных форматов она не нужна по ТЗ.
+function scheduleSizeEstimate() {
+if (formatSelect.value !== 'application/pdf' || singleEl.hidden) { sizeEstimateEl.textContent = ''; return; }
+clearTimeout(sizeEstimateTimer);
+sizeEstimateTimer = setTimeout(updateSizeEstimate, 150);
+}
+function updateSizeEstimate() {
+if (formatSelect.value !== 'application/pdf' || singleEl.hidden) return;
+var q = Math.max(0.05, Math.min(1, qualitySlider.value / 100));
+canvasToPDFBlob(canvas, pdfPageSizeSelect.value, q).then(function(blob) {
+sizeEstimateEl.textContent = blob ? ('Станет примерно ' + formatKB(blob.size)) : '';
+});
+}
 
 downloadBtn.addEventListener('click', function() {
 var mime = formatSelect.value;
 var q = Math.max(0.05, Math.min(1, qualitySlider.value / 100));
+var pageSize = pdfPageSizeSelect.value;
 statusEl.textContent = 'Готовим файл…';
 statusEl.className = 'status-msg';
-encodeCanvasToFormat(canvas, mime, QUALITY_FORMATS[mime] ? q : undefined).then(function(blob) {
+encodeCanvasToFormat(canvas, mime, QUALITY_FORMATS[mime] ? q : undefined, pageSize).then(function(blob) {
 if (!blob) {
 statusEl.textContent = 'Ваш браузер не смог сохранить в этом формате, попробуйте JPEG.';
 statusEl.className = 'status-msg err';
 return;
 }
 downloadBlob(blob, originalName + '.' + extForMime(mime));
-statusEl.textContent = 'Готово: ' + formatKB(blob.size);
+statusEl.textContent = 'Готово: ' + formatKB(blob.size) + '. Файл сохранён в папку «Загрузки».';
 statusEl.className = 'status-msg';
 });
 });
@@ -1928,11 +2049,42 @@ statusEl.className = 'status-msg';
 batchProcessBtn.addEventListener('click', function() {
 var mime = formatSelect.value;
 var q = Math.max(0.05, Math.min(1, qualitySlider.value / 100));
+var pageSize = pdfPageSizeSelect.value;
 statusEl.textContent = 'Обрабатываю файлы…';
 statusEl.className = 'status-msg';
+
+if (mime === 'application/pdf') {
+batchListEl.innerHTML = '';
+batchZipBtn.disabled = true;
+var pages = [];
+var chain = Promise.resolve();
+pendingBatchFiles.forEach(function(file) {
+chain = chain.then(function() {
+return loadImageToCanvas(file).then(function(c) { pages.push(c); });
+});
+});
+chain.then(function() {
+return buildMultiPagePdfBlob(pages, pageSize, q);
+}).then(function(pdfBlob) {
+statusEl.textContent = 'Готово: один PDF (' + pages.length + ' стр.), ' + formatKB(pdfBlob.size);
+statusEl.className = 'status-msg';
+batchZipBtn.textContent = 'Скачать PDF';
+batchZipBtn.disabled = false;
+batchZipBtn.onclick = function() {
+downloadBlob(pdfBlob, 'images.pdf');
+statusEl.textContent = 'Файл сохранён в папку «Загрузки».';
+statusEl.className = 'status-msg';
+};
+}).catch(function(err) {
+statusEl.textContent = 'Ошибка: ' + err.message;
+statusEl.className = 'status-msg err';
+});
+return;
+}
+
 runBatch(pendingBatchFiles, batchListEl, batchZipBtn, statusEl, function(file) {
 return loadImageToCanvas(file).then(function(srcCanvas) {
-return encodeCanvasToFormat(srcCanvas, mime, QUALITY_FORMATS[mime] ? q : undefined).then(function(blob) {
+return encodeCanvasToFormat(srcCanvas, mime, QUALITY_FORMATS[mime] ? q : undefined, pageSize).then(function(blob) {
 if (!blob) throw new Error('формат не поддержан браузером');
 var base = file.name.replace(/\.(heic|heif|[^.]+)$/i, '');
 return { blob: blob, filename: base + '.' + extForMime(mime) };
@@ -2191,7 +2343,7 @@ canvasToBlob(canvas, 'image/png').then(function(blob) {
 render(true);
 if (!blob) { statusEl.textContent = 'Не удалось сохранить.'; statusEl.className = 'status-msg err'; return; }
 downloadBlob(blob, originalName + '-text.png');
-statusEl.textContent = 'Готово!';
+statusEl.textContent = 'Готово! Файл сохранён в папку «Загрузки».';
 statusEl.className = 'status-msg';
 });
 });
@@ -2239,7 +2391,7 @@ if (!srcCanvas) return;
 canvasToBlob(canvas, 'image/png').then(function(blob) {
 if (!blob) { statusEl.textContent = 'Не удалось сохранить.'; statusEl.className = 'status-msg err'; return; }
 downloadBlob(blob, originalName + '-meme.png');
-statusEl.textContent = 'Готово!';
+statusEl.textContent = 'Готово! Файл сохранён в папку «Загрузки».';
 statusEl.className = 'status-msg';
 });
 });
