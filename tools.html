@@ -30,7 +30,8 @@
 --text-main: #ffffff;
 --text-muted: #8e9e93;
 --text-muted-alt: #8e9eaf;
---border-color: #0088cc
+--border-color: #0088cc;
+--accent-warn: #ffb340
 }
 [data-theme="light"] {
 --bg-color: #eef2f7;
@@ -39,7 +40,8 @@
 --text-main: #11213a;
 --text-muted: #5b6b82;
 --text-muted-alt: #5b6b82;
---border-color: #cfd8e3
+--border-color: #cfd8e3;
+--accent-warn: #b06a00
 }
 * {
 box-sizing: border-box;
@@ -195,6 +197,7 @@ border: 1px solid var(--border-color); border-radius: 20px; padding: 8px 8px 8px
 
 .status-msg { font-size: 13px; color: var(--accent-green); margin-top: 8px; min-height: 16px }
 .status-msg.err { color: #ff6b6b }
+.status-msg.warn { color: var(--accent-warn) }
 
 /* пакетная обработка */
 .batch-list { display: flex; flex-direction: column; gap: 8px; margin: 14px 0 }
@@ -208,6 +211,8 @@ border: 1px solid var(--border-color); border-radius: 12px; padding: 10px 12px
 .batch-item .b-status.err { color: #ff6b6b }
 .batch-item .b-dl { flex: 0 0 auto; min-height: 40px; padding: 8px 12px; font-size: 13px }
 
+.footer-promo { width: 100%; max-width: 700px; margin-top: 24px; text-align: center; color: var(--text-muted-alt); font-size: 13px; padding: 0 4px }
+.footer-promo a { color: var(--accent-blue); font-weight: 600; text-decoration: none }
 .site-footer { margin-top: 24px; padding: 20px 0 10px; border-top: 1px solid rgba(255,255,255,0.1); text-align: center; color: var(--text-muted-alt); font-size: 13px }
 .site-footer .footer-links { display: flex; flex-wrap: wrap; gap: 14px; justify-content: center; margin-bottom: 10px }
 .site-footer .footer-links a { color: var(--accent-blue); text-decoration: none; font-weight: 600; font-size: 14px }
@@ -457,7 +462,6 @@ ym(112807526, "init", {ssr:true, webvisor:true, clickmap:true, referrer: documen
 
 <div id="convert-batch" hidden>
 <p class="hint">Выбрано файлов: <b id="convert-batch-count">0</b>. Настройте формат и качество выше, затем нажмите «Обработать все».</p>
-<p class="hint" id="convert-batch-pdf-note" hidden>Для PDF все выбранные фото объединятся в один файл — по одному фото на странице, в том порядке, в котором вы их выбрали.</p>
 <button class="btn primary" id="convert-batch-process">Обработать все файлы</button>
 <div class="batch-list" id="convert-batch-list"></div>
 <button class="btn success" id="convert-batch-zip" disabled>Скачать всё в ZIP</button>
@@ -567,6 +571,8 @@ ym(112807526, "init", {ssr:true, webvisor:true, clickmap:true, referrer: documen
 </section>
 
 </div>
+
+<p class="footer-promo">Промты для нейросетей и простые приёмы каждый день — <a href="https://vk.ru/zhivoy_ai" target="_blank" rel="noopener noreferrer">в нашем сообществе ВКонтакте</a>.</p>
 
 <footer class="site-footer">
 <div class="footer-links">
@@ -1568,7 +1574,10 @@ statusEl.className = 'status-msg err';
 return;
 }
 afterEl.textContent = formatKB(blob.size);
-if (blob.size >= originalBytes * 0.97) {
+if (blob.size > originalBytes) {
+statusEl.textContent = 'Файл получится больше исходного. Уменьшите качество.';
+statusEl.className = 'status-msg warn';
+} else if (blob.size >= originalBytes * 0.97) {
 statusEl.textContent = 'Вес почти не изменился — картинка уже сжата на таком уровне качества. Уменьшите значение качества, чтобы сжать сильнее.';
 statusEl.className = 'status-msg err';
 } else {
@@ -1950,7 +1959,6 @@ var pdfPageSizeSelect = document.getElementById('convert-pdf-pagesize');
 var sizeEstimateEl = document.getElementById('convert-size-estimate');
 var origInfo = document.getElementById('convert-orig-info');
 var formatNoteEl = document.getElementById('convert-format-note');
-var batchPdfNoteEl = document.getElementById('convert-batch-pdf-note');
 var statusEl = document.getElementById('convert-status');
 var downloadBtn = document.getElementById('convert-download');
 var originalName = 'image';
@@ -2005,8 +2013,9 @@ var mime = formatSelect.value;
 qualityField.style.display = QUALITY_FORMATS[mime] ? '' : 'none';
 formatNoteEl.textContent = FORMAT_NOTES[mime] || '';
 pdfPageSizeField.hidden = (mime !== 'application/pdf');
-batchPdfNoteEl.hidden = (mime !== 'application/pdf');
-if (mime !== 'application/pdf') batchZipBtn.textContent = 'Скачать всё в ZIP';
+batchZipBtn.textContent = (mime === 'application/pdf') ? 'Скачать PDF' : 'Скачать всё в ZIP';
+batchZipBtn.disabled = true;
+batchZipBtn.onclick = null;
 scheduleSizeEstimate();
 }
 formatSelect.addEventListener('change', updateFormatUI);
