@@ -3,15 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
-<title>Инструменты для картинок — Живой ИИ</title>
-<meta name="description" content="Бесплатные инструменты для работы с картинками прямо в браузере: сжатие, изменение размера, обрезка, поворот, конвертация формата и наложение текста на обложку. Без сервера — файлы не покидают ваше устройство.">
+<title>Инструменты для картинок и звука — Живой ИИ</title>
+<meta name="description" content="Бесплатные инструменты прямо в браузере: сжатие, изменение размера, обрезка, поворот, конвертация формата и текст на картинке, а также изменение громкости MP3. Без сервера — файлы не покидают ваше устройство.">
 
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%23113154'/%3E%3Ctext x='50' y='68' font-size='58' font-family='Arial, sans-serif' font-weight='bold' fill='%23007aff' text-anchor='middle'%3EЖ%3C/text%3E%3C/svg%3E">
 
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Живой ИИ">
-<meta property="og:title" content="Инструменты для картинок — Живой ИИ">
-<meta property="og:description" content="Сжатие, resize, обрезка, поворот, конвертация формата и текст на обложке — прямо в браузере, без сервера.">
+<meta property="og:title" content="Инструменты для картинок и звука — Живой ИИ">
+<meta property="og:description" content="Сжатие, resize, обрезка, поворот, конвертация формата, текст на обложке и громкость MP3 — прямо в браузере, без сервера.">
 <meta property="og:url" content="https://zhivoy-ai.ru/tools.html">
 <meta property="og:image" content="https://zhivoy-ai.ru/og-cover.jpg">
 <meta name="twitter:card" content="summary_large_image">
@@ -234,6 +234,7 @@ border: 1px solid var(--border-color); border-radius: 12px; padding: 10px 12px
 .audio-card .dropzone { border-color: var(--accent-audio) }
 .audio-card .btn.primary { background-color: var(--accent-audio); border-color: var(--accent-audio); color: #fff }
 .audio-card select { border-color: var(--accent-audio) }
+.audio-card .btn:not(.primary):not(.success) { border-color: var(--accent-audio); color: var(--accent-audio) }
 .audio-card select:focus { outline: 2px solid var(--accent-audio); outline-offset: 1px }
 
 .footer-promo { width: 100%; max-width: 700px; margin-top: 24px; text-align: center; color: var(--text-muted-alt); font-size: 13px; padding: 0 4px }
@@ -614,6 +615,7 @@ ym(112807526, "init", {ssr:true, webvisor:true, clickmap:true, referrer: documen
 <span id="volume-dz-text">Нажмите, чтобы выбрать MP3-файл</span>
 <input type="file" accept=".mp3,audio/mpeg,audio/mp3" id="volume-file">
 </label>
+<button class="btn small" id="volume-sample" type="button" style="margin-top:10px;width:100%">🎻 Попробовать на примере: Вивальди, «Весна»</button>
 
 <div class="field">
 <label for="volume-action">Действие</label>
@@ -2571,6 +2573,9 @@ var formatSel = document.getElementById('volume-format');
 var processBtn = document.getElementById('volume-process');
 var downloadBtn = document.getElementById('volume-download');
 var statusEl = document.getElementById('volume-status');
+var sampleBtn = document.getElementById('volume-sample');
+var SAMPLE_URL = 'audio/vivaldi-vesna-primer.mp3';
+var SAMPLE_NAME = 'vivaldi-vesna-primer.mp3';
 
 var LAME_SAMPLE_RATES = [8000, 11025, 12000, 16000, 22050, 24000, 32000, 44100, 48000];
 
@@ -2592,7 +2597,7 @@ downloadBtn.hidden = true;
 // Пока идёт обработка, файл и настройки менять нельзя — иначе результат не совпадёт с тем, что выбрано
 function setBusy(value) {
 busy = value;
-[fileInput, actionSel, dbSel, channelsSel, formatSel].forEach(function(el) { el.disabled = value; });
+[fileInput, sampleBtn, actionSel, dbSel, channelsSel, formatSel].forEach(function(el) { el.disabled = value; });
 processBtn.disabled = value || !currentFile;
 }
 
@@ -2602,9 +2607,7 @@ var type = (file.type || '').toLowerCase();
 return name.endsWith('.mp3') || type === 'audio/mpeg' || type === 'audio/mp3';
 }
 
-fileInput.addEventListener('change', function() {
-var file = fileInput.files && fileInput.files[0];
-if (!file) return;
+function selectFile(file) {
 resetResult();
 if (!isMp3File(file)) {
 currentFile = null;
@@ -2620,6 +2623,32 @@ dropzone.classList.add('has-file');
 dzText.textContent = file.name + ' (' + formatSize(file.size) + ') — нажмите, чтобы выбрать другой';
 processBtn.disabled = false;
 setStatus('');
+}
+
+fileInput.addEventListener('change', function() {
+var file = fileInput.files && fileInput.files[0];
+if (file) selectFile(file);
+});
+
+// Пример для пробы: начало «Весны» из «Времён года» А. Вивальди (синтезированный фрагмент,
+// 23 секунды; музыка в общественном достоянии). Мелодия чуть левее, бас чуть правее —
+// так на примере слышно и выбор каналов.
+sampleBtn.addEventListener('click', function() {
+if (busy) return;
+sampleBtn.disabled = true;
+setStatus('Загружаю пример…');
+fetch(SAMPLE_URL).then(function(res) {
+if (!res.ok) throw new Error('HTTP ' + res.status);
+return res.blob();
+}).then(function(blob) {
+fileInput.value = '';
+selectFile(new File([blob], SAMPLE_NAME, { type: 'audio/mpeg' }));
+setStatus('Пример загружен: А. Вивальди, «Весна» (фрагмент). Выберите настройки и нажмите «Обработать».');
+}).catch(function() {
+setStatus('Не удалось загрузить пример. Проверьте интернет и попробуйте ещё раз.', 'err');
+}).then(function() {
+sampleBtn.disabled = busy;
+});
 });
 
 [actionSel, dbSel, channelsSel, formatSel].forEach(function(el) {
