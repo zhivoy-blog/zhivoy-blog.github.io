@@ -107,6 +107,11 @@ cursor: pointer; min-height: 46px; display: inline-flex; align-items: center; ju
 }
 .tab-btn.active { background-color: var(--accent-blue); border-color: var(--accent-blue); color: #fff }
 .tab-btn[hidden] { display: none }
+/* подписи групп инструментов («Размер и качество», «Надписи и мемы») */
+.tab-group { grid-column: 1 / -1; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.6px; color: var(--text-muted-alt); padding: 6px 2px 0 }
+.tab-group:first-child { padding-top: 0 }
+.tab-group[hidden] { display: none }
+.tab-badge { font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.4px; background: var(--accent-green); color: #fff; border-radius: 6px; padding: 2px 6px; line-height: 1.3 }
 
 /* --- Категории инструментов (Картинки / Аудио / Видео) --- */
 .cat-tabs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 14px }
@@ -256,6 +261,20 @@ border: 1px solid var(--border-color); border-radius: 12px; padding: 10px 12px
 .video-card .time-row .btn.small { flex: 0 0 auto; white-space: nowrap }
 .video-card .level-hint { font-size: 13px; color: var(--text-muted-alt); margin-top: 8px }
 
+/* --- Улучшение фото: сравнение «До / После» --- */
+.cmp-wrap { position: relative; margin: 14px 0 8px; border-radius: 10px; overflow: hidden; background: repeating-conic-gradient(#0000 0 25%, rgba(255,255,255,0.04) 0 50%) 0 0/24px 24px }
+.cmp-wrap.full { overflow: auto; max-height: 70vh; -webkit-overflow-scrolling: touch }
+.cmp { position: relative; width: 100%; line-height: 0; user-select: none; -webkit-user-select: none; touch-action: pan-y; cursor: ew-resize; --pos: 50% }
+.cmp-wrap.full .cmp { touch-action: auto; cursor: default }
+.cmp img { display: block; width: 100%; height: auto; pointer-events: none }
+.cmp-before { position: absolute; inset: 0; clip-path: inset(0 calc(100% - var(--pos)) 0 0) }
+.cmp-before img { width: 100%; height: 100% }
+.cmp-line { position: absolute; top: 0; bottom: 0; left: var(--pos); width: 2px; margin-left: -1px; background: #fff; box-shadow: 0 0 6px rgba(0,0,0,0.6); pointer-events: none }
+.cmp-knob { position: absolute; top: 50%; left: 50%; width: 40px; height: 40px; margin: -20px 0 0 -20px; border-radius: 50%; background: var(--accent-blue); border: 3px solid #fff; color: #fff; font-size: 18px; line-height: 34px; text-align: center; box-shadow: 0 0 8px rgba(0,0,0,0.5); pointer-events: auto; touch-action: none; cursor: ew-resize }
+.cmp-label { position: absolute; top: 8px; font-size: 12px; font-weight: 700; line-height: 1; color: #fff; background: rgba(0,0,0,0.55); padding: 5px 8px; border-radius: 6px; pointer-events: none }
+.cmp-label.l { left: 8px }
+.cmp-label.r { right: 8px }
+
 .footer-promo { width: 100%; max-width: 700px; margin-top: 24px; text-align: center; color: var(--text-muted-alt); font-size: 13px; padding: 0 4px }
 .footer-promo a { color: var(--accent-blue); font-weight: 600; text-decoration: none }
 .site-footer { margin-top: 24px; padding: 20px 0 10px; border-top: 1px solid rgba(255,255,255,0.1); text-align: center; color: var(--text-muted-alt); font-size: 13px }
@@ -299,11 +318,14 @@ ym(112807526, "init", {ssr:true, webvisor:true, clickmap:true, referrer: documen
 <p class="page-intro" id="cat-intro-video" hidden><strong>Инструменты для видео.</strong> Всё считается прямо в вашем браузере — видео никуда не отправляется и не сохраняется на сервере. При первом запуске браузер один раз скачивает модуль обработки видео (около 30&nbsp;МБ). Обработка длинного видео на телефоне может занять несколько минут.</p>
 
 <div class="tabs" id="tabs">
+<div class="tab-group" data-cat="images">Размер и качество</div>
 <button class="tab-btn active" data-cat="images" data-tab="compress">🗜️ Сжатие</button>
+<button class="tab-btn" data-cat="images" data-tab="enhance">✨ Улучшение фото <span class="tab-badge">новое</span></button>
 <button class="tab-btn" data-cat="images" data-tab="resize">📐 Размер</button>
 <button class="tab-btn" data-cat="images" data-tab="crop">✂️ Обрезка</button>
 <button class="tab-btn" data-cat="images" data-tab="rotate">🔄 Поворот</button>
 <button class="tab-btn" data-cat="images" data-tab="convert">🔁 Формат</button>
+<div class="tab-group" data-cat="images">Надписи и мемы</div>
 <button class="tab-btn" data-cat="images" data-tab="text">🔤 Текст на картинке</button>
 <button class="tab-btn" data-cat="images" data-tab="meme">😂 Мемы</button>
 <button class="tab-btn" data-cat="audio" data-tab="volume" hidden>🔊 Громкость MP3</button>
@@ -364,6 +386,50 @@ ym(112807526, "init", {ssr:true, webvisor:true, clickmap:true, referrer: documen
 </div>
 
 <div class="status-msg" id="compress-status"></div>
+</div>
+</div>
+</section>
+
+<!-- ================= УЛУЧШЕНИЕ ФОТО ================= -->
+<section class="panel" id="panel-enhance">
+<div class="card">
+<h2>Улучшение фото</h2>
+<p class="hint">Делает фото чётче, увеличивает его размер и убирает часть шума — для старых, мелких или нечётких фото. Работает нейросеть прямо в вашем браузере, фото никуда не отправляется.</p>
+<label class="dropzone" id="enhance-dropzone">
+<div class="dz-icon">📷</div>
+<span id="enhance-dz-text">Нажмите, чтобы выбрать фото</span>
+<input type="file" accept="image/*,.heic,.heif" id="enhance-file">
+</label>
+
+<div class="field">
+<label>Во сколько раз увеличить</label>
+<div class="preset-row" id="enhance-scale">
+<button class="preset-btn active" data-scale="2">2×</button>
+<button class="preset-btn" data-scale="4">4×</button>
+</div>
+<p class="hint" id="enhance-scale-hint">2× — быстрее, подходит для большинства фото. 4× — для совсем маленьких картинок.</p>
+</div>
+
+<button class="btn primary" id="enhance-process" disabled>Обработать</button>
+<div class="status-msg" id="enhance-status"></div>
+
+<div id="enhance-result" hidden>
+<div class="cmp-wrap" id="enhance-cmp-wrap">
+<div class="cmp" id="enhance-cmp">
+<img id="enhance-after" alt="После улучшения">
+<div class="cmp-before"><img id="enhance-before" alt="До улучшения"></div>
+<div class="cmp-line"><div class="cmp-knob" id="enhance-knob">⇆</div></div>
+<span class="cmp-label l">До</span>
+<span class="cmp-label r">После</span>
+</div>
+</div>
+<input type="range" id="enhance-pos" min="0" max="100" value="50" aria-label="Сравнение до и после">
+<div class="preset-row" id="enhance-zoom">
+<button class="preset-btn active" data-zoom="fit">Целиком</button>
+<button class="preset-btn" data-zoom="full">Крупно</button>
+</div>
+<p class="hint">Двигайте ползунок, чтобы сравнить «до» и «после». В режиме «Крупно» видно мелкие детали — картинку можно листать.</p>
+<button class="btn success" id="enhance-download">Скачать результат</button>
 </div>
 </div>
 </section>
@@ -890,6 +956,7 @@ catButtons.forEach(function(b) { b.classList.toggle('active', b.getAttribute('da
 ['images', 'audio', 'video'].forEach(function(c) {
 document.getElementById('cat-intro-' + c).hidden = c !== cat;
 });
+document.querySelectorAll('.tab-group').forEach(function(g) { g.hidden = g.getAttribute('data-cat') !== cat; });
 var first = null;
 toolButtons.forEach(function(b) {
 var inCat = b.getAttribute('data-cat') === cat;
@@ -1920,6 +1987,304 @@ return { blob: blob, filename: base + '-compressed.' + extForMime(mime) };
 });
 });
 });
+});
+})();
+
+// ===================== УЛУЧШЕНИЕ ФОТО (нейросеть ESRGAN через UpscalerJS) =====================
+// TensorFlow.js, UpscalerJS и модель (~4 МБ вместе) грузятся с CDN только при первом «Обработать».
+// Считается на видеокарте через WebGL, если она доступна, иначе на процессоре (заметно медленнее).
+(function() {
+var CDN = 'https://cdn.jsdelivr.net/npm/';
+var SCRIPTS = [
+CDN + '@tensorflow/tfjs@4.11.0/dist/tf.min.js',
+CDN + 'upscaler@1.0.0/dist/browser/umd/upscaler.min.js'
+];
+var MODELS = {
+2: { src: CDN + '@upscalerjs/esrgan-medium@1.0.0/dist/umd/models/esrgan-medium/src/x2/index.min.js', global: 'ESRGANMedium2x' },
+4: { src: CDN + '@upscalerjs/esrgan-medium@1.0.0/dist/umd/models/esrgan-medium/src/x4/index.min.js', global: 'ESRGANMedium4x' }
+};
+// Предел длинной стороны результата: больше — телефону не хватит памяти, а обработка затянется.
+// Без видеокарты (WebGL) нейросеть считает на процессоре в десятки раз медленнее — там предел меньше.
+var MAX_OUT = 2400;
+var MAX_OUT_CPU = 1000;
+var maxOut = MAX_OUT;
+
+var fileInput = document.getElementById('enhance-file');
+var dropzone = document.getElementById('enhance-dropzone');
+var dzText = document.getElementById('enhance-dz-text');
+var scaleRow = document.getElementById('enhance-scale');
+var scaleHint = document.getElementById('enhance-scale-hint');
+var processBtn = document.getElementById('enhance-process');
+var statusEl = document.getElementById('enhance-status');
+var resultBox = document.getElementById('enhance-result');
+var cmpWrap = document.getElementById('enhance-cmp-wrap');
+var cmp = document.getElementById('enhance-cmp');
+var afterImg = document.getElementById('enhance-after');
+var beforeImg = document.getElementById('enhance-before');
+var knob = document.getElementById('enhance-knob');
+var posRange = document.getElementById('enhance-pos');
+var zoomRow = document.getElementById('enhance-zoom');
+var downloadBtn = document.getElementById('enhance-download');
+
+var srcCanvas = null;
+var originalName = 'photo';
+var hasAlpha = false;
+var scale = 2;
+var busy = false;
+var resultBlob = null;
+var resultName = '';
+var urls = [];
+var loadPromise = null;
+var upscalers = {};
+
+function setStatus(text, kind) {
+statusEl.textContent = text;
+statusEl.className = 'status-msg' + (kind ? ' ' + kind : '');
+}
+
+function loadScript(src) {
+return new Promise(function(resolve, reject) {
+var s = document.createElement('script');
+s.src = src;
+s.onload = function() { resolve(); };
+s.onerror = function() { reject(new Error('не удалось загрузить ' + src)); };
+document.head.appendChild(s);
+});
+}
+
+// Библиотеки и модель нужного масштаба — один раз за визит
+function ensureUpscaler(sc) {
+if (upscalers[sc]) return Promise.resolve(upscalers[sc]);
+if (!loadPromise) {
+loadPromise = SCRIPTS.reduce(function(p, src) {
+return p.then(function() { return loadScript(src); });
+}, Promise.resolve()).then(function() {
+return window.tf.ready();
+}).catch(function(err) {
+loadPromise = null;
+throw err;
+});
+}
+var m = MODELS[sc];
+return loadPromise.then(function() {
+return window[m.global] ? null : loadScript(m.src);
+}).then(function() {
+if (!upscalers[sc]) upscalers[sc] = new window.Upscaler({ model: window[m.global] });
+return upscalers[sc];
+});
+}
+
+// Размер, до которого уменьшаем исходник, чтобы результат не превысил MAX_OUT
+function targetInputSize(w, h, sc) {
+var k = Math.min(1, (maxOut / sc) / Math.max(w, h));
+return { w: Math.max(1, Math.round(w * k)), h: Math.max(1, Math.round(h * k)), reduced: k < 1 };
+}
+
+function updateHint() {
+var base = scale === 2 ? '2× — быстрее, подходит для большинства фото.' : '4× — для совсем маленьких картинок, считается дольше.';
+if (srcCanvas) {
+var t = targetInputSize(srcCanvas.width, srcCanvas.height, scale);
+base += ' Получится ' + (t.w * scale) + ' × ' + (t.h * scale) + ' px.';
+if (t.reduced) base += ' Фото уже довольно большое, поэтому перед улучшением оно будет немного уменьшено.';
+}
+scaleHint.textContent = base;
+}
+
+function detectAlpha(canvas) {
+try {
+var d = canvas.getContext('2d').getImageData(0, 0, canvas.width, canvas.height).data;
+for (var i = 3; i < d.length; i += 4) if (d[i] < 255) return true;
+} catch (e) {}
+return false;
+}
+
+function clearResult() {
+resultBlob = null;
+resultBox.hidden = true;
+urls.forEach(function(u) { URL.revokeObjectURL(u); });
+urls = [];
+afterImg.removeAttribute('src');
+beforeImg.removeAttribute('src');
+}
+
+function setBusy(v) {
+busy = v;
+fileInput.disabled = v;
+scaleRow.querySelectorAll('button').forEach(function(b) { b.disabled = v; });
+processBtn.disabled = v || !srcCanvas;
+}
+
+fileInput.addEventListener('change', function() {
+var file = fileInput.files && fileInput.files[0];
+if (!file) return;
+clearResult();
+srcCanvas = null;
+processBtn.disabled = true;
+originalName = (file.name || 'photo').replace(/\.[^.]+$/, '');
+setStatus(isHeicFile(file) ? 'Конвертирую фото с iPhone…' : 'Открываю фото…');
+loadImageToCanvas(file).then(function(canvas) {
+srcCanvas = canvas;
+hasAlpha = effectiveMime(file) !== 'image/jpeg' && detectAlpha(canvas);
+dropzone.classList.add('has-file');
+dzText.textContent = file.name + ' (' + canvas.width + ' × ' + canvas.height + ' px) — нажмите, чтобы выбрать другое';
+processBtn.disabled = false;
+setStatus('');
+updateHint();
+}).catch(function(err) {
+setStatus('Не удалось открыть фото: ' + err.message, 'err');
+});
+});
+
+scaleRow.querySelectorAll('button').forEach(function(btn) {
+btn.addEventListener('click', function() {
+if (busy) return;
+scaleRow.querySelectorAll('button').forEach(function(b) { b.classList.remove('active'); });
+btn.classList.add('active');
+scale = +btn.getAttribute('data-scale');
+updateHint();
+if (resultBlob) {
+clearResult();
+setStatus('Настройки изменены — нажмите «Обработать» ещё раз.', 'warn');
+}
+});
+});
+
+function canvasToUrl(canvas, type, q) {
+return canvasToBlob(canvas, type, q).then(function(blob) {
+var u = URL.createObjectURL(blob);
+urls.push(u);
+return { url: u, blob: blob };
+});
+}
+
+processBtn.addEventListener('click', function() {
+if (!srcCanvas || busy) return;
+var sc = scale;
+var input = srcCanvas;
+var slowNote = '';
+setBusy(true);
+clearResult();
+setStatus('Загружаю нейросеть для улучшения (около 4 МБ, это один раз)…');
+var tensor = null;
+ensureUpscaler(sc).then(function(upscaler) {
+if (window.tf.getBackend() !== 'webgl') {
+maxOut = MAX_OUT_CPU;
+updateHint();
+slowNote = ' Браузер не дал доступ к видеокарте, поэтому нейросеть считает медленнее обычного.';
+}
+var t = targetInputSize(srcCanvas.width, srcCanvas.height, sc);
+if (t.reduced) {
+input = document.createElement('canvas');
+input.width = t.w;
+input.height = t.h;
+var ictx = input.getContext('2d');
+ictx.imageSmoothingQuality = 'high';
+ictx.drawImage(srcCanvas, 0, 0, t.w, t.h);
+}
+setStatus('Улучшаю фото… 0%' + slowNote);
+return upscaler.upscale(input, {
+output: 'tensor',
+patchSize: 64,
+padding: 6,
+awaitNextFrame: true,
+progress: function(p) { setStatus('Улучшаю фото… ' + Math.min(99, Math.round(p * 100)) + '%' + slowNote); }
+});
+}).then(function(out) {
+tensor = out;
+var outCanvas = document.createElement('canvas');
+var pixels = window.tf.tidy(function() { return out.clipByValue(0, 255).cast('int32'); });
+return window.tf.browser.toPixels(pixels, outCanvas).then(function() {
+pixels.dispose();
+return outCanvas;
+});
+}).then(function(outCanvas) {
+if (tensor) { tensor.dispose(); tensor = null; }
+// Нейросеть работает только с цветом — прозрачность переносим из исходника
+if (hasAlpha) {
+var a = document.createElement('canvas');
+a.width = outCanvas.width;
+a.height = outCanvas.height;
+var actx = a.getContext('2d');
+actx.imageSmoothingQuality = 'high';
+actx.drawImage(input, 0, 0, a.width, a.height);
+var ad = actx.getImageData(0, 0, a.width, a.height).data;
+var octx = outCanvas.getContext('2d');
+var od = octx.getImageData(0, 0, a.width, a.height);
+for (var i = 3; i < od.data.length; i += 4) od.data[i] = ad[i];
+octx.putImageData(od, 0, 0);
+}
+var type = hasAlpha ? 'image/png' : 'image/jpeg';
+return Promise.all([
+canvasToUrl(outCanvas, type, 0.92),
+canvasToUrl(input, 'image/png')
+]).then(function(r) {
+resultBlob = r[0].blob;
+resultName = originalName + '-x' + sc + (hasAlpha ? '.png' : '.jpg');
+afterImg.src = r[0].url;
+beforeImg.src = r[1].url;
+afterImg.setAttribute('width', outCanvas.width);
+afterImg.setAttribute('height', outCanvas.height);
+setZoom('fit');
+setPos(50);
+resultBox.hidden = false;
+setStatus('Готово! ' + input.width + ' × ' + input.height + ' → ' + outCanvas.width + ' × ' + outCanvas.height + ' px, ' + formatKB(resultBlob.size) + '. Сравните «до» и «после» ползунком.');
+});
+}).catch(function(err) {
+if (tensor) { try { tensor.dispose(); } catch (e) {} }
+var msg = String(err && err.message || err);
+if (/memory|allocate|OOM|context lost/i.test(msg)) msg = 'браузеру не хватило памяти. Попробуйте 2× или фото поменьше';
+setStatus('Не удалось улучшить фото: ' + msg + '.', 'err');
+}).then(function() {
+setBusy(false);
+});
+});
+
+// ---- Сравнение «До / После» ----
+function setPos(pct) {
+pct = Math.max(0, Math.min(100, pct));
+cmp.style.setProperty('--pos', pct + '%');
+posRange.value = pct;
+}
+function posFromEvent(e) {
+var r = cmp.getBoundingClientRect();
+return (e.clientX - r.left) / r.width * 100;
+}
+var dragging = false;
+cmp.addEventListener('pointerdown', function(e) {
+// В режиме «Крупно» картинку листают пальцем, поэтому тянуть можно только за кружок
+if (cmpWrap.classList.contains('full') && e.target !== knob) return;
+dragging = true;
+try { cmp.setPointerCapture(e.pointerId); } catch (err) {}
+setPos(posFromEvent(e));
+});
+cmp.addEventListener('pointermove', function(e) { if (dragging) setPos(posFromEvent(e)); });
+['pointerup', 'pointercancel'].forEach(function(ev) {
+cmp.addEventListener(ev, function() { dragging = false; });
+});
+cmp.addEventListener('click', function(e) {
+if (cmpWrap.classList.contains('full')) setPos(posFromEvent(e));
+});
+posRange.addEventListener('input', function() { setPos(+posRange.value); });
+
+function setZoom(mode) {
+zoomRow.querySelectorAll('button').forEach(function(b) { b.classList.toggle('active', b.getAttribute('data-zoom') === mode); });
+if (mode === 'full') {
+cmpWrap.classList.add('full');
+// 1 пиксель картинки = 1 пиксель экрана (с учётом плотности экрана телефона)
+cmp.style.width = Math.round(+afterImg.getAttribute('width') / (window.devicePixelRatio || 1)) + 'px';
+} else {
+cmpWrap.classList.remove('full');
+cmp.style.width = '';
+}
+}
+zoomRow.querySelectorAll('button').forEach(function(btn) {
+btn.addEventListener('click', function() { setZoom(btn.getAttribute('data-zoom')); });
+});
+
+downloadBtn.addEventListener('click', function() {
+if (!resultBlob) return;
+downloadBlob(resultBlob, resultName);
+setStatus('Готово! Файл сохранён в папку «Загрузки».');
 });
 })();
 
