@@ -237,6 +237,25 @@ border: 1px solid var(--border-color); border-radius: 12px; padding: 10px 12px
 .audio-card .btn:not(.primary):not(.success) { border-color: var(--accent-audio); color: var(--accent-audio) }
 .audio-card select:focus { outline: 2px solid var(--accent-audio); outline-offset: 1px }
 
+/* --- Видео-инструменты (жёлто-оранжевая гамма категории «Видео») --- */
+.card.video-card { border-color: var(--accent-video); box-shadow: 0 0 16px rgba(255, 159, 10, 0.15) }
+.video-card .dropzone { border-color: var(--accent-video) }
+.video-card .btn.primary { background-color: var(--accent-video); border-color: var(--accent-video); color: #fff }
+.video-card select, .video-card input[type=text] { border-color: var(--accent-video) }
+.video-card .btn:not(.primary):not(.success) { border-color: var(--accent-video); color: var(--accent-video) }
+.video-card select:focus, .video-card input[type=text]:focus { outline: 2px solid var(--accent-video); outline-offset: 1px }
+.video-card input[type=range]::-webkit-slider-thumb { background: var(--accent-video) }
+.video-card input[type=range]::-moz-range-thumb { background: var(--accent-video) }
+.video-card video, .video-card .gif-preview { display: block; width: 100%; max-height: 420px; border-radius: 10px; margin: 12px 0 4px; background: #000; object-fit: contain }
+.video-card .gif-preview { background: transparent }
+.video-card [hidden] { display: none !important }
+.video-card .v-info { font-size: 14px; margin-top: 12px; text-align: center }
+.video-card .v-info b { color: var(--accent-video) }
+.video-card .time-row { display: flex; gap: 8px; align-items: center }
+.video-card .time-row input[type=text] { flex: 1 1 auto }
+.video-card .time-row .btn.small { flex: 0 0 auto; white-space: nowrap }
+.video-card .level-hint { font-size: 13px; color: var(--text-muted-alt); margin-top: 8px }
+
 .footer-promo { width: 100%; max-width: 700px; margin-top: 24px; text-align: center; color: var(--text-muted-alt); font-size: 13px; padding: 0 4px }
 .footer-promo a { color: var(--accent-blue); font-weight: 600; text-decoration: none }
 .site-footer { margin-top: 24px; padding: 20px 0 10px; border-top: 1px solid rgba(255,255,255,0.1); text-align: center; color: var(--text-muted-alt); font-size: 13px }
@@ -277,7 +296,7 @@ ym(112807526, "init", {ssr:true, webvisor:true, clickmap:true, referrer: documen
 
 <p class="page-intro" id="cat-intro-images"><strong>Инструменты для картинок.</strong> Всё считается прямо в вашем браузере — фото никуда не отправляется и не сохраняется на сервере. Для стабильной работы на телефоне очень большие фото (шире 3000&nbsp;px) автоматически немного уменьшаются.</p>
 <p class="page-intro" id="cat-intro-audio" hidden><strong>Инструменты для звука.</strong> Всё считается прямо в вашем браузере — аудио никуда не отправляется и не сохраняется на сервере.</p>
-<p class="page-intro" id="cat-intro-video" hidden><strong>Инструменты для видео.</strong></p>
+<p class="page-intro" id="cat-intro-video" hidden><strong>Инструменты для видео.</strong> Всё считается прямо в вашем браузере — видео никуда не отправляется и не сохраняется на сервере. При первом запуске браузер один раз скачивает модуль обработки видео (около 30&nbsp;МБ). Обработка длинного видео на телефоне может занять несколько минут.</p>
 
 <div class="tabs" id="tabs">
 <button class="tab-btn active" data-cat="images" data-tab="compress">🗜️ Сжатие</button>
@@ -288,6 +307,9 @@ ym(112807526, "init", {ssr:true, webvisor:true, clickmap:true, referrer: documen
 <button class="tab-btn" data-cat="images" data-tab="text">🔤 Текст на картинке</button>
 <button class="tab-btn" data-cat="images" data-tab="meme">😂 Мемы</button>
 <button class="tab-btn" data-cat="audio" data-tab="volume" hidden>🔊 Громкость MP3</button>
+<button class="tab-btn" data-cat="video" data-tab="vcompress" hidden>🗜️ Сжатие видео</button>
+<button class="tab-btn" data-cat="video" data-tab="vtrim" hidden>✂️ Обрезка видео</button>
+<button class="tab-btn" data-cat="video" data-tab="vgif" hidden>🎞️ Видео → GIF</button>
 </div>
 
 <!-- ================= СЖАТИЕ ================= -->
@@ -672,6 +694,131 @@ ym(112807526, "init", {ssr:true, webvisor:true, clickmap:true, referrer: documen
 
 <button class="btn" id="volume-listen" type="button" style="margin-top:12px" hidden>▶ Послушать результат</button>
 <button class="btn success" id="volume-download" style="margin-top:12px" hidden>Скачать готовый файл</button>
+</div>
+</section>
+
+<!-- ================= СЖАТИЕ ВИДЕО (категория «Видео») ================= -->
+<section class="panel" id="panel-vcompress">
+<div class="card video-card">
+<h2>Сжатие видео</h2>
+<p class="hint">Уменьшает вес видео, чтобы его было удобно отправить в мессенджер или по почте. Подходит для MP4, MOV (видео с iPhone), WEBM и других форматов. Результат — MP4, который открывается везде.</p>
+<label class="dropzone" id="vcompress-dropzone">
+<div class="dz-icon">🎬</div>
+<span id="vcompress-dz-text">Нажмите, чтобы выбрать видео</span>
+<input type="file" accept="video/*,.mp4,.mov,.m4v,.webm,.mkv,.avi,.3gp" id="vcompress-file">
+</label>
+
+<div class="field">
+<label for="vcompress-level">Уровень сжатия</label>
+<select id="vcompress-level">
+<option value="light">Лёгкое</option>
+<option value="medium" selected>Среднее</option>
+<option value="strong">Сильное</option>
+</select>
+<p class="level-hint" id="vcompress-level-hint"></p>
+</div>
+
+<button class="btn primary" id="vcompress-process" disabled>Обработать</button>
+<div class="status-msg" id="vcompress-status"></div>
+<video id="vcompress-result-video" controls playsinline preload="metadata" hidden></video>
+<button class="btn success" id="vcompress-download" style="margin-top:12px" hidden>Скачать результат</button>
+</div>
+</section>
+
+<!-- ================= ОБРЕЗКА ВИДЕО (категория «Видео») ================= -->
+<section class="panel" id="panel-vtrim">
+<div class="card video-card">
+<h2>Обрезка видео</h2>
+<p class="hint">Обрезает видео до нужного отрезка — без программ и без загрузки на сервер. Укажите, с какого и до какого момента оставить видео.</p>
+<label class="dropzone" id="vtrim-dropzone">
+<div class="dz-icon">🎬</div>
+<span id="vtrim-dz-text">Нажмите, чтобы выбрать видео</span>
+<input type="file" accept="video/*,.mp4,.mov,.m4v,.webm,.mkv,.avi,.3gp" id="vtrim-file">
+</label>
+<div id="vtrim-times" hidden>
+<div class="v-info" id="vtrim-duration"></div>
+<video id="vtrim-preview" controls playsinline preload="metadata" hidden></video>
+<div class="field">
+<label for="vtrim-start">Начало (мм:сс или секунды)</label>
+<div class="time-row">
+<input type="text" id="vtrim-start" inputmode="decimal" placeholder="0:00" autocomplete="off">
+<button class="btn small" type="button" id="vtrim-start-now" hidden>⏱ Сейчас</button>
+</div>
+<input type="range" id="vtrim-start-range" min="0" max="1" step="0.1" value="0">
+</div>
+<div class="field">
+<label for="vtrim-end">Конец (мм:сс или секунды)</label>
+<div class="time-row">
+<input type="text" id="vtrim-end" inputmode="decimal" placeholder="0:10" autocomplete="off">
+<button class="btn small" type="button" id="vtrim-end-now" hidden>⏱ Сейчас</button>
+</div>
+<input type="range" id="vtrim-end-range" min="0" max="1" step="0.1" value="1">
+</div>
+<p class="hint" id="vtrim-length"></p>
+</div>
+
+<div class="field">
+<label for="vtrim-mode">Способ</label>
+<select id="vtrim-mode">
+<option value="exact" selected>Точно до кадра (рекомендуется)</option>
+<option value="fast">Быстро, без перекодирования</option>
+</select>
+<p class="level-hint">«Быстро» — за секунды и без потери качества, но подходит не каждому видео. Если края сдвинутся, сайт сам обрежет точно.</p>
+</div>
+
+<button class="btn primary" id="vtrim-process" disabled>Обработать</button>
+<div class="status-msg" id="vtrim-status"></div>
+<video id="vtrim-result-video" controls playsinline preload="metadata" hidden></video>
+<button class="btn success" id="vtrim-download" style="margin-top:12px" hidden>Скачать результат</button>
+</div>
+</section>
+
+<!-- ================= ВИДЕО → GIF (категория «Видео») ================= -->
+<section class="panel" id="panel-vgif">
+<div class="card video-card">
+<h2>Видео → GIF</h2>
+<p class="hint">Превращает кусок видео в GIF-анимацию, которую можно вставить в чат, пост или презентацию. Фрагмент — не длиннее 15 секунд, чтобы файл не получился огромным.</p>
+<label class="dropzone" id="vgif-dropzone">
+<div class="dz-icon">🎬</div>
+<span id="vgif-dz-text">Нажмите, чтобы выбрать видео</span>
+<input type="file" accept="video/*,.mp4,.mov,.m4v,.webm,.mkv,.avi,.3gp" id="vgif-file">
+</label>
+<div id="vgif-times" hidden>
+<div class="v-info" id="vgif-duration"></div>
+<video id="vgif-preview" controls playsinline preload="metadata" hidden></video>
+<div class="field">
+<label for="vgif-start">Начало (в секундах)</label>
+<div class="time-row">
+<input type="text" id="vgif-start" inputmode="decimal" placeholder="0" autocomplete="off">
+<button class="btn small" type="button" id="vgif-start-now" hidden>⏱ Сейчас</button>
+</div>
+<input type="range" id="vgif-start-range" min="0" max="1" step="0.1" value="0">
+</div>
+<div class="field">
+<label for="vgif-end">Конец (в секундах)</label>
+<div class="time-row">
+<input type="text" id="vgif-end" inputmode="decimal" placeholder="5" autocomplete="off">
+<button class="btn small" type="button" id="vgif-end-now" hidden>⏱ Сейчас</button>
+</div>
+<input type="range" id="vgif-end-range" min="0" max="1" step="0.1" value="1">
+</div>
+<p class="hint" id="vgif-length"></p>
+</div>
+
+<div class="field">
+<label for="vgif-quality">Качество и размер</label>
+<select id="vgif-quality">
+<option value="small">Маленький</option>
+<option value="medium" selected>Среднее</option>
+<option value="good">Хорошее</option>
+</select>
+<p class="level-hint" id="vgif-quality-hint"></p>
+</div>
+
+<button class="btn primary" id="vgif-process" disabled>Обработать</button>
+<div class="status-msg" id="vgif-status"></div>
+<img id="vgif-result-img" class="gif-preview" alt="Готовая GIF-анимация" hidden>
+<button class="btn success" id="vgif-download" style="margin-top:12px" hidden>Скачать результат</button>
 </div>
 </section>
 
@@ -2893,6 +3040,694 @@ downloadBtn.addEventListener('click', function() {
 if (!resultBlob) return;
 downloadBlob(resultBlob, resultName);
 setStatus('Готово! Файл сохранён в папку «Загрузки».');
+});
+})();
+
+// ===================== ВИДЕО: общая основа для всех инструментов категории =====================
+// Все видео-инструменты работают через один общий экземпляр ffmpeg.wasm. Небольшая обёртка лежит
+// локально (js/vendor/ffmpeg — её рабочий поток обязан грузиться с нашего же сайта), а само ядро
+// (~31 МБ) скачивается с CDN один раз — при первом нажатии «Обработать» — и дальше берётся из кэша.
+// Работает без SharedArrayBuffer (однопоточное ядро), поэтому особые заголовки сервера не нужны.
+var VideoKit = (function() {
+var FFMPEG_JS = 'js/vendor/ffmpeg/ffmpeg.js';
+var CORE_VERSION = '0.12.10';
+var CORE_BASES = [
+'https://cdn.jsdelivr.net/npm/@ffmpeg/core@' + CORE_VERSION + '/dist/umd/',
+'https://unpkg.com/@ffmpeg/core@' + CORE_VERSION + '/dist/umd/'
+];
+var LOADING_TEXT = 'Готовим инструмент для видео, подождите немного (это один раз)';
+
+var ffmpeg = null;
+var loadPromise = null;
+var queue = Promise.resolve();
+var logLines = [];
+var progressHandler = null;
+var lastOutTime = 0;
+
+function parseDurationFromLog() {
+for (var i = 0; i < logLines.length; i++) {
+var m = /Duration:\s*(\d+):(\d+):(\d+(?:\.\d+)?)/.exec(logLines[i]);
+if (m) return (+m[1]) * 3600 + (+m[2]) * 60 + parseFloat(m[3]);
+}
+return 0;
+}
+
+function loadScript(src) {
+return new Promise(function(resolve, reject) {
+var s = document.createElement('script');
+s.src = src;
+s.onload = function() { resolve(); };
+s.onerror = function() { reject(new Error('не удалось загрузить ' + src)); };
+document.head.appendChild(s);
+});
+}
+
+// Скачивает файл целиком, сообщая, сколько уже загружено, и отдаёт blob:-ссылку на него
+function fetchToBlobUrl(url, type, onBytes) {
+return fetch(url).then(function(res) {
+if (!res.ok) throw new Error('HTTP ' + res.status);
+var total = +res.headers.get('Content-Length') || 0;
+if (!res.body || !res.body.getReader) {
+return res.blob().then(function(b) { onBytes(b.size, total || b.size); return b; });
+}
+var reader = res.body.getReader();
+var chunks = [];
+var got = 0;
+function pump() {
+return reader.read().then(function(r) {
+if (r.done) return new Blob(chunks, { type: type });
+chunks.push(r.value);
+got += r.value.length;
+onBytes(got, total);
+return pump();
+});
+}
+return pump();
+}).then(function(blob) {
+return URL.createObjectURL(blob);
+});
+}
+
+function loadCoreFrom(base, onStatus) {
+var jsBytes = 0, wasmBytes = 0, wasmTotal = 0;
+function report() {
+var mb = (jsBytes + wasmBytes) / 1048576;
+var totalMb = wasmTotal ? (wasmTotal + 112059) / 1048576 : 31;
+onStatus(LOADING_TEXT + '… ' + Math.min(mb, totalMb).toFixed(0) + ' из ' + totalMb.toFixed(0) + ' МБ');
+}
+return Promise.all([
+fetchToBlobUrl(base + 'ffmpeg-core.js', 'text/javascript', function(b) { jsBytes = b; report(); }),
+fetchToBlobUrl(base + 'ffmpeg-core.wasm', 'application/wasm', function(b, t) { wasmBytes = b; wasmTotal = t; report(); })
+]).then(function(urls) {
+onStatus(LOADING_TEXT + '… запускаем');
+var ff = new window.FFmpegWASM.FFmpeg();
+ff.on('log', function(e) {
+logLines.push(e.message);
+if (logLines.length > 200) logLines.shift();
+});
+ff.on('progress', function(e) {
+if (progressHandler) progressHandler(e);
+});
+return ff.load({ coreURL: urls[0], wasmURL: urls[1] }).then(function() { return ff; });
+});
+}
+
+// Загружает ffmpeg один раз на всю страницу (повторные вызовы получают тот же экземпляр)
+function ensure(onStatus) {
+if (ffmpeg) return Promise.resolve(ffmpeg);
+if (!loadPromise) {
+onStatus(LOADING_TEXT + '…');
+var p = window.FFmpegWASM ? Promise.resolve() : loadScript(FFMPEG_JS);
+loadPromise = p.then(function() {
+// основной CDN, при ошибке — запасной
+return loadCoreFrom(CORE_BASES[0], function(t) { onStatus(t); }).catch(function() {
+return loadCoreFrom(CORE_BASES[1], function(t) { onStatus(t); });
+});
+}).then(function(ff) {
+ffmpeg = ff;
+return ff;
+}).catch(function(err) {
+loadPromise = null;
+throw new Error('не удалось загрузить модуль обработки видео. Проверьте интернет и попробуйте ещё раз');
+});
+} else {
+onStatus(LOADING_TEXT + '…');
+}
+return loadPromise;
+}
+
+// Задания выполняются строго по очереди — у страницы один общий ffmpeg
+function run(task) {
+var next = queue.then(task, task);
+queue = next.catch(function() {});
+return next;
+}
+
+// После серьёзного сбоя (например, не хватило памяти) экземпляр пересоздаётся при следующем запуске
+function reset() {
+if (ffmpeg) { try { ffmpeg.terminate(); } catch (e) {} }
+ffmpeg = null;
+loadPromise = null;
+}
+
+function lastError() {
+for (var i = logLines.length - 1; i >= 0; i--) {
+var l = logLines[i];
+if (/error|invalid|could not|no such|not found|failed|does not contain/i.test(l) && !/^\s*$/.test(l)) return l.trim();
+}
+return '';
+}
+
+// Выполняет команду ffmpeg над файлом: кладёт его в память модуля, запускает, забирает результат.
+// expectedSec — ожидаемая длительность результата, по ней считается процент готовности.
+// checkOutput — после обработки открыть результат и узнать его настоящую длительность (outputDuration)
+function process(file, args, outName, expectedSec, onStatus, busyText, checkOutput) {
+return run(function() {
+return ensure(onStatus).then(function(ff) {
+var inName = 'input' + extOf(file.name, 'mp4');
+onStatus('Читаю файл…');
+return readFileBytes(file).then(function(bytes) {
+return ff.writeFile(inName, bytes);
+}).then(function() {
+logLines = [];
+onStatus(busyText + '…');
+progressHandler = function(e) {
+var sec = (e.time || 0) / 1e6;
+var pct = -1;
+if (expectedSec > 0 && sec > 0) pct = sec / expectedSec;
+else if (e.progress > 0 && e.progress <= 1) pct = e.progress; // ffmpeg сам знает длительность входа
+if (pct >= 0) onStatus(busyText + '… ' + Math.min(99, Math.round(pct * 100)) + '%');
+};
+return ff.exec(['-hide_banner', '-nostdin', '-y'].concat(args.map(function(a) { return a === '{in}' ? inName : a; }), [outName]));
+}).then(function(code) {
+progressHandler = null;
+lastOutTime = 0;
+if (code !== 0) {
+var msg = lastError();
+throw new Error(msg ? 'ffmpeg: ' + msg : 'обработка не удалась (код ' + code + ')');
+}
+if (!checkOutput) return ff.readFile(outName);
+logLines = [];
+return ff.exec(['-hide_banner', '-i', outName]).then(function() {
+lastOutTime = parseDurationFromLog();
+return ff.readFile(outName);
+});
+}).then(function(data) {
+return cleanup(ff, [inName, outName]).then(function() { return data; });
+}, function(err) {
+progressHandler = null;
+return cleanup(ff, [inName, outName]).then(function() { throw err; });
+});
+}).catch(function(err) {
+// «Aborted» / нехватка памяти — модуль больше не годен, пересоздадим его в следующий раз
+if (/abort|memory|RuntimeError/i.test(String(err && err.message || err))) {
+reset();
+throw new Error('браузеру не хватило памяти. Попробуйте видео покороче или сильнее сжатие');
+}
+throw err;
+});
+});
+}
+
+function cleanup(ff, names) {
+return Promise.all(names.map(function(n) {
+return ff.deleteFile(n).catch(function() {});
+}));
+}
+
+// Длительность через ffmpeg — запасной путь, если браузер сам не умеет открыть этот формат
+function probeDuration(file, onStatus) {
+return run(function() {
+return ensure(onStatus).then(function(ff) {
+var inName = 'probe' + extOf(file.name, 'mp4');
+onStatus('Определяю длительность…');
+return readFileBytes(file).then(function(bytes) {
+return ff.writeFile(inName, bytes);
+}).then(function() {
+logLines = [];
+return ff.exec(['-hide_banner', '-i', inName]);
+}).then(function() {
+var d = parseDurationFromLog();
+return cleanup(ff, [inName]).then(function() {
+if (!d) throw new Error('не удалось определить длительность видео');
+return d;
+});
+});
+});
+});
+}
+
+function readFileBytes(file) {
+var p = file.arrayBuffer ? file.arrayBuffer() : new Promise(function(resolve, reject) {
+var r = new FileReader();
+r.onload = function() { resolve(r.result); };
+r.onerror = function() { reject(r.error); };
+r.readAsArrayBuffer(file);
+});
+return p.then(function(ab) { return new Uint8Array(ab); });
+}
+
+function extOf(name, fallback) {
+var m = /\.([a-z0-9]{2,5})$/i.exec(name || '');
+return '.' + (m ? m[1].toLowerCase() : fallback);
+}
+
+return { ensure: ensure, process: process, probeDuration: probeDuration, extOf: extOf,
+outputDuration: function() { return lastOutTime; } };
+})();
+
+// ---- Общие мелочи видео-инструментов ----
+
+function isVideoFile(file) {
+var type = (file.type || '').toLowerCase();
+if (type.indexOf('video/') === 0) return true;
+return /\.(mp4|mov|m4v|webm|mkv|avi|3gp|mpeg|mpg|wmv|flv|ts)$/i.test(file.name || '');
+}
+
+function fmtVideoSize(bytes) {
+if (bytes < 1048576) return formatKB(bytes);
+return (bytes / 1048576).toFixed(1) + ' МБ';
+}
+
+// 75.5 → «1:15.5», 5 → «0:05»
+function fmtTime(sec) {
+sec = Math.max(0, Math.round(sec * 10) / 10);
+var m = Math.floor(sec / 60);
+var s = sec - m * 60;
+var whole = Math.floor(s);
+var frac = Math.round((s - whole) * 10);
+return m + ':' + (whole < 10 ? '0' : '') + whole + (frac ? ',' + frac : '');
+}
+
+// Понимает «90», «90,5», «1:30», «1:30.5», «0:01:30» → секунды (или NaN)
+function parseTime(text) {
+var t = String(text || '').trim().replace(/,/g, '.');
+if (!t) return NaN;
+if (!/^\d+(\.\d+)?$|^\d+(:\d{1,2}){1,2}(\.\d+)?$/.test(t)) return NaN;
+var parts = t.split(':');
+var sec = 0;
+for (var i = 0; i < parts.length; i++) sec = sec * 60 + parseFloat(parts[i]);
+return sec;
+}
+
+// Длительность: сначала пробуем сам браузер (мгновенно), если он не знает формат — через ffmpeg
+function getVideoDuration(file, previewEl, onStatus) {
+return new Promise(function(resolve) {
+var url = URL.createObjectURL(file);
+var done = false;
+function finish(d) {
+if (done) return;
+done = true;
+clearTimeout(timer);
+resolve(d);
+}
+var timer = setTimeout(function() { finish(null); }, 5000);
+if (previewEl._url) URL.revokeObjectURL(previewEl._url);
+previewEl._url = url;
+previewEl.onloadedmetadata = function() {
+var d = previewEl.duration;
+finish(isFinite(d) && d > 0 ? d : null);
+};
+previewEl.onerror = function() { finish(null); };
+previewEl.src = url;
+}).then(function(d) {
+if (d) {
+previewEl.hidden = false;
+return { duration: d, playable: true };
+}
+previewEl.hidden = true;
+previewEl.removeAttribute('src');
+previewEl.load();
+return VideoKit.probeDuration(file, onStatus).then(function(d2) {
+return { duration: d2, playable: false };
+});
+});
+}
+
+// Общая логика выбора файла + статуса + результата для видео-карточки
+function makeVideoTool(pfx) {
+var t = {
+fileInput: document.getElementById(pfx + '-file'),
+dropzone: document.getElementById(pfx + '-dropzone'),
+dzText: document.getElementById(pfx + '-dz-text'),
+processBtn: document.getElementById(pfx + '-process'),
+statusEl: document.getElementById(pfx + '-status'),
+downloadBtn: document.getElementById(pfx + '-download'),
+resultVideo: document.getElementById(pfx + '-result-video'),
+resultImg: document.getElementById(pfx + '-result-img'),
+file: null,
+busy: false,
+resultBlob: null,
+resultName: '',
+resultUrl: null,
+controls: []
+};
+t.setStatus = function(text, kind) {
+t.statusEl.textContent = text;
+t.statusEl.className = 'status-msg' + (kind ? ' ' + kind : '');
+};
+t.resetResult = function() {
+t.resultBlob = null;
+t.downloadBtn.hidden = true;
+var media = t.resultVideo || t.resultImg;
+if (media) {
+if (t.resultVideo) t.resultVideo.pause();
+media.hidden = true;
+media.removeAttribute('src');
+}
+if (t.resultUrl) { URL.revokeObjectURL(t.resultUrl); t.resultUrl = null; }
+};
+t.showResult = function(blob, name) {
+t.resultBlob = blob;
+t.resultName = name;
+t.resultUrl = URL.createObjectURL(blob);
+if (t.resultImg) {
+t.resultImg.src = t.resultUrl;
+t.resultImg.hidden = false;
+} else if (t.resultVideo) {
+t.resultVideo.onerror = function() { t.resultVideo.hidden = true; };
+t.resultVideo.src = t.resultUrl;
+t.resultVideo.hidden = false;
+}
+t.downloadBtn.hidden = false;
+};
+t.setBusy = function(v) {
+t.busy = v;
+t.fileInput.disabled = v;
+t.controls.forEach(function(el) { el.disabled = v; });
+t.processBtn.disabled = v || !t.canProcess();
+};
+t.canProcess = function() { return !!t.file; };
+t.baseName = function() { return (t.file && t.file.name || 'video').replace(/\.[^.]+$/, ''); };
+t.onChange = function() {
+if (t.resultBlob && !t.busy) {
+t.resetResult();
+t.setStatus('Настройки изменены — нажмите «Обработать» ещё раз.', 'warn');
+}
+};
+t.downloadBtn.addEventListener('click', function() {
+if (!t.resultBlob) return;
+downloadBlob(t.resultBlob, t.resultName);
+t.setStatus('Готово! Файл сохранён в папку «Загрузки».');
+});
+// onFile(file) вызывается для корректного видеофайла
+t.init = function(onFile) {
+t.fileInput.addEventListener('change', function() {
+var file = t.fileInput.files && t.fileInput.files[0];
+if (!file) return;
+t.resetResult();
+if (!isVideoFile(file)) {
+t.file = null;
+t.processBtn.disabled = true;
+t.dropzone.classList.remove('has-file');
+t.dzText.textContent = 'Нажмите, чтобы выбрать видео';
+t.setStatus('Это не видеофайл. Выберите видео (MP4, MOV, WEBM…).', 'err');
+t.fileInput.value = '';
+if (onFile) onFile(null);
+return;
+}
+t.file = file;
+t.dropzone.classList.add('has-file');
+t.dzText.textContent = file.name + ' (' + fmtVideoSize(file.size) + ') — нажмите, чтобы выбрать другое';
+var warn = file.size > 500 * 1048576;
+t.setStatus(warn ? 'Файл очень большой — браузеру может не хватить памяти. Если не получится, обрежьте видео покороче.' : '', warn ? 'warn' : '');
+if (onFile) onFile(file);
+t.processBtn.disabled = !t.canProcess();
+});
+};
+t.fail = function(err) {
+t.setStatus('Не удалось обработать видео: ' + ((err && err.message) || 'неизвестная ошибка') + '.', 'err');
+};
+return t;
+}
+
+// Поля «Начало» / «Конец» + ползунки + кнопки «Сейчас» (общие для обрезки и GIF)
+function makeTimeRange(pfx, opts) {
+var r = {
+box: document.getElementById(pfx + '-times'),
+durationEl: document.getElementById(pfx + '-duration'),
+preview: document.getElementById(pfx + '-preview'),
+startIn: document.getElementById(pfx + '-start'),
+endIn: document.getElementById(pfx + '-end'),
+startRange: document.getElementById(pfx + '-start-range'),
+endRange: document.getElementById(pfx + '-end-range'),
+startNow: document.getElementById(pfx + '-start-now'),
+endNow: document.getElementById(pfx + '-end-now'),
+lengthEl: document.getElementById(pfx + '-length'),
+duration: 0
+};
+var fmt = opts.format || fmtTime;
+r.get = function() { return { start: parseTime(r.startIn.value), end: parseTime(r.endIn.value) }; };
+r.validate = function() {
+var v = r.get();
+if (isNaN(v.start) || isNaN(v.end)) return 'Время указано непонятно. Пишите, например, 75 или 1:15.';
+if (v.start >= r.duration) return 'Начало позже конца видео (видео длится ' + fmtTime(r.duration) + ').';
+if (v.end <= v.start) return 'Конец должен быть позже начала.';
+if (v.end > r.duration + 0.05) return 'Конец позже конца видео (видео длится ' + fmtTime(r.duration) + ').';
+if (opts.maxLength && v.end - v.start > opts.maxLength + 0.001) return 'Фрагмент длиннее ' + opts.maxLength + ' секунд — укоротите его.';
+return '';
+};
+r.refresh = function() {
+var v = r.get();
+var err = r.validate();
+r.lengthEl.textContent = err || ('Длина фрагмента: ' + (opts.lengthFormat || fmtTime)(v.end - v.start) + (opts.maxLength ? ' (максимум ' + opts.maxLength + ' секунд)' : ''));
+r.lengthEl.style.color = err ? '#ff6b6b' : '';
+if (!isNaN(v.start)) r.startRange.value = Math.min(r.duration, v.start);
+if (!isNaN(v.end)) r.endRange.value = Math.min(r.duration, v.end);
+if (opts.onChange) opts.onChange();
+};
+r.set = function(start, end) {
+r.startIn.value = fmt(start);
+r.endIn.value = fmt(end);
+r.refresh();
+};
+r.setDuration = function(d, playable) {
+r.duration = d;
+[r.startRange, r.endRange].forEach(function(el) {
+el.max = d.toFixed(1);
+el.step = d > 600 ? 1 : 0.1;
+});
+r.durationEl.innerHTML = 'Длительность видео: <b>' + fmtTime(d) + '</b>';
+r.startNow.hidden = r.endNow.hidden = !playable;
+r.box.hidden = false;
+};
+r.hide = function() {
+r.box.hidden = true;
+r.preview.pause();
+r.preview.hidden = true;
+};
+[r.startIn, r.endIn].forEach(function(el) { el.addEventListener('input', r.refresh); });
+// При выходе из поля приводим запись к единому виду («90» → «1:30»)
+[[r.startIn, 'start'], [r.endIn, 'end']].forEach(function(pair) {
+pair[0].addEventListener('change', function() {
+var v = parseTime(pair[0].value);
+if (!isNaN(v)) { pair[0].value = fmt(Math.min(v, r.duration)); r.refresh(); }
+});
+});
+r.startRange.addEventListener('input', function() {
+var s = parseFloat(r.startRange.value);
+var e = parseTime(r.endIn.value);
+if (opts.maxLength && !isNaN(e) && e - s > opts.maxLength) e = Math.min(r.duration, s + opts.maxLength);
+if (!isNaN(e) && e <= s) e = Math.min(r.duration, s + 1);
+r.startIn.value = fmt(s);
+if (!isNaN(e)) r.endIn.value = fmt(e);
+r.refresh();
+seekPreview(s);
+});
+r.endRange.addEventListener('input', function() {
+var e = parseFloat(r.endRange.value);
+var s = parseTime(r.startIn.value);
+if (opts.maxLength && !isNaN(s) && e - s > opts.maxLength) s = Math.max(0, e - opts.maxLength);
+if (!isNaN(s) && s >= e) s = Math.max(0, e - 1);
+r.endIn.value = fmt(e);
+if (!isNaN(s)) r.startIn.value = fmt(s);
+r.refresh();
+seekPreview(e);
+});
+function seekPreview(t) {
+if (!r.preview.hidden) { try { r.preview.currentTime = t; } catch (e) {} }
+}
+r.startNow.addEventListener('click', function() {
+var s = r.preview.currentTime || 0;
+var e = parseTime(r.endIn.value);
+if (isNaN(e) || e <= s || (opts.maxLength && e - s > opts.maxLength)) e = Math.min(r.duration, s + (opts.defaultLength || r.duration));
+r.set(s, e);
+});
+r.endNow.addEventListener('click', function() {
+var e = r.preview.currentTime || 0;
+var s = parseTime(r.startIn.value);
+if (isNaN(s) || s >= e || (opts.maxLength && e - s > opts.maxLength)) s = Math.max(0, e - (opts.defaultLength || e));
+r.set(s, e);
+});
+r.inputs = [r.startIn, r.endIn, r.startRange, r.endRange, r.startNow, r.endNow];
+return r;
+}
+
+// При переключении вкладки или категории останавливаем все видео, чтобы звук не играл из скрытой карточки
+document.querySelectorAll('.tab-btn, .cat-btn').forEach(function(btn) {
+btn.addEventListener('click', function() {
+document.querySelectorAll('.video-card video').forEach(function(v) { v.pause(); });
+});
+});
+
+// ===================== ВИДЕО: СЖАТИЕ =====================
+(function() {
+var t = makeVideoTool('vcompress');
+var levelSel = document.getElementById('vcompress-level');
+var levelHint = document.getElementById('vcompress-level-hint');
+t.controls = [levelSel];
+// max — предел длинной стороны кадра; crf — чем больше, тем сильнее сжатие
+var LEVELS = {
+light: { crf: 26, max: 1920, audio: '128k', hint: 'Лёгкое — качество почти как у оригинала, файл уменьшится не так сильно.' },
+medium: { crf: 30, max: 1280, audio: '96k', hint: 'Среднее — хороший баланс: файл заметно меньше, качество остаётся приличным (до 720p).' },
+strong: { crf: 35, max: 854, audio: '64k', hint: 'Сильное — самый маленький файл, но заметно хуже качество (до 480p).' }
+};
+function showHint() { levelHint.textContent = LEVELS[levelSel.value].hint; }
+showHint();
+levelSel.addEventListener('change', function() { showHint(); t.onChange(); });
+t.init();
+
+t.processBtn.addEventListener('click', function() {
+if (!t.file || t.busy) return;
+var file = t.file;
+var lv = LEVELS[levelSel.value];
+var M = lv.max;
+// уменьшаем только если кадр больше предела; вертикальные видео ограничиваем по высоте; стороны — чётные
+var vf = "scale='if(gte(iw,ih),min(iw," + M + "),-2)':'if(gte(iw,ih),-2,min(ih," + M + "))',scale=trunc(iw/2)*2:trunc(ih/2)*2";
+t.setBusy(true);
+t.resetResult();
+VideoKit.process(file, ['-i', '{in}', '-map', '0:v:0', '-map', '0:a:0?', '-vf', vf,
+'-c:v', 'libx264', '-preset', 'veryfast', '-crf', String(lv.crf), '-pix_fmt', 'yuv420p',
+'-c:a', 'aac', '-b:a', lv.audio, '-movflags', '+faststart'], 'out.mp4', 0,
+function(s) { t.setStatus(s); }, 'Сжимаю видео').then(function(data) {
+var blob = new Blob([data], { type: 'video/mp4' });
+t.showResult(blob, t.baseName() + '-compressed.mp4');
+if (blob.size >= file.size) {
+t.setStatus('Готово, но файл не стал меньше (было ' + fmtVideoSize(file.size) + ', стало ' + fmtVideoSize(blob.size) + ') — видео уже хорошо сжато. Попробуйте уровень «Сильное».', 'warn');
+} else {
+t.setStatus('Готово! Было ' + fmtVideoSize(file.size) + ', стало ' + fmtVideoSize(blob.size) + ' (−' + Math.round((1 - blob.size / file.size) * 100) + '%). Посмотрите результат и скачайте.');
+}
+}).catch(t.fail).then(function() { t.setBusy(false); });
+});
+})();
+
+// ===================== ВИДЕО: ОБРЕЗКА =====================
+(function() {
+var t = makeVideoTool('vtrim');
+var modeSel = document.getElementById('vtrim-mode');
+var range = makeTimeRange('vtrim', { onChange: function() { t.onChange(); updateBtn(); } });
+t.controls = [modeSel].concat(range.inputs);
+var ready = false;
+t.canProcess = function() { return !!t.file && ready && !range.validate(); };
+function updateBtn() { if (!t.busy) t.processBtn.disabled = !t.canProcess(); }
+modeSel.addEventListener('change', t.onChange);
+
+var COPY_TYPES = { '.mp4': 'video/mp4', '.m4v': 'video/mp4', '.mov': 'video/quicktime', '.webm': 'video/webm', '.mkv': 'video/x-matroska' };
+
+t.init(function(file) {
+ready = false;
+range.hide();
+if (!file) return;
+t.setBusy(true);
+getVideoDuration(file, range.preview, function(s) { t.setStatus(s); }).then(function(info) {
+if (t.file !== file) return;
+range.setDuration(info.duration, info.playable);
+range.set(0, info.duration);
+ready = true;
+t.setStatus(info.playable ? '' : 'Браузер не умеет показывать этот формат, но обрезать его можно — укажите время вручную.');
+}).catch(function(err) {
+t.setStatus('Не удалось открыть видео: ' + ((err && err.message) || 'файл повреждён') + '.', 'err');
+}).then(function() { t.setBusy(false); });
+});
+
+function run(mode) {
+var file = t.file;
+var v = range.get();
+var dur = v.end - v.start;
+var ext = VideoKit.extOf(file.name, 'mp4');
+var args, outName, type;
+if (mode === 'fast') {
+if (!COPY_TYPES[ext]) ext = '.mp4';
+type = COPY_TYPES[ext];
+outName = 'out' + ext;
+args = ['-ss', String(v.start), '-i', '{in}', '-t', String(dur), '-map', '0:v:0?', '-map', '0:a:0?',
+'-c', 'copy', '-avoid_negative_ts', 'make_zero'];
+if (type === 'video/mp4' || type === 'video/quicktime') args.push('-movflags', '+faststart');
+} else {
+ext = '.mp4';
+type = 'video/mp4';
+outName = 'out.mp4';
+args = ['-ss', String(v.start), '-i', '{in}', '-t', String(dur), '-map', '0:v:0', '-map', '0:a:0?',
+'-c:v', 'libx264', '-preset', 'veryfast', '-crf', '22', '-pix_fmt', 'yuv420p',
+'-c:a', 'aac', '-b:a', '128k', '-movflags', '+faststart'];
+}
+return VideoKit.process(file, args, outName, dur, function(s) { t.setStatus(s); },
+mode === 'fast' ? 'Обрезаю видео' : 'Обрезаю видео точно до кадра', mode === 'fast').then(function(data) {
+if (!data || data.length < 1024) throw new Error('получился пустой файл');
+var got = VideoKit.outputDuration();
+// Без перекодирования ffmpeg режет только по ключевым кадрам — если край съехал больше чем на секунду,
+// переделываем точно
+if (mode === 'fast' && got && Math.abs(got - dur) > 1) throw new Error('fast-inexact');
+return { blob: new Blob([data], { type: type }), ext: ext };
+});
+}
+
+t.processBtn.addEventListener('click', function() {
+if (!t.canProcess() || t.busy) return;
+var mode = modeSel.value;
+var v = range.get();
+t.setBusy(true);
+t.resetResult();
+run(mode).catch(function(err) {
+// Быстрый способ не справился (редкий кодек/контейнер или края сильно съехали) — делаем точно
+if (mode !== 'fast') throw err;
+t.setStatus('Быстрый способ здесь не подходит — обрезаю точно до кадра…');
+return run('exact');
+}).then(function(res) {
+t.showResult(res.blob, t.baseName() + '-trim' + res.ext);
+t.setStatus('Готово! Фрагмент ' + fmtTime(v.start) + ' – ' + fmtTime(v.end) + ', ' + fmtVideoSize(res.blob.size) + '. Посмотрите результат и скачайте.');
+}).catch(t.fail).then(function() { t.setBusy(false); });
+});
+})();
+
+// ===================== ВИДЕО → GIF =====================
+(function() {
+var MAX_LEN = 15;
+var DEFAULT_LEN = 5;
+var t = makeVideoTool('vgif');
+var qualitySel = document.getElementById('vgif-quality');
+var qualityHint = document.getElementById('vgif-quality-hint');
+function fmtSec(s) { return String(Math.round(s * 10) / 10).replace('.', ','); }
+var range = makeTimeRange('vgif', { maxLength: MAX_LEN, defaultLength: DEFAULT_LEN, format: fmtSec,
+lengthFormat: function(s) { return fmtSec(s) + ' с'; },
+onChange: function() { t.onChange(); updateBtn(); } });
+t.controls = [qualitySel].concat(range.inputs);
+var ready = false;
+t.canProcess = function() { return !!t.file && ready && !range.validate(); };
+function updateBtn() { if (!t.busy) t.processBtn.disabled = !t.canProcess(); }
+
+// w — предел длинной стороны, fps — кадров в секунду
+var QUALITY = {
+small: { w: 320, fps: 10, hint: 'Маленький — лёгкий файл для чатов, но картинка мелкая.' },
+medium: { w: 480, fps: 12, hint: 'Среднее — нормальная чёткость при умеренном весе.' },
+good: { w: 640, fps: 15, hint: 'Хорошее — чётче и плавнее, но файл весит больше всего.' }
+};
+function showHint() { qualityHint.textContent = QUALITY[qualitySel.value].hint + ' Чем выше качество, тем больше весит GIF.'; }
+showHint();
+qualitySel.addEventListener('change', function() { showHint(); t.onChange(); });
+
+t.init(function(file) {
+ready = false;
+range.hide();
+if (!file) return;
+t.setBusy(true);
+getVideoDuration(file, range.preview, function(s) { t.setStatus(s); }).then(function(info) {
+if (t.file !== file) return;
+range.setDuration(info.duration, info.playable);
+range.set(0, Math.min(DEFAULT_LEN, info.duration));
+ready = true;
+t.setStatus(info.playable ? '' : 'Браузер не умеет показывать этот формат, но GIF из него сделать можно — укажите время вручную.');
+}).catch(function(err) {
+t.setStatus('Не удалось открыть видео: ' + ((err && err.message) || 'файл повреждён') + '.', 'err');
+}).then(function() { t.setBusy(false); });
+});
+
+t.processBtn.addEventListener('click', function() {
+if (!t.canProcess() || t.busy) return;
+var v = range.get();
+var dur = v.end - v.start;
+var q = QUALITY[qualitySel.value];
+// своя палитра из 256 цветов под именно этот фрагмент — так GIF выглядит заметно лучше
+var vf = 'fps=' + q.fps + ",scale='if(gte(iw,ih),min(iw," + q.w + "),-2)':'if(gte(iw,ih),-2,min(ih," + q.w + "))':flags=lanczos," +
+'split[a][b];[a]palettegen=stats_mode=diff[p];[b][p]paletteuse=dither=bayer:bayer_scale=5:diff_mode=rectangle';
+t.setBusy(true);
+t.resetResult();
+VideoKit.process(t.file, ['-ss', String(v.start), '-t', String(dur), '-i', '{in}', '-vf', vf, '-loop', '0'],
+'out.gif', dur, function(s) { t.setStatus(s); }, 'Делаю GIF').then(function(data) {
+var blob = new Blob([data], { type: 'image/gif' });
+t.showResult(blob, t.baseName() + '.gif');
+t.setStatus('Готово! GIF ' + fmtSec(dur) + ' с, ' + fmtVideoSize(blob.size) + '. Посмотрите результат и скачайте.');
+}).catch(t.fail).then(function() { t.setBusy(false); });
 });
 })();
 </script>
