@@ -3,15 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
-<title>Инструменты для картинок — Живой ИИ</title>
-<meta name="description" content="Бесплатные инструменты для работы с картинками прямо в браузере: сжатие, изменение размера, обрезка, поворот, конвертация формата и наложение текста на обложку. Без сервера — файлы не покидают ваше устройство.">
+<title>Инструменты для картинок и звука — Живой ИИ</title>
+<meta name="description" content="Бесплатные инструменты прямо в браузере: сжатие, изменение размера, обрезка, поворот, конвертация формата и текст на картинке, а также изменение громкости MP3. Без сервера — файлы не покидают ваше устройство.">
 
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%23113154'/%3E%3Ctext x='50' y='68' font-size='58' font-family='Arial, sans-serif' font-weight='bold' fill='%23007aff' text-anchor='middle'%3EЖ%3C/text%3E%3C/svg%3E">
 
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Живой ИИ">
-<meta property="og:title" content="Инструменты для картинок — Живой ИИ">
-<meta property="og:description" content="Сжатие, resize, обрезка, поворот, конвертация формата и текст на обложке — прямо в браузере, без сервера.">
+<meta property="og:title" content="Инструменты для картинок и звука — Живой ИИ">
+<meta property="og:description" content="Сжатие, resize, обрезка, поворот, конвертация формата, текст на обложке и громкость MP3 — прямо в браузере, без сервера.">
 <meta property="og:url" content="https://zhivoy-ai.ru/tools.html">
 <meta property="og:image" content="https://zhivoy-ai.ru/og-cover.jpg">
 <meta name="twitter:card" content="summary_large_image">
@@ -31,7 +31,9 @@
 --text-muted: #8e9e93;
 --text-muted-alt: #8e9eaf;
 --border-color: #0088cc;
---accent-warn: #ffb340
+--accent-warn: #ffb340;
+--accent-audio: #34c759;
+--accent-video: #ff9f0a
 }
 [data-theme="light"] {
 --bg-color: #eef2f7;
@@ -104,6 +106,22 @@ color: var(--text-main); padding: 12px 10px; border-radius: 12px; font-size: 14p
 cursor: pointer; min-height: 46px; display: inline-flex; align-items: center; justify-content: center; gap: 6px; text-align: center
 }
 .tab-btn.active { background-color: var(--accent-blue); border-color: var(--accent-blue); color: #fff }
+.tab-btn[hidden] { display: none }
+
+/* --- Категории инструментов (Картинки / Аудио / Видео) --- */
+.cat-tabs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 14px }
+.cat-btn {
+background-color: var(--card-bg); border: 1px solid var(--border-color);
+color: var(--text-main); padding: 10px 6px; border-radius: 12px; font-size: 14px; font-weight: 700;
+cursor: pointer; min-height: 50px; display: inline-flex; align-items: center; justify-content: center; gap: 6px; text-align: center;
+-webkit-tap-highlight-color: transparent
+}
+.cat-btn:active { transform: scale(0.98) }
+.cat-btn[data-cat=images].active { background-color: var(--accent-blue); border-color: var(--accent-blue); color: #fff; box-shadow: 0 0 14px rgba(0, 122, 255, 0.4) }
+.cat-btn[data-cat=audio].active { background-color: var(--accent-audio); border-color: var(--accent-audio); color: #fff; box-shadow: 0 0 14px rgba(52, 199, 89, 0.4) }
+.cat-btn[data-cat=video].active { background-color: var(--accent-video); border-color: var(--accent-video); color: #fff; box-shadow: 0 0 14px rgba(255, 159, 10, 0.4) }
+.page-wrap[data-cat=audio] .tab-btn.active { background-color: var(--accent-audio); border-color: var(--accent-audio) }
+.page-wrap[data-cat=video] .tab-btn.active { background-color: var(--accent-video); border-color: var(--accent-video) }
 
 .panel { display: none }
 .panel.active { display: block }
@@ -211,6 +229,14 @@ border: 1px solid var(--border-color); border-radius: 12px; padding: 10px 12px
 .batch-item .b-status.err { color: #ff6b6b }
 .batch-item .b-dl { flex: 0 0 auto; min-height: 40px; padding: 8px 12px; font-size: 13px }
 
+/* --- Аудио-инструменты (зелёная гамма категории «Аудио») --- */
+.card.audio-card { border-color: var(--accent-audio); box-shadow: 0 0 16px rgba(52, 199, 89, 0.15) }
+.audio-card .dropzone { border-color: var(--accent-audio) }
+.audio-card .btn.primary { background-color: var(--accent-audio); border-color: var(--accent-audio); color: #fff }
+.audio-card select { border-color: var(--accent-audio) }
+.audio-card .btn:not(.primary):not(.success) { border-color: var(--accent-audio); color: var(--accent-audio) }
+.audio-card select:focus { outline: 2px solid var(--accent-audio); outline-offset: 1px }
+
 .footer-promo { width: 100%; max-width: 700px; margin-top: 24px; text-align: center; color: var(--text-muted-alt); font-size: 13px; padding: 0 4px }
 .footer-promo a { color: var(--accent-blue); font-weight: 600; text-decoration: none }
 .site-footer { margin-top: 24px; padding: 20px 0 10px; border-top: 1px solid rgba(255,255,255,0.1); text-align: center; color: var(--text-muted-alt); font-size: 13px }
@@ -240,19 +266,28 @@ ym(112807526, "init", {ssr:true, webvisor:true, clickmap:true, referrer: documen
 </div>
 </header>
 
-<div class="page-wrap">
+<div class="page-wrap" id="page-wrap" data-cat="images">
 <a href="index.html" class="back-link">← На главную</a>
 
-<p class="page-intro"><strong>Инструменты для картинок.</strong> Всё считается прямо в вашем браузере — фото никуда не отправляется и не сохраняется на сервере. Для стабильной работы на телефоне очень большие фото (шире 3000&nbsp;px) автоматически немного уменьшаются.</p>
+<div class="cat-tabs" id="cat-tabs">
+<button class="cat-btn active" data-cat="images">🖼️ Картинки</button>
+<button class="cat-btn" data-cat="audio">🎵 Аудио</button>
+<button class="cat-btn" data-cat="video">🎬 Видео</button>
+</div>
+
+<p class="page-intro" id="cat-intro-images"><strong>Инструменты для картинок.</strong> Всё считается прямо в вашем браузере — фото никуда не отправляется и не сохраняется на сервере. Для стабильной работы на телефоне очень большие фото (шире 3000&nbsp;px) автоматически немного уменьшаются.</p>
+<p class="page-intro" id="cat-intro-audio" hidden><strong>Инструменты для звука.</strong> Всё считается прямо в вашем браузере — аудио никуда не отправляется и не сохраняется на сервере.</p>
+<p class="page-intro" id="cat-intro-video" hidden><strong>Инструменты для видео.</strong></p>
 
 <div class="tabs" id="tabs">
-<button class="tab-btn active" data-tab="compress">🗜️ Сжатие</button>
-<button class="tab-btn" data-tab="resize">📐 Размер</button>
-<button class="tab-btn" data-tab="crop">✂️ Обрезка</button>
-<button class="tab-btn" data-tab="rotate">🔄 Поворот</button>
-<button class="tab-btn" data-tab="convert">🔁 Формат</button>
-<button class="tab-btn" data-tab="text">🔤 Текст на картинке</button>
-<button class="tab-btn" data-tab="meme">😂 Мемы</button>
+<button class="tab-btn active" data-cat="images" data-tab="compress">🗜️ Сжатие</button>
+<button class="tab-btn" data-cat="images" data-tab="resize">📐 Размер</button>
+<button class="tab-btn" data-cat="images" data-tab="crop">✂️ Обрезка</button>
+<button class="tab-btn" data-cat="images" data-tab="rotate">🔄 Поворот</button>
+<button class="tab-btn" data-cat="images" data-tab="convert">🔁 Формат</button>
+<button class="tab-btn" data-cat="images" data-tab="text">🔤 Текст на картинке</button>
+<button class="tab-btn" data-cat="images" data-tab="meme">😂 Мемы</button>
+<button class="tab-btn" data-cat="audio" data-tab="volume" hidden>🔊 Громкость MP3</button>
 </div>
 
 <!-- ================= СЖАТИЕ ================= -->
@@ -570,6 +605,75 @@ ym(112807526, "init", {ssr:true, webvisor:true, clickmap:true, referrer: documen
 </div>
 </section>
 
+<!-- ================= ГРОМКОСТЬ MP3 (категория «Аудио») ================= -->
+<section class="panel" id="panel-volume">
+<div class="card audio-card">
+<h2>Громкость MP3</h2>
+<p class="hint">Делает песню, подкаст или запись голоса громче или тише. Можно поменять громкость сразу во всём файле или только в левом либо правом канале.</p>
+<label class="dropzone" id="volume-dropzone">
+<div class="dz-icon">🎵</div>
+<span id="volume-dz-text">Нажмите, чтобы выбрать MP3-файл</span>
+<input type="file" accept=".mp3,audio/mpeg,audio/mp3" id="volume-file">
+</label>
+<button class="btn small" id="volume-sample" type="button" style="margin-top:10px;width:100%">🎻 Попробовать на примере: Вивальди, «Весна»</button>
+
+<div class="field">
+<label for="volume-action">Действие</label>
+<select id="volume-action">
+<option value="up" selected>Увеличить громкость</option>
+<option value="down">Уменьшить громкость</option>
+</select>
+</div>
+
+<div class="field">
+<label for="volume-db">На сколько</label>
+<select id="volume-db">
+<option value="1">1 децибел</option>
+<option value="1.5">1,5 децибела</option>
+<option value="2">2 децибела</option>
+<option value="2.5">2,5 децибела</option>
+<option value="3" selected>3 децибела (рекомендуется)</option>
+<option value="3.5">3,5 децибела</option>
+<option value="4">4 децибела</option>
+<option value="4.5">4,5 децибела</option>
+<option value="5">5 децибел</option>
+<option value="5.5">5,5 децибела</option>
+<option value="6">6 децибел</option>
+<option value="6.5">6,5 децибела</option>
+<option value="7">7 децибел</option>
+<option value="7.5">7,5 децибела</option>
+<option value="8">8 децибел</option>
+<option value="8.5">8,5 децибела</option>
+<option value="9">9 децибел</option>
+<option value="9.5">9,5 децибела</option>
+<option value="10">10 децибел</option>
+</select>
+</div>
+
+<div class="field">
+<label for="volume-channels">Каналы</label>
+<select id="volume-channels">
+<option value="all" selected>Все каналы</option>
+<option value="left">Только левый канал</option>
+<option value="right">Только правый канал</option>
+</select>
+</div>
+
+<div class="field">
+<label for="volume-format">Формат результата</label>
+<select id="volume-format">
+<option value="mp3" selected>MP3</option>
+<option value="wav">WAV (без сжатия, файл будет больше)</option>
+</select>
+</div>
+
+<button class="btn primary" id="volume-process" disabled>Обработать</button>
+<div class="status-msg" id="volume-status"></div>
+
+<button class="btn success" id="volume-download" style="margin-top:12px" hidden>Скачать готовый файл</button>
+</div>
+</section>
+
 </div>
 
 <p class="footer-promo">Промты для нейросетей и простые приёмы каждый день — <a href="https://vk.ru/zhivoy_ai" target="_blank" rel="noopener noreferrer">в нашем сообществе ВКонтакте</a>.</p>
@@ -618,6 +722,54 @@ document.querySelectorAll('.panel').forEach(function(p) { p.classList.remove('ac
 document.getElementById('panel-' + btn.getAttribute('data-tab')).classList.add('active');
 });
 });
+})();
+
+// ===================== КАТЕГОРИИ (Картинки / Аудио / Видео) =====================
+// Только показывает/скрывает кнопки инструментов нужной категории — логику самих инструментов не трогает.
+(function() {
+var wrap = document.getElementById('page-wrap');
+var catButtons = document.querySelectorAll('.cat-btn');
+var toolButtons = document.querySelectorAll('.tab-btn');
+var lastTab = {}; // последний открытый инструмент в каждой категории
+
+toolButtons.forEach(function(btn) {
+btn.addEventListener('click', function() { lastTab[btn.getAttribute('data-cat')] = btn; });
+});
+
+function selectCategory(cat) {
+wrap.setAttribute('data-cat', cat);
+catButtons.forEach(function(b) { b.classList.toggle('active', b.getAttribute('data-cat') === cat); });
+['images', 'audio', 'video'].forEach(function(c) {
+document.getElementById('cat-intro-' + c).hidden = c !== cat;
+});
+var first = null;
+toolButtons.forEach(function(b) {
+var inCat = b.getAttribute('data-cat') === cat;
+b.hidden = !inCat;
+if (inCat && !first) first = b;
+});
+var target = lastTab[cat] || first;
+if (target) {
+target.click();
+} else {
+// Пустая категория (пока «Видео»): прячем все панели
+toolButtons.forEach(function(b) { b.classList.remove('active'); });
+document.querySelectorAll('.panel').forEach(function(p) { p.classList.remove('active'); });
+}
+}
+
+catButtons.forEach(function(btn) {
+btn.addEventListener('click', function() {
+var cat = btn.getAttribute('data-cat');
+if (wrap.getAttribute('data-cat') === cat) return;
+selectCategory(cat);
+if (history.replaceState) history.replaceState(null, '', cat === 'images' ? location.pathname + location.search : '#' + cat);
+});
+});
+
+// Прямая ссылка на категорию: tools.html#audio или tools.html#video
+var fromHash = (location.hash || '').replace('#', '');
+if (fromHash === 'audio' || fromHash === 'video') selectCategory(fromHash);
 })();
 
 // ===================== ОБЩИЕ УТИЛИТЫ =====================
@@ -2403,6 +2555,314 @@ downloadBlob(blob, originalName + '-meme.png');
 statusEl.textContent = 'Готово! Файл сохранён в папку «Загрузки».';
 statusEl.className = 'status-msg';
 });
+});
+})();
+
+// ===================== ГРОМКОСТЬ MP3 (категория «Аудио») =====================
+// Всё считается в браузере через Web Audio API: файл декодируется, громкость меняется
+// узлами GainNode в OfflineAudioContext, результат кодируется в MP3 (lamejs, лежит локально
+// в js/vendor и подгружается только при первом сохранении в MP3) или в WAV (без библиотек).
+(function() {
+var fileInput = document.getElementById('volume-file');
+var dropzone = document.getElementById('volume-dropzone');
+var dzText = document.getElementById('volume-dz-text');
+var actionSel = document.getElementById('volume-action');
+var dbSel = document.getElementById('volume-db');
+var channelsSel = document.getElementById('volume-channels');
+var formatSel = document.getElementById('volume-format');
+var processBtn = document.getElementById('volume-process');
+var downloadBtn = document.getElementById('volume-download');
+var statusEl = document.getElementById('volume-status');
+var sampleBtn = document.getElementById('volume-sample');
+var SAMPLE_URL = 'audio/vivaldi-vesna-primer.mp3';
+var SAMPLE_NAME = 'vivaldi-vesna-primer.mp3';
+
+var LAME_SAMPLE_RATES = [8000, 11025, 12000, 16000, 22050, 24000, 32000, 44100, 48000];
+
+var currentFile = null;
+var resultBlob = null;
+var resultName = '';
+var busy = false;
+
+function setStatus(text, kind) {
+statusEl.textContent = text;
+statusEl.className = 'status-msg' + (kind ? ' ' + kind : '');
+}
+
+function resetResult() {
+resultBlob = null;
+downloadBtn.hidden = true;
+}
+
+// Пока идёт обработка, файл и настройки менять нельзя — иначе результат не совпадёт с тем, что выбрано
+function setBusy(value) {
+busy = value;
+[fileInput, sampleBtn, actionSel, dbSel, channelsSel, formatSel].forEach(function(el) { el.disabled = value; });
+processBtn.disabled = value || !currentFile;
+}
+
+function isMp3File(file) {
+var name = (file.name || '').toLowerCase();
+var type = (file.type || '').toLowerCase();
+return name.endsWith('.mp3') || type === 'audio/mpeg' || type === 'audio/mp3';
+}
+
+function selectFile(file) {
+resetResult();
+if (!isMp3File(file)) {
+currentFile = null;
+processBtn.disabled = true;
+dropzone.classList.remove('has-file');
+dzText.textContent = 'Нажмите, чтобы выбрать MP3-файл';
+setStatus('Это не MP3-файл. Выберите файл с расширением .mp3', 'err');
+fileInput.value = '';
+return;
+}
+currentFile = file;
+dropzone.classList.add('has-file');
+dzText.textContent = file.name + ' (' + formatSize(file.size) + ') — нажмите, чтобы выбрать другой';
+processBtn.disabled = false;
+setStatus('');
+}
+
+fileInput.addEventListener('change', function() {
+var file = fileInput.files && fileInput.files[0];
+if (file) selectFile(file);
+});
+
+// Пример для пробы: начало «Весны» из «Времён года» А. Вивальди (синтезированный фрагмент,
+// 23 секунды; музыка в общественном достоянии). Мелодия чуть левее, бас чуть правее —
+// так на примере слышно и выбор каналов.
+sampleBtn.addEventListener('click', function() {
+if (busy) return;
+sampleBtn.disabled = true;
+setStatus('Загружаю пример…');
+fetch(SAMPLE_URL).then(function(res) {
+if (!res.ok) throw new Error('HTTP ' + res.status);
+return res.blob();
+}).then(function(blob) {
+fileInput.value = '';
+selectFile(new File([blob], SAMPLE_NAME, { type: 'audio/mpeg' }));
+setStatus('Пример загружен: А. Вивальди, «Весна» (фрагмент). Выберите настройки и нажмите «Обработать».');
+}).catch(function() {
+setStatus('Не удалось загрузить пример. Проверьте интернет и попробуйте ещё раз.', 'err');
+}).then(function() {
+sampleBtn.disabled = busy;
+});
+});
+
+[actionSel, dbSel, channelsSel, formatSel].forEach(function(el) {
+el.addEventListener('change', function() {
+if (resultBlob) {
+resetResult();
+setStatus('Настройки изменены — нажмите «Обработать» ещё раз.', 'warn');
+}
+});
+});
+
+function formatSize(bytes) {
+if (bytes < 1024 * 1024) return formatKB(bytes);
+return (bytes / 1024 / 1024).toFixed(1) + ' МБ';
+}
+
+function readFileAsArrayBuffer(file) {
+if (file.arrayBuffer) return file.arrayBuffer();
+return new Promise(function(resolve, reject) {
+var r = new FileReader();
+r.onload = function() { resolve(r.result); };
+r.onerror = function() { reject(r.error); };
+r.readAsArrayBuffer(file);
+});
+}
+
+function decodeAudio(arrayBuffer) {
+var Ctx = window.AudioContext || window.webkitAudioContext;
+if (!Ctx) return Promise.reject(new Error('браузер не поддерживает Web Audio API'));
+var ctx = new Ctx();
+return new Promise(function(resolve, reject) {
+// старый Safari знает только вариант с колбэками
+var p = ctx.decodeAudioData(arrayBuffer, resolve, function(e) { reject(e || new Error('decode failed')); });
+if (p && p.then) p.then(resolve, function(e) { reject(e || new Error('decode failed')); });
+}).then(function(buf) {
+if (ctx.close) ctx.close();
+return buf;
+}, function(err) {
+if (ctx.close) ctx.close();
+throw err;
+});
+}
+
+// Меняет громкость через Web Audio API: источник → разделение на каналы → свой GainNode
+// для каждого канала → обратно в один поток. outRate — частота результата (для MP3 иногда
+// приходится перевести в поддерживаемую кодировщиком).
+function applyGain(buffer, gain, channelMode, outRate) {
+var Offline = window.OfflineAudioContext || window.webkitOfflineAudioContext;
+var channels = buffer.numberOfChannels;
+var length = Math.max(1, Math.ceil(buffer.duration * outRate));
+var off = new Offline(channels, length, outRate);
+var src = off.createBufferSource();
+src.buffer = buffer;
+var splitter = off.createChannelSplitter(channels);
+var merger = off.createChannelMerger(channels);
+src.connect(splitter);
+for (var ch = 0; ch < channels; ch++) {
+var g = off.createGain();
+var affected = channels === 1 || channelMode === 'all' ||
+(channelMode === 'left' && ch === 0) || (channelMode === 'right' && ch === 1);
+g.gain.value = affected ? gain : 1;
+splitter.connect(g, ch);
+g.connect(merger, 0, ch);
+}
+merger.connect(off.destination);
+src.start(0);
+return new Promise(function(resolve, reject) {
+off.oncomplete = function(e) { resolve(e.renderedBuffer); };
+var p = off.startRendering();
+if (p && p.then) p.then(resolve, reject);
+});
+}
+
+// float [-1..1] → 16 бит; заодно считает, сколько отсчётов пришлось обрезать (перегруз)
+function floatTo16(data, stats) {
+var out = new Int16Array(data.length);
+for (var i = 0; i < data.length; i++) {
+var s = data[i];
+if (s > 1) { s = 1; stats.clipped++; } else if (s < -1) { s = -1; stats.clipped++; }
+out[i] = s < 0 ? s * 0x8000 : s * 0x7FFF;
+}
+return out;
+}
+
+function encodeWav(buffer, stats) {
+var channels = buffer.numberOfChannels;
+var rate = buffer.sampleRate;
+var frames = buffer.length;
+var pcm = [];
+for (var ch = 0; ch < channels; ch++) pcm.push(floatTo16(buffer.getChannelData(ch), stats));
+var dataSize = frames * channels * 2;
+var ab = new ArrayBuffer(44 + dataSize);
+var v = new DataView(ab);
+function str(off, s) { for (var i = 0; i < s.length; i++) v.setUint8(off + i, s.charCodeAt(i)); }
+str(0, 'RIFF'); v.setUint32(4, 36 + dataSize, true); str(8, 'WAVE');
+str(12, 'fmt '); v.setUint32(16, 16, true); v.setUint16(20, 1, true); v.setUint16(22, channels, true);
+v.setUint32(24, rate, true); v.setUint32(28, rate * channels * 2, true);
+v.setUint16(32, channels * 2, true); v.setUint16(34, 16, true);
+str(36, 'data'); v.setUint32(40, dataSize, true);
+var off = 44;
+for (var i = 0; i < frames; i++) {
+for (var c = 0; c < channels; c++) { v.setInt16(off, pcm[c][i], true); off += 2; }
+}
+return Promise.resolve(new Blob([ab], { type: 'audio/wav' }));
+}
+
+var lameLoadPromise = null;
+function ensureLame() {
+if (window.lamejs) return Promise.resolve();
+if (lameLoadPromise) return lameLoadPromise;
+lameLoadPromise = new Promise(function(resolve, reject) {
+var script = document.createElement('script');
+script.src = 'js/vendor/lame.min.js';
+script.onload = function() { resolve(); };
+script.onerror = function() { lameLoadPromise = null; reject(new Error('не удалось загрузить MP3-кодировщик')); };
+document.head.appendChild(script);
+});
+return lameLoadPromise;
+}
+
+// MP3 всегда сохраняем в 320 кбит/с: на меньшем битрейте повторное сжатие съедает часть качества
+// и немного громкости (0,3–0,5 дБ), и результат отличался бы от выбранного уровня
+var MP3_KBPS = 320;
+
+function encodeMp3(buffer, kbps, stats) {
+return ensureLame().then(function() {
+var channels = Math.min(2, buffer.numberOfChannels);
+var left = floatTo16(buffer.getChannelData(0), stats);
+var right = channels === 2 ? floatTo16(buffer.getChannelData(1), stats) : null;
+var encoder = new window.lamejs.Mp3Encoder(channels, buffer.sampleRate, kbps);
+var parts = [];
+var BLOCK = 1152 * 64;
+var pos = 0;
+// кодируем кусками и отдаём управление браузеру, чтобы страница не «зависала» на длинных файлах
+return new Promise(function(resolve, reject) {
+function step() {
+try {
+var end = Math.min(pos + BLOCK, left.length);
+var mp3buf = channels === 2 ?
+encoder.encodeBuffer(left.subarray(pos, end), right.subarray(pos, end)) :
+encoder.encodeBuffer(left.subarray(pos, end));
+if (mp3buf.length) parts.push(new Uint8Array(mp3buf));
+pos = end;
+if (pos < left.length) {
+setStatus('Сохраняю в MP3… ' + Math.round(pos / left.length * 100) + '%');
+setTimeout(step, 0);
+} else {
+var last = encoder.flush();
+if (last.length) parts.push(new Uint8Array(last));
+resolve(new Blob(parts, { type: 'audio/mpeg' }));
+}
+} catch (e) { reject(e); }
+}
+step();
+});
+});
+}
+
+processBtn.addEventListener('click', function() {
+if (!currentFile || busy) return;
+setBusy(true);
+resetResult();
+var file = currentFile;
+var db = parseFloat(dbSel.value);
+var signedDb = actionSel.value === 'down' ? -db : db;
+var gain = Math.pow(10, signedDb / 20);
+var channelMode = channelsSel.value;
+var format = formatSel.value;
+var stats = { clipped: 0 };
+var isMono = false;
+setStatus('Читаю файл…');
+
+readFileAsArrayBuffer(file).then(function(ab) {
+return decodeAudio(ab);
+}).then(function(decoded) {
+isMono = decoded.numberOfChannels === 1;
+var outRate = decoded.sampleRate;
+if (format === 'mp3' && LAME_SAMPLE_RATES.indexOf(outRate) === -1) outRate = 44100;
+setStatus('Меняю громкость…');
+return applyGain(decoded, gain, channelMode, outRate).then(function(rendered) {
+if (format === 'wav') {
+setStatus('Сохраняю в WAV…');
+return encodeWav(rendered, stats);
+}
+return encodeMp3(rendered, MP3_KBPS, stats);
+});
+}).then(function(blob) {
+var base = (file.name || 'audio').replace(/\.[^.]+$/, '');
+var dbLabel = (signedDb > 0 ? '+' : '') + String(signedDb).replace('.', ',') + 'dB';
+resultBlob = blob;
+resultName = base + '_' + dbLabel + '.' + format;
+downloadBtn.hidden = false;
+var msg = 'Готово! Было ' + formatSize(file.size) + ', стало ' + formatSize(blob.size) + '.';
+var kind = '';
+if (isMono && channelMode !== 'all') {
+msg += ' В файле один канал (моно), поэтому громкость изменена во всём звуке.';
+kind = 'warn';
+}
+if (stats.clipped > 0) {
+msg += ' Местами звук упёрся в максимум громкости — могут появиться хрипы. Если так, выберите меньше децибел.';
+kind = 'warn';
+}
+setStatus(msg, kind);
+}).catch(function(err) {
+setStatus('Не удалось обработать файл: ' + ((err && err.message) || 'файл повреждён или браузер не умеет его читать') + '.', 'err');
+}).then(function() {
+setBusy(false);
+});
+});
+
+downloadBtn.addEventListener('click', function() {
+if (!resultBlob) return;
+downloadBlob(resultBlob, resultName);
+setStatus('Готово! Файл сохранён в папку «Загрузки».');
 });
 })();
 </script>
