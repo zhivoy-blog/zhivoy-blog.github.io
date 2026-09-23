@@ -670,6 +670,7 @@ ym(112807526, "init", {ssr:true, webvisor:true, clickmap:true, referrer: documen
 <button class="btn primary" id="volume-process" disabled>Обработать</button>
 <div class="status-msg" id="volume-status"></div>
 
+<button class="btn" id="volume-listen" type="button" style="margin-top:12px" hidden>▶ Послушать результат</button>
 <button class="btn success" id="volume-download" style="margin-top:12px" hidden>Скачать готовый файл</button>
 </div>
 </section>
@@ -2572,6 +2573,9 @@ var channelsSel = document.getElementById('volume-channels');
 var formatSel = document.getElementById('volume-format');
 var processBtn = document.getElementById('volume-process');
 var downloadBtn = document.getElementById('volume-download');
+var listenBtn = document.getElementById('volume-listen');
+var player = new Audio();
+var playerUrl = null;
 var statusEl = document.getElementById('volume-status');
 var sampleBtn = document.getElementById('volume-sample');
 var SAMPLE_URL = 'audio/vivaldi-vesna-primer.mp3';
@@ -2592,7 +2596,34 @@ statusEl.className = 'status-msg' + (kind ? ' ' + kind : '');
 function resetResult() {
 resultBlob = null;
 downloadBtn.hidden = true;
+listenBtn.hidden = true;
+stopPlayer();
+if (playerUrl) { URL.revokeObjectURL(playerUrl); playerUrl = null; }
 }
+
+// ---- Прослушивание результата перед скачиванием ----
+function stopPlayer() {
+player.pause();
+listenBtn.textContent = '▶ Послушать результат';
+}
+
+listenBtn.addEventListener('click', function() {
+if (!resultBlob) return;
+if (!player.paused) { stopPlayer(); return; }
+if (!playerUrl) {
+playerUrl = URL.createObjectURL(resultBlob);
+player.src = playerUrl;
+}
+var p = player.play();
+listenBtn.textContent = '⏸ Пауза';
+if (p && p.catch) p.catch(function() {
+stopPlayer();
+setStatus('Браузер не смог воспроизвести файл, но его можно скачать и послушать в плеере.', 'warn');
+});
+});
+player.addEventListener('ended', function() {
+listenBtn.textContent = '▶ Послушать ещё раз';
+});
 
 // Пока идёт обработка, файл и настройки менять нельзя — иначе результат не совпадёт с тем, что выбрано
 function setBusy(value) {
@@ -2840,8 +2871,9 @@ var base = (file.name || 'audio').replace(/\.[^.]+$/, '');
 var dbLabel = (signedDb > 0 ? '+' : '') + String(signedDb).replace('.', ',') + 'dB';
 resultBlob = blob;
 resultName = base + '_' + dbLabel + '.' + format;
+listenBtn.hidden = false;
 downloadBtn.hidden = false;
-var msg = 'Готово! Было ' + formatSize(file.size) + ', стало ' + formatSize(blob.size) + '.';
+var msg = 'Готово! Было ' + formatSize(file.size) + ', стало ' + formatSize(blob.size) + '. Послушайте результат — если громкость не та, поменяйте децибелы и нажмите «Обработать» ещё раз.';
 var kind = '';
 if (isMono && channelMode !== 'all') {
 msg += ' В файле один канал (моно), поэтому громкость изменена во всём звуке.';
