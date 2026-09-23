@@ -701,7 +701,7 @@ ym(112807526, "init", {ssr:true, webvisor:true, clickmap:true, referrer: documen
 <section class="panel" id="panel-vcompress">
 <div class="card video-card">
 <h2>Сжатие видео</h2>
-<p class="hint">Уменьшает вес видео, чтобы его было удобно отправить в мессенджер или по почте. Подходит для MP4, MOV (видео с iPhone), WEBM и других форматов. Результат — MP4, который открывается везде.</p>
+<p class="hint">Уменьшает вес видео, чтобы его было быстрее отправить или выложить. Выберите, куда отправляете, — остальное сайт сделает сам. Подходит для любого видео с телефона.</p>
 <label class="dropzone" id="vcompress-dropzone">
 <div class="dz-icon">🎬</div>
 <span id="vcompress-dz-text">Нажмите, чтобы выбрать видео</span>
@@ -711,9 +711,9 @@ ym(112807526, "init", {ssr:true, webvisor:true, clickmap:true, referrer: documen
 <div class="field">
 <label for="vcompress-level">Уровень сжатия</label>
 <select id="vcompress-level">
-<option value="light">Лёгкое</option>
-<option value="medium" selected>Среднее</option>
-<option value="strong">Сильное</option>
+<option value="light">Лёгкое — для ВК и YouTube</option>
+<option value="medium" selected>Среднее — для Telegram и WhatsApp</option>
+<option value="strong">Сильное — для почты</option>
 </select>
 <p class="level-hint" id="vcompress-level-hint"></p>
 </div>
@@ -3558,9 +3558,9 @@ var levelHint = document.getElementById('vcompress-level-hint');
 t.controls = [levelSel];
 // max — предел длинной стороны кадра; crf — чем больше, тем сильнее сжатие
 var LEVELS = {
-light: { crf: 26, max: 1920, audio: '128k', hint: 'Лёгкое — качество почти как у оригинала, файл уменьшится не так сильно.' },
-medium: { crf: 30, max: 1280, audio: '96k', hint: 'Среднее — хороший баланс: файл заметно меньше, качество остаётся приличным (до 720p).' },
-strong: { crf: 35, max: 854, audio: '64k', hint: 'Сильное — самый маленький файл, но заметно хуже качество (до 480p).' }
+light: { crf: 26, max: 1920, audio: '128k', hint: 'Видео выглядит почти как оригинал, файл станет поменьше. Совет: в ВК и на YouTube можно загружать и вовсе без сжатия — так качество будет лучше всего.' },
+medium: { crf: 30, max: 1280, audio: '96k', hint: 'Файл станет намного меньше, а на экране телефона разницы почти не видно. Подходит для отправки в мессенджер.' },
+strong: { crf: 35, max: 854, audio: '64k', hint: 'Самый маленький файл — для почты или очень медленного интернета. Картинка станет заметно хуже.' }
 };
 function showHint() { levelHint.textContent = LEVELS[levelSel.value].hint; }
 showHint();
