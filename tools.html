@@ -615,7 +615,7 @@ ym(112807526, "init", {ssr:true, webvisor:true, clickmap:true, referrer: documen
 <span id="volume-dz-text">Нажмите, чтобы выбрать MP3-файл</span>
 <input type="file" accept=".mp3,audio/mpeg,audio/mp3" id="volume-file">
 </label>
-<button class="btn small" id="volume-sample" type="button" style="margin-top:10px;width:100%">🎻 Попробовать на примере: Вивальди, «Весна»</button>
+<button class="btn small" id="volume-sample" type="button" style="margin-top:10px;width:100%">🎵 Попробовать на примере</button>
 
 <div class="field">
 <label for="volume-action">Действие</label>
@@ -2578,8 +2578,8 @@ var player = new Audio();
 var playerUrl = null;
 var statusEl = document.getElementById('volume-status');
 var sampleBtn = document.getElementById('volume-sample');
-var SAMPLE_URL = 'audio/vivaldi-vesna-primer.mp3';
-var SAMPLE_NAME = 'vivaldi-vesna-primer.mp3';
+var SAMPLE_URL = 'audio/primer.mp3';
+var SAMPLE_NAME = 'explosive-start-primer.mp3';
 
 var LAME_SAMPLE_RATES = [8000, 11025, 12000, 16000, 22050, 24000, 32000, 44100, 48000];
 
@@ -2661,9 +2661,7 @@ var file = fileInput.files && fileInput.files[0];
 if (file) selectFile(file);
 });
 
-// Пример для пробы: начало «Весны» из «Времён года» А. Вивальди (синтезированный фрагмент,
-// 23 секунды; музыка в общественном достоянии). Мелодия чуть левее, бас чуть правее —
-// так на примере слышно и выбор каналов.
+// Пример для пробы: 25-секундный фрагмент трека «Explosive Start» (музыка автора сайта, сделана в Suno).
 sampleBtn.addEventListener('click', function() {
 if (busy) return;
 sampleBtn.disabled = true;
@@ -2674,7 +2672,7 @@ return res.blob();
 }).then(function(blob) {
 fileInput.value = '';
 selectFile(new File([blob], SAMPLE_NAME, { type: 'audio/mpeg' }));
-setStatus('Пример загружен: А. Вивальди, «Весна» (фрагмент). Выберите настройки и нажмите «Обработать».');
+setStatus('Пример загружен: «Explosive Start» (фрагмент 25 секунд). Выберите настройки и нажмите «Обработать».');
 }).catch(function() {
 setStatus('Не удалось загрузить пример. Проверьте интернет и попробуйте ещё раз.', 'err');
 }).then(function() {
