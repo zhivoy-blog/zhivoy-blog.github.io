@@ -3,15 +3,16 @@
 // Все ссылки строятся от адреса этого файла, поэтому скрипт работает
 // и в корне сайта, и в articles/<slug>/.
 (function() {
-// Короткий текст для блока «О проекте» в подвале — меняется только здесь.
-var ABOUT_TEXT = 'Меня зовут Вадим. Я обычный человек, без диплома программиста, который сам разбирается в нейросетях — полностью с телефона и планшета. Делюсь только тем, что реально попробовал своими руками, без теории и красивых слов.';
+// Фраза-тизер для блока «О проекте» в подвале (полный текст — на about.html).
+var ABOUT_TEXT = 'Кто ведёт этот блог и почему без прикрас';
 
 var SOCIAL = [
 { title: 'ВКонтакте', href: 'https://vk.ru/zhivoy_ai' },
 { title: 'vc.ru', href: 'https://vc.ru/id6025411' },
 { title: 'Telegram', href: 'https://t.me/zhivoy_ii' }
 ];
-var CONTACT_HREF = 'https://t.me/zhivoy_ii';
+var CONTACT_TG = 'https://t.me/zhivoy_ii';
+var CONTACT_VK = 'https://vk.ru/zhivoy_ai';
 
 var script = document.currentScript;
 var base = script ? new URL('.', script.src).href : '/';
@@ -102,8 +103,11 @@ footer.innerHTML =
 '</div>' +
 '<div class="footer-col">' +
 '<h3>Контакт</h3>' +
-'<p>Есть вопрос или идея? Пишите в Telegram.</p>' +
-'<a class="footer-write" href="' + CONTACT_HREF + '" target="_blank" rel="noopener noreferrer">Написать</a>' +
+'<p>Есть вопрос или идея? Пишите:</p>' +
+'<div class="footer-write-row">' +
+'<a class="footer-write" href="' + CONTACT_TG + '" target="_blank" rel="noopener noreferrer">Написать в Telegram</a>' +
+'<a class="footer-write vk" href="' + CONTACT_VK + '" target="_blank" rel="noopener noreferrer">Написать в ВК</a>' +
+'</div>' +
 '</div>' +
 '</div>' +
 '<p class="footer-copy">© Живой ИИ</p>';
