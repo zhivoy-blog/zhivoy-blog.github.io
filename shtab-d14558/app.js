@@ -1389,12 +1389,14 @@ document.getElementById('article-content').innerHTML = '<p style="color:#d1d1d6;
       const existingData = await site.getJson(`articles/${slug}/data.json`);
       await site.putJson(`articles/${slug}/data.json`, { title, date: todayStr(), tag, excerpt, content }, `Публикация статьи: ${title}`, existingData ? existingData.sha : undefined);
 
+      // Картинка для соцсетей и для превью в ленте на главной (image в manifest.json)
+      const ogImageFile = cover ? `cover.${extOf(cover.name)}` : (inlineImages[0] ? `image1.${extOf(inlineImages[0].name)}` : null);
+
       const manifestRes = await site.getJson('articles/manifest.json');
       const manifest = (manifestRes ? manifestRes.json : []).filter((a) => a.slug !== slug);
-      manifest.unshift({ slug, title, date: todayStr(), tag, excerpt });
+      manifest.unshift({ slug, title, date: todayStr(), tag, excerpt, image: ogImageFile || '' });
       await site.putJson('articles/manifest.json', manifest, `Добавление статьи в manifest: ${title}`, manifestRes ? manifestRes.sha : undefined);
 
-      const ogImageFile = cover ? `cover.${extOf(cover.name)}` : (inlineImages[0] ? `image1.${extOf(inlineImages[0].name)}` : null);
       const pageHtml = buildArticlePageHtml({ slug, title, excerpt, ogImageFile });
       await site.putText(`articles/${slug}/index.html`, pageHtml, `Страница статьи (мета-теги): ${title}`);
 
