@@ -97,21 +97,33 @@ box-shadow: 0 0 16px rgba(0, 122, 255, 0.45)
 
 /* --- Вкладки --- */
 .tabs {
-display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 8px;
+display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px;
 padding: 4px 2px 12px; margin-bottom: 6px
 }
+@media (min-width: 520px) { .tabs { grid-template-columns: repeat(3, minmax(0, 1fr)) } }
+@media (min-width: 700px) { .tabs { grid-template-columns: repeat(4, minmax(0, 1fr)) } }
+/* карточка инструмента: иконка, название, короткое описание */
 .tab-btn {
+position: relative;
 background-color: var(--card-bg); border: 1px solid var(--border-color);
-color: var(--text-main); padding: 12px 10px; border-radius: 12px; font-size: 14px; font-weight: 600;
-cursor: pointer; min-height: 46px; display: inline-flex; align-items: center; justify-content: center; gap: 6px; text-align: center
+color: var(--text-main); padding: 14px 10px 12px; border-radius: 14px;
+cursor: pointer; min-height: 118px; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; gap: 4px; text-align: center;
+font: inherit; box-shadow: 0 0 12px rgba(0, 122, 255, 0.1);
+transition: transform 0.1s ease, background-color 0.2s, border-color 0.2s;
+-webkit-tap-highlight-color: transparent
 }
-.tab-btn.active { background-color: var(--accent-blue); border-color: var(--accent-blue); color: #fff }
+.tab-btn:active { transform: scale(0.97) }
+.tab-icon { font-size: 30px; line-height: 1.1; margin-bottom: 4px }
+.tab-title { font-size: 14px; font-weight: 700; line-height: 1.25 }
+.tab-desc { font-size: 12px; font-weight: 500; line-height: 1.3; color: var(--text-muted-alt) }
+.tab-btn.active { background-color: var(--accent-blue); border-color: var(--accent-blue); color: #fff; box-shadow: 0 0 16px rgba(0, 122, 255, 0.4) }
+.tab-btn.active .tab-desc { color: rgba(255, 255, 255, 0.88) }
 .tab-btn[hidden] { display: none }
 /* подписи групп инструментов («Размер и качество», «Надписи и мемы») */
 .tab-group { grid-column: 1 / -1; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.6px; color: var(--text-muted-alt); padding: 6px 2px 0 }
 .tab-group:first-child { padding-top: 0 }
 .tab-group[hidden] { display: none }
-.tab-badge { font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.4px; background: var(--accent-green); color: #fff; border-radius: 6px; padding: 2px 6px; line-height: 1.3 }
+.tab-badge { position: absolute; top: 8px; right: 8px; font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.4px; background: var(--accent-green); color: #fff; border-radius: 6px; padding: 2px 6px; line-height: 1.3 }
 
 /* --- Категории инструментов (Картинки / Аудио / Видео) --- */
 .cat-tabs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 14px }
@@ -125,8 +137,8 @@ cursor: pointer; min-height: 50px; display: inline-flex; align-items: center; ju
 .cat-btn[data-cat=images].active { background-color: var(--accent-blue); border-color: var(--accent-blue); color: #fff; box-shadow: 0 0 14px rgba(0, 122, 255, 0.4) }
 .cat-btn[data-cat=audio].active { background-color: var(--accent-audio); border-color: var(--accent-audio); color: #fff; box-shadow: 0 0 14px rgba(52, 199, 89, 0.4) }
 .cat-btn[data-cat=video].active { background-color: var(--accent-video); border-color: var(--accent-video); color: #fff; box-shadow: 0 0 14px rgba(255, 159, 10, 0.4) }
-.page-wrap[data-cat=audio] .tab-btn.active { background-color: var(--accent-audio); border-color: var(--accent-audio) }
-.page-wrap[data-cat=video] .tab-btn.active { background-color: var(--accent-video); border-color: var(--accent-video) }
+.page-wrap[data-cat=audio] .tab-btn.active { background-color: var(--accent-audio); border-color: var(--accent-audio); box-shadow: 0 0 16px rgba(52, 199, 89, 0.4) }
+.page-wrap[data-cat=video] .tab-btn.active { background-color: var(--accent-video); border-color: var(--accent-video); box-shadow: 0 0 16px rgba(255, 159, 10, 0.4) }
 
 .panel { display: none }
 .panel.active { display: block }
@@ -317,19 +329,19 @@ ym(112807526, "init", {ssr:true, webvisor:true, clickmap:true, referrer: documen
 
 <div class="tabs" id="tabs">
 <div class="tab-group" data-cat="images">Размер и качество</div>
-<button class="tab-btn active" data-cat="images" data-tab="compress">🗜️ Сжатие</button>
-<button class="tab-btn" data-cat="images" data-tab="enhance">✨ Улучшение фото <span class="tab-badge">новое</span></button>
-<button class="tab-btn" data-cat="images" data-tab="resize">📐 Размер</button>
-<button class="tab-btn" data-cat="images" data-tab="crop">✂️ Обрезка</button>
-<button class="tab-btn" data-cat="images" data-tab="rotate">🔄 Поворот</button>
-<button class="tab-btn" data-cat="images" data-tab="convert">🔁 Формат</button>
+<button class="tab-btn active" data-cat="images" data-tab="compress"><span class="tab-icon" aria-hidden="true">🗜️</span><span class="tab-title">Сжатие</span><span class="tab-desc">Уменьшает вес файла</span></button>
+<button class="tab-btn" data-cat="images" data-tab="enhance"><span class="tab-icon" aria-hidden="true">✨</span><span class="tab-title">Улучшение фото</span><span class="tab-desc">Чётче и крупнее с помощью ИИ</span><span class="tab-badge">новое</span></button>
+<button class="tab-btn" data-cat="images" data-tab="resize"><span class="tab-icon" aria-hidden="true">📐</span><span class="tab-title">Размер</span><span class="tab-desc">Новые пиксели или проценты</span></button>
+<button class="tab-btn" data-cat="images" data-tab="crop"><span class="tab-icon" aria-hidden="true">✂️</span><span class="tab-title">Обрезка</span><span class="tab-desc">Рамка и готовые пропорции</span></button>
+<button class="tab-btn" data-cat="images" data-tab="rotate"><span class="tab-icon" aria-hidden="true">🔄</span><span class="tab-title">Поворот</span><span class="tab-desc">На 90° или на любой угол</span></button>
+<button class="tab-btn" data-cat="images" data-tab="convert"><span class="tab-icon" aria-hidden="true">🔁</span><span class="tab-title">Формат</span><span class="tab-desc">JPG, PNG, WEBP, HEIC</span></button>
 <div class="tab-group" data-cat="images">Надписи и мемы</div>
-<button class="tab-btn" data-cat="images" data-tab="text">🔤 Текст на картинке</button>
-<button class="tab-btn" data-cat="images" data-tab="meme">😂 Мемы</button>
-<button class="tab-btn" data-cat="audio" data-tab="volume" hidden>🔊 Громкость MP3</button>
-<button class="tab-btn" data-cat="video" data-tab="vcompress" hidden>🗜️ Сжатие видео</button>
-<button class="tab-btn" data-cat="video" data-tab="vtrim" hidden>✂️ Обрезка видео</button>
-<button class="tab-btn" data-cat="video" data-tab="vgif" hidden>🎞️ Видео → GIF</button>
+<button class="tab-btn" data-cat="images" data-tab="text"><span class="tab-icon" aria-hidden="true">🔤</span><span class="tab-title">Текст на картинке</span><span class="tab-desc">Подписи для обложек</span></button>
+<button class="tab-btn" data-cat="images" data-tab="meme"><span class="tab-icon" aria-hidden="true">😂</span><span class="tab-title">Мемы</span><span class="tab-desc">Классический мем за минуту</span></button>
+<button class="tab-btn" data-cat="audio" data-tab="volume" hidden><span class="tab-icon" aria-hidden="true">🔊</span><span class="tab-title">Громкость MP3</span><span class="tab-desc">Громче или тише, по каналам</span></button>
+<button class="tab-btn" data-cat="video" data-tab="vcompress" hidden><span class="tab-icon" aria-hidden="true">🗜️</span><span class="tab-title">Сжатие видео</span><span class="tab-desc">Лёгкое видео для отправки</span></button>
+<button class="tab-btn" data-cat="video" data-tab="vtrim" hidden><span class="tab-icon" aria-hidden="true">✂️</span><span class="tab-title">Обрезка видео</span><span class="tab-desc">Оставить нужный отрезок</span></button>
+<button class="tab-btn" data-cat="video" data-tab="vgif" hidden><span class="tab-icon" aria-hidden="true">🎞️</span><span class="tab-title">Видео → GIF</span><span class="tab-desc">Кусок видео в анимацию</span></button>
 </div>
 
 <!-- ================= СЖАТИЕ ================= -->
@@ -920,11 +932,16 @@ applyTheme(next);
 (function() {
 var buttons = document.querySelectorAll('.tab-btn');
 buttons.forEach(function(btn) {
-btn.addEventListener('click', function() {
+btn.addEventListener('click', function(e) {
 buttons.forEach(function(b) { b.classList.remove('active'); });
 btn.classList.add('active');
 document.querySelectorAll('.panel').forEach(function(p) { p.classList.remove('active'); });
-document.getElementById('panel-' + btn.getAttribute('data-tab')).classList.add('active');
+var panel = document.getElementById('panel-' + btn.getAttribute('data-tab'));
+panel.classList.add('active');
+// Нажали на карточку сами, а панель инструмента ушла ниже экрана (телефон) — плавно докручиваем к ней
+if (e.isTrusted && panel.getBoundingClientRect().top > window.innerHeight - 120) {
+panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
 });
 });
 })();
