@@ -21,6 +21,8 @@
 :root {
 --bg-color: #113154;
 --card-bg: #1b436d;
+/* фон карточек статей: полупрозрачный, чтобы сквозь него была видна анимация */
+--card-bg-glass: rgba(27, 67, 109, 0.88);
 --accent-blue: #007aff;
 --accent-green: #34c759;
 --text-main: #ffffff;
@@ -32,6 +34,7 @@
 [data-theme="light"] {
 --bg-color: #eef2f7;
 --card-bg: #ffffff;
+--card-bg-glass: rgba(255, 255, 255, 0.88);
 --text-main: #11213a;
 --text-muted: #5b6b82;
 --text-muted-alt: #5b6b82;
@@ -202,7 +205,9 @@ max-width: 600px;
 margin-top: 8px
 }
 .article-card {
-background-color: var(--card-bg);
+background-color: var(--card-bg-glass);
+-webkit-backdrop-filter: blur(6px);
+backdrop-filter: blur(6px);
 border-radius: 16px;
 padding: 18px;
 margin-bottom: 18px;
