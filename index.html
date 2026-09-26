@@ -19,27 +19,31 @@
 <meta name="twitter:card" content="summary_large_image">
 <style>
 :root {
---bg-color: #113154;
---card-bg: #1b436d;
+--bg-color: #1a1f2e;
+--card-bg: #242b3d;
+--accent: #d4a94a;
+--accent-rgb: 212, 169, 74;
+--on-accent: #1a1f2e;
 /* фон карточек статей: полупрозрачный, чтобы сквозь него была видна анимация */
---card-bg-glass: rgba(27, 67, 109, 0.88);
---accent-blue: #007aff;
---accent-green: #34c759;
+--card-bg-glass: rgba(36, 43, 61, 0.88);
 --text-main: #ffffff;
---text-muted: #8e9e93;
---text-muted-alt: #8e9eaf;
---border-color: #0088cc;
+--text-muted: #a8b0bf;
+--text-muted-alt: #a8b0bf;
+--border-color: #3a4358;
 --line-color: 220, 225, 235
 }
 [data-theme="light"] {
 --bg-color: #eef2f7;
 --card-bg: #ffffff;
 --card-bg-glass: rgba(255, 255, 255, 0.88);
+--accent: #8f6310;
+--accent-rgb: 143, 99, 16;
+--on-accent: #ffffff;
 --text-main: #11213a;
 --text-muted: #5b6b82;
 --text-muted-alt: #5b6b82;
---border-color: #cfd8e3;
---line-color: 0, 90, 160
+--border-color: #d5dae3;
+--line-color: 143, 99, 16
 }
 * {
 box-sizing: border-box;
@@ -88,7 +92,7 @@ cursor: pointer;
 display: flex;
 align-items: center;
 justify-content: center;
-box-shadow: 0 0 14px rgba(0, 122, 255, 0.25)
+box-shadow: 0 0 14px rgba(var(--accent-rgb), 0.25)
 }
 .search-box {
 width: 100%;
@@ -106,7 +110,7 @@ background-color: var(--card-bg);
 color: var(--text-main);
 font-size: 15px;
 outline: none;
-box-shadow: 0 0 14px rgba(0, 122, 255, 0.2)
+box-shadow: 0 0 14px rgba(var(--accent-rgb), 0.2)
 }
 .search-box input::placeholder {
 color: var(--text-muted-alt)
@@ -138,8 +142,8 @@ align-items: center;
 justify-content: center;
 flex: 1 1 140px;
 max-width: 180px;
-background-color: var(--accent-blue);
-color: white;
+background-color: var(--accent);
+color: var(--on-accent);
 text-align: center;
 padding: 14px 16px;
 border-radius: 12px;
@@ -147,22 +151,8 @@ font-weight: 700;
 text-decoration: none;
 font-size: 14px;
 letter-spacing: 0.3px;
-box-shadow: 0 0 16px rgba(0, 122, 255, 0.45);
+box-shadow: 0 0 16px rgba(var(--accent-rgb), 0.45);
 transition: transform 0.1s ease
-}
-.btn-link.vk {
-background-color: #0077ff;
-}
-.btn-link.vc {
-background-color: #ff5c00;
-box-shadow: 0 0 16px rgba(255, 92, 0, 0.45);
-}
-.btn-link.tg {
-background-color: #007aff;
-}
-.btn-link.tools {
-background-color: var(--accent-green);
-box-shadow: 0 0 16px rgba(52, 199, 89, 0.45);
 }
 .btn-link:active {
 transform: scale(0.97)
@@ -179,8 +169,8 @@ max-width: 600px
 }
 .tag-btn {
 background-color: transparent;
-border: 1px solid var(--accent-blue);
-color: var(--accent-blue);
+border: 1px solid var(--accent);
+color: var(--accent);
 padding: 10px 18px;
 border-radius: 10px;
 font-size: 15px;
@@ -193,11 +183,11 @@ align-items: center;
 justify-content: center;
 text-align: center;
 white-space: nowrap;
-box-shadow: 0 0 10px rgba(0, 122, 255, 0.15)
+box-shadow: 0 0 10px rgba(var(--accent-rgb), 0.15)
 }
 .tag-btn.active-tag {
-background-color: var(--accent-blue);
-color: #fff
+background-color: var(--accent);
+color: var(--on-accent)
 }
 .feed {
 width: 100%;
@@ -211,9 +201,42 @@ backdrop-filter: blur(6px);
 border-radius: 16px;
 padding: 18px;
 margin-bottom: 18px;
-border: 1px solid var(--border-color);
-box-shadow: 0 0 16px rgba(0, 122, 255, 0.18);
+border: 1px solid transparent;
+box-shadow: 0 4px 18px rgba(0, 0, 0, 0.18);
 transition: opacity 0.2s, transform 0.2s, background-color 0.3s
+}
+/* самая свежая публикация — первая в ленте */
+.article-card.is-latest {
+border-color: var(--accent);
+box-shadow: 0 0 0 1px var(--accent), 0 0 22px rgba(var(--accent-rgb), 0.35)
+}
+/* слева — круглый бейдж с номером в ленте, справа — текст карточки */
+.article-row {
+display: flex;
+align-items: flex-start;
+gap: 14px
+}
+.article-num {
+flex: none;
+width: 38px;
+height: 38px;
+border-radius: 50%;
+border: 2px solid var(--accent);
+color: var(--accent);
+display: flex;
+align-items: center;
+justify-content: center;
+font-size: 15px;
+font-weight: 700;
+font-variant-numeric: tabular-nums
+}
+.article-card.is-latest .article-num {
+background-color: var(--accent);
+color: var(--on-accent)
+}
+.article-body {
+flex: 1;
+min-width: 0
 }
 .article-thumb {
 display: block;
@@ -221,7 +244,7 @@ margin: -18px -18px 14px;
 height: 180px;
 overflow: hidden;
 border-radius: 16px 16px 0 0;
-background-color: rgba(0, 122, 255, 0.12)
+background-color: rgba(var(--accent-rgb), 0.12)
 }
 .article-thumb img {
 display: block;
@@ -255,8 +278,8 @@ margin-bottom: 14px
 display: block;
 width: 100%;
 background-color: transparent;
-border: 1px solid var(--accent-blue);
-color: var(--accent-blue);
+border: 1px solid var(--accent);
+color: var(--accent);
 text-align: center;
 padding: 12px;
 border-radius: 12px;
@@ -264,11 +287,11 @@ font-weight: 600;
 text-decoration: none;
 font-size: 15px;
 transition: background-color 0.2s, color 0.2s;
-box-shadow: 0 0 10px rgba(0, 122, 255, 0.15)
+box-shadow: 0 0 10px rgba(var(--accent-rgb), 0.15)
 }
 .read-more:active {
-background-color: var(--accent-blue);
-color: white
+background-color: var(--accent);
+color: var(--on-accent)
 }
 .feed-loading {
 text-align: center;
@@ -378,6 +401,10 @@ H = canvas.height = window.innerHeight;
 window.addEventListener('resize', resize);
 resize();
 
+function getAccentColor() {
+return getComputedStyle(document.documentElement).getPropertyValue('--accent-rgb').trim() || '212, 169, 74';
+}
+
 function getLineColor() {
 return getComputedStyle(document.documentElement).getPropertyValue('--line-color').trim() || '220, 225, 235';
 }
@@ -420,12 +447,14 @@ mouse.active = false;
 
 function draw() {
 ctx.clearRect(0, 0, W, H);
+var accentColor = getAccentColor();
+var lineColor = getLineColor();
 
 for (var i = 0; i < particles.length; i++) {
 particles[i].update();
 ctx.beginPath();
 ctx.arc(particles[i].x, particles[i].y, particles[i].r, 0, Math.PI * 2);
-ctx.fillStyle = 'rgba(0, 122, 255, 0.7)';
+ctx.fillStyle = 'rgba(' + accentColor + ', 0.7)';
 ctx.fill();
 }
 
@@ -438,7 +467,7 @@ if (dist < LINK_DIST) {
 ctx.beginPath();
 ctx.moveTo(particles[a].x, particles[a].y);
 ctx.lineTo(particles[b].x, particles[b].y);
-ctx.strokeStyle = 'rgba(' + getLineColor() + ', ' + (1 - dist / LINK_DIST) * 0.35 + ')';
+ctx.strokeStyle = 'rgba(' + lineColor + ', ' + (1 - dist / LINK_DIST) * 0.35 + ')';
 ctx.lineWidth = 1;
 ctx.stroke();
 }
@@ -528,11 +557,22 @@ link.className = 'read-more';
 link.href = 'articles/' + article.slug + '/';
 link.textContent = 'Читать полностью';
 
+var row = document.createElement('div');
+row.className = 'article-row';
+var num = document.createElement('span');
+num.className = 'article-num';
+num.setAttribute('aria-hidden', 'true');
+var body = document.createElement('div');
+body.className = 'article-body';
+body.appendChild(time);
+body.appendChild(h2);
+body.appendChild(excerpt);
+body.appendChild(link);
+row.appendChild(num);
+row.appendChild(body);
+
 addThumb(card, article);
-card.appendChild(time);
-card.appendChild(h2);
-card.appendChild(excerpt);
-card.appendChild(link);
+card.appendChild(row);
 return card;
 }
 
@@ -544,6 +584,8 @@ var matchesSearch = currentSearch === '' || card.getAttribute('data-search').ind
 if (matchesTag && matchesSearch) {
 card.classList.remove('is-hidden');
 visibleCount++;
+// номер по порядку среди карточек, видимых сейчас в ленте
+card.querySelector('.article-num').textContent = visibleCount;
 } else {
 card.classList.add('is-hidden');
 }
@@ -596,8 +638,9 @@ if (articles.length === 0) {
 feed.innerHTML = '<p class="feed-loading">Нет опубликованных статей.</p>';
 return;
 }
-articles.forEach(function(article) {
+articles.forEach(function(article, i) {
 var card = createCard(article);
+if (i === 0) card.classList.add('is-latest');
 allCards.push(card);
 feed.appendChild(card);
 });
