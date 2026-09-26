@@ -210,6 +210,20 @@ border: 1px solid var(--border-color);
 box-shadow: 0 0 16px rgba(0, 122, 255, 0.18);
 transition: opacity 0.2s, transform 0.2s, background-color 0.3s
 }
+.article-thumb {
+display: block;
+margin: -18px -18px 14px;
+height: 180px;
+overflow: hidden;
+border-radius: 16px 16px 0 0;
+background-color: rgba(0, 122, 255, 0.12)
+}
+.article-thumb img {
+display: block;
+width: 100%;
+height: 100%;
+object-fit: cover
+}
 .article-card.is-hidden {
 display: none !important
 }
@@ -451,6 +465,41 @@ var year = date.getFullYear();
 return day + ' ' + month + ' ' + year;
 }
 
+// Превью статьи: имя файла картинки берётся из поля image в manifest.json
+// (пустая строка — у статьи нет картинки). Если поля нет, берём первую
+// картинку из data.json статьи. Не загрузилась — блок убирается целиком.
+function addThumb(card, article) {
+var base = 'articles/' + article.slug + '/';
+if (article.image === '') return;
+
+var wrap = document.createElement('a');
+wrap.className = 'article-thumb';
+wrap.href = base;
+wrap.setAttribute('aria-hidden', 'true');
+wrap.tabIndex = -1;
+var img = document.createElement('img');
+img.alt = '';
+img.loading = 'lazy';
+img.decoding = 'async';
+img.onerror = function() { wrap.remove(); };
+wrap.appendChild(img);
+
+if (article.image) {
+img.src = base + article.image;
+card.appendChild(wrap);
+return;
+}
+fetch(base + 'data.json', { cache: 'no-store' })
+.then(function(r) { return r.ok ? r.json() : null; })
+.then(function(data) {
+var m = data && /<img[^>]+src="([^"]+)"/.exec(data.content || '');
+if (!m) return;
+img.src = base + m[1].replace(/^\.\//, '');
+card.insertBefore(wrap, card.firstChild);
+})
+.catch(function() {});
+}
+
 function createCard(article) {
 var card = document.createElement('article');
 card.className = 'article-card';
@@ -474,6 +523,7 @@ link.className = 'read-more';
 link.href = 'articles/' + article.slug + '/';
 link.textContent = 'Читать полностью';
 
+addThumb(card, article);
 card.appendChild(time);
 card.appendChild(h2);
 card.appendChild(excerpt);
