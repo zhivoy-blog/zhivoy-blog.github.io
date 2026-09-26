@@ -56,6 +56,12 @@ body {
     text-decoration: underline
 }
 
+/* картинки внутри статьи никогда не шире карточки */
+article img {
+    max-width: 100%;
+    height: auto
+}
+
 article {
     background-color: var(--card-bg);
     border-radius: 16px;
