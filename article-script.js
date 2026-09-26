@@ -20,8 +20,8 @@
                 max-width: 600px;
                 margin: 24px auto;
                 padding: 18px;
-                background-color: var(--card-bg, #1b436d);
-                border: 1px solid var(--border-color, #0088cc);
+                background-color: var(--card-bg, #242b3d);
+                border: 1px solid var(--border-color, #3a4358);
                 border-radius: 16px;
             }
             .read-more-block h3 {
@@ -32,7 +32,7 @@
             .read-more-link {
                 display: block;
                 padding: 10px 0;
-                color: var(--accent-blue, #007aff);
+                color: var(--accent, #d4a94a);
                 text-decoration: none;
                 font-size: 15px;
                 border-top: 1px solid rgba(255,255,255,0.08);
@@ -56,7 +56,7 @@
             }
             .reaction-btn {
                 background: transparent;
-                border: 1px solid var(--border-color, #0088cc);
+                border: 1px solid var(--border-color, #3a4358);
                 color: var(--text-main, #fff);
                 padding: 8px 14px;
                 border-radius: 10px;
@@ -64,12 +64,13 @@
                 cursor: pointer;
             }
             .reaction-btn.active {
-                background-color: var(--accent-blue, #007aff);
-                border-color: var(--accent-blue, #007aff);
+                background-color: var(--accent, #d4a94a);
+                border-color: var(--accent, #d4a94a);
+                color: var(--on-accent, #1a1f2e);
             }
             .views-counter {
                 font-size: 14px;
-                color: var(--text-muted-alt, #8e9eaf);
+                color: var(--text-muted-alt, #a8b0bf);
             }
             .share-block {
                 max-width: 600px;
@@ -88,9 +89,8 @@
                 font-weight: 600;
                 font-size: 14px;
             }
-            .share-btn.vk { background-color: #0077ff; }
-            .share-btn.tg { background-color: var(--accent-blue, #007aff); }
-            .share-btn.copy { background-color: #445b7c; cursor: pointer; border: none; }
+            .share-btn.vk, .share-btn.tg { background-color: var(--accent, #d4a94a); color: var(--on-accent, #1a1f2e); }
+            .share-btn.copy { background-color: var(--border-color, #3a4358); cursor: pointer; border: none; }
             .scroll-top-btn {
                 position: fixed;
                 bottom: 24px;
@@ -98,8 +98,8 @@
                 width: 46px;
                 height: 46px;
                 border-radius: 50%;
-                background-color: var(--accent-blue, #007aff);
-                color: #fff;
+                background-color: var(--accent, #d4a94a);
+                color: var(--on-accent, #1a1f2e);
                 border: none;
                 font-size: 20px;
                 display: flex;
@@ -120,7 +120,7 @@
                 top: 0;
                 left: 0;
                 height: 3px;
-                background-color: var(--accent-blue, #007aff);
+                background-color: var(--accent, #d4a94a);
                 z-index: 1000;
                 width: 0%;
             }

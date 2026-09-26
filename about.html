@@ -20,22 +20,26 @@
 
 <style>
 :root {
---bg-color: #113154;
---card-bg: #1b436d;
---accent-blue: #007aff;
---accent-green: #34c759;
+--bg-color: #1a1f2e;
+--card-bg: #242b3d;
+--accent: #d4a94a;
+--accent-rgb: 212, 169, 74;
+--on-accent: #1a1f2e;
 --text-main: #ffffff;
---text-muted: #8e9e93;
---text-muted-alt: #8e9eaf;
---border-color: #0088cc
+--text-muted: #a8b0bf;
+--text-muted-alt: #a8b0bf;
+--border-color: #3a4358
 }
 [data-theme="light"] {
 --bg-color: #eef2f7;
 --card-bg: #ffffff;
+--accent: #8f6310;
+--accent-rgb: 143, 99, 16;
+--on-accent: #ffffff;
 --text-main: #11213a;
 --text-muted: #5b6b82;
 --text-muted-alt: #5b6b82;
---border-color: #cfd8e3
+--border-color: #d5dae3
 }
 * {
 box-sizing: border-box;
@@ -78,7 +82,7 @@ cursor: pointer;
 display: flex;
 align-items: center;
 justify-content: center;
-box-shadow: 0 0 14px rgba(0, 122, 255, 0.25)
+box-shadow: 0 0 14px rgba(var(--accent-rgb), 0.25)
 }
 .header h1 {
 font-size: 22px;
@@ -97,8 +101,8 @@ align-items: center;
 justify-content: center;
 flex: 1 1 140px;
 max-width: 180px;
-background-color: var(--accent-blue);
-color: #fff;
+background-color: var(--accent);
+color: var(--on-accent);
 text-align: center;
 padding: 14px 16px;
 border-radius: 12px;
@@ -106,16 +110,13 @@ font-weight: 700;
 text-decoration: none;
 font-size: 14px;
 letter-spacing: 0.3px;
-box-shadow: 0 0 16px rgba(0, 122, 255, 0.45)
+box-shadow: 0 0 16px rgba(var(--accent-rgb), 0.45)
 }
-.btn-link.vk { background-color: #0077ff }
-.btn-link.vc { background-color: #ff5c00; box-shadow: 0 0 16px rgba(255, 92, 0, 0.45) }
-.btn-link.tools { background-color: var(--accent-green); box-shadow: 0 0 16px rgba(52, 199, 89, 0.45) }
 .btn-link:active { transform: scale(0.97) }
 .back-link {
 display: inline-flex;
 align-items: center;
-color: var(--accent-blue);
+color: var(--accent);
 text-decoration: none;
 font-size: 15px;
 font-weight: 600;
@@ -127,7 +128,7 @@ background-color: var(--card-bg);
 border-radius: 16px;
 padding: 24px 20px;
 border: 1px solid var(--border-color);
-box-shadow: 0 0 16px rgba(0, 122, 255, 0.18)
+box-shadow: 0 0 16px rgba(var(--accent-rgb), 0.18)
 }
 .about-card h2 {
 font-size: 20px;

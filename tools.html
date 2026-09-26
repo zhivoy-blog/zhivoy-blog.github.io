@@ -22,15 +22,17 @@
 
 <style>
 :root {
---bg-color: #113154;
---card-bg: #1b436d;
---card-bg-2: #16395c;
---accent-blue: #007aff;
+--bg-color: #1a1f2e;
+--card-bg: #242b3d;
+--accent: #d4a94a;
+--accent-rgb: 212, 169, 74;
+--on-accent: #1a1f2e;
+--card-bg-2: #1e2434;
 --accent-green: #34c759;
 --text-main: #ffffff;
---text-muted: #8e9e93;
---text-muted-alt: #8e9eaf;
---border-color: #0088cc;
+--text-muted: #a8b0bf;
+--text-muted-alt: #a8b0bf;
+--border-color: #3a4358;
 --accent-warn: #ffb340;
 --accent-audio: #34c759;
 --accent-video: #ff9f0a
@@ -39,10 +41,13 @@
 --bg-color: #eef2f7;
 --card-bg: #ffffff;
 --card-bg-2: #f3f6fa;
+--accent: #8f6310;
+--accent-rgb: 143, 99, 16;
+--on-accent: #ffffff;
 --text-main: #11213a;
 --text-muted: #5b6b82;
 --text-muted-alt: #5b6b82;
---border-color: #cfd8e3;
+--border-color: #d5dae3;
 --accent-warn: #b06a00
 }
 * {
@@ -65,7 +70,7 @@ flex-direction: column;
 align-items: center;
 transition: background-color 0.3s ease, color 0.3s ease
 }
-a { color: var(--accent-blue) }
+a { color: var(--accent) }
 
 /* --- Шапка (как на остальном сайте) --- */
 .header, .page-wrap, .site-footer { width: 100%; max-width: 700px }
@@ -75,22 +80,19 @@ position: absolute; top: 12px; right: 0;
 background-color: transparent; border: 1px solid var(--border-color);
 color: var(--text-main); width: 40px; height: 40px; border-radius: 50%;
 font-size: 18px; cursor: pointer; display: flex; align-items: center; justify-content: center;
-box-shadow: 0 0 14px rgba(0, 122, 255, 0.25)
+box-shadow: 0 0 14px rgba(var(--accent-rgb), 0.25)
 }
 .header h1 { font-size: 22px; font-weight: 700; margin-bottom: 14px }
 .site-links { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-bottom: 8px }
 .btn-link {
 display: inline-flex; align-items: center; justify-content: center;
-flex: 1 1 140px; max-width: 180px; background-color: var(--accent-blue); color: #fff;
+flex: 1 1 140px; max-width: 180px; background-color: var(--accent); color: var(--on-accent);
 text-align: center; padding: 14px 16px; border-radius: 12px; font-weight: 700;
 text-decoration: none; font-size: 14px; letter-spacing: 0.3px;
-box-shadow: 0 0 16px rgba(0, 122, 255, 0.45)
+box-shadow: 0 0 16px rgba(var(--accent-rgb), 0.45)
 }
-.btn-link.vk { background-color: #0077ff }
-.btn-link.vc { background-color: #ff5c00; box-shadow: 0 0 16px rgba(255, 92, 0, 0.45) }
-.btn-link.tools { background-color: var(--accent-green); box-shadow: 0 0 16px rgba(52, 199, 89, 0.45) }
 .btn-link:active { transform: scale(0.97) }
-.back-link { display: inline-flex; align-items: center; color: var(--accent-blue); text-decoration: none; font-size: 15px; font-weight: 600; margin: 4px 0 18px; gap: 4px }
+.back-link { display: inline-flex; align-items: center; color: var(--accent); text-decoration: none; font-size: 15px; font-weight: 600; margin: 4px 0 18px; gap: 4px }
 
 .page-intro { text-align: center; margin-bottom: 18px; color: var(--text-muted-alt); font-size: 14px; padding: 0 4px }
 .page-intro strong { color: var(--text-main) }
@@ -108,7 +110,7 @@ position: relative;
 background-color: var(--card-bg); border: 1px solid var(--border-color);
 color: var(--text-main); padding: 14px 10px 12px; border-radius: 14px;
 cursor: pointer; min-height: 118px; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; gap: 4px; text-align: center;
-font: inherit; box-shadow: 0 0 12px rgba(0, 122, 255, 0.1);
+font: inherit; box-shadow: 0 0 12px rgba(var(--accent-rgb), 0.1);
 transition: transform 0.1s ease, background-color 0.2s, border-color 0.2s;
 -webkit-tap-highlight-color: transparent
 }
@@ -116,8 +118,8 @@ transition: transform 0.1s ease, background-color 0.2s, border-color 0.2s;
 .tab-icon { font-size: 30px; line-height: 1.1; margin-bottom: 4px }
 .tab-title { font-size: 14px; font-weight: 700; line-height: 1.25 }
 .tab-desc { font-size: 12px; font-weight: 500; line-height: 1.3; color: var(--text-muted-alt) }
-.tab-btn.active { background-color: var(--accent-blue); border-color: var(--accent-blue); color: #fff; box-shadow: 0 0 16px rgba(0, 122, 255, 0.4) }
-.tab-btn.active .tab-desc { color: rgba(255, 255, 255, 0.88) }
+.tab-btn.active { background-color: var(--accent); border-color: var(--accent); color: var(--on-accent); box-shadow: 0 0 16px rgba(var(--accent-rgb), 0.4) }
+.tab-btn.active .tab-desc { color: inherit; opacity: 0.85 }
 .tab-btn[hidden] { display: none }
 /* подписи групп инструментов («Размер и качество», «Надписи и мемы») */
 .tab-group { grid-column: 1 / -1; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.6px; color: var(--text-muted-alt); padding: 6px 2px 0 }
@@ -134,16 +136,16 @@ cursor: pointer; min-height: 50px; display: inline-flex; align-items: center; ju
 -webkit-tap-highlight-color: transparent
 }
 .cat-btn:active { transform: scale(0.98) }
-.cat-btn[data-cat=images].active { background-color: var(--accent-blue); border-color: var(--accent-blue); color: #fff; box-shadow: 0 0 14px rgba(0, 122, 255, 0.4) }
-.cat-btn[data-cat=audio].active { background-color: var(--accent-audio); border-color: var(--accent-audio); color: #fff; box-shadow: 0 0 14px rgba(52, 199, 89, 0.4) }
-.cat-btn[data-cat=video].active { background-color: var(--accent-video); border-color: var(--accent-video); color: #fff; box-shadow: 0 0 14px rgba(255, 159, 10, 0.4) }
-.page-wrap[data-cat=audio] .tab-btn.active { background-color: var(--accent-audio); border-color: var(--accent-audio); box-shadow: 0 0 16px rgba(52, 199, 89, 0.4) }
-.page-wrap[data-cat=video] .tab-btn.active { background-color: var(--accent-video); border-color: var(--accent-video); box-shadow: 0 0 16px rgba(255, 159, 10, 0.4) }
+.cat-btn[data-cat=images].active { background-color: var(--accent); border-color: var(--accent); color: var(--on-accent); box-shadow: 0 0 14px rgba(var(--accent-rgb), 0.4) }
+.cat-btn[data-cat=audio].active { background-color: var(--accent-audio); border-color: var(--accent-audio); color: #1a1f2e; box-shadow: 0 0 14px rgba(52, 199, 89, 0.4) }
+.cat-btn[data-cat=video].active { background-color: var(--accent-video); border-color: var(--accent-video); color: #1a1f2e; box-shadow: 0 0 14px rgba(255, 159, 10, 0.4) }
+.page-wrap[data-cat=audio] .tab-btn.active { background-color: var(--accent-audio); border-color: var(--accent-audio); color: #1a1f2e; box-shadow: 0 0 16px rgba(52, 199, 89, 0.4) }
+.page-wrap[data-cat=video] .tab-btn.active { background-color: var(--accent-video); border-color: var(--accent-video); color: #1a1f2e; box-shadow: 0 0 16px rgba(255, 159, 10, 0.4) }
 
 .panel { display: none }
 .panel.active { display: block }
 
-.card { background-color: var(--card-bg); border: 1px solid var(--border-color); border-radius: 16px; padding: 18px; margin-bottom: 16px; box-shadow: 0 0 16px rgba(0,122,255,0.12) }
+.card { background-color: var(--card-bg); border: 1px solid var(--border-color); border-radius: 16px; padding: 18px; margin-bottom: 16px; box-shadow: 0 0 16px rgba(var(--accent-rgb), 0.12) }
 .card h2 { font-size: 17px; margin-bottom: 6px }
 .card .hint { font-size: 13px; color: var(--text-muted-alt); margin-bottom: 14px }
 
@@ -166,11 +168,11 @@ cursor: pointer; min-height: 110px; background-color: var(--card-bg-2)
 
 .btn {
 min-height: 50px; border-radius: 12px; font-weight: 700; font-size: 15px; cursor: pointer;
-border: 1px solid var(--accent-blue); background-color: transparent; color: var(--accent-blue);
+border: 1px solid var(--accent); background-color: transparent; color: var(--accent);
 padding: 12px 18px; width: 100%; -webkit-tap-highlight-color: transparent
 }
 .btn:active { transform: scale(0.98) }
-.btn.primary { background-color: var(--accent-blue); color: #fff }
+.btn.primary { background-color: var(--accent); color: var(--on-accent) }
 .btn.success { background-color: var(--accent-green); border-color: var(--accent-green); color: #fff }
 .btn.small { width: auto; min-height: 44px; padding: 10px 16px; font-size: 14px }
 .btn:disabled { opacity: 0.4; cursor: not-allowed }
@@ -180,7 +182,7 @@ padding: 12px 18px; width: 100%; -webkit-tap-highlight-color: transparent
 flex: 1 1 auto; min-height: 46px; border-radius: 10px; border: 1px solid var(--border-color);
 background-color: var(--card-bg-2); color: var(--text-main); font-size: 14px; font-weight: 600; cursor: pointer
 }
-.preset-btn.active { background-color: var(--accent-blue); border-color: var(--accent-blue); color: #fff }
+.preset-btn.active { background-color: var(--accent); border-color: var(--accent); color: var(--on-accent) }
 
 input[type=range] {
 width: 100%; height: 36px; -webkit-appearance: none; background: transparent
@@ -188,10 +190,10 @@ width: 100%; height: 36px; -webkit-appearance: none; background: transparent
 input[type=range]::-webkit-slider-runnable-track { height: 6px; border-radius: 3px; background: var(--border-color) }
 input[type=range]::-webkit-slider-thumb {
 -webkit-appearance: none; width: 28px; height: 28px; border-radius: 50%;
-background: var(--accent-blue); margin-top: -11px; border: 3px solid #fff; box-shadow: 0 0 6px rgba(0,0,0,0.3)
+background: var(--accent); margin-top: -11px; border: 3px solid #fff; box-shadow: 0 0 6px rgba(0,0,0,0.3)
 }
 input[type=range]::-moz-range-track { height: 6px; border-radius: 3px; background: var(--border-color) }
-input[type=range]::-moz-range-thumb { width: 26px; height: 26px; border-radius: 50%; background: var(--accent-blue); border: 3px solid #fff }
+input[type=range]::-moz-range-thumb { width: 26px; height: 26px; border-radius: 50%; background: var(--accent); border: 3px solid #fff }
 
 input[type=number], input[type=text], select {
 width: 100%; min-height: 48px; border-radius: 10px; border: 1px solid var(--border-color);
@@ -225,7 +227,7 @@ input[type=color] { width: 56px; height: 48px; border-radius: 10px; border: 1px 
 display: inline-flex; align-items: center; gap: 8px; background-color: var(--card-bg-2);
 border: 1px solid var(--border-color); border-radius: 20px; padding: 8px 8px 8px 14px; font-size: 14px; min-height: 40px; cursor: pointer
 }
-.layer-chip.active { border-color: var(--accent-blue); background-color: rgba(0,122,255,0.15) }
+.layer-chip.active { border-color: var(--accent); background-color: rgba(var(--accent-rgb), 0.15) }
 .layer-chip .del { width: 26px; height: 26px; border-radius: 50%; background: rgba(255,255,255,0.12); display: flex; align-items: center; justify-content: center; font-size: 14px }
 
 .font-preview-option { padding: 4px 0 }
@@ -282,13 +284,13 @@ border: 1px solid var(--border-color); border-radius: 12px; padding: 10px 12px
 .cmp-before { position: absolute; inset: 0; clip-path: inset(0 calc(100% - var(--pos)) 0 0) }
 .cmp-before img { width: 100%; height: 100% }
 .cmp-line { position: absolute; top: 0; bottom: 0; left: var(--pos); width: 2px; margin-left: -1px; background: #fff; box-shadow: 0 0 6px rgba(0,0,0,0.6); pointer-events: none }
-.cmp-knob { position: absolute; top: 50%; left: 50%; width: 40px; height: 40px; margin: -20px 0 0 -20px; border-radius: 50%; background: var(--accent-blue); border: 3px solid #fff; color: #fff; font-size: 18px; line-height: 34px; text-align: center; box-shadow: 0 0 8px rgba(0,0,0,0.5); pointer-events: auto; touch-action: none; cursor: ew-resize }
+.cmp-knob { position: absolute; top: 50%; left: 50%; width: 40px; height: 40px; margin: -20px 0 0 -20px; border-radius: 50%; background: var(--accent); border: 3px solid #fff; color: var(--on-accent); font-size: 18px; line-height: 34px; text-align: center; box-shadow: 0 0 8px rgba(0,0,0,0.5); pointer-events: auto; touch-action: none; cursor: ew-resize }
 .cmp-label { position: absolute; top: 8px; font-size: 12px; font-weight: 700; line-height: 1; color: #fff; background: rgba(0,0,0,0.55); padding: 5px 8px; border-radius: 6px; pointer-events: none }
 .cmp-label.l { left: 8px }
 .cmp-label.r { right: 8px }
 
 .footer-promo { width: 100%; max-width: 700px; margin-top: 24px; text-align: center; color: var(--text-muted-alt); font-size: 13px; padding: 0 4px }
-.footer-promo a { color: var(--accent-blue); font-weight: 600; text-decoration: none }
+.footer-promo a { color: var(--accent); font-weight: 600; text-decoration: none }
 </style>
 <link rel="stylesheet" href="site-chrome.css">
 <!-- Yandex.Metrika counter -->

@@ -106,7 +106,7 @@ footer.innerHTML =
 '<p>Есть вопрос или идея? Пишите:</p>' +
 '<div class="footer-write-row">' +
 '<a class="footer-write" href="' + CONTACT_TG + '" target="_blank" rel="noopener noreferrer">Написать в Telegram</a>' +
-'<a class="footer-write vk" href="' + CONTACT_VK + '" target="_blank" rel="noopener noreferrer">Написать в ВК</a>' +
+'<a class="footer-write" href="' + CONTACT_VK + '" target="_blank" rel="noopener noreferrer">Написать в ВК</a>' +
 '</div>' +
 '</div>' +
 '</div>' +
