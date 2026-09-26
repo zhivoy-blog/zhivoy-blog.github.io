@@ -187,28 +187,6 @@ strong {
 .btn-link.tg { background-color: #007aff; }
 .btn-link.tools { background-color: #34c759; }
 
-.site-footer {
-    max-width: 600px;
-    margin: 32px auto 10px;
-    padding: 20px 16px 10px;
-    border-top: 1px solid rgba(255,255,255,0.1);
-    text-align: center;
-    color: #8e9eaf;
-    font-size: 13px
-}
-.site-footer .footer-links {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 14px;
-    justify-content: center;
-    margin-bottom: 10px
-}
-.site-footer .footer-links a {
-    color: #007aff;
-    text-decoration: none;
-    font-weight: 600;
-    font-size: 14px
-}
 
 .inline-cta {
     background-color: #1e2a3a;

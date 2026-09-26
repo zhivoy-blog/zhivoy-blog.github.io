@@ -264,37 +264,13 @@ color: #ff6b6b;
 font-size: 15px
 }
 
-/* --- Общий footer --- */
-.site-footer {
-width: 100%;
-max-width: 600px;
-margin-top: 32px;
-padding: 20px 0 10px;
-border-top: 1px solid rgba(255,255,255,0.1);
-text-align: center;
-color: var(--text-muted-alt);
-font-size: 13px
-}
-.site-footer .footer-links {
-display: flex;
-flex-wrap: wrap;
-gap: 14px;
-justify-content: center;
-margin-bottom: 10px
-}
-.site-footer .footer-links a {
-color: var(--accent-blue);
-text-decoration: none;
-font-weight: 600;
-font-size: 14px
-}
-
 @media(min-width:640px) {
 .btn-telegram {
 max-width: 380px
 }
 }
 </style>
+<link rel="stylesheet" href="site-chrome.css">
 <!-- Yandex.Metrika counter -->
 <script type="text/javascript">
 (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
@@ -337,15 +313,8 @@ ym(112807526, "init", {ssr:true, webvisor:true, clickmap:true, referrer: documen
 <p class="feed-loading">Загрузка статей...</p>
 </main>
 
-<footer class="site-footer">
-<div class="footer-links">
-<a href="https://vk.ru/zhivoy_ai" target="_blank" rel="noopener noreferrer">ВКонтакте</a>
-<a href="https://vc.ru/id6025411" target="_blank" rel="noopener noreferrer">vc.ru</a>
-<a href="https://t.me/zhivoy_ii" target="_blank" rel="noopener noreferrer">Telegram</a>
-<a href="about.html">О нас</a>
-</div>
-<p>© Живой ИИ</p>
-</footer>
+<footer class="site-footer"></footer>
+<script src="site-chrome.js"></script>
 
 <script>
 // --- Тёмная/светлая тема ---

@@ -122,6 +122,7 @@
 <meta name="twitter:card" content="summary_large_image">
 
 <link rel="stylesheet" href="../../article-style.css">
+<link rel="stylesheet" href="../../site-chrome.css">
 
 <!-- Yandex.Metrika counter -->
 <script type="text/javascript">
@@ -153,15 +154,8 @@ ym(112807526, "init", {ssr:true, webvisor:true, clickmap:true, referrer: documen
 <p>Загрузка статьи...</p>
 </article>
 
-<footer class="site-footer">
-<div class="footer-links">
-<a href="https://vk.ru/zhivoy_ai" target="_blank" rel="noopener noreferrer">ВКонтакте</a>
-<a href="https://vc.ru/id6025411" target="_blank" rel="noopener noreferrer">vc.ru</a>
-<a href="https://t.me/zhivoy_ii" target="_blank" rel="noopener noreferrer">Telegram</a>
-<a href="../../about.html">О нас</a>
-</div>
-<p>© Живой ИИ</p>
-</footer>
+<footer class="site-footer"></footer>
+<script src="../../site-chrome.js"></script>
 
 <script src="../../article-script.js"></script>
 <script>
