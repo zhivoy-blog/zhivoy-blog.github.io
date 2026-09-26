@@ -1,4 +1,4 @@
-// --- Общие для всех страниц: бургер-меню в шапке и подвал ---
+// --- Общие для всех страниц: бургер-меню в шапке, плавающая кнопка ВК и подвал ---
 // Подключается в конце <body> после <footer class="site-footer"></footer>.
 // Все ссылки строятся от адреса этого файла, поэтому скрипт работает
 // и в корне сайта, и в articles/<slug>/.
@@ -76,6 +76,15 @@ btn.focus();
 }
 });
 }
+
+// --- Плавающая кнопка ВК ---
+var vk = document.createElement('a');
+vk.className = 'vk-float';
+vk.href = SOCIAL[0].href;
+vk.target = '_blank';
+vk.rel = 'noopener noreferrer';
+vk.textContent = 'Мы в ВК';
+document.body.appendChild(vk);
 
 // --- Подвал ---
 var footer = document.querySelector('.site-footer');

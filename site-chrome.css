@@ -1,4 +1,4 @@
-/* ===== Общие для всех страниц: бургер-меню в шапке и подвал =====
+/* ===== Общие для всех страниц: бургер-меню в шапке, плавающая кнопка ВК и подвал =====
    Разметку рисует site-chrome.js. Подключается после стилей страницы. */
 
 .header, .site-header {
@@ -154,4 +154,41 @@ box-shadow: 0 0 12px rgba(0, 122, 255, 0.35)
 .footer-copy {
 text-align: center;
 margin: 0
+}
+
+/* --- Плавающая кнопка ВК --- */
+.vk-float {
+position: fixed;
+right: 20px;
+bottom: 24px;
+z-index: 998;
+display: inline-flex;
+align-items: center;
+justify-content: center;
+min-height: 46px;
+padding: 12px 20px;
+border-radius: 23px;
+background-color: #0077ff;
+color: #fff;
+font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+font-size: 14px;
+font-weight: 700;
+letter-spacing: 0.3px;
+text-decoration: none;
+box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3), 0 0 16px rgba(0, 119, 255, 0.45);
+-webkit-tap-highlight-color: transparent
+}
+.vk-float:active {
+transform: scale(0.97)
+}
+/* В статьях в этом углу уже есть кнопка «↑ наверх» — ставим ВК над ней */
+body:has(.scroll-top-btn) .vk-float {
+bottom: 82px
+}
+/* Чтобы кнопка не закрывала низ подвала, когда страница прокручена до конца */
+.site-footer {
+padding-bottom: 72px
+}
+body:has(.scroll-top-btn) .site-footer {
+padding-bottom: 130px
 }
