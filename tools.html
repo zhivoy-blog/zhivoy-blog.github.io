@@ -3,15 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
-<title>Инструменты для картинок и звука — Живой ИИ</title>
-<meta name="description" content="Бесплатные инструменты прямо в браузере: сжатие, изменение размера, обрезка, поворот, конвертация формата и текст на картинке, а также изменение громкости MP3. Без сервера — файлы не покидают ваше устройство.">
+<title>Инструменты: фото, видео, MP3, PDF — Живой ИИ</title>
+<meta name="description" content="Бесплатно прямо в браузере: сжать фото и видео, видео или голосовое в MP3, объединить PDF, счётчик знаков для постов. Файлы не покидают ваше устройство.">
 
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%23113154'/%3E%3Ctext x='50' y='68' font-size='58' font-family='Arial, sans-serif' font-weight='bold' fill='%23007aff' text-anchor='middle'%3EЖ%3C/text%3E%3C/svg%3E">
 
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Живой ИИ">
-<meta property="og:title" content="Инструменты для картинок и звука — Живой ИИ">
-<meta property="og:description" content="Сжатие, resize, обрезка, поворот, конвертация формата, текст на обложке и громкость MP3 — прямо в браузере, без сервера.">
+<meta property="og:title" content="Инструменты: фото, видео, MP3, PDF — Живой ИИ">
+<meta property="og:description" content="Сжатие фото и видео, видео и голосовые в MP3, объединение PDF, счётчик знаков для постов — прямо в браузере, без сервера.">
 <meta property="og:url" content="https://zhivoy-ai.ru/tools.html">
 <meta property="og:image" content="https://zhivoy-ai.ru/og-cover.jpg">
 <meta name="twitter:card" content="summary_large_image">
@@ -35,7 +35,9 @@
 --border-color: #3a4358;
 --accent-warn: #ffb340;
 --accent-audio: #34c759;
---accent-video: #ff9f0a
+--accent-video: #ff9f0a;
+--accent-pdf: #ff5a4f;
+--accent-text: #bf5af2
 }
 [data-theme="light"] {
 --bg-color: #eef2f7;
@@ -127,8 +129,12 @@ transition: transform 0.1s ease, background-color 0.2s, border-color 0.2s;
 .tab-group[hidden] { display: none }
 .tab-badge { position: absolute; top: 8px; right: 8px; font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.4px; background: var(--accent-green); color: #fff; border-radius: 6px; padding: 2px 6px; line-height: 1.3 }
 
-/* --- Категории инструментов (Картинки / Аудио / Видео) --- */
-.cat-tabs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 14px }
+/* --- Категории инструментов (Картинки / Аудио / Видео / PDF / Текст) --- */
+.cat-tabs { display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px; margin-bottom: 14px }
+/* на телефоне: 3 кнопки в первом ряду, 2 во втором — все одной ширины рядов */
+.cat-btn { grid-column: span 2 }
+.cat-btn:nth-child(n+4) { grid-column: span 3 }
+@media (min-width: 620px) { .cat-tabs { grid-template-columns: repeat(5, 1fr) } .cat-btn, .cat-btn:nth-child(n+4) { grid-column: auto } }
 .cat-btn {
 background-color: var(--card-bg); border: 1px solid var(--border-color);
 color: var(--text-main); padding: 10px 6px; border-radius: 12px; font-size: 14px; font-weight: 700;
@@ -141,6 +147,10 @@ cursor: pointer; min-height: 50px; display: inline-flex; align-items: center; ju
 .cat-btn[data-cat=video].active { background-color: var(--accent-video); border-color: var(--accent-video); color: #1a1f2e; box-shadow: 0 0 14px rgba(255, 159, 10, 0.4) }
 .page-wrap[data-cat=audio] .tab-btn.active { background-color: var(--accent-audio); border-color: var(--accent-audio); color: #1a1f2e; box-shadow: 0 0 16px rgba(52, 199, 89, 0.4) }
 .page-wrap[data-cat=video] .tab-btn.active { background-color: var(--accent-video); border-color: var(--accent-video); color: #1a1f2e; box-shadow: 0 0 16px rgba(255, 159, 10, 0.4) }
+.cat-btn[data-cat=pdf].active { background-color: var(--accent-pdf); border-color: var(--accent-pdf); color: #fff; box-shadow: 0 0 14px rgba(255, 90, 79, 0.4) }
+.cat-btn[data-cat=text].active { background-color: var(--accent-text); border-color: var(--accent-text); color: #fff; box-shadow: 0 0 14px rgba(191, 90, 242, 0.4) }
+.page-wrap[data-cat=pdf] .tab-btn.active { background-color: var(--accent-pdf); border-color: var(--accent-pdf); color: #fff; box-shadow: 0 0 16px rgba(255, 90, 79, 0.4) }
+.page-wrap[data-cat=text] .tab-btn.active { background-color: var(--accent-text); border-color: var(--accent-text); color: #fff; box-shadow: 0 0 16px rgba(191, 90, 242, 0.4) }
 
 .panel { display: none }
 .panel.active { display: block }
@@ -275,6 +285,38 @@ border: 1px solid var(--border-color); border-radius: 12px; padding: 10px 12px
 .video-card .time-row .btn.small { flex: 0 0 auto; white-space: nowrap }
 .video-card .level-hint { font-size: 13px; color: var(--text-muted-alt); margin-top: 8px }
 
+/* --- PDF-инструменты (красная гамма категории «PDF») --- */
+.card.pdf-card { border-color: var(--accent-pdf); box-shadow: 0 0 16px rgba(255, 90, 79, 0.15) }
+.pdf-card .dropzone { border-color: var(--accent-pdf) }
+.pdf-card .btn.primary { background-color: var(--accent-pdf); border-color: var(--accent-pdf); color: #fff }
+.pdf-card select, .pdf-card input[type=text] { border-color: var(--accent-pdf) }
+.pdf-card .btn:not(.primary):not(.success) { border-color: var(--accent-pdf); color: var(--accent-pdf) }
+.pdf-card select:focus, .pdf-card input[type=text]:focus { outline: 2px solid var(--accent-pdf); outline-offset: 1px }
+.pdf-card [hidden] { display: none !important }
+.pdf-card .batch-item .b-move { flex: 0 0 auto; min-height: 40px; min-width: 40px; padding: 6px 8px; font-size: 15px }
+.pdf-card .b-num { flex: 0 0 auto; font-weight: 700; color: var(--accent-pdf); font-size: 13px }
+
+/* --- Текстовые инструменты (фиолетовая гамма категории «Текст») --- */
+.card.text-card { border-color: var(--accent-text); box-shadow: 0 0 16px rgba(191, 90, 242, 0.15) }
+.text-card textarea { width: 100%; min-height: 200px; resize: vertical; background-color: var(--card-bg-2); color: var(--text-main); border: 1px solid var(--accent-text); border-radius: 12px; padding: 12px; font: inherit; font-size: 16px; line-height: 1.5 }
+.text-card textarea:focus { outline: 2px solid var(--accent-text); outline-offset: 1px }
+.text-card .btn:not(.primary):not(.success) { border-color: var(--accent-text); color: var(--accent-text) }
+.count-stats { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; margin: 14px 0 }
+@media (min-width: 520px) { .count-stats { grid-template-columns: repeat(4, minmax(0, 1fr)) } }
+.count-stat { background-color: var(--card-bg-2); border: 1px solid var(--border-color); border-radius: 12px; padding: 10px; text-align: center }
+.count-stat b { display: block; font-size: 22px; color: var(--accent-text); line-height: 1.2 }
+.count-stat span { font-size: 12px; color: var(--text-muted-alt) }
+.limit-list { display: flex; flex-direction: column; gap: 8px; margin-top: 6px }
+.limit-row { background-color: var(--card-bg-2); border: 1px solid var(--border-color); border-radius: 12px; padding: 10px 12px }
+.limit-top { display: flex; justify-content: space-between; gap: 10px; font-size: 14px }
+.limit-top .l-val { flex: 0 0 auto; font-weight: 700; white-space: nowrap }
+.limit-bar { height: 6px; border-radius: 3px; background: var(--border-color); margin-top: 8px; overflow: hidden }
+.limit-bar i { display: block; height: 100%; width: 0; background: var(--accent-green); border-radius: 3px; transition: width .15s }
+.limit-row.over .limit-bar i { background: #ff6b6b }
+.limit-row.over .l-val { color: #ff6b6b }
+.limit-row.near .limit-bar i { background: var(--accent-warn) }
+.limit-note { font-size: 12px; color: var(--text-muted-alt); margin-top: 4px }
+
 /* --- Улучшение фото: сравнение «До / После» --- */
 .cmp-wrap { position: relative; margin: 14px 0 8px; border-radius: 10px; overflow: hidden; background: repeating-conic-gradient(#0000 0 25%, rgba(255,255,255,0.04) 0 50%) 0 0/24px 24px }
 .cmp-wrap.full { overflow: auto; max-height: 70vh; -webkit-overflow-scrolling: touch }
@@ -323,11 +365,15 @@ ym(112807526, "init", {ssr:true, webvisor:true, clickmap:true, referrer: documen
 <button class="cat-btn active" data-cat="images">🖼️ Картинки</button>
 <button class="cat-btn" data-cat="audio">🎵 Аудио</button>
 <button class="cat-btn" data-cat="video">🎬 Видео</button>
+<button class="cat-btn" data-cat="pdf">📄 PDF</button>
+<button class="cat-btn" data-cat="text">✍️ Текст</button>
 </div>
 
 <p class="page-intro" id="cat-intro-images"><strong>Инструменты для картинок.</strong> Всё считается прямо в вашем браузере — фото никуда не отправляется и не сохраняется на сервере. Для стабильной работы на телефоне очень большие фото (шире 3000&nbsp;px) автоматически немного уменьшаются.</p>
 <p class="page-intro" id="cat-intro-audio" hidden><strong>Инструменты для звука.</strong> Всё считается прямо в вашем браузере — аудио никуда не отправляется и не сохраняется на сервере.</p>
 <p class="page-intro" id="cat-intro-video" hidden><strong>Инструменты для видео.</strong> Всё считается прямо в вашем браузере — видео никуда не отправляется и не сохраняется на сервере. При первом запуске браузер один раз скачивает модуль обработки видео (около 30&nbsp;МБ). Обработка длинного видео на телефоне может занять несколько минут.</p>
+<p class="page-intro" id="cat-intro-pdf" hidden><strong>Инструменты для PDF.</strong> Всё считается прямо в вашем браузере — документы никуда не отправляются и не сохраняются на сервере. Удобно для сканов паспорта, справок и договоров.</p>
+<p class="page-intro" id="cat-intro-text" hidden><strong>Инструменты для текста.</strong> Всё считается прямо в вашем браузере — текст никуда не отправляется.</p>
 
 <div class="tabs" id="tabs">
 <div class="tab-group" data-cat="images">Размер и качество</div>
@@ -340,10 +386,14 @@ ym(112807526, "init", {ssr:true, webvisor:true, clickmap:true, referrer: documen
 <div class="tab-group" data-cat="images">Надписи и мемы</div>
 <button class="tab-btn" data-cat="images" data-tab="text"><span class="tab-icon" aria-hidden="true">🔤</span><span class="tab-title">Текст на картинке</span><span class="tab-desc">Подписи для обложек</span></button>
 <button class="tab-btn" data-cat="images" data-tab="meme"><span class="tab-icon" aria-hidden="true">😂</span><span class="tab-title">Мемы</span><span class="tab-desc">Классический мем за минуту</span></button>
+<button class="tab-btn" data-cat="audio" data-tab="tomp3" hidden><span class="tab-icon" aria-hidden="true">🎧</span><span class="tab-title">В MP3</span><span class="tab-desc">Звук из видео, голосовые</span><span class="tab-badge">новое</span></button>
 <button class="tab-btn" data-cat="audio" data-tab="volume" hidden><span class="tab-icon" aria-hidden="true">🔊</span><span class="tab-title">Громкость MP3</span><span class="tab-desc">Громче или тише, по каналам</span></button>
 <button class="tab-btn" data-cat="video" data-tab="vcompress" hidden><span class="tab-icon" aria-hidden="true">🗜️</span><span class="tab-title">Сжатие видео</span><span class="tab-desc">Лёгкое видео для отправки</span></button>
 <button class="tab-btn" data-cat="video" data-tab="vtrim" hidden><span class="tab-icon" aria-hidden="true">✂️</span><span class="tab-title">Обрезка видео</span><span class="tab-desc">Оставить нужный отрезок</span></button>
 <button class="tab-btn" data-cat="video" data-tab="vgif" hidden><span class="tab-icon" aria-hidden="true">🎞️</span><span class="tab-title">Видео → GIF</span><span class="tab-desc">Кусок видео в анимацию</span></button>
+<button class="tab-btn" data-cat="pdf" data-tab="pmerge" hidden><span class="tab-icon" aria-hidden="true">📚</span><span class="tab-title">Объединить PDF</span><span class="tab-desc">Несколько файлов в один</span><span class="tab-badge">новое</span></button>
+<button class="tab-btn" data-cat="pdf" data-tab="ppages" hidden><span class="tab-icon" aria-hidden="true">✂️</span><span class="tab-title">Страницы PDF</span><span class="tab-desc">Вырезать или удалить листы</span><span class="tab-badge">новое</span></button>
+<button class="tab-btn" data-cat="text" data-tab="tcount" hidden><span class="tab-icon" aria-hidden="true">🔢</span><span class="tab-title">Счётчик знаков</span><span class="tab-desc">Влезет ли пост в Telegram и ВК</span><span class="tab-badge">новое</span></button>
 </div>
 
 <!-- ================= СЖАТИЕ ================= -->
@@ -705,6 +755,35 @@ ym(112807526, "init", {ssr:true, webvisor:true, clickmap:true, referrer: documen
 </div>
 </section>
 
+<!-- ================= В MP3 (категория «Аудио») ================= -->
+<section class="panel" id="panel-tomp3">
+<div class="card audio-card">
+<h2>Видео или голосовое в MP3</h2>
+<p class="hint">Вытаскивает звук из видео или превращает голосовое сообщение из Telegram или WhatsApp (файлы .ogg, .opus) в обычный MP3, который открывается на любом телефоне и компьютере.</p>
+<label class="dropzone" id="tomp3-dropzone">
+<div class="dz-icon">🎧</div>
+<span id="tomp3-dz-text">Нажмите, чтобы выбрать видео или аудио</span>
+<input type="file" accept="video/*,audio/*,.mp4,.mov,.m4v,.webm,.mkv,.avi,.3gp,.ogg,.oga,.opus,.m4a,.aac,.wav,.flac,.amr,.wma,.mp3" id="tomp3-file">
+</label>
+
+<div class="field">
+<label for="tomp3-quality">Качество</label>
+<select id="tomp3-quality">
+<option value="128">Обычное — для голоса</option>
+<option value="192" selected>Хорошее — для музыки</option>
+<option value="320">Максимальное — файл больше</option>
+</select>
+</div>
+
+<button class="btn primary" id="tomp3-process" disabled>Сделать MP3</button>
+<p class="level-hint" id="tomp3-first-hint" style="font-size:13px;color:var(--text-muted-alt);margin-top:8px">При первом запуске браузер один раз скачивает модуль обработки (около 30&nbsp;МБ), дальше всё работает быстро.</p>
+<div class="status-msg" id="tomp3-status"></div>
+
+<button class="btn" id="tomp3-listen" type="button" style="margin-top:12px" hidden>▶ Послушать результат</button>
+<button class="btn success" id="tomp3-download" style="margin-top:12px" hidden>Скачать MP3</button>
+</div>
+</section>
+
 <!-- ================= ГРОМКОСТЬ MP3 (категория «Аудио») ================= -->
 <section class="panel" id="panel-volume">
 <div class="card audio-card">
@@ -900,6 +979,73 @@ ym(112807526, "init", {ssr:true, webvisor:true, clickmap:true, referrer: documen
 </div>
 </section>
 
+<!-- ================= ОБЪЕДИНИТЬ PDF (категория «PDF») ================= -->
+<section class="panel" id="panel-pmerge">
+<div class="card pdf-card">
+<h2>Объединить PDF</h2>
+<p class="hint">Склеивает несколько PDF в один файл — например, все страницы договора или сканы документов, чтобы отправить одним вложением. Порядок можно поменять стрелками.</p>
+<label class="dropzone" id="pmerge-dropzone">
+<div class="dz-icon">📚</div>
+<span id="pmerge-dz-text">Нажмите, чтобы выбрать PDF-файлы (можно сразу несколько)</span>
+<input type="file" accept="application/pdf,.pdf" id="pmerge-file" multiple>
+</label>
+<p class="hint" style="margin-top:8px">Фото документов сначала превратите в PDF: «Картинки» → «Формат» → PDF.</p>
+<div class="batch-list" id="pmerge-list" hidden></div>
+<button class="btn primary" id="pmerge-process" disabled>Объединить</button>
+<div class="status-msg" id="pmerge-status"></div>
+<button class="btn success" id="pmerge-download" style="margin-top:12px" hidden>Скачать PDF</button>
+</div>
+</section>
+
+<!-- ================= СТРАНИЦЫ PDF (категория «PDF») ================= -->
+<section class="panel" id="panel-ppages">
+<div class="card pdf-card">
+<h2>Страницы PDF</h2>
+<p class="hint">Сохраняет из PDF только нужные страницы или, наоборот, убирает лишние. Например, из большого договора оставить подписанную страницу, или удалить пустые листы из скана.</p>
+<label class="dropzone" id="ppages-dropzone">
+<div class="dz-icon">📄</div>
+<span id="ppages-dz-text">Нажмите, чтобы выбрать PDF-файл</span>
+<input type="file" accept="application/pdf,.pdf" id="ppages-file">
+</label>
+
+<div class="field">
+<label for="ppages-mode">Что сделать</label>
+<select id="ppages-mode">
+<option value="keep" selected>Оставить только эти страницы</option>
+<option value="remove">Удалить эти страницы</option>
+</select>
+</div>
+
+<div class="field">
+<label for="ppages-range">Номера страниц</label>
+<input type="text" id="ppages-range" placeholder="например: 1-3, 5, 8" inputmode="text" autocomplete="off">
+<p class="hint" id="ppages-info" style="margin-top:6px">Через запятую, диапазоны через дефис.</p>
+</div>
+
+<button class="btn primary" id="ppages-process" disabled>Готово — сделать PDF</button>
+<div class="status-msg" id="ppages-status"></div>
+<button class="btn success" id="ppages-download" style="margin-top:12px" hidden>Скачать PDF</button>
+</div>
+</section>
+
+<!-- ================= СЧЁТЧИК ЗНАКОВ (категория «Текст») ================= -->
+<section class="panel" id="panel-tcount">
+<div class="card text-card">
+<h2>Счётчик знаков для постов</h2>
+<p class="hint">Вставьте текст поста — сразу видно, сколько в нём знаков и влезет ли он в подпись к фото в Telegram, в обычное сообщение или в пост ВКонтакте.</p>
+<textarea id="tcount-text" placeholder="Вставьте или напишите текст здесь…" spellcheck="true"></textarea>
+<div class="count-stats">
+<div class="count-stat"><b id="tcount-chars">0</b><span>знаков с пробелами</span></div>
+<div class="count-stat"><b id="tcount-nospace">0</b><span>без пробелов</span></div>
+<div class="count-stat"><b id="tcount-words">0</b><span>слов</span></div>
+<div class="count-stat"><b id="tcount-read">0 мин</b><span>читать</span></div>
+</div>
+<div class="limit-list" id="tcount-limits"></div>
+<p class="limit-note">Telegram считает эмодзи за 2 знака и больше, поэтому для Telegram число бывает чуть больше, чем «знаков с пробелами». Здесь это уже учтено.</p>
+<button class="btn" id="tcount-clear" type="button" style="margin-top:12px">Очистить</button>
+</div>
+</section>
+
 </div>
 
 <p class="footer-promo">Промты для нейросетей и простые приёмы каждый день — <a href="https://vk.ru/zhivoy_ai" target="_blank" rel="noopener noreferrer">в нашем сообществе ВКонтакте</a>.</p>
@@ -948,13 +1094,14 @@ panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
 });
 })();
 
-// ===================== КАТЕГОРИИ (Картинки / Аудио / Видео) =====================
+// ===================== КАТЕГОРИИ (Картинки / Аудио / Видео / PDF / Текст) =====================
 // Только показывает/скрывает кнопки инструментов нужной категории — логику самих инструментов не трогает.
 (function() {
 var wrap = document.getElementById('page-wrap');
 var catButtons = document.querySelectorAll('.cat-btn');
 var toolButtons = document.querySelectorAll('.tab-btn');
 var lastTab = {}; // последний открытый инструмент в каждой категории
+var CATS = ['images', 'audio', 'video', 'pdf', 'text'];
 
 toolButtons.forEach(function(btn) {
 btn.addEventListener('click', function() { lastTab[btn.getAttribute('data-cat')] = btn; });
@@ -963,7 +1110,7 @@ btn.addEventListener('click', function() { lastTab[btn.getAttribute('data-cat')]
 function selectCategory(cat) {
 wrap.setAttribute('data-cat', cat);
 catButtons.forEach(function(b) { b.classList.toggle('active', b.getAttribute('data-cat') === cat); });
-['images', 'audio', 'video'].forEach(function(c) {
+CATS.forEach(function(c) {
 document.getElementById('cat-intro-' + c).hidden = c !== cat;
 });
 document.querySelectorAll('.tab-group').forEach(function(g) { g.hidden = g.getAttribute('data-cat') !== cat; });
@@ -992,9 +1139,18 @@ if (history.replaceState) history.replaceState(null, '', cat === 'images' ? loca
 });
 });
 
-// Прямая ссылка на категорию: tools.html#audio или tools.html#video
+// Прямая ссылка на категорию (tools.html#audio, #video, #pdf, #text) или сразу на инструмент (tools.html#tomp3)
+function openFromHash() {
 var fromHash = (location.hash || '').replace('#', '');
-if (fromHash === 'audio' || fromHash === 'video') selectCategory(fromHash);
+// имя категории главнее: #text — это категория «Текст», а не инструмент «Текст на картинке»
+var hashTool = CATS.indexOf(fromHash) === -1 && fromHash && document.querySelector('.tab-btn[data-tab="' + fromHash.replace(/[^a-z0-9]/gi, '') + '"]');
+if (hashTool) {
+if (wrap.getAttribute('data-cat') !== hashTool.getAttribute('data-cat')) selectCategory(hashTool.getAttribute('data-cat'));
+hashTool.click();
+} else if (CATS.indexOf(fromHash) !== -1 && wrap.getAttribute('data-cat') !== fromHash) selectCategory(fromHash);
+}
+openFromHash();
+window.addEventListener('hashchange', openFromHash);
 })();
 
 // ===================== ОБЩИЕ УТИЛИТЫ =====================
@@ -4104,6 +4260,511 @@ t.showResult(blob, t.baseName() + '.gif');
 t.setStatus('Готово! GIF ' + fmtSec(dur) + ' с, ' + fmtVideoSize(blob.size) + '. Посмотрите результат и скачайте.');
 }).catch(t.fail).then(function() { t.setBusy(false); });
 });
+})();
+
+// ===================== В MP3: звук из видео и голосовые (категория «Аудио») =====================
+// Работает через тот же общий ffmpeg, что и видео-инструменты (VideoKit): он понимает почти
+// любой формат — MP4/MOV/WEBM, голосовые Telegram и WhatsApp (OGG/Opus), M4A, AMR, WAV и другие.
+(function() {
+var fileInput = document.getElementById('tomp3-file');
+var dropzone = document.getElementById('tomp3-dropzone');
+var dzText = document.getElementById('tomp3-dz-text');
+var qualitySel = document.getElementById('tomp3-quality');
+var processBtn = document.getElementById('tomp3-process');
+var statusEl = document.getElementById('tomp3-status');
+var listenBtn = document.getElementById('tomp3-listen');
+var downloadBtn = document.getElementById('tomp3-download');
+var firstHint = document.getElementById('tomp3-first-hint');
+var player = new Audio();
+var file = null, resultBlob = null, resultName = '', resultUrl = null, busy = false;
+
+function setStatus(text, kind) {
+statusEl.textContent = text;
+statusEl.className = 'status-msg' + (kind ? ' ' + kind : '');
+}
+function stopPlayer() { player.pause(); listenBtn.textContent = '▶ Послушать результат'; }
+function resetResult() {
+resultBlob = null;
+stopPlayer();
+listenBtn.hidden = true;
+downloadBtn.hidden = true;
+if (resultUrl) { URL.revokeObjectURL(resultUrl); resultUrl = null; }
+player.removeAttribute('src');
+}
+function setBusy(v) {
+busy = v;
+fileInput.disabled = v;
+qualitySel.disabled = v;
+processBtn.disabled = v || !file;
+}
+function isMediaFile(f) {
+var type = (f.type || '').toLowerCase();
+if (type.indexOf('video/') === 0 || type.indexOf('audio/') === 0) return true;
+return /\.(mp4|mov|m4v|webm|mkv|avi|3gp|mpeg|mpg|wmv|flv|ts|ogg|oga|opus|m4a|aac|wav|flac|amr|wma|mp3|mp2|aiff?|caf)$/i.test(f.name || '');
+}
+
+fileInput.addEventListener('change', function() {
+var f = fileInput.files && fileInput.files[0];
+if (!f) return;
+resetResult();
+if (!isMediaFile(f)) {
+file = null;
+processBtn.disabled = true;
+dropzone.classList.remove('has-file');
+dzText.textContent = 'Нажмите, чтобы выбрать видео или аудио';
+setStatus('Это не видео и не аудио. Выберите видео (MP4, MOV…) или голосовое (OGG, OPUS, M4A…).', 'err');
+fileInput.value = '';
+return;
+}
+file = f;
+dropzone.classList.add('has-file');
+dzText.textContent = f.name + ' (' + fmtVideoSize(f.size) + ') — нажмите, чтобы выбрать другой';
+var big = f.size > 500 * 1048576;
+setStatus(big ? 'Файл очень большой — браузеру может не хватить памяти. Если не получится, сначала обрежьте видео.' : '', big ? 'warn' : '');
+processBtn.disabled = false;
+});
+
+qualitySel.addEventListener('change', function() {
+if (resultBlob && !busy) {
+resetResult();
+setStatus('Качество изменено — нажмите «Сделать MP3» ещё раз.', 'warn');
+}
+});
+
+processBtn.addEventListener('click', function() {
+if (!file || busy) return;
+var src = file;
+setBusy(true);
+resetResult();
+VideoKit.process(src, ['-i', '{in}', '-vn', '-map', '0:a:0', '-c:a', 'libmp3lame', '-b:a', qualitySel.value + 'k'],
+'out.mp3', 0, function(s) { setStatus(s.replace('Готовим инструмент для видео', 'Готовим инструмент для звука')); },
+'Делаю MP3').then(function(data) {
+resultBlob = new Blob([data], { type: 'audio/mpeg' });
+resultName = (src.name || 'audio').replace(/\.[^.]+$/, '') + '.mp3';
+resultUrl = URL.createObjectURL(resultBlob);
+player.src = resultUrl;
+listenBtn.hidden = false;
+downloadBtn.hidden = false;
+firstHint.hidden = true;
+setStatus('Готово! MP3 весит ' + fmtVideoSize(resultBlob.size) + '. Послушайте и скачайте.');
+}).catch(function(err) {
+var msg = (err && err.message) || '';
+// ffmpeg отказывается, когда в файле нет звуковой дорожки (например, видео без звука)
+if (/does not contain|matches no streams|Stream map|код 1\)/i.test(msg)) msg = 'в файле нет звука или он повреждён';
+setStatus('Не удалось сделать MP3: ' + (msg || 'файл повреждён или формат не поддерживается') + '.', 'err');
+}).then(function() { setBusy(false); });
+});
+
+listenBtn.addEventListener('click', function() {
+if (!resultBlob) return;
+if (!player.paused) { stopPlayer(); return; }
+var p = player.play();
+listenBtn.textContent = '⏸ Пауза';
+if (p && p.catch) p.catch(function() {
+stopPlayer();
+setStatus('Браузер не смог воспроизвести файл, но его можно скачать и послушать в плеере.', 'warn');
+});
+});
+player.addEventListener('ended', function() { listenBtn.textContent = '▶ Послушать ещё раз'; });
+document.querySelectorAll('.tab-btn, .cat-btn').forEach(function(b) { b.addEventListener('click', stopPlayer); });
+
+downloadBtn.addEventListener('click', function() {
+if (!resultBlob) return;
+downloadBlob(resultBlob, resultName);
+setStatus('Готово! Файл сохранён в папку «Загрузки».');
+});
+})();
+
+// ===================== PDF: общая основа (библиотека pdf-lib) =====================
+// pdf-lib (~0,5 МБ) подгружается с CDN только при первой работе с PDF. Она склеивает
+// и режет PDF как есть, без перерисовки: текст остаётся текстом, качество сканов не меняется.
+var PdfKit = (function() {
+var SOURCES = [
+'https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js',
+'https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js'
+];
+var loadPromise = null;
+function loadFrom(i) {
+return new Promise(function(resolve, reject) {
+var s = document.createElement('script');
+s.src = SOURCES[i];
+s.onload = function() { window.PDFLib ? resolve(window.PDFLib) : reject(new Error('no PDFLib')); };
+s.onerror = function() { reject(new Error('load failed')); };
+document.head.appendChild(s);
+});
+}
+function ensure() {
+if (window.PDFLib) return Promise.resolve(window.PDFLib);
+if (!loadPromise) {
+loadPromise = loadFrom(0).catch(function() { return loadFrom(1); }).catch(function() {
+loadPromise = null;
+throw new Error('не удалось загрузить модуль для PDF. Проверьте интернет и попробуйте ещё раз');
+});
+}
+return loadPromise;
+}
+function isPdf(f) {
+return (f.type || '').toLowerCase() === 'application/pdf' || /\.pdf$/i.test(f.name || '');
+}
+// Открывает PDF; понятные сообщения для защищённых паролем и повреждённых файлов
+function open(file) {
+return ensure().then(function(L) {
+return file.arrayBuffer().then(function(ab) {
+return L.PDFDocument.load(ab, { updateMetadata: false });
+}).catch(function(err) {
+var m = String(err && err.message || err);
+if (/encrypt/i.test(m)) throw new Error('файл «' + file.name + '» защищён паролем — такой PDF изменить нельзя');
+throw new Error('файл «' + file.name + '» повреждён или это не PDF');
+});
+});
+}
+function save(doc) {
+return doc.save().then(function(bytes) { return new Blob([bytes], { type: 'application/pdf' }); });
+}
+function status(el, text, kind) {
+el.textContent = text;
+el.className = 'status-msg' + (kind ? ' ' + kind : '');
+}
+return { ensure: ensure, isPdf: isPdf, open: open, save: save, status: status };
+})();
+
+// ===================== PDF: ОБЪЕДИНИТЬ =====================
+(function() {
+var fileInput = document.getElementById('pmerge-file');
+var dropzone = document.getElementById('pmerge-dropzone');
+var dzText = document.getElementById('pmerge-dz-text');
+var list = document.getElementById('pmerge-list');
+var processBtn = document.getElementById('pmerge-process');
+var statusEl = document.getElementById('pmerge-status');
+var downloadBtn = document.getElementById('pmerge-download');
+var files = [];
+var resultBlob = null;
+var busy = false;
+var st = function(t, k) { PdfKit.status(statusEl, t, k); };
+
+function resetResult() { resultBlob = null; downloadBtn.hidden = true; }
+function refresh() {
+list.innerHTML = '';
+list.hidden = !files.length;
+files.forEach(function(f, i) {
+var row = document.createElement('div');
+row.className = 'batch-item';
+var num = document.createElement('span');
+num.className = 'b-num';
+num.textContent = (i + 1) + '.';
+var name = document.createElement('span');
+name.className = 'b-name';
+name.textContent = f.name;
+var size = document.createElement('span');
+size.className = 'b-status';
+size.textContent = fmtVideoSize(f.size);
+row.appendChild(num);
+row.appendChild(name);
+row.appendChild(size);
+[['↑', -1, 'Выше'], ['↓', 1, 'Ниже'], ['✕', 0, 'Убрать']].forEach(function(b) {
+var btn = document.createElement('button');
+btn.type = 'button';
+btn.className = 'btn small b-move';
+btn.textContent = b[0];
+btn.setAttribute('aria-label', b[2] + ': ' + f.name);
+btn.disabled = busy || (b[1] === -1 && i === 0) || (b[1] === 1 && i === files.length - 1);
+btn.addEventListener('click', function() {
+if (busy) return;
+if (b[1] === 0) files.splice(i, 1);
+else { var j = i + b[1]; var tmp = files[i]; files[i] = files[j]; files[j] = tmp; }
+resetResult();
+st(files.length ? 'Порядок изменён.' : '');
+refresh();
+});
+row.appendChild(btn);
+});
+list.appendChild(row);
+});
+dropzone.classList.toggle('has-file', files.length > 0);
+dzText.textContent = files.length ? 'Выбрано файлов: ' + files.length + ' — нажмите, чтобы добавить ещё' : 'Нажмите, чтобы выбрать PDF-файлы (можно сразу несколько)';
+processBtn.disabled = busy || files.length < 2;
+if (files.length === 1 && !busy) st('Добавьте ещё хотя бы один PDF — объединять пока нечего.', 'warn');
+}
+
+fileInput.addEventListener('change', function() {
+var picked = Array.prototype.slice.call(fileInput.files || []);
+fileInput.value = '';
+if (!picked.length) return;
+var bad = picked.filter(function(f) { return !PdfKit.isPdf(f); });
+picked.filter(PdfKit.isPdf).forEach(function(f) { files.push(f); });
+resetResult();
+st(bad.length ? 'Пропущены файлы не в формате PDF: ' + bad.map(function(f) { return f.name; }).join(', ') : '', bad.length ? 'warn' : '');
+refresh();
+PdfKit.ensure().catch(function() {}); // заранее подгружаем модуль, пока человек выбирает порядок
+});
+
+processBtn.addEventListener('click', function() {
+if (busy || files.length < 2) return;
+busy = true;
+fileInput.disabled = true;
+resetResult();
+refresh();
+st('Объединяю…');
+var queue = files.slice();
+var pages = 0;
+PdfKit.ensure().then(function(L) {
+return L.PDFDocument.create().then(function(out) {
+var chain = Promise.resolve();
+queue.forEach(function(f, i) {
+chain = chain.then(function() {
+st('Объединяю… файл ' + (i + 1) + ' из ' + queue.length);
+return PdfKit.open(f).then(function(src) {
+return out.copyPages(src, src.getPageIndices()).then(function(copied) {
+copied.forEach(function(p) { out.addPage(p); });
+pages += copied.length;
+});
+});
+});
+});
+return chain.then(function() { return PdfKit.save(out); });
+});
+}).then(function(blob) {
+resultBlob = blob;
+downloadBtn.hidden = false;
+st('Готово! В одном файле ' + pages + ' ' + plural(pages, 'страница', 'страницы', 'страниц') + ', ' + fmtVideoSize(blob.size) + '.');
+}).catch(function(err) {
+st('Не удалось объединить: ' + ((err && err.message) || 'неизвестная ошибка') + '.', 'err');
+}).then(function() {
+busy = false;
+fileInput.disabled = false;
+refresh();
+});
+});
+
+downloadBtn.addEventListener('click', function() {
+if (!resultBlob) return;
+downloadBlob(resultBlob, 'obedinennyj.pdf');
+st('Готово! Файл сохранён в папку «Загрузки».');
+});
+})();
+
+// ===================== PDF: СТРАНИЦЫ (оставить / удалить) =====================
+(function() {
+var fileInput = document.getElementById('ppages-file');
+var dropzone = document.getElementById('ppages-dropzone');
+var dzText = document.getElementById('ppages-dz-text');
+var modeSel = document.getElementById('ppages-mode');
+var rangeIn = document.getElementById('ppages-range');
+var info = document.getElementById('ppages-info');
+var processBtn = document.getElementById('ppages-process');
+var statusEl = document.getElementById('ppages-status');
+var downloadBtn = document.getElementById('ppages-download');
+var file = null, doc = null, pageCount = 0, resultBlob = null, resultName = '', busy = false;
+var st = function(t, k) { PdfKit.status(statusEl, t, k); };
+var BASE_INFO = 'Через запятую, диапазоны через дефис. «5-» — с пятой до конца.';
+info.textContent = BASE_INFO;
+
+// «1-3, 5, 8-» → [0,1,2,4,7,8,…] (номера с нуля, по возрастанию, без повторов) или строка с ошибкой
+function parsePages(text, total) {
+var t = String(text || '').replace(/[–—]/g, '-').replace(/\s+/g, '');
+if (!t) return 'Укажите номера страниц.';
+var set = {};
+var parts = t.split(/[,;]/);
+for (var i = 0; i < parts.length; i++) {
+var p = parts[i];
+if (!p) continue;
+var m = /^(\d+)(?:-(\d*))?$/.exec(p);
+if (!m) return 'Непонятная запись «' + p + '». Пишите так: 1-3, 5, 8';
+var a = +m[1];
+var b = m[2] === undefined ? a : (m[2] === '' ? total : +m[2]);
+if (a < 1 || b < 1) return 'Страницы нумеруются с 1.';
+if (a > b) { var x = a; a = b; b = x; }
+if (a > total) return 'В файле всего ' + total + ' ' + plural(total, 'страница', 'страницы', 'страниц') + ', а указана ' + a + '-я.';
+if (b > total) return 'В файле всего ' + total + ' ' + plural(total, 'страница', 'страницы', 'страниц') + ', а указана ' + b + '-я.';
+for (var n = a; n <= b; n++) set[n - 1] = true;
+}
+var out = Object.keys(set).map(Number).sort(function(x, y) { return x - y; });
+return out.length ? out : 'Укажите номера страниц.';
+}
+
+function selected() {
+var pages = parsePages(rangeIn.value, pageCount);
+if (typeof pages === 'string') return pages;
+if (modeSel.value === 'remove') {
+var drop = {};
+pages.forEach(function(i) { drop[i] = true; });
+pages = [];
+for (var i = 0; i < pageCount; i++) if (!drop[i]) pages.push(i);
+if (!pages.length) return 'Так удалятся все страницы — в файле ничего не останется.';
+}
+return pages;
+}
+
+function refresh() {
+if (resultBlob) { resultBlob = null; downloadBtn.hidden = true; }
+if (!doc) { processBtn.disabled = true; return; }
+var pages = rangeIn.value.trim() ? selected() : null;
+if (typeof pages === 'string') {
+info.textContent = pages;
+info.style.color = '#ff6b6b';
+processBtn.disabled = true;
+return;
+}
+info.style.color = '';
+info.textContent = pages ? 'В новом файле будет ' + pages.length + ' из ' + pageCount + ' ' + plural(pageCount, 'страницы', 'страниц', 'страниц') + '.' : BASE_INFO;
+processBtn.disabled = busy || !pages;
+}
+
+fileInput.addEventListener('change', function() {
+var f = fileInput.files && fileInput.files[0];
+if (!f) return;
+doc = null;
+pageCount = 0;
+resultBlob = null;
+downloadBtn.hidden = true;
+if (!PdfKit.isPdf(f)) {
+file = null;
+fileInput.value = '';
+dropzone.classList.remove('has-file');
+dzText.textContent = 'Нажмите, чтобы выбрать PDF-файл';
+st('Это не PDF. Выберите файл с расширением .pdf', 'err');
+refresh();
+return;
+}
+file = f;
+dropzone.classList.add('has-file');
+dzText.textContent = f.name + ' (' + fmtVideoSize(f.size) + ') — нажмите, чтобы выбрать другой';
+st('Открываю файл…');
+PdfKit.open(f).then(function(d) {
+if (file !== f) return;
+doc = d;
+pageCount = d.getPageCount();
+st('В файле ' + pageCount + ' ' + plural(pageCount, 'страница', 'страницы', 'страниц') + '. Укажите, какие нужны.');
+refresh();
+}).catch(function(err) {
+if (file !== f) return;
+st('Не удалось открыть: ' + ((err && err.message) || 'неизвестная ошибка') + '.', 'err');
+refresh();
+});
+});
+
+rangeIn.addEventListener('input', refresh);
+modeSel.addEventListener('change', refresh);
+
+processBtn.addEventListener('click', function() {
+var pages = selected();
+if (!doc || busy || typeof pages === 'string') return;
+busy = true;
+[fileInput, modeSel, rangeIn].forEach(function(el) { el.disabled = true; });
+processBtn.disabled = true;
+st('Собираю новый PDF…');
+PdfKit.ensure().then(function(L) {
+return L.PDFDocument.create().then(function(out) {
+return out.copyPages(doc, pages).then(function(copied) {
+copied.forEach(function(p) { out.addPage(p); });
+return PdfKit.save(out);
+});
+});
+}).then(function(blob) {
+resultBlob = blob;
+resultName = (file.name || 'document').replace(/\.pdf$/i, '') + '-stranicy.pdf';
+downloadBtn.hidden = false;
+st('Готово! ' + pages.length + ' ' + plural(pages.length, 'страница', 'страницы', 'страниц') + ', ' + fmtVideoSize(blob.size) + '.');
+}).catch(function(err) {
+st('Не удалось сделать PDF: ' + ((err && err.message) || 'неизвестная ошибка') + '.', 'err');
+}).then(function() {
+busy = false;
+[fileInput, modeSel, rangeIn].forEach(function(el) { el.disabled = false; });
+processBtn.disabled = false;
+});
+});
+
+downloadBtn.addEventListener('click', function() {
+if (!resultBlob) return;
+downloadBlob(resultBlob, resultName);
+st('Готово! Файл сохранён в папку «Загрузки».');
+});
+})();
+
+// 1 страница, 2 страницы, 5 страниц
+function plural(n, one, few, many) {
+var a = Math.abs(n) % 100, b = a % 10;
+if (a > 10 && a < 20) return many;
+if (b > 1 && b < 5) return few;
+if (b === 1) return one;
+return many;
+}
+
+// ===================== СЧЁТЧИК ЗНАКОВ (категория «Текст») =====================
+(function() {
+var area = document.getElementById('tcount-text');
+var limitsBox = document.getElementById('tcount-limits');
+var el = {
+chars: document.getElementById('tcount-chars'),
+nospace: document.getElementById('tcount-nospace'),
+words: document.getElementById('tcount-words'),
+read: document.getElementById('tcount-read')
+};
+var DRAFT_KEY = 'zhivoy-tcount-draft';
+// tg: true — лимит считается так, как считает Telegram (эмодзи = 2 знака и больше)
+var LIMITS = [
+{ name: 'Подпись к фото или видео в Telegram', max: 1024, tg: true },
+{ name: 'Подпись к фото с Telegram Premium', max: 2048, tg: true },
+{ name: 'Обычное сообщение в Telegram', max: 4096, tg: true },
+{ name: 'Пост ВКонтакте', max: 16384, tg: false, note: 'около 16 тысяч знаков' }
+];
+var seg = window.Intl && Intl.Segmenter ? new Intl.Segmenter('ru', { granularity: 'grapheme' }) : null;
+function graphemes(t) {
+if (!seg) return Array.from(t).length;
+var n = 0;
+var it = seg.segment(t)[Symbol.iterator]();
+while (!it.next().done) n++;
+return n;
+}
+var rows = LIMITS.map(function(l) {
+var row = document.createElement('div');
+row.className = 'limit-row';
+row.innerHTML = '<div class="limit-top"><span class="l-name"></span><span class="l-val"></span></div><div class="limit-bar"><i></i></div>';
+row.querySelector('.l-name').textContent = l.name;
+limitsBox.appendChild(row);
+return row;
+});
+function fmtNum(n) { return String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ' '); }
+
+function update() {
+var t = area.value;
+var chars = graphemes(t);
+var words = (t.match(/[\p{L}\p{N}]+(?:[-'’][\p{L}\p{N}]+)*/gu) || []).length;
+el.chars.textContent = fmtNum(chars);
+el.nospace.textContent = fmtNum(graphemes(t.replace(/\s+/g, '')));
+el.words.textContent = fmtNum(words);
+var min = words / 180;
+el.read.textContent = !words ? '0 мин' : min < 1 ? '< 1 мин' : Math.round(min) + ' мин';
+LIMITS.forEach(function(l, i) {
+var used = l.tg ? t.length : chars;
+var row = rows[i];
+var left = l.max - used;
+row.classList.toggle('over', left < 0);
+row.classList.toggle('near', left >= 0 && used > l.max * 0.9);
+row.querySelector('.l-val').textContent = left < 0 ? 'лишних ' + fmtNum(-left) : fmtNum(used) + ' из ' + fmtNum(l.max);
+row.querySelector('.limit-bar i').style.width = Math.min(100, used / l.max * 100) + '%';
+row.title = l.note || '';
+});
+}
+
+try { var saved = localStorage.getItem(DRAFT_KEY); if (saved) area.value = saved; } catch (e) {}
+var saveTimer = null;
+area.addEventListener('input', function() {
+update();
+clearTimeout(saveTimer);
+saveTimer = setTimeout(function() { try { localStorage.setItem(DRAFT_KEY, area.value); } catch (e) {} }, 400);
+});
+window.addEventListener('pagehide', function() {
+clearTimeout(saveTimer);
+try { if (area.value) localStorage.setItem(DRAFT_KEY, area.value); } catch (e) {}
+});
+document.getElementById('tcount-clear').addEventListener('click', function() {
+area.value = '';
+try { localStorage.removeItem(DRAFT_KEY); } catch (e) {}
+update();
+area.focus();
+});
+update();
 })();
 </script>
 </body>
