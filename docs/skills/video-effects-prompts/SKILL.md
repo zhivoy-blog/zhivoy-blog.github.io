@@ -30,17 +30,24 @@ description: Use when the user wants to write a prompt for an AI video generator
 - **Акт 3 (последние ~30%) — РАЗРЕШЕНИЕ.** Эффекты стихают, камера успокаивается, плавный уход к финалу.
 
 ## Шаг 3. Фирменный элемент автора
-Встраивать в Акт 3 узнаваемую фишку: дрон сопровождает героя весь ролик, в последнем кадре после завершения действия герой поднимает указательный палец вверх глядя в камеру — снято третьим лицом со стороны, не от первого лица.
+Фишка обязательна в каждом ролике и встраивается в Акт 3. Её вид зависит от места съёмки:
+
+- **Открытое пространство** (стадион, улица, горы, пляж, трасса): дрон сопровождает героя весь ролик. В последнем кадре, после завершения действия, герой поднимает указательный палец вверх, глядя в камеру, а рядом в кадре виден дрон. Снято третьим лицом со стороны, не от первого лица.
+- **Помещение** (зал, арена под крышей, бассейн в здании, дом): дрона нет совсем, ни в кадре, ни в описании операторской работы (вместо дрона — трекинг, стедикам или ручная камера). Остаётся только финальный жест: герой поднимает указательный палец вверх, глядя в камеру, снято третьим лицом со стороны.
+
+Если по описанию непонятно, улица это или помещение, — спроси, а не выбирай сам.
+
+Пример финала для помещения: "In the final frame, after landing the last lift, the athlete turns to camera and raises one index finger up, filmed from the side in third-person by a smooth tracking camera. No drone."
 
 ## Шаг 4. Шаблон сборки промта
 1. Опиши героя и обстановку (кто, что делает, где)
 2. Опиши операторскую работу и её этап (акт 1/2/3 из шага 2)
 3. Вставь конкретный эффект(ы) из словаря (шаг 1) — не более 2-3 одновременно
-4. Укажи камеру: тип движения (дрон/трекинг/статика), ракурс (низкий/высокий/сбоку)
+4. Укажи камеру: тип движения (дрон — только на открытом пространстве; трекинг/статика), ракурс (низкий/высокий/сбоку)
 5. Заверши описанием звука/атмосферы, если нужно
 
-## Пример короткого промта (спринтер, 15 сек)
-"Raw handheld footage, sprinter bursts from starting blocks, speed ramp from slow-motion (20% speed) to full sprint speed, drone tracks alongside at low altitude throughout the entire shot, third-person perspective. In the final frame, after finishing the sprint, the athlete turns to camera and raises one finger up, drone still framing him from the side. Natural daylight, documentary sports photography style, dynamic camera work."
+## Пример короткого промта (спринтер на открытом стадионе, 15 сек)
+"Raw handheld footage, sprinter bursts from starting blocks, speed ramp from slow-motion (20% speed) to full sprint speed, drone tracks alongside at low altitude throughout the entire shot, third-person perspective. In the final frame, after finishing the sprint, the athlete turns to camera and raises one index finger up, the drone hovering beside him in frame, filmed from the side. Natural daylight, documentary sports photography style, dynamic camera work."
 
 ## Как анализировать чужой референс-ролик по этой же схеме
 Если пользователь прислал видео или его описание для анализа: разложи по кадрам (таймкод + что происходит + какой эффект), затем сведи в общий список эффектов с частотой использования, затем определи плотность эффектов по трети ролика (акт 1/2/3), затем сформулируй, какой эффект является "сигнатурным" для этого ролика.
