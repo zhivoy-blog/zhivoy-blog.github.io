@@ -8,10 +8,8 @@ var ABOUT_TEXT = 'Кто ведёт этот блог и почему без п�
 
 var SOCIAL = [
 { title: 'ВКонтакте', href: 'https://vk.ru/zhivoy_ai' },
-{ title: 'vc.ru', href: 'https://vc.ru/id6025411' },
-{ title: 'Telegram', href: 'https://t.me/zhivoy_ii' }
+{ title: 'vc.ru', href: 'https://vc.ru/id6025411' }
 ];
-var CONTACT_TG = 'https://t.me/zhivoy_ii';
 var CONTACT_VK = 'https://vk.ru/zhivoy_ai';
 
 var script = document.currentScript;
@@ -105,7 +103,6 @@ footer.innerHTML =
 '<h3>Контакт</h3>' +
 '<p>Есть вопрос или идея? Пишите:</p>' +
 '<div class="footer-write-row">' +
-'<a class="footer-write" href="' + CONTACT_TG + '" target="_blank" rel="noopener noreferrer">Написать в Telegram</a>' +
 '<a class="footer-write" href="' + CONTACT_VK + '" target="_blank" rel="noopener noreferrer">Написать в ВК</a>' +
 '</div>' +
 '</div>' +

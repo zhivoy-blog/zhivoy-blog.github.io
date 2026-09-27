@@ -322,13 +322,6 @@
         vkLink.href = 'https://vk.com/share.php?url=' + encodeURIComponent(pageUrl) + '&title=' + encodeURIComponent(pageTitle);
         vkLink.textContent = 'Поделиться в ВК';
 
-        const tgLink = document.createElement('a');
-        tgLink.className = 'share-btn tg';
-        tgLink.target = '_blank';
-        tgLink.rel = 'noopener noreferrer';
-        tgLink.href = 'https://t.me/share/url?url=' + encodeURIComponent(pageUrl) + '&text=' + encodeURIComponent(pageTitle);
-        tgLink.textContent = 'В Telegram';
-
         const copyBtn = document.createElement('button');
         copyBtn.className = 'share-btn copy';
         copyBtn.textContent = '🔗 Скопировать ссылку';
@@ -345,7 +338,6 @@
         });
 
         block.appendChild(vkLink);
-        block.appendChild(tgLink);
         block.appendChild(copyBtn);
 
         const articleEl = document.querySelector('article');
