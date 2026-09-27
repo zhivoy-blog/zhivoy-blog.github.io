@@ -1,0 +1,5 @@
+# GitHub Pages (Jekyll): служебные файлы не публикуются на сайте.
+exclude:
+  - CLAUDE.md
+  - docs/
+  - scripts/
