@@ -3,15 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
-<title>Инструменты: фото, видео, MP3, PDF — Живой ИИ</title>
-<meta name="description" content="Бесплатно прямо в браузере: сжать фото и видео, видео или голосовое в MP3, объединить PDF, счётчик знаков для постов. Файлы не покидают ваше устройство.">
+<title>Инструменты: фото, видео, MP3, PDF, QR — Живой ИИ</title>
+<meta name="description" content="Бесплатно прямо в браузере: сжать фото и видео, видео в MP3, объединить PDF, QR-код, текст с картинки, удалить место съёмки из фото. Файлы не покидают устройство.">
 
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%23113154'/%3E%3Ctext x='50' y='68' font-size='58' font-family='Arial, sans-serif' font-weight='bold' fill='%23007aff' text-anchor='middle'%3EЖ%3C/text%3E%3C/svg%3E">
 
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Живой ИИ">
-<meta property="og:title" content="Инструменты: фото, видео, MP3, PDF — Живой ИИ">
-<meta property="og:description" content="Сжатие фото и видео, видео и голосовые в MP3, объединение PDF, счётчик знаков для постов — прямо в браузере, без сервера.">
+<meta property="og:title" content="Инструменты: фото, видео, MP3, PDF, QR — Живой ИИ">
+<meta property="og:description" content="Сжатие фото и видео, видео и голосовые в MP3, объединение PDF, QR-код, текст с картинки и очистка фото от места съёмки — прямо в браузере, без сервера.">
 <meta property="og:url" content="https://zhivoy-ai.ru/tools.html">
 <meta property="og:image" content="https://zhivoy-ai.ru/og-cover.jpg">
 <meta name="twitter:card" content="summary_large_image">
@@ -317,6 +317,29 @@ border: 1px solid var(--border-color); border-radius: 12px; padding: 10px 12px
 .limit-row.near .limit-bar i { background: var(--accent-warn) }
 .limit-note { font-size: 12px; color: var(--text-muted-alt); margin-top: 4px }
 
+/* --- QR-код, данные фото, текст с картинки --- */
+.qr-preview { display: flex; justify-content: center; margin: 14px 0 6px }
+.qr-preview canvas { width: 240px; max-width: 100%; height: auto; border-radius: 12px; background: #fff; image-rendering: pixelated }
+.qr-type { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 14px 0 }
+.qr-type .btn.small { width: 100% }
+.qr-type .btn.on { background-color: var(--accent); border-color: var(--accent); color: var(--on-accent) }
+.card textarea.plain { width: 100%; min-height: 90px; resize: vertical; background-color: var(--card-bg-2); color: var(--text-main); border: 1px solid var(--border-color); border-radius: 12px; padding: 12px; font: inherit; font-size: 16px; line-height: 1.5 }
+.meta-list { display: flex; flex-direction: column; gap: 8px; margin: 14px 0 }
+.meta-row { display: flex; gap: 10px; align-items: flex-start; background-color: var(--card-bg-2); border: 1px solid var(--border-color); border-radius: 12px; padding: 10px 12px; font-size: 14px }
+.meta-row .m-icon { flex: 0 0 auto; font-size: 18px; line-height: 1.2 }
+.meta-row .m-body { flex: 1 1 auto; min-width: 0; overflow-wrap: anywhere }
+.meta-row .m-label { display: block; font-size: 12px; color: var(--text-muted-alt) }
+.meta-row.danger { border-color: #ff6b6b }
+.meta-row.ok { border-color: var(--accent-green) }
+.meta-row a { color: var(--accent); font-weight: 600 }
+.text-card .ocr-out { min-height: 160px; margin-top: 12px }
+.text-card select { border-color: var(--accent-text) }
+.text-card .dropzone { border-color: var(--accent-text) }
+.text-card .btn.primary { background-color: var(--accent-text); border-color: var(--accent-text); color: #fff }
+.text-card [hidden] { display: none !important }
+.text-card .row { display: flex; gap: 8px; margin-top: 12px }
+.text-card .row .btn { flex: 1 1 0 }
+
 /* --- Улучшение фото: сравнение «До / После» --- */
 .cmp-wrap { position: relative; margin: 14px 0 8px; border-radius: 10px; overflow: hidden; background: repeating-conic-gradient(#0000 0 25%, rgba(255,255,255,0.04) 0 50%) 0 0/24px 24px }
 .cmp-wrap.full { overflow: auto; max-height: 70vh; -webkit-overflow-scrolling: touch }
@@ -386,6 +409,9 @@ ym(112807526, "init", {ssr:true, webvisor:true, clickmap:true, referrer: documen
 <div class="tab-group" data-cat="images">Надписи и мемы</div>
 <button class="tab-btn" data-cat="images" data-tab="text"><span class="tab-icon" aria-hidden="true">🔤</span><span class="tab-title">Текст на картинке</span><span class="tab-desc">Подписи для обложек</span></button>
 <button class="tab-btn" data-cat="images" data-tab="meme"><span class="tab-icon" aria-hidden="true">😂</span><span class="tab-title">Мемы</span><span class="tab-desc">Классический мем за минуту</span></button>
+<div class="tab-group" data-cat="images">Полезное</div>
+<button class="tab-btn" data-cat="images" data-tab="qr"><span class="tab-icon" aria-hidden="true">🔳</span><span class="tab-title">QR-код</span><span class="tab-desc">Для ссылки или Wi-Fi</span><span class="tab-badge">новое</span></button>
+<button class="tab-btn" data-cat="images" data-tab="exif"><span class="tab-icon" aria-hidden="true">📍</span><span class="tab-title">Данные в фото</span><span class="tab-desc">Убрать место съёмки и телефон</span><span class="tab-badge">новое</span></button>
 <button class="tab-btn" data-cat="audio" data-tab="tomp3" hidden><span class="tab-icon" aria-hidden="true">🎧</span><span class="tab-title">В MP3</span><span class="tab-desc">Звук из видео, голосовые</span><span class="tab-badge">новое</span></button>
 <button class="tab-btn" data-cat="audio" data-tab="volume" hidden><span class="tab-icon" aria-hidden="true">🔊</span><span class="tab-title">Громкость MP3</span><span class="tab-desc">Громче или тише, по каналам</span></button>
 <button class="tab-btn" data-cat="video" data-tab="vcompress" hidden><span class="tab-icon" aria-hidden="true">🗜️</span><span class="tab-title">Сжатие видео</span><span class="tab-desc">Лёгкое видео для отправки</span></button>
@@ -394,6 +420,7 @@ ym(112807526, "init", {ssr:true, webvisor:true, clickmap:true, referrer: documen
 <button class="tab-btn" data-cat="pdf" data-tab="pmerge" hidden><span class="tab-icon" aria-hidden="true">📚</span><span class="tab-title">Объединить PDF</span><span class="tab-desc">Несколько файлов в один</span><span class="tab-badge">новое</span></button>
 <button class="tab-btn" data-cat="pdf" data-tab="ppages" hidden><span class="tab-icon" aria-hidden="true">✂️</span><span class="tab-title">Страницы PDF</span><span class="tab-desc">Вырезать или удалить листы</span><span class="tab-badge">новое</span></button>
 <button class="tab-btn" data-cat="text" data-tab="tcount" hidden><span class="tab-icon" aria-hidden="true">🔢</span><span class="tab-title">Счётчик знаков</span><span class="tab-desc">Влезет ли пост в Telegram и ВК</span><span class="tab-badge">новое</span></button>
+<button class="tab-btn" data-cat="text" data-tab="ocr" hidden><span class="tab-icon" aria-hidden="true">🔍</span><span class="tab-title">Текст с картинки</span><span class="tab-desc">Фото документа или скриншот в текст</span><span class="tab-badge">новое</span></button>
 </div>
 
 <!-- ================= СЖАТИЕ ================= -->
@@ -566,6 +593,65 @@ ym(112807526, "init", {ssr:true, webvisor:true, clickmap:true, referrer: documen
 <button class="btn success" id="crop-download">Обрезать и скачать</button>
 <div class="status-msg" id="crop-status"></div>
 </div>
+</div>
+</section>
+
+<!-- ================= QR-КОД (категория «Картинки») ================= -->
+<section class="panel" id="panel-qr">
+<div class="card">
+<h2>QR-код</h2>
+<p class="hint">Сделайте QR-код со ссылкой на канал, сайт или с паролем от Wi-Fi: гости наведут камеру телефона и сразу подключатся. Код можно распечатать или вставить в пост.</p>
+<div class="qr-type" role="group" aria-label="Что зашифровать">
+<button class="btn small on" type="button" data-qr="text">🔗 Ссылка или текст</button>
+<button class="btn small" type="button" data-qr="wifi">📶 Wi-Fi</button>
+</div>
+
+<div id="qr-text-fields">
+<div class="field">
+<label for="qr-text">Ссылка или текст</label>
+<textarea class="plain" id="qr-text" placeholder="например: https://t.me/zhivoy_ii" spellcheck="false"></textarea>
+</div>
+</div>
+
+<div id="qr-wifi-fields" hidden>
+<div class="field">
+<label for="qr-ssid">Название сети Wi-Fi</label>
+<input type="text" id="qr-ssid" autocomplete="off" spellcheck="false" placeholder="как она называется в телефоне">
+</div>
+<div class="field">
+<label for="qr-pass">Пароль</label>
+<input type="text" id="qr-pass" autocomplete="off" spellcheck="false">
+</div>
+<div class="field">
+<label for="qr-sec">Защита сети</label>
+<select id="qr-sec">
+<option value="WPA" selected>WPA/WPA2/WPA3 (почти у всех)</option>
+<option value="WEP">WEP (старые роутеры)</option>
+<option value="nopass">Без пароля</option>
+</select>
+</div>
+</div>
+
+<div class="qr-preview"><canvas id="qr-canvas" width="240" height="240" aria-label="Готовый QR-код"></canvas></div>
+<div class="status-msg" id="qr-status" style="text-align:center"></div>
+<button class="btn success" id="qr-download" style="margin-top:12px" disabled>Скачать QR-код (PNG)</button>
+</div>
+</section>
+
+<!-- ================= ДАННЫЕ В ФОТО (категория «Картинки») ================= -->
+<section class="panel" id="panel-exif">
+<div class="card">
+<h2>Данные в фото: место съёмки и телефон</h2>
+<p class="hint">Телефон записывает в каждое фото скрытые данные: где оно сделано (с точностью до дома), модель телефона и время. Если отправить такое фото файлом, всё это увидит получатель. Здесь можно посмотреть, что записано, и убрать это. Качество фото не меняется.</p>
+<label class="dropzone" id="exif-dropzone">
+<div class="dz-icon">📍</div>
+<span id="exif-dz-text">Нажмите, чтобы выбрать фото</span>
+<input type="file" accept="image/*,.heic,.heif" id="exif-file">
+</label>
+<div class="meta-list" id="exif-list" hidden></div>
+<button class="btn primary" id="exif-process" disabled>Убрать скрытые данные</button>
+<div class="status-msg" id="exif-status"></div>
+<button class="btn success" id="exif-download" style="margin-top:12px" hidden>Скачать чистое фото</button>
 </div>
 </section>
 
@@ -1043,6 +1129,41 @@ ym(112807526, "init", {ssr:true, webvisor:true, clickmap:true, referrer: documen
 <div class="limit-list" id="tcount-limits"></div>
 <p class="limit-note">Telegram считает эмодзи за 2 знака и больше, поэтому для Telegram число бывает чуть больше, чем «знаков с пробелами». Здесь это уже учтено.</p>
 <button class="btn" id="tcount-clear" type="button" style="margin-top:12px">Очистить</button>
+</div>
+</section>
+
+<!-- ================= ТЕКСТ С КАРТИНКИ (категория «Текст») ================= -->
+<section class="panel" id="panel-ocr">
+<div class="card text-card">
+<h2>Текст с картинки</h2>
+<p class="hint">Достаёт текст из фото документа, скриншота или страницы книги, чтобы его не перепечатывать. Лучше всего получается с чётких фото, где текст ровный и хорошо освещён.</p>
+<label class="dropzone" id="ocr-dropzone">
+<div class="dz-icon">🔍</div>
+<span id="ocr-dz-text">Нажмите, чтобы выбрать фото или скриншот</span>
+<input type="file" accept="image/*,.heic,.heif" id="ocr-file">
+</label>
+<button class="btn small" id="ocr-sample" type="button" style="margin-top:10px;width:100%">🖼️ Попробовать на примере</button>
+
+<div class="field">
+<label for="ocr-lang">Язык текста</label>
+<select id="ocr-lang">
+<option value="rus+eng" selected>Русский и английский</option>
+<option value="rus">Только русский</option>
+<option value="eng">Только английский</option>
+</select>
+</div>
+
+<button class="btn primary" id="ocr-process" disabled>Распознать текст</button>
+<p class="hint" id="ocr-first-hint" style="margin-top:8px">При первом запуске браузер один раз скачивает модуль распознавания (около 7&nbsp;МБ).</p>
+<div class="status-msg" id="ocr-status"></div>
+
+<div id="ocr-result" hidden>
+<textarea class="ocr-out" id="ocr-text" spellcheck="true" aria-label="Распознанный текст"></textarea>
+<div class="row">
+<button class="btn" id="ocr-copy" type="button">📋 Скопировать</button>
+<button class="btn" id="ocr-count" type="button">🔢 Посчитать знаки</button>
+</div>
+</div>
 </div>
 </section>
 
@@ -4765,6 +4886,524 @@ update();
 area.focus();
 });
 update();
+})();
+
+// ===================== Подгрузка небольших библиотек с CDN (QR, данные фото, распознавание текста) =====================
+// Грузим только когда инструмент реально нужен; основной адрес — jsDelivr, запасной — unpkg.
+function loadLibOnce(key, urls, getGlobal) {
+loadLibOnce.cache = loadLibOnce.cache || {};
+if (getGlobal()) return Promise.resolve(getGlobal());
+if (loadLibOnce.cache[key]) return loadLibOnce.cache[key];
+function from(i) {
+return new Promise(function(resolve, reject) {
+var s = document.createElement('script');
+s.src = urls[i];
+s.onload = function() { getGlobal() ? resolve(getGlobal()) : reject(new Error('empty')); };
+s.onerror = function() { reject(new Error('load failed')); };
+document.head.appendChild(s);
+}).catch(function(err) {
+if (i + 1 < urls.length) return from(i + 1);
+throw err;
+});
+}
+loadLibOnce.cache[key] = from(0).catch(function() {
+loadLibOnce.cache[key] = null;
+throw new Error('не удалось загрузить модуль. Проверьте интернет и попробуйте ещё раз');
+});
+return loadLibOnce.cache[key];
+}
+
+// ===================== QR-КОД =====================
+(function() {
+var canvas = document.getElementById('qr-canvas');
+var textIn = document.getElementById('qr-text');
+var ssidIn = document.getElementById('qr-ssid');
+var passIn = document.getElementById('qr-pass');
+var secSel = document.getElementById('qr-sec');
+var textBox = document.getElementById('qr-text-fields');
+var wifiBox = document.getElementById('qr-wifi-fields');
+var statusEl = document.getElementById('qr-status');
+var downloadBtn = document.getElementById('qr-download');
+var typeBtns = document.querySelectorAll('[data-qr]');
+var mode = 'text';
+var current = null; // готовый код: матрица модулей
+var timer = null;
+
+function setStatus(t, k) { statusEl.textContent = t; statusEl.className = 'status-msg' + (k ? ' ' + k : ''); }
+function ensureQr() {
+return loadLibOnce('qr', [
+'https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.js',
+'https://unpkg.com/qrcode-generator@1.4.4/qrcode.js'
+], function() { return window.qrcode; });
+}
+// В строке Wi-Fi спецсимволы \ ; , : " экранируются обратной косой чертой
+function wifiEsc(v) { return String(v).replace(/([\;,:"])/g, '\\$1'); }
+function payload() {
+if (mode === 'text') return textIn.value.trim();
+var ssid = ssidIn.value;
+if (!ssid.trim()) return '';
+var sec = secSel.value;
+return 'WIFI:T:' + sec + ';S:' + wifiEsc(ssid) + ';' + (sec === 'nopass' ? '' : 'P:' + wifiEsc(passIn.value) + ';') + ';';
+}
+
+// Рисует код: чёрные модули на белом, с белой рамкой в 4 модуля (без неё телефоны хуже читают код)
+function draw(target, size) {
+var n = current.getModuleCount();
+var quiet = 4;
+var cell = Math.max(1, Math.floor(size / (n + quiet * 2)));
+var full = cell * (n + quiet * 2);
+target.width = full;
+target.height = full;
+var ctx = target.getContext('2d');
+ctx.fillStyle = '#fff';
+ctx.fillRect(0, 0, full, full);
+ctx.fillStyle = '#000';
+for (var r = 0; r < n; r++) {
+for (var c = 0; c < n; c++) {
+if (current.isDark(r, c)) ctx.fillRect((c + quiet) * cell, (r + quiet) * cell, cell, cell);
+}
+}
+}
+
+function clear(msg, kind) {
+current = null;
+var ctx = canvas.getContext('2d');
+canvas.width = canvas.height = 240;
+ctx.clearRect(0, 0, 240, 240);
+downloadBtn.disabled = true;
+setStatus(msg || '', kind);
+}
+
+function render() {
+var data = payload();
+if (!data) {
+clear(mode === 'text' ? 'Введите ссылку или текст — код появится здесь.' : 'Введите название сети — код появится здесь.');
+return;
+}
+ensureQr().then(function(qrcode) {
+if (data !== payload()) return; // пока грузилась библиотека, текст уже поменяли
+qrcode.stringToBytes = qrcode.stringToBytesFuncs['UTF-8'];
+var qr = qrcode(0, 'M');
+qr.addData(data, 'Byte');
+qr.make();
+current = qr;
+draw(canvas, 480);
+downloadBtn.disabled = false;
+var hint = mode === 'wifi' ? 'Наведите камеру телефона на код — он предложит подключиться к сети «' + ssidIn.value.trim() + '».' : 'Проверьте: наведите камеру телефона на код.';
+if (mode === 'text' && /^(www\.)?[a-zа-я0-9-]+\.[a-zа-я]{2,}(\/|$)/i.test(data)) hint = 'Совет: начните ссылку с https:// — так телефон точно откроет её как сайт.';
+setStatus(hint, mode === 'text' && /^(www\.)?[a-zа-я0-9-]+\.[a-zа-я]{2,}(\/|$)/i.test(data) ? 'warn' : '');
+}).catch(function(err) {
+var tooLong = /overflow|length/i.test(String(err && err.message || err));
+clear(tooLong ? 'Слишком длинный текст для QR-кода — сократите его.' : 'Не удалось сделать QR-код: ' + ((err && err.message) || 'ошибка') + '.', 'err');
+});
+}
+function schedule() { clearTimeout(timer); timer = setTimeout(render, 250); }
+
+typeBtns.forEach(function(b) {
+b.addEventListener('click', function() {
+mode = b.getAttribute('data-qr');
+typeBtns.forEach(function(x) { x.classList.toggle('on', x === b); });
+textBox.hidden = mode !== 'text';
+wifiBox.hidden = mode !== 'wifi';
+render();
+});
+});
+[textIn, ssidIn, passIn].forEach(function(el) { el.addEventListener('input', schedule); });
+secSel.addEventListener('change', function() {
+passIn.disabled = secSel.value === 'nopass';
+render();
+});
+
+downloadBtn.addEventListener('click', function() {
+if (!current) return;
+var big = document.createElement('canvas');
+draw(big, 1024); // для печати — покрупнее
+big.toBlob(function(blob) {
+var name = mode === 'wifi' ? 'qr-wifi' : 'qr-kod';
+downloadBlob(blob, name + '.png');
+setStatus('Готово! QR-код сохранён в папку «Загрузки».');
+}, 'image/png');
+});
+clear('Введите ссылку или текст — код появится здесь.');
+})();
+
+// ===================== ДАННЫЕ В ФОТО (место съёмки, телефон) =====================
+// Читаем скрытые данные библиотекой exifr, а убираем их сами — вырезаем служебные блоки из файла,
+// не пересжимая картинку (JPG, PNG, WEBP). Поворот фото (Orientation) сохраняем, иначе оно ляжет боком.
+(function() {
+var fileInput = document.getElementById('exif-file');
+var dropzone = document.getElementById('exif-dropzone');
+var dzText = document.getElementById('exif-dz-text');
+var list = document.getElementById('exif-list');
+var processBtn = document.getElementById('exif-process');
+var statusEl = document.getElementById('exif-status');
+var downloadBtn = document.getElementById('exif-download');
+var file = null, info = null, resultBlob = null, resultName = '', busy = false;
+
+function setStatus(t, k) { statusEl.textContent = t; statusEl.className = 'status-msg' + (k ? ' ' + k : ''); }
+function ensureExifr() {
+return loadLibOnce('exifr', [
+'https://cdn.jsdelivr.net/npm/exifr@7.1.3/dist/full.umd.js',
+'https://unpkg.com/exifr@7.1.3/dist/full.umd.js'
+], function() { return window.exifr; });
+}
+function readMeta(blob) {
+return ensureExifr().then(function(exifr) {
+return exifr.parse(blob, { tiff: true, ifd0: true, exif: true, gps: true, xmp: true, iptc: true, icc: false, ifd1: false, interop: false, translateValues: false, mergeOutput: true })
+.catch(function() { return null; });
+}).then(function(m) { return m || {}; });
+}
+function fmtDate(d) {
+if (!(d instanceof Date) || isNaN(d)) return d ? String(d) : '';
+var p = function(n) { return (n < 10 ? '0' : '') + n; };
+return p(d.getDate()) + '.' + p(d.getMonth() + 1) + '.' + d.getFullYear() + ' в ' + p(d.getHours()) + ':' + p(d.getMinutes());
+}
+function row(icon, label, html, kind) {
+var el = document.createElement('div');
+el.className = 'meta-row' + (kind ? ' ' + kind : '');
+el.innerHTML = '<span class="m-icon" aria-hidden="true">' + icon + '</span><span class="m-body"><span class="m-label"></span><span class="m-val"></span></span>';
+el.querySelector('.m-label').textContent = label;
+el.querySelector('.m-val').innerHTML = html;
+list.appendChild(el);
+}
+function esc(s) { var d = document.createElement('div'); d.textContent = String(s); return d.innerHTML; }
+
+// Что из найденного стоит показать человеку
+function findings(m) {
+var f = [];
+if (typeof m.latitude === 'number' && typeof m.longitude === 'number' && (m.latitude || m.longitude)) {
+var lat = m.latitude.toFixed(5), lon = m.longitude.toFixed(5);
+f.push(['📍', 'Место съёмки — видно, где сделано фото',
+esc(lat + ', ' + lon) + ' · <a href="https://yandex.ru/maps/?pt=' + lon + ',' + lat + '&z=17&l=map" target="_blank" rel="noopener noreferrer">показать на карте</a>']);
+}
+var cam = [m.Make, m.Model].filter(Boolean).join(' ').replace(/\s+/g, ' ').trim();
+if (cam) f.push(['📱', 'Телефон или камера', esc(cam)]);
+var when = m.DateTimeOriginal || m.CreateDate || m.ModifyDate;
+if (when) f.push(['🕒', 'Дата и время съёмки', esc(fmtDate(when))]);
+if (m.Software) f.push(['🛠️', 'Программа', esc(m.Software)]);
+var who = [m.Artist, m.Author, m.Copyright, m.creator, m.Creator].filter(function(v) { return v && typeof v === 'string'; });
+if (who.length) f.push(['✍️', 'Автор', esc(who[0])]);
+return f;
+}
+
+function showInfo(m) {
+list.innerHTML = '';
+list.hidden = false;
+var f = findings(m);
+if (!f.length) {
+row('✅', 'Скрытых данных не найдено', 'В этом фото нет ни места съёмки, ни модели телефона. Его можно отправлять спокойно.', 'ok');
+return;
+}
+f.forEach(function(x) { row(x[0], x[1], x[2], x[0] === '📍' ? 'danger' : ''); });
+}
+
+// ---- вырезание служебных блоков без пересжатия ----
+function u8(blob) { return blob.arrayBuffer().then(function(ab) { return new Uint8Array(ab); }); }
+function startsWith(b, off, str) {
+for (var i = 0; i < str.length; i++) if (b[off + i] !== str.charCodeAt(i)) return false;
+return true;
+}
+// Минимальный блок EXIF только с поворотом фото
+function orientationApp1(o) {
+// FFE1 + длина, «Exif\0\0», заголовок TIFF (MM, 42, IFD с 8-го байта), 1 запись: 0x0112 SHORT = o, следующего IFD нет
+return new Uint8Array([0xFF, 0xE1, 0x00, 0x22, 0x45, 0x78, 0x69, 0x66, 0, 0, 0x4D, 0x4D, 0x00, 0x2A, 0, 0, 0, 8,
+0, 1, 0x01, 0x12, 0, 3, 0, 0, 0, 1, 0, o, 0, 0, 0, 0, 0, 0]);
+}
+function cleanJpeg(b, orientation) {
+var out = [b.subarray(0, 2)];
+var i = 2;
+var inserted = false;
+function addOrientation() {
+if (!inserted && orientation > 1 && orientation <= 8) out.push(orientationApp1(orientation));
+inserted = true;
+}
+while (i < b.length) {
+if (b[i] !== 0xFF) throw new Error('файл JPG повреждён');
+var m = b[i + 1];
+if (m === 0xFF) { i++; continue; }
+if (m === 0xDA) { addOrientation(); out.push(b.subarray(i)); break; } // дальше само изображение
+if (m === 0xD9 || (m >= 0xD0 && m <= 0xD7) || m === 0x01) { out.push(b.subarray(i, i + 2)); i += 2; continue; }
+var len = (b[i + 2] << 8) | b[i + 3];
+var seg = b.subarray(i, i + 2 + len);
+var keep = true;
+if (m === 0xE1 || m === 0xED || m === 0xFE) keep = false; // EXIF/XMP, IPTC, комментарий
+else if (m === 0xE2) keep = startsWith(b, i + 4, 'ICC_PROFILE'); // цветовой профиль оставляем
+else if (m >= 0xE3 && m <= 0xEF && m !== 0xEE) keep = false; // прочие служебные (Adobe APP14 нужен для цветов)
+if (m !== 0xE0) addOrientation(); // поворот — сразу после JFIF, перед остальными блоками
+if (keep) out.push(seg);
+i += 2 + len;
+}
+return new Blob(out, { type: 'image/jpeg' });
+}
+function cleanPng(b) {
+var DROP = { tEXt: 1, zTXt: 1, iTXt: 1, eXIf: 1, tIME: 1 };
+var out = [b.subarray(0, 8)];
+var i = 8;
+while (i + 8 <= b.length) {
+var len = ((b[i] << 24) >>> 0) + (b[i + 1] << 16) + (b[i + 2] << 8) + b[i + 3];
+var type = String.fromCharCode(b[i + 4], b[i + 5], b[i + 6], b[i + 7]);
+var end = i + 12 + len;
+if (!DROP[type]) out.push(b.subarray(i, end));
+i = end;
+}
+return new Blob(out, { type: 'image/png' });
+}
+function cleanWebp(b) {
+if (!startsWith(b, 0, 'RIFF') || !startsWith(b, 8, 'WEBP')) throw new Error('файл WEBP повреждён');
+var parts = [];
+var i = 12;
+while (i + 8 <= b.length) {
+var type = String.fromCharCode(b[i], b[i + 1], b[i + 2], b[i + 3]);
+var len = b[i + 4] | (b[i + 5] << 8) | (b[i + 6] << 16) | ((b[i + 7] << 24) >>> 0);
+var end = i + 8 + len + (len & 1);
+if (type !== 'EXIF' && type !== 'XMP ') {
+var chunk = b.slice(i, end);
+if (type === 'VP8X') chunk[8] &= ~(0x08 | 0x04); // снимаем флажки «есть EXIF» и «есть XMP»
+parts.push(chunk);
+}
+i = end;
+}
+var size = 4 + parts.reduce(function(s, p) { return s + p.length; }, 0);
+var head = new Uint8Array(12);
+head.set([0x52, 0x49, 0x46, 0x46, size & 255, (size >> 8) & 255, (size >> 16) & 255, (size >>> 24) & 255, 0x57, 0x45, 0x42, 0x50]);
+return new Blob([head].concat(parts), { type: 'image/webp' });
+}
+
+function kindOf(f, b) {
+if (b[0] === 0xFF && b[1] === 0xD8) return 'jpg';
+if (b[0] === 0x89 && startsWith(b, 1, 'PNG')) return 'png';
+if (startsWith(b, 0, 'RIFF') && startsWith(b, 8, 'WEBP')) return 'webp';
+if (isHeicFile(f)) return 'heic';
+return 'other';
+}
+
+function clean(f, m) {
+return u8(f).then(function(b) {
+var k = kindOf(f, b);
+var base = (f.name || 'photo').replace(/\.[^.]+$/, '') + '-bez-dannyh';
+if (k === 'jpg') return { blob: cleanJpeg(b, +m.Orientation || 1), name: base + '.jpg', note: '' };
+if (k === 'png') return { blob: cleanPng(b), name: base + '.png', note: '' };
+if (k === 'webp') return { blob: cleanWebp(b), name: base + '.webp', note: '' };
+if (k === 'heic') {
+// HEIC браузеры не умеют правильно разбирать, поэтому переводим в JPG — данные при этом не переносятся
+return normalizeHeicFile(f).then(function(jpg) {
+return u8(jpg).then(function(jb) {
+return { blob: cleanJpeg(jb, 1), name: base + '.jpg', note: ' Фото с iPhone (HEIC) сохранено в формате JPG — так его откроет любой телефон.' };
+});
+});
+}
+throw new Error('этот формат пока не поддерживается. Подойдут JPG, PNG, WEBP и HEIC');
+});
+}
+
+function resetResult() { resultBlob = null; downloadBtn.hidden = true; }
+
+fileInput.addEventListener('change', function() {
+var f = fileInput.files && fileInput.files[0];
+if (!f) return;
+resetResult();
+if (!(/^image\//i.test(f.type || '') || isHeicFile(f) || /\.(jpe?g|png|webp)$/i.test(f.name || ''))) {
+file = null;
+fileInput.value = '';
+list.hidden = true;
+processBtn.disabled = true;
+dropzone.classList.remove('has-file');
+dzText.textContent = 'Нажмите, чтобы выбрать фото';
+setStatus('Это не фото. Выберите JPG, PNG, WEBP или HEIC.', 'err');
+return;
+}
+file = f;
+info = null;
+dropzone.classList.add('has-file');
+dzText.textContent = f.name + ' (' + fmtVideoSize(f.size) + ') — нажмите, чтобы выбрать другое';
+processBtn.disabled = true;
+list.hidden = true;
+setStatus('Смотрю, что записано в фото…');
+readMeta(f).then(function(m) {
+if (file !== f) return;
+info = m;
+showInfo(m);
+var hasGps = findings(m).some(function(x) { return x[0] === '📍'; });
+setStatus(hasGps ? 'В фото записано место съёмки. Перед отправкой лучше его убрать.' : '', hasGps ? 'warn' : '');
+processBtn.disabled = false;
+}).catch(function(err) {
+if (file !== f) return;
+setStatus('Не удалось прочитать фото: ' + ((err && err.message) || 'ошибка') + '.', 'err');
+});
+});
+
+processBtn.addEventListener('click', function() {
+if (!file || busy) return;
+busy = true;
+processBtn.disabled = true;
+fileInput.disabled = true;
+setStatus('Убираю скрытые данные…');
+var f = file;
+var res = null;
+clean(f, info || {}).then(function(r) {
+res = r;
+return readMeta(r.blob); // проверяем сами себя: в новом файле ничего не должно остаться
+}).then(function(after) {
+var left = findings(after);
+if (left.length) throw new Error('часть данных осталась (' + left.map(function(x) { return x[1]; }).join(', ') + ')');
+resultBlob = res.blob;
+resultName = res.name;
+downloadBtn.hidden = false;
+list.innerHTML = '';
+row('✅', 'Проверено', 'В новом фото нет ни места съёмки, ни модели телефона, ни даты.', 'ok');
+setStatus('Готово! Фото ' + fmtVideoSize(res.blob.size) + ', качество не изменилось.' + res.note);
+}).catch(function(err) {
+setStatus('Не удалось очистить фото: ' + ((err && err.message) || 'ошибка') + '.', 'err');
+}).then(function() {
+busy = false;
+processBtn.disabled = !file;
+fileInput.disabled = false;
+});
+});
+
+downloadBtn.addEventListener('click', function() {
+if (!resultBlob) return;
+downloadBlob(resultBlob, resultName);
+setStatus('Готово! Фото сохранено в папку «Загрузки». Отправляйте его, а не оригинал.');
+});
+})();
+
+// ===================== ТЕКСТ С КАРТИНКИ (распознавание, Tesseract.js) =====================
+// Модуль распознавания (~4 МБ) и словари языков (~3 МБ каждый) скачиваются с CDN при первом
+// запуске и дальше берутся из кэша браузера. Картинка никуда не отправляется.
+(function() {
+var fileInput = document.getElementById('ocr-file');
+var dropzone = document.getElementById('ocr-dropzone');
+var dzText = document.getElementById('ocr-dz-text');
+var sampleBtn = document.getElementById('ocr-sample');
+var langSel = document.getElementById('ocr-lang');
+var processBtn = document.getElementById('ocr-process');
+var statusEl = document.getElementById('ocr-status');
+var firstHint = document.getElementById('ocr-first-hint');
+var resultBox = document.getElementById('ocr-result');
+var out = document.getElementById('ocr-text');
+var copyBtn = document.getElementById('ocr-copy');
+var countBtn = document.getElementById('ocr-count');
+var SAMPLE_URL = 'img/primer-tekst.png';
+var file = null, busy = false, worker = null, workerLang = '';
+var STAGES = {
+'loading tesseract core': 'Загружаю модуль распознавания',
+'initializing tesseract': 'Запускаю модуль распознавания',
+'loading language traineddata': 'Загружаю словарь языка',
+'initializing api': 'Готовлюсь к распознаванию',
+'recognizing text': 'Распознаю текст'
+};
+
+function setStatus(t, k) { statusEl.textContent = t; statusEl.className = 'status-msg' + (k ? ' ' + k : ''); }
+function logger(m) {
+if (!busy || !m || !STAGES[m.status]) return;
+var pct = m.progress > 0 && m.progress < 1 ? ' ' + Math.round(m.progress * 100) + '%' : '';
+setStatus(STAGES[m.status] + '…' + pct);
+}
+function getWorker(lang) {
+if (worker && workerLang === lang) return Promise.resolve(worker);
+var old = worker;
+worker = null;
+return Promise.resolve(old && old.terminate()).catch(function() {}).then(function() {
+return loadLibOnce('tesseract', [
+'https://cdn.jsdelivr.net/npm/tesseract.js@5.1.1/dist/tesseract.min.js',
+'https://unpkg.com/tesseract.js@5.1.1/dist/tesseract.min.js'
+], function() { return window.Tesseract; });
+}).then(function(T) {
+return T.createWorker(lang, 1, {
+workerPath: 'https://cdn.jsdelivr.net/npm/tesseract.js@5.1.1/dist/worker.min.js',
+corePath: 'https://cdn.jsdelivr.net/npm/tesseract.js-core@5.1.1',
+logger: logger
+});
+}).then(function(w) {
+worker = w;
+workerLang = lang;
+return w;
+});
+}
+
+function selectFile(f) {
+if (!(/^image\//i.test(f.type || '') || isHeicFile(f))) {
+file = null;
+processBtn.disabled = true;
+dropzone.classList.remove('has-file');
+dzText.textContent = 'Нажмите, чтобы выбрать фото или скриншот';
+setStatus('Это не картинка. Выберите фото или скриншот (JPG, PNG, HEIC…).', 'err');
+return;
+}
+file = f;
+dropzone.classList.add('has-file');
+dzText.textContent = f.name + ' (' + fmtVideoSize(f.size) + ') — нажмите, чтобы выбрать другое';
+processBtn.disabled = false;
+setStatus('');
+}
+fileInput.addEventListener('change', function() {
+var f = fileInput.files && fileInput.files[0];
+fileInput.value = '';
+if (f) selectFile(f);
+});
+sampleBtn.addEventListener('click', function() {
+if (busy) return;
+sampleBtn.disabled = true;
+setStatus('Загружаю пример…');
+fetch(SAMPLE_URL).then(function(r) {
+if (!r.ok) throw new Error('HTTP ' + r.status);
+return r.blob();
+}).then(function(b) {
+selectFile(new File([b], 'primer-tekst.png', { type: 'image/png' }));
+setStatus('Пример загружен. Нажмите «Распознать текст».');
+}).catch(function() {
+setStatus('Не удалось загрузить пример. Проверьте интернет и попробуйте ещё раз.', 'err');
+}).then(function() { sampleBtn.disabled = busy; });
+});
+
+processBtn.addEventListener('click', function() {
+if (!file || busy) return;
+busy = true;
+[fileInput, sampleBtn, langSel, processBtn].forEach(function(el) { el.disabled = true; });
+setStatus('Готовлю картинку…');
+var canvas;
+loadImageToCanvas(file).then(function(c) {
+canvas = c;
+return getWorker(langSel.value);
+}).then(function(w) {
+return w.recognize(canvas);
+}).then(function(r) {
+var text = (r && r.data && r.data.text || '').replace(/[ \t]+\n/g, '\n').replace(/\n{3,}/g, '\n\n').trim();
+firstHint.hidden = true;
+resultBox.hidden = false;
+out.value = text;
+if (!text) {
+setStatus('Текст не найден. Попробуйте более чёткое фото, где текст крупнее и ровнее.', 'warn');
+} else {
+var conf = r.data.confidence || 0;
+setStatus('Готово! Проверьте текст — нейросеть могла ошибиться в отдельных буквах.' + (conf && conf < 60 ? ' Фото не очень чёткое, ошибок может быть больше обычного.' : ''), conf && conf < 60 ? 'warn' : '');
+}
+}).catch(function(err) {
+worker = null; workerLang = '';
+setStatus('Не удалось распознать: ' + ((err && err.message) || 'неизвестная ошибка') + '.', 'err');
+}).then(function() {
+busy = false;
+[fileInput, sampleBtn, langSel].forEach(function(el) { el.disabled = false; });
+processBtn.disabled = !file;
+});
+});
+
+copyBtn.addEventListener('click', function() {
+var t = out.value;
+if (!t) return;
+function done() { setStatus('Текст скопирован — вставьте его куда нужно.'); }
+if (navigator.clipboard && navigator.clipboard.writeText) {
+navigator.clipboard.writeText(t).then(done, function() { out.select(); document.execCommand('copy'); done(); });
+} else { out.select(); document.execCommand('copy'); done(); }
+});
+// Переносим текст в «Счётчик знаков» (та же категория)
+countBtn.addEventListener('click', function() {
+var area = document.getElementById('tcount-text');
+area.value = out.value;
+area.dispatchEvent(new Event('input'));
+document.querySelector('.tab-btn[data-tab=tcount]').click();
+});
 })();
 </script>
 </body>
