@@ -11,7 +11,7 @@
   const SITE_DEF = { label: 'Сайт zhivoy-ai.ru', total: 44, transferEveryDays: 3 };
   const STATUS_LABEL = { none: 'нет поста', draft: 'черновик', edited: 'отредактировано', published: 'опубликовано' };
   const TAGS = ['промпты', 'реальные-истории', 'лайфхаки', 'разбор'];
-  const CTA_HTML = '<p align="center"><a href="https://t.me/zhivoy_ii" target="_blank" style="background-color: #0088cc; color: #ffffff; padding: 10px 20px; border-radius: 15px; text-decoration: none; display: inline-block;">Перейти в Telegram «ЖИВОЙ ИИ»</a></p>';
+  const CTA_HTML = '<p align="center"><a href="https://vk.ru/zhivoy_ai" target="_blank" style="background-color: #0077ff; color: #ffffff; padding: 10px 20px; border-radius: 15px; text-decoration: none; display: inline-block;">Перейти во ВКонтакте «ЖИВОЙ ИИ»</a></p>';
 
   /* ===================== Генератор статической страницы статьи ===================== */
   /* Раньше все статьи открывались через один article-template.html?article=slug и
@@ -183,8 +183,8 @@ video.style.maxWidth = '100%';
 var firstP = tempDiv.querySelector('p');
 if (firstP) {
 var ctaHtml = '<div class="inline-cta">' +
-'<p>Такие разборы выходят у нас в Telegram каждый день</p>' +
-'<a href="https://t.me/zhivoy_ii" target="_blank" rel="noopener noreferrer" class="inline-cta-btn">Перейти в Telegram →</a>' +
+'<p>Больше полезного про нейросети — простым языком, каждый день в нашей группе ВКонтакте</p>' +
+'<a href="https://vk.ru/zhivoy_ai" target="_blank" rel="noopener noreferrer" class="inline-cta-btn">Перейти во ВКонтакте →</a>' +
 '</div>';
 firstP.insertAdjacentHTML('afterend', ctaHtml);
 }
@@ -1331,7 +1331,7 @@ document.getElementById('article-content').innerHTML = '<p style="color:#d1d1d6;
       '<strong>Добавится в статью автоматически (правится не здесь, а выше — через обложку/картинки поста):</strong><br>'
       + `Обложка: ${cover ? '✓ есть' : '— не добавлена'}<br>`
       + `Внутренних картинок: ${inlineCount}<br>`
-      + 'Кнопка в конце статьи: «Перейти в Telegram «ЖИВОЙ ИИ»»';
+      + 'Кнопка в конце статьи: «Перейти во ВКонтакте «ЖИВОЙ ИИ»»';
   }
 
   function prepareSiteRewrite() {
