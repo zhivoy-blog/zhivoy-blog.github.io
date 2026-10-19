@@ -54,6 +54,9 @@ for (const entry of manifest) {
     if (!page.includes(`<link rel="canonical" href="${articleUrl(slug)}">`)) {
       err(slug, 'в index.html адрес (canonical) от другой статьи — страницу скопировали и не поправили');
     }
+    if (!page.includes('site-chrome.js')) {
+      err(slug, 'index.html не подключает site-chrome.js — нет подвала, кнопки ВК и подсчёта кликов по ВК');
+    }
   }
 
   if (!TAGS.includes(entry.tag)) warn(slug, `рубрика "${entry.tag}" не из фильтров главной (${TAGS.join(', ')})`);

@@ -109,4 +109,18 @@ footer.innerHTML =
 '</div>' +
 '<p class="footer-copy">© Живой ИИ</p>';
 }
+
+// --- Цели Яндекс.Метрики: клики по ссылкам на ВК ---
+// Одна проверка на весь документ, поэтому считаются и кнопки, которые
+// появляются позже (блок «Перейти во ВКонтакте →» в статьях, ссылки в тексте).
+// Цель — по месту ссылки: vk_float, vk_footer, vk_header, иначе vk_article.
+document.addEventListener('click', function(e) {
+var link = e.target.closest && e.target.closest('a[href^="https://vk.ru/zhivoy_ai"]');
+if (!link || typeof window.ym !== 'function') return;
+var goal = link.closest('.vk-float') ? 'vk_float'
+: link.closest('.site-footer, .footer-promo') ? 'vk_footer'
+: link.closest('.header, .site-header') ? 'vk_header'
+: 'vk_article';
+window.ym(112807526, 'reachGoal', goal);
+}, true);
 })();
