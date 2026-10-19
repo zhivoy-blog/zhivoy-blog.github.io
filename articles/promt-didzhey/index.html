@@ -18,6 +18,30 @@
 <meta property="og:url" content="https://zhivoy-ai.ru/articles/promt-didzhey/">
 <meta name="twitter:card" content="summary_large_image">
 
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "Промт-Диджей: как заставить ИИ управлять звуком с помощью скрытых команд",
+  "description": "Скрытые теги в квадратных скобках для Suno и Udio, которые превращают плоский трек в объёмную профессиональную запись.",
+  "datePublished": "2026-08-22",
+  "image": [
+    "https://zhivoy-ai.ru/articles/promt-didzhey/promt-didzhey-cover.jpg"
+  ],
+  "author": {
+    "@type": "Organization",
+    "name": "Живой ИИ",
+    "url": "https://zhivoy-ai.ru/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Живой ИИ",
+    "url": "https://zhivoy-ai.ru/"
+  },
+  "mainEntityOfPage": "https://zhivoy-ai.ru/articles/promt-didzhey/"
+}
+</script>
+
 <link rel="stylesheet" href="../../article-style.css">
 <link rel="stylesheet" href="../../site-chrome.css">
 <!-- Yandex.Metrika counter -->
@@ -46,56 +70,12 @@ ym(112807526, "init", {ssr:true, webvisor:true, clickmap:true, referrer: documen
 <a href="../../index.html" class="back-link">← Назад к статьям</a>
 
 <article id="article-content">
-<p>Загрузка статьи...</p>
+<time datetime="2026-08-22" class="article-date">22 августа 2026</time><h1>Промт-Диджей: как заставить ИИ управлять звуком с помощью скрытых команд</h1><img src="promt-didzhey-cover.jpg" alt="Робот-диджей за пультом со звуковыми волнами" style="max-width: 100%; border-radius: 12px; margin: 20px 0;"><p>Представь, что музыкальный робот — это твой друг, который сел за пианино. Если ты просто скажешь ему "сыграй грустно", он уныло нажмёт на одну кнопочку. Чтобы он сыграл как настоящий волшебник, ему нужно нашептать секретное заклинание в квадратных скобках [ ].</p><div class="inline-cta"><p>Больше полезного про нейросети — простым языком, каждый день в нашей группе ВКонтакте</p><a href="https://vk.ru/zhivoy_ai" target="_blank" rel="noopener noreferrer" class="inline-cta-btn">Перейти во ВКонтакте →</a></div><p><strong>Какую песню он выдаст:</strong> по этому промту робот споёт космическую, таинственную и очень глубокую песню-колыбельную (будто ты летишь на ракете в кино про супергероев). Барабаны будут стучать тихо-тихо, а электронная музыка будет плавно летать из левого уха в правое, создавая ощущение огромного пространства. А прямо перед припевом музыка на секунду замрёт, а потом мощно бабахнет красивым звуком.</p><p><strong>В чём секрет:</strong> роботы-музыканты учились в настоящей школе звукозаписи. Если вставить в промт скрытые теги (например, [stereo imaging] для объёма или [drop] для резкого перехода), ИИ мгновенно превращается в крутого диджея.</p><p><strong>Код-команда для вставки в поле Стиля (Style) в Suno или Udio:</strong></p><blockquote>[Cinematic, Dark Ambient, stereo imaging, soft minimalist drum patterns, gentle EQ, Reverb, spacious stereo delay, shimmering reverse effects]</blockquote><p><strong>Код-команда для вставки прямо в текст песни (Lyrics) перед припевом:</strong></p><blockquote>[Instrumental Drop, heavy bass synth swell, beat shifts, epic climax]</blockquote><p>Нейросеть перестанет выдавать плоский и скучный шум и сделает по-настоящему глубокий, объёмный трек, от которого побегут мурашки.</p>
 </article>
 
 <footer class="site-footer"></footer>
 <script src="../../site-chrome.js"></script>
 
 <script src="../../article-script.js"></script>
-<script>
-(function() {
-fetch('data.json?v=' + Date.now(), { cache: 'no-store' })
-.then(function(response) {
-if (!response.ok) throw new Error('Not found');
-return response.json();
-})
-.then(function(data) {
-var tempDiv = document.createElement('div');
-tempDiv.innerHTML = data.content;
-
-tempDiv.querySelectorAll('video').forEach(function(video) {
-video.setAttribute('playsinline', '');
-video.setAttribute('webkit-playsinline', '');
-video.setAttribute('loop', '');
-video.setAttribute('muted', '');
-video.setAttribute('controls', '');
-video.setAttribute('preload', 'auto');
-video.style.width = '100%';
-video.style.maxWidth = '100%';
-});
-
-var firstP = tempDiv.querySelector('p');
-if (firstP) {
-var ctaHtml = '<div class="inline-cta">' +
-'<p>Больше полезного про нейросети — простым языком, каждый день в нашей группе ВКонтакте</p>' +
-'<a href="https://vk.ru/zhivoy_ai" target="_blank" rel="noopener noreferrer" class="inline-cta-btn">Перейти во ВКонтакте →</a>' +
-'</div>';
-firstP.insertAdjacentHTML('afterend', ctaHtml);
-}
-
-document.getElementById('article-content').innerHTML = tempDiv.innerHTML;
-
-setTimeout(function() {
-if (typeof initAll === 'function') {
-initAll();
-}
-}, 100);
-})
-.catch(function() {
-document.getElementById('article-content').innerHTML = '<p style="color:#d1d1d6; text-align:center; padding:40px 0;">❌ Ошибка загрузки статьи. <a href="../../index.html" style="color:var(--accent-blue);">Вернуться к списку</a></p>';
-});
-})();
-</script>
 </body>
 </html>

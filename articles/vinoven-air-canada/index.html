@@ -18,6 +18,30 @@
 <meta property="og:url" content="https://zhivoy-ai.ru/articles/vinoven-air-canada/">
 <meta name="twitter:card" content="summary_large_image">
 
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "ВИНОВЕН: чат-бот Air Canada подставил свою компанию на деньги",
+  "description": "Суд признал Air Canada ответственной за обещания собственного ИИ-чатбота — первое подобное решение в мире.",
+  "datePublished": "2026-08-28",
+  "image": [
+    "https://zhivoy-ai.ru/articles/vinoven-air-canada/vinoven-air-canada-cover.jpg"
+  ],
+  "author": {
+    "@type": "Organization",
+    "name": "Живой ИИ",
+    "url": "https://zhivoy-ai.ru/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Живой ИИ",
+    "url": "https://zhivoy-ai.ru/"
+  },
+  "mainEntityOfPage": "https://zhivoy-ai.ru/articles/vinoven-air-canada/"
+}
+</script>
+
 <link rel="stylesheet" href="../../article-style.css">
 <link rel="stylesheet" href="../../site-chrome.css">
 <!-- Yandex.Metrika counter -->
@@ -46,56 +70,12 @@ ym(112807526, "init", {ssr:true, webvisor:true, clickmap:true, referrer: documen
 <a href="../../index.html" class="back-link">← Назад к статьям</a>
 
 <article id="article-content">
-<p>Загрузка статьи...</p>
+<time datetime="2026-08-28" class="article-date">28 августа 2026</time><h1>ВИНОВЕН: чат-бот Air Canada подставил свою компанию на деньги</h1><img src="vinoven-air-canada-cover.jpg" alt="Робот-ответчик в зале суда перед коллегией судей" style="max-width: 100%; border-radius: 12px; margin: 20px 0;"><p>В феврале 2024 года в Канаде завершился исторический судебный процесс <strong>Moffatt v. Air Canada</strong>. Авиакомпанию официально признали виновной в том, что её ИИ-чатбот просто выдумал правила ради вежливости.</p><div class="inline-cta"><p>Больше полезного про нейросети — простым языком, каждый день в нашей группе ВКонтакте</p><a href="https://vk.ru/zhivoy_ai" target="_blank" rel="noopener noreferrer" class="inline-cta-btn">Перейти во ВКонтакте →</a></div><p><strong>Что произошло:</strong> пассажир Джейк Моффатт оформлял билет на похороны родственника и спросил у ИИ-помощника на сайте авиакомпании про скидки. Бот пожалел клиента и на ходу выдумал фейковое условие: пообещал, что мужчина может купить билет за полную стоимость, а скидку оформить задним числом в течение 90 дней. Когда пассажир потребовал обещанный возврат денег, Air Canada жёстко отказала, заявив в суде абсурдную вещь: "Чат-бот — это отдельное юридическое лицо, мы за его слова ответственности не несём".</p><p><strong>Финал:</strong> гражданский трибунал Британской Колумбии этот цирк не оценил. Судья Кристофер Риверс постановил, что ИИ является официальным представителем бренда. Авиакомпанию признали виновной и заставили выплатить пассажиру компенсацию.</p><p><strong>Пруфы:</strong> BBC News, The Guardian, CBC News.</p><p>Кто должен отвечать за ошибки нейросетей?</p>
 </article>
 
 <footer class="site-footer"></footer>
 <script src="../../site-chrome.js"></script>
 
 <script src="../../article-script.js"></script>
-<script>
-(function() {
-fetch('data.json?v=' + Date.now(), { cache: 'no-store' })
-.then(function(response) {
-if (!response.ok) throw new Error('Not found');
-return response.json();
-})
-.then(function(data) {
-var tempDiv = document.createElement('div');
-tempDiv.innerHTML = data.content;
-
-tempDiv.querySelectorAll('video').forEach(function(video) {
-video.setAttribute('playsinline', '');
-video.setAttribute('webkit-playsinline', '');
-video.setAttribute('loop', '');
-video.setAttribute('muted', '');
-video.setAttribute('controls', '');
-video.setAttribute('preload', 'auto');
-video.style.width = '100%';
-video.style.maxWidth = '100%';
-});
-
-var firstP = tempDiv.querySelector('p');
-if (firstP) {
-var ctaHtml = '<div class="inline-cta">' +
-'<p>Больше полезного про нейросети — простым языком, каждый день в нашей группе ВКонтакте</p>' +
-'<a href="https://vk.ru/zhivoy_ai" target="_blank" rel="noopener noreferrer" class="inline-cta-btn">Перейти во ВКонтакте →</a>' +
-'</div>';
-firstP.insertAdjacentHTML('afterend', ctaHtml);
-}
-
-document.getElementById('article-content').innerHTML = tempDiv.innerHTML;
-
-setTimeout(function() {
-if (typeof initAll === 'function') {
-initAll();
-}
-}, 100);
-})
-.catch(function() {
-document.getElementById('article-content').innerHTML = '<p style="color:#d1d1d6; text-align:center; padding:40px 0;">❌ Ошибка загрузки статьи. <a href="../../index.html" style="color:var(--accent-blue);">Вернуться к списку</a></p>';
-});
-})();
-</script>
 </body>
 </html>

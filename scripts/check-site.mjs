@@ -11,8 +11,10 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import {
-  ROOT, TAGS, REQUIRED_FIELDS, readJson, articleDir, localMediaSrcs, readSitemap, articleUrl,
+  ROOT, TAGS, REQUIRED_FIELDS, readJson, articleDir, localMediaSrcs, readSitemap, articleUrl, loadArticlePageParts,
 } from './lib/site.mjs';
+
+const { renderArticleContent } = loadArticlePageParts();
 
 const errors = [];
 const warnings = [];
@@ -54,6 +56,12 @@ for (const entry of manifest) {
     if (!page.includes(`<link rel="canonical" href="${articleUrl(slug)}">`)) {
       err(slug, 'в index.html адрес (canonical) от другой статьи — страницу скопировали и не поправили');
     }
+    if (/Загрузка статьи/.test(page)) {
+      err(slug, 'в index.html вместо текста заглушка «Загрузка статьи…» — поисковики не видят текст. Пересобрать: node scripts/new-article.mjs ' + slug + ' --force');
+    } else if (data && !page.includes(renderArticleContent(data.content))) {
+      err(slug, 'текст в index.html не совпадает с data.json — пересобрать: node scripts/new-article.mjs ' + slug + ' --force');
+    }
+    if (!page.includes('<script type="application/ld+json">')) err(slug, 'в index.html нет разметки для поисковиков (JSON-LD)');
     if (!page.includes('site-chrome.js')) {
       err(slug, 'index.html не подключает site-chrome.js — нет подвала, кнопки ВК и подсчёта кликов по ВК');
     }

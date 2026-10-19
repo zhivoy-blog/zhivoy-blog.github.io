@@ -18,6 +18,30 @@
 <meta property="og:url" content="https://zhivoy-ai.ru/articles/rasshiryaem-pamyat-ii/">
 <meta name="twitter:card" content="summary_large_image">
 
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "Как заставить нейросеть помнить детали в бесконечных диалогах",
+  "description": "Промт-архиватор для Custom Instructions, который создаёт динамический буфер памяти и не даёт ИИ забывать контекст диалога.",
+  "datePublished": "2026-08-26",
+  "image": [
+    "https://zhivoy-ai.ru/articles/rasshiryaem-pamyat-ii/rasshiryaem-pamyat-ii-cover.jpg"
+  ],
+  "author": {
+    "@type": "Organization",
+    "name": "Живой ИИ",
+    "url": "https://zhivoy-ai.ru/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Живой ИИ",
+    "url": "https://zhivoy-ai.ru/"
+  },
+  "mainEntityOfPage": "https://zhivoy-ai.ru/articles/rasshiryaem-pamyat-ii/"
+}
+</script>
+
 <link rel="stylesheet" href="../../article-style.css">
 <link rel="stylesheet" href="../../site-chrome.css">
 <!-- Yandex.Metrika counter -->
@@ -46,56 +70,12 @@ ym(112807526, "init", {ssr:true, webvisor:true, clickmap:true, referrer: documen
 <a href="../../index.html" class="back-link">← Назад к статьям</a>
 
 <article id="article-content">
-<p>Загрузка статьи...</p>
+<time datetime="2026-08-26" class="article-date">26 августа 2026</time><h1>Как заставить нейросеть помнить детали в бесконечных диалогах</h1><img src="rasshiryaem-pamyat-ii-cover.jpg" alt="Маленький робот с летающими кубиками данных вокруг" style="max-width: 100%; border-radius: 12px; margin: 20px 0;"><p>При долгой работе в одном чате ИИ начинает "тупеть": забывает контекст, путает вводные данные и теряет нить разговора. Это происходит из-за жёсткого лимита контекстного окна (максимального объёма текста, который нейросеть удерживает в памяти одновременно).</p><div class="inline-cta"><p>Больше полезного про нейросети — простым языком, каждый день в нашей группе ВКонтакте</p><a href="https://vk.ru/zhivoy_ai" target="_blank" rel="noopener noreferrer" class="inline-cta-btn">Перейти во ВКонтакте →</a></div><p><strong>Решение:</strong> скрытая связка функции Custom Instructions (пользовательские инструкции) и специального промта-архиватора, который создаёт динамический буфер памяти.</p><p><strong>Как это настроить:</strong> открой настройки ChatGPT или любой другой нейросети. Найди раздел Custom Instructions (или "Персональные инструкции").</p><p>В поле "Как бы вы хотели, чтобы ИИ отвечал" вставь этот промт-архиватор:</p><blockquote>«В конце каждого своего ответа выводи скрытый технический блок [MEMORY_BUFFER], в котором сжимай и обновляй ключевые факты нашего диалога (имена, цифры, цели проекта). Используй этот блок как приоритетный контекст для всех последующих ответов в этом чате».</blockquote><p><strong>Результат:</strong> теперь при каждом ответе ИИ будет автоматически перезаписывать и сжимать самую важную информацию, удерживая её на вершине своей памяти. Лимит контекста больше не сотрёт важные детали проекта.</p><p>Проверим на практике?</p>
 </article>
 
 <footer class="site-footer"></footer>
 <script src="../../site-chrome.js"></script>
 
 <script src="../../article-script.js"></script>
-<script>
-(function() {
-fetch('data.json?v=' + Date.now(), { cache: 'no-store' })
-.then(function(response) {
-if (!response.ok) throw new Error('Not found');
-return response.json();
-})
-.then(function(data) {
-var tempDiv = document.createElement('div');
-tempDiv.innerHTML = data.content;
-
-tempDiv.querySelectorAll('video').forEach(function(video) {
-video.setAttribute('playsinline', '');
-video.setAttribute('webkit-playsinline', '');
-video.setAttribute('loop', '');
-video.setAttribute('muted', '');
-video.setAttribute('controls', '');
-video.setAttribute('preload', 'auto');
-video.style.width = '100%';
-video.style.maxWidth = '100%';
-});
-
-var firstP = tempDiv.querySelector('p');
-if (firstP) {
-var ctaHtml = '<div class="inline-cta">' +
-'<p>Больше полезного про нейросети — простым языком, каждый день в нашей группе ВКонтакте</p>' +
-'<a href="https://vk.ru/zhivoy_ai" target="_blank" rel="noopener noreferrer" class="inline-cta-btn">Перейти во ВКонтакте →</a>' +
-'</div>';
-firstP.insertAdjacentHTML('afterend', ctaHtml);
-}
-
-document.getElementById('article-content').innerHTML = tempDiv.innerHTML;
-
-setTimeout(function() {
-if (typeof initAll === 'function') {
-initAll();
-}
-}, 100);
-})
-.catch(function() {
-document.getElementById('article-content').innerHTML = '<p style="color:#d1d1d6; text-align:center; padding:40px 0;">❌ Ошибка загрузки статьи. <a href="../../index.html" style="color:var(--accent-blue);">Вернуться к списку</a></p>';
-});
-})();
-</script>
 </body>
 </html>

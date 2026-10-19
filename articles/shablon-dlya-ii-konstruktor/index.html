@@ -18,6 +18,30 @@
 <meta property="og:url" content="https://zhivoy-ai.ru/articles/shablon-dlya-ii-konstruktor/">
 <meta name="twitter:card" content="summary_large_image">
 
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "Шаблон для ИИ (Промт-Конструктор)",
+  "description": "Как один раз написать универсальный каркас промта с переменными в квадратных скобках и больше не объяснять нейросети контекст заново для каждой задачи.",
+  "datePublished": "2026-09-16",
+  "image": [
+    "https://zhivoy-ai.ru/articles/shablon-dlya-ii-konstruktor/cover.jpg"
+  ],
+  "author": {
+    "@type": "Organization",
+    "name": "Живой ИИ",
+    "url": "https://zhivoy-ai.ru/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Живой ИИ",
+    "url": "https://zhivoy-ai.ru/"
+  },
+  "mainEntityOfPage": "https://zhivoy-ai.ru/articles/shablon-dlya-ii-konstruktor/"
+}
+</script>
+
 <link rel="stylesheet" href="../../article-style.css">
 <link rel="stylesheet" href="../../site-chrome.css">
 <!-- Yandex.Metrika counter -->
@@ -46,56 +70,12 @@ ym(112807526, "init", {ssr:true, webvisor:true, clickmap:true, referrer: documen
 <a href="../../index.html" class="back-link">← Назад к статьям</a>
 
 <article id="article-content">
-<p>Загрузка статьи...</p>
+<time datetime="2026-09-16" class="article-date">16 сентября 2026</time><h1>Шаблон для ИИ (Промт-Конструктор)</h1><img src="cover.jpg" alt="Пазл с одним светящимся фиолетовым фрагментом среди белых деталей" style="max-width: 100%; border-radius: 12px; margin: 20px 0;"><p>Как создавать универсальные шаблоны, чтобы ИИ работал на автомате.</p><div class="inline-cta"><p>Больше полезного про нейросети — простым языком, каждый день в нашей группе ВКонтакте</p><a href="https://vk.ru/zhivoy_ai" target="_blank" rel="noopener noreferrer" class="inline-cta-btn">Перейти во ВКонтакте →</a></div><p>Для каждой новой задачи приходится заново расписывать нейросети километровые инструкции. Сегодня нужен пост — пиши контекст с нуля, завтра нужен сценарий — опять разжёвывай всё заново. Это отнимает много времени.</p><p><strong>Решение:</strong> полностью перейти на систему мега-промтов. Один раз написать универсальный каркас с пустыми переменными и потом просто менять их за несколько секунд перед запуском.</p><p><strong>В чём секрет:</strong> нужно создать для ИИ жёсткую модульную структуру. Нейросеть считывает квадратные скобки как переменные и моментально понимает архитектуру запроса.</p><p><strong>Шаблон для копирования:</strong></p><blockquote>«Действуй в роли [Роль, например: маркетолог]. Твоя целевая аудитория — [ЦА, например: фрилансеры]. Я пришлю тебе тему, а твоя задача — написать текст в стиле [Стиль, например: инфостиль], объёмом до [Объём, например: 1000 знаков]. Обязательно добавь в конце [Деталь, например: призыв к действию]. Вот моя тема: [Вставь тему]. Игнорируй любые банальные шаблоны».</blockquote><p><strong>Результат:</strong> шаблон один раз сохраняется в заметки, и больше не нужно каждый раз объяснять нейросети, какой у автора канал и для кого он пишет — просто копируется каркас, вбиваются нужные вводные в скобки, и готовый контент выходит как с конвейера.</p>
 </article>
 
 <footer class="site-footer"></footer>
 <script src="../../site-chrome.js"></script>
 
 <script src="../../article-script.js"></script>
-<script>
-(function() {
-fetch('data.json?v=' + Date.now(), { cache: 'no-store' })
-.then(function(response) {
-if (!response.ok) throw new Error('Not found');
-return response.json();
-})
-.then(function(data) {
-var tempDiv = document.createElement('div');
-tempDiv.innerHTML = data.content;
-
-tempDiv.querySelectorAll('video').forEach(function(video) {
-video.setAttribute('playsinline', '');
-video.setAttribute('webkit-playsinline', '');
-video.setAttribute('loop', '');
-video.setAttribute('muted', '');
-video.setAttribute('controls', '');
-video.setAttribute('preload', 'auto');
-video.style.width = '100%';
-video.style.maxWidth = '100%';
-});
-
-var firstP = tempDiv.querySelector('p');
-if (firstP) {
-var ctaHtml = '<div class="inline-cta">' +
-'<p>Больше полезного про нейросети — простым языком, каждый день в нашей группе ВКонтакте</p>' +
-'<a href="https://vk.ru/zhivoy_ai" target="_blank" rel="noopener noreferrer" class="inline-cta-btn">Перейти во ВКонтакте →</a>' +
-'</div>';
-firstP.insertAdjacentHTML('afterend', ctaHtml);
-}
-
-document.getElementById('article-content').innerHTML = tempDiv.innerHTML;
-
-setTimeout(function() {
-if (typeof initAll === 'function') {
-initAll();
-}
-}, 100);
-})
-.catch(function() {
-document.getElementById('article-content').innerHTML = '<p style="color:#d1d1d6; text-align:center; padding:40px 0;">❌ Ошибка загрузки статьи. <a href="../../index.html" style="color:var(--accent-blue);">Вернуться к списку</a></p>';
-});
-})();
-</script>
 </body>
 </html>

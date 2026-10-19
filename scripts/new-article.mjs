@@ -67,7 +67,9 @@ for (const slug of slugs) {
   if (fs.existsSync(pagePath) && !force) {
     done.push('index.html уже был — не трогал (перезаписать: --force)');
   } else {
-    fs.writeFileSync(pagePath, buildArticlePageHtml({ slug, title: data.title, excerpt: data.excerpt, ogImageFile }));
+    fs.writeFileSync(pagePath, buildArticlePageHtml({
+      slug, title: data.title, excerpt: data.excerpt, ogImageFile, date: data.date, content: data.content,
+    }));
     done.push('index.html создан');
   }
 

@@ -18,6 +18,30 @@
 <meta property="og:url" content="https://zhivoy-ai.ru/articles/promt-ot-obratnogo/">
 <meta name="twitter:card" content="summary_large_image">
 
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "Промт от обратного: как скопировать чужой стиль текста через ИИ",
+  "description": "Как заставить нейросеть точно скопировать чужой стиль текста: вместо расплывчатого «пиши бодрее» — разбор образца на технические маркеры и готовый промт под свой стиль.",
+  "datePublished": "2026-09-10",
+  "image": [
+    "https://zhivoy-ai.ru/articles/promt-ot-obratnogo/promt-ot-obratnogo.jpg"
+  ],
+  "author": {
+    "@type": "Organization",
+    "name": "Живой ИИ",
+    "url": "https://zhivoy-ai.ru/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Живой ИИ",
+    "url": "https://zhivoy-ai.ru/"
+  },
+  "mainEntityOfPage": "https://zhivoy-ai.ru/articles/promt-ot-obratnogo/"
+}
+</script>
+
 <link rel="stylesheet" href="../../article-style.css">
 <link rel="stylesheet" href="../../site-chrome.css">
 <!-- Yandex.Metrika counter -->
@@ -46,56 +70,12 @@ ym(112807526, "init", {ssr:true, webvisor:true, clickmap:true, referrer: documen
 <a href="../../index.html" class="back-link">← Назад к статьям</a>
 
 <article id="article-content">
-<p>Загрузка статьи...</p>
+<time datetime="2026-09-10" class="article-date">10 сентября 2026</time><h1>Промт от обратного: как скопировать чужой стиль текста через ИИ</h1><img src="promt-ot-obratnogo.jpg" alt="Парень в очках на фоне зелёного программного кода" style="max-width: 100%; border-radius: 12px; margin: 20px 0;"><p>Когда человек просит нейросеть «писать бодро, с юмором» или «сделай текст живее», результат почти всегда получается расплывчатым. Дело в том, что для языковой модели слова вроде «бодро» или «живо» — это не инструкция, а скорее пожелание без чётких границ: модель не знает, какую длину предложений вы имеете в виду, сколько восклицательных знаков — это «бодро», а сколько уже перебор.</p><div class="inline-cta"><p>Больше полезного про нейросети — простым языком, каждый день в нашей группе ВКонтакте</p><a href="https://vk.ru/zhivoy_ai" target="_blank" rel="noopener noreferrer" class="inline-cta-btn">Перейти во ВКонтакте →</a></div><p>Есть более надёжный способ — метод, который можно назвать «промптингом от обратного». Вместо того чтобы описывать стиль словами, вы даёте нейросети готовый пример текста, стиль которого вам нравится, и просите её разобрать этот пример на технические составляющие, а затем собрать из них инструкцию.</p><p>Промт выглядит так:</p><p>«Проанализируй текст ниже. Разбери его структуру, длину предложений, тон автора и использование эмодзи. Напиши готовый ПРОМТ, который я смогу использовать, чтобы ты писал другие тексты точно в таком же стиле. Вот текст: [вставь образец]»</p><p>После этого нейросеть сама раскладывает чужой текст на конкретные технические маркеры: среднюю длину предложения в словах, соотношение коротких и длинных фраз, частоту повторов ключевых слов, наличие или отсутствие канцелярита, характер обращения к читателю (на «ты» или на «вы»), долю разговорных оборотов. На выходе получается не абстрактное «пиши веселее», а конкретная инструкция вида «используй предложения в среднем на 12-15 слов, чередуй их с короткими фразами-акцентами в 3-5 слов, обращайся к читателю на "ты", избегай канцелярских оборотов».</p><p>Готовую инструкцию можно скопировать в новый диалог с любой другой нейросетью — и она будет заметно точнее следовать нужному стилю, чем при словесном описании «пиши круче».</p><p>Метод работает не только для постов в блоге. Он применим для деловой переписки (скопировать стиль коллеги, который умеет писать убедительные письма), для писем поддержки клиентам, даже для личных сообщений — если вы хотите, чтобы черновик, который вам написала нейросеть, звучал похоже на то, как обычно пишете вы сами.</p>
 </article>
 
 <footer class="site-footer"></footer>
 <script src="../../site-chrome.js"></script>
 
 <script src="../../article-script.js"></script>
-<script>
-(function() {
-fetch('data.json?v=' + Date.now(), { cache: 'no-store' })
-.then(function(response) {
-if (!response.ok) throw new Error('Not found');
-return response.json();
-})
-.then(function(data) {
-var tempDiv = document.createElement('div');
-tempDiv.innerHTML = data.content;
-
-tempDiv.querySelectorAll('video').forEach(function(video) {
-video.setAttribute('playsinline', '');
-video.setAttribute('webkit-playsinline', '');
-video.setAttribute('loop', '');
-video.setAttribute('muted', '');
-video.setAttribute('controls', '');
-video.setAttribute('preload', 'auto');
-video.style.width = '100%';
-video.style.maxWidth = '100%';
-});
-
-var firstP = tempDiv.querySelector('p');
-if (firstP) {
-var ctaHtml = '<div class="inline-cta">' +
-'<p>Больше полезного про нейросети — простым языком, каждый день в нашей группе ВКонтакте</p>' +
-'<a href="https://vk.ru/zhivoy_ai" target="_blank" rel="noopener noreferrer" class="inline-cta-btn">Перейти во ВКонтакте →</a>' +
-'</div>';
-firstP.insertAdjacentHTML('afterend', ctaHtml);
-}
-
-document.getElementById('article-content').innerHTML = tempDiv.innerHTML;
-
-setTimeout(function() {
-if (typeof initAll === 'function') {
-initAll();
-}
-}, 100);
-})
-.catch(function() {
-document.getElementById('article-content').innerHTML = '<p style="color:#d1d1d6; text-align:center; padding:40px 0;">❌ Ошибка загрузки статьи. <a href="../../index.html" style="color:var(--accent-blue);">Вернуться к списку</a></p>';
-});
-})();
-</script>
 </body>
 </html>

@@ -18,6 +18,30 @@
 <meta property="og:url" content="https://zhivoy-ai.ru/articles/obyasni-kak-rebenku/">
 <meta name="twitter:card" content="summary_large_image">
 
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "Промт-переводчик: как быстро разобраться в любой сложной теме",
+  "description": "Метод 'Эликсир простоты' — промт, который переводит любой заумный научный или юридический текст на простой человеческий язык.",
+  "datePublished": "2026-08-29",
+  "image": [
+    "https://zhivoy-ai.ru/articles/obyasni-kak-rebenku/obyasni-kak-rebenku-cover.jpg"
+  ],
+  "author": {
+    "@type": "Organization",
+    "name": "Живой ИИ",
+    "url": "https://zhivoy-ai.ru/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Живой ИИ",
+    "url": "https://zhivoy-ai.ru/"
+  },
+  "mainEntityOfPage": "https://zhivoy-ai.ru/articles/obyasni-kak-rebenku/"
+}
+</script>
+
 <link rel="stylesheet" href="../../article-style.css">
 <link rel="stylesheet" href="../../site-chrome.css">
 <!-- Yandex.Metrika counter -->
@@ -46,56 +70,12 @@ ym(112807526, "init", {ssr:true, webvisor:true, clickmap:true, referrer: documen
 <a href="../../index.html" class="back-link">← Назад к статьям</a>
 
 <article id="article-content">
-<p>Загрузка статьи...</p>
+<time datetime="2026-08-29" class="article-date">29 августа 2026</time><h1>Промт-переводчик: как быстро разобраться в любой сложной теме</h1><img src="obyasni-kak-rebenku-cover.jpg" alt="Робот читает книгу вместе с мальчиком за столом с бумагами" style="max-width: 100%; border-radius: 12px; margin: 20px 0;"><p>Как быстро разобраться в любой сложной теме, заумном термине или запутанной инструкции. Если вам ИИ выдал текст со сложными техническими терминами и вам ничего не понятно, не спешите закрывать чат или часами гуглить каждое слово. Достаточно заставить нейросеть разложить всё на пальцах с помощью ярких бытовых образов. Используйте метод "Эликсир простоты".</p><div class="inline-cta"><p>Больше полезного про нейросети — простым языком, каждый день в нашей группе ВКонтакте</p><a href="https://vk.ru/zhivoy_ai" target="_blank" rel="noopener noreferrer" class="inline-cta-btn">Перейти во ВКонтакте →</a></div><p><strong>В чём секрет:</strong> скопируйте любой тяжёлый научный, технический или юридический текст и отправьте ИИ этот промт:</p><blockquote>«Ты — мастер метафор. Возьми сложный концепт или текст ниже и объясни его суть так, будто рассказываешь 10-летнему ребёнку. Избегай канцеляризма и заумных слов. Используй ОДНУ понятную бытовую аналогию, чтобы логика стала очевидной. Вот текст: [вставь текст]».</blockquote><p>ИИ моментально переведёт скучную документацию или заумную теорию в формат живого и понятного примера, сэкономив вам часы работы мозга.</p>
 </article>
 
 <footer class="site-footer"></footer>
 <script src="../../site-chrome.js"></script>
 
 <script src="../../article-script.js"></script>
-<script>
-(function() {
-fetch('data.json?v=' + Date.now(), { cache: 'no-store' })
-.then(function(response) {
-if (!response.ok) throw new Error('Not found');
-return response.json();
-})
-.then(function(data) {
-var tempDiv = document.createElement('div');
-tempDiv.innerHTML = data.content;
-
-tempDiv.querySelectorAll('video').forEach(function(video) {
-video.setAttribute('playsinline', '');
-video.setAttribute('webkit-playsinline', '');
-video.setAttribute('loop', '');
-video.setAttribute('muted', '');
-video.setAttribute('controls', '');
-video.setAttribute('preload', 'auto');
-video.style.width = '100%';
-video.style.maxWidth = '100%';
-});
-
-var firstP = tempDiv.querySelector('p');
-if (firstP) {
-var ctaHtml = '<div class="inline-cta">' +
-'<p>Больше полезного про нейросети — простым языком, каждый день в нашей группе ВКонтакте</p>' +
-'<a href="https://vk.ru/zhivoy_ai" target="_blank" rel="noopener noreferrer" class="inline-cta-btn">Перейти во ВКонтакте →</a>' +
-'</div>';
-firstP.insertAdjacentHTML('afterend', ctaHtml);
-}
-
-document.getElementById('article-content').innerHTML = tempDiv.innerHTML;
-
-setTimeout(function() {
-if (typeof initAll === 'function') {
-initAll();
-}
-}, 100);
-})
-.catch(function() {
-document.getElementById('article-content').innerHTML = '<p style="color:#d1d1d6; text-align:center; padding:40px 0;">❌ Ошибка загрузки статьи. <a href="../../index.html" style="color:var(--accent-blue);">Вернуться к списку</a></p>';
-});
-})();
-</script>
 </body>
 </html>

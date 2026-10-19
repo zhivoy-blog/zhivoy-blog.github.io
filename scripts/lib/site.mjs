@@ -18,6 +18,12 @@ const GEN_START = '/* ===================== Генератор статичес�
 const GEN_END = "const LS_SETTINGS = ";
 
 export function loadArticlePageBuilder() {
+  return loadArticlePageParts().buildArticlePageHtml;
+}
+
+// Части шаблона по отдельности: текст статьи для <article> и разметка JSON-LD.
+// Нужны, чтобы проверить готовую страницу, не пересобирая её целиком.
+export function loadArticlePageParts() {
   const src = fs.readFileSync(path.join(ROOT, 'shtab-d14558', 'app.js'), 'utf8');
   const a = src.indexOf(GEN_START);
   const b = src.indexOf(GEN_END, a);
@@ -25,7 +31,7 @@ export function loadArticlePageBuilder() {
     throw new Error('Не нашёл генератор страницы в shtab-d14558/app.js — его переименовали или перенесли?');
   }
   // eslint-disable-next-line no-new-func
-  return new Function(src.slice(a, b) + '\nreturn buildArticlePageHtml;')();
+  return new Function(src.slice(a, b) + '\nreturn { buildArticlePageHtml, renderArticleContent, buildArticleJsonLd };')();
 }
 
 export function readJson(file) {

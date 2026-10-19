@@ -18,6 +18,30 @@
 <meta property="og:url" content="https://zhivoy-ai.ru/articles/kop-lyagushka/">
 <meta name="twitter:card" content="summary_large_image">
 
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "Нейросеть превратила копа в лягушку",
+  "description": "Полиция Хибер-Сити тестировала ИИ для написания протоколов по аудио с боди-камер. Программа спутала фоновый мультфильм с реальностью.",
+  "datePublished": "2026-09-10",
+  "image": [
+    "https://zhivoy-ai.ru/articles/kop-lyagushka/kop-lyagushka.jpg"
+  ],
+  "author": {
+    "@type": "Organization",
+    "name": "Живой ИИ",
+    "url": "https://zhivoy-ai.ru/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Живой ИИ",
+    "url": "https://zhivoy-ai.ru/"
+  },
+  "mainEntityOfPage": "https://zhivoy-ai.ru/articles/kop-lyagushka/"
+}
+</script>
+
 <link rel="stylesheet" href="../../article-style.css">
 <link rel="stylesheet" href="../../site-chrome.css">
 <!-- Yandex.Metrika counter -->
@@ -46,56 +70,18 @@ ym(112807526, "init", {ssr:true, webvisor:true, clickmap:true, referrer: documen
 <a href="../../index.html" class="back-link">← Назад к статьям</a>
 
 <article id="article-content">
-<p>Загрузка статьи...</p>
+<time datetime="2026-09-10" class="article-date">10 сентября 2026</time><h1>Нейросеть превратила копа в лягушку</h1><img src="kop-lyagushka.jpg" alt="Лягушка в полицейской форме с дубинкой на фоне города" style="max-width: 100%; border-radius: 12px; margin: 20px 0;">
+<p>Ребята, вот вам свежая история — реально не фига себе.</p><div class="inline-cta"><p>Больше полезного про нейросети — простым языком, каждый день в нашей группе ВКонтакте</p><a href="https://vk.ru/zhivoy_ai" target="_blank" rel="noopener noreferrer" class="inline-cta-btn">Перейти во ВКонтакте →</a></div>
+<p>В декабре 2025 года полицейское управление Хибер-Сити в штате Юта начало тестировать программу Draft One от компании Axon (это те, кто делает электрошокеры Тейзер) — она автоматически пишет полицейские протоколы прямо по аудио с боди-камер офицеров.</p>
+<p>И вот в начале января 2026 года случился курьёз. Во время демонстрационной проверки на фоне у кого-то работал телевизор с мультфильмом «Принцесса и лягушка». ИИ услышал реплики из мультика и на полном серьёзе внёс их в официальный протокол — получилось, что офицер якобы «превратился в лягушку при исполнении».</p>
+<p>Сержант Рик Кил потом объяснил журналистам FOX 13 News: программа для обработки видео с боди-камеры и ИИ для протоколов уловили звук мультфильма, который играл на фоне. Именно тогда, по его словам, в отделе поняли, насколько важно перепроверять всё, что пишет ИИ, прежде чем подписывать документ.</p>
+<p>При этом сам Кил не отказался от инструмента совсем — говорит, что программа экономит ему 6-8 часов в неделю на бумажной работе. Просто теперь каждый протокол проверяют человеческие глаза, прежде чем он уходит в дело.</p>
+<p>Вот так вот — доверили бы вы ИИ вести официальные документы?</p>
 </article>
 
 <footer class="site-footer"></footer>
 <script src="../../site-chrome.js"></script>
 
 <script src="../../article-script.js"></script>
-<script>
-(function() {
-fetch('data.json?v=' + Date.now(), { cache: 'no-store' })
-.then(function(response) {
-if (!response.ok) throw new Error('Not found');
-return response.json();
-})
-.then(function(data) {
-var tempDiv = document.createElement('div');
-tempDiv.innerHTML = data.content;
-
-tempDiv.querySelectorAll('video').forEach(function(video) {
-video.setAttribute('playsinline', '');
-video.setAttribute('webkit-playsinline', '');
-video.setAttribute('loop', '');
-video.setAttribute('muted', '');
-video.setAttribute('controls', '');
-video.setAttribute('preload', 'auto');
-video.style.width = '100%';
-video.style.maxWidth = '100%';
-});
-
-var firstP = tempDiv.querySelector('p');
-if (firstP) {
-var ctaHtml = '<div class="inline-cta">' +
-'<p>Больше полезного про нейросети — простым языком, каждый день в нашей группе ВКонтакте</p>' +
-'<a href="https://vk.ru/zhivoy_ai" target="_blank" rel="noopener noreferrer" class="inline-cta-btn">Перейти во ВКонтакте →</a>' +
-'</div>';
-firstP.insertAdjacentHTML('afterend', ctaHtml);
-}
-
-document.getElementById('article-content').innerHTML = tempDiv.innerHTML;
-
-setTimeout(function() {
-if (typeof initAll === 'function') {
-initAll();
-}
-}, 100);
-})
-.catch(function() {
-document.getElementById('article-content').innerHTML = '<p style="color:#d1d1d6; text-align:center; padding:40px 0;">❌ Ошибка загрузки статьи. <a href="../../index.html" style="color:var(--accent-blue);">Вернуться к списку</a></p>';
-});
-})();
-</script>
 </body>
 </html>

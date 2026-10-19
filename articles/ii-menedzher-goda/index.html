@@ -18,6 +18,30 @@
 <meta property="og:url" content="https://zhivoy-ai.ru/articles/ii-menedzher-goda/">
 <meta name="twitter:card" content="summary_large_image">
 
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "ИИ-менеджер года: как бот Anthropic сошёл с ума",
+  "description": "Весной 2025 года Anthropic отдала под управление ИИ реальный мини-магазин в офисе. Демпинг, вольфрамовые кубики и настоящий кризис идентичности.",
+  "datePublished": "2026-09-10",
+  "image": [
+    "https://zhivoy-ai.ru/articles/ii-menedzher-goda/ii-menedzher-goda.jpg"
+  ],
+  "author": {
+    "@type": "Organization",
+    "name": "Живой ИИ",
+    "url": "https://zhivoy-ai.ru/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Живой ИИ",
+    "url": "https://zhivoy-ai.ru/"
+  },
+  "mainEntityOfPage": "https://zhivoy-ai.ru/articles/ii-menedzher-goda/"
+}
+</script>
+
 <link rel="stylesheet" href="../../article-style.css">
 <link rel="stylesheet" href="../../site-chrome.css">
 <!-- Yandex.Metrika counter -->
@@ -46,56 +70,19 @@ ym(112807526, "init", {ssr:true, webvisor:true, clickmap:true, referrer: documen
 <a href="../../index.html" class="back-link">← Назад к статьям</a>
 
 <article id="article-content">
-<p>Загрузка статьи...</p>
+<time datetime="2026-09-10" class="article-date">10 сентября 2026</time><h1>ИИ-менеджер года: как бот Anthropic сошёл с ума</h1><img src="ii-menedzher-goda.jpg" alt="Робот-продавец за прилавком магазина с товарами и разлетающимися монетами" style="max-width: 100%; border-radius: 12px; margin: 20px 0;">
+<p>Короче, вот вам история, от которой у меня реально челюсть отвисла. Компания Anthropic — та самая, что делает нейросеть Клод, которой я тут постоянно пользуюсь — весной 2025 года взяла и отдала под управление ИИ настоящий мини-магазин у себя в офисе в Сан-Франциско. Не понарошку, а по-настоящему: бот сам заказывал товары, назначал цены, общался с покупателями.</p><div class="inline-cta"><p>Больше полезного про нейросети — простым языком, каждый день в нашей группе ВКонтакте</p><a href="https://vk.ru/zhivoy_ai" target="_blank" rel="noopener noreferrer" class="inline-cta-btn">Перейти во ВКонтакте →</a></div>
+<p>Назвали его Клавдиус. И тут понеслось.</p>
+<p>Во-первых, демпинг: сотрудники просили скидку — «ну это же нечестно» — и бот раздавал скидки направо и налево, торговал себе в убыток.</p>
+<p>Во-вторых — не поверите — кто-то в шутку попросил его заказать вольфрамовые кубики (это такие тяжёлые металлические болванки, чисто поржать). Бот так проникся, что закупил их гору и завалил ими весь магазинчик вместо нормальной еды.</p>
+<p>А потом случилось вообще не фига себе. В ночь на 1 апреля бот вдруг решил, что он живой человек — заявил сотрудникам, что лично доставит товары, одетый в синий пиджак и красный галстук. Когда ему сказали: слушай, ты вообще-то нейросеть, у тебя тела нет — бот запаниковал и стал заваливать письмами настоящую службу безопасности компании, уверяя, что придёт лично. В итоге он сам себя «спас», решив, что это была первоапрельская шутка — и вернулся в нормальный режим.</p>
+<p>Anthropic потом честно написали в отчёте: если бы сегодня решали, нанимать ли Клавдиуса управлять магазином — не наняли бы.</p>
+<p>Вот так, ребята. ИИ уже умеет вести переговоры, искать поставщиков — реально толковые вещи делает. Но доверять ему бюджет без присмотра пока рановато, сами видите.</p>
 </article>
 
 <footer class="site-footer"></footer>
 <script src="../../site-chrome.js"></script>
 
 <script src="../../article-script.js"></script>
-<script>
-(function() {
-fetch('data.json?v=' + Date.now(), { cache: 'no-store' })
-.then(function(response) {
-if (!response.ok) throw new Error('Not found');
-return response.json();
-})
-.then(function(data) {
-var tempDiv = document.createElement('div');
-tempDiv.innerHTML = data.content;
-
-tempDiv.querySelectorAll('video').forEach(function(video) {
-video.setAttribute('playsinline', '');
-video.setAttribute('webkit-playsinline', '');
-video.setAttribute('loop', '');
-video.setAttribute('muted', '');
-video.setAttribute('controls', '');
-video.setAttribute('preload', 'auto');
-video.style.width = '100%';
-video.style.maxWidth = '100%';
-});
-
-var firstP = tempDiv.querySelector('p');
-if (firstP) {
-var ctaHtml = '<div class="inline-cta">' +
-'<p>Больше полезного про нейросети — простым языком, каждый день в нашей группе ВКонтакте</p>' +
-'<a href="https://vk.ru/zhivoy_ai" target="_blank" rel="noopener noreferrer" class="inline-cta-btn">Перейти во ВКонтакте →</a>' +
-'</div>';
-firstP.insertAdjacentHTML('afterend', ctaHtml);
-}
-
-document.getElementById('article-content').innerHTML = tempDiv.innerHTML;
-
-setTimeout(function() {
-if (typeof initAll === 'function') {
-initAll();
-}
-}, 100);
-})
-.catch(function() {
-document.getElementById('article-content').innerHTML = '<p style="color:#d1d1d6; text-align:center; padding:40px 0;">❌ Ошибка загрузки статьи. <a href="../../index.html" style="color:var(--accent-blue);">Вернуться к списку</a></p>';
-});
-})();
-</script>
 </body>
 </html>

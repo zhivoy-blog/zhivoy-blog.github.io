@@ -18,6 +18,30 @@
 <meta property="og:url" content="https://zhivoy-ai.ru/articles/poshagovyi-bufer/">
 <meta name="twitter:card" content="summary_large_image">
 
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "Как лечить «склероз» ИИ при работе со смартфона",
+  "description": "Почему нейросеть «путается», если скинуть ей весь текст сразу с телефона, и как техника «пошагового буфера» решает эту проблему на маленьком экране.",
+  "datePublished": "2026-09-10",
+  "image": [
+    "https://zhivoy-ai.ru/articles/poshagovyi-bufer/poshagovyi-bufer.jpg"
+  ],
+  "author": {
+    "@type": "Organization",
+    "name": "Живой ИИ",
+    "url": "https://zhivoy-ai.ru/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Живой ИИ",
+    "url": "https://zhivoy-ai.ru/"
+  },
+  "mainEntityOfPage": "https://zhivoy-ai.ru/articles/poshagovyi-bufer/"
+}
+</script>
+
 <link rel="stylesheet" href="../../article-style.css">
 <link rel="stylesheet" href="../../site-chrome.css">
 <!-- Yandex.Metrika counter -->
@@ -46,56 +70,12 @@ ym(112807526, "init", {ssr:true, webvisor:true, clickmap:true, referrer: documen
 <a href="../../index.html" class="back-link">← Назад к статьям</a>
 
 <article id="article-content">
-<p>Загрузка статьи...</p>
+<time datetime="2026-09-10" class="article-date">10 сентября 2026</time><h1>Как лечить «склероз» ИИ при работе со смартфона</h1><img src="poshagovyi-bufer.jpg" alt="Робот в очках с вопросительными знаками и запиской «Запомнить задачи!» на голове" style="max-width: 100%; border-radius: 12px; margin: 20px 0;"><p>Одна из самых частых ошибок при работе с нейросетью с телефона — это попытка скинуть ей сразу весь большой текст целиком: длинную статью на правку, объёмный документ на анализ, многостраничный список задач. Кажется, что так быстрее — один раз вставил и жди результат.</p><div class="inline-cta"><p>Больше полезного про нейросети — простым языком, каждый день в нашей группе ВКонтакте</p><a href="https://vk.ru/zhivoy_ai" target="_blank" rel="noopener noreferrer" class="inline-cta-btn">Перейти во ВКонтакте →</a></div><p>На практике всё наоборот. Без чётких рамок нейросеть, получившая слишком большой объём текста за один раз, начинает «путать» части документа между собой, упускать детали из середины текста, а к концу диалога и вовсе выдавать более расплывчатые, менее точные ответы — эффект, который можно неформально назвать «склерозом» ИИ. Причина в том, что модель обрабатывает весь контекст диалога целиком, и чем он длиннее и разнороднее, тем сложнее ей удерживать фокус на конкретной актуальной задаче.</p><p>Особенно остро эта проблема ощущается при работе именно со смартфона: маленький экран не позволяет удобно пролистывать длинный ответ, сверять, что именно изменилось, искать нужный фрагмент в объёмном тексте.</p><p>Решение — техника, которую можно назвать «пошаговым буфером». Смысл в том, чтобы заранее ограничить модель конкретным лимитом на объём одной порции работы, отправляемой за раз, и подавать текст небольшими частями, дожидаясь ответа на каждую, прежде чем переходить к следующей.</p><p>Перед тем как отправлять сам текст, нужно задать нейросети рамки отдельным сообщением:</p><p>«Я скину текст частями. Ничего не анализируй сразу, ответь только: "Жду порцию". Выдавай результат пошагово — не более 15% за раз. Без команды "Дальше" к следующему куску не переходи».</p><p>После этого нейросеть перестаёт пытаться держать в голове весь объём материала сразу и обрабатывает каждый фрагмент точечно, выдавая результат прямо на экране телефона без каши из перепутанных частей документа. Это особенно удобно, если правки нужно вносить последовательно и проверять каждую перед тем, как двигаться дальше — что практически невозможно сделать аккуратно, если бросить нейросети сразу весь объём.</p>
 </article>
 
 <footer class="site-footer"></footer>
 <script src="../../site-chrome.js"></script>
 
 <script src="../../article-script.js"></script>
-<script>
-(function() {
-fetch('data.json?v=' + Date.now(), { cache: 'no-store' })
-.then(function(response) {
-if (!response.ok) throw new Error('Not found');
-return response.json();
-})
-.then(function(data) {
-var tempDiv = document.createElement('div');
-tempDiv.innerHTML = data.content;
-
-tempDiv.querySelectorAll('video').forEach(function(video) {
-video.setAttribute('playsinline', '');
-video.setAttribute('webkit-playsinline', '');
-video.setAttribute('loop', '');
-video.setAttribute('muted', '');
-video.setAttribute('controls', '');
-video.setAttribute('preload', 'auto');
-video.style.width = '100%';
-video.style.maxWidth = '100%';
-});
-
-var firstP = tempDiv.querySelector('p');
-if (firstP) {
-var ctaHtml = '<div class="inline-cta">' +
-'<p>Больше полезного про нейросети — простым языком, каждый день в нашей группе ВКонтакте</p>' +
-'<a href="https://vk.ru/zhivoy_ai" target="_blank" rel="noopener noreferrer" class="inline-cta-btn">Перейти во ВКонтакте →</a>' +
-'</div>';
-firstP.insertAdjacentHTML('afterend', ctaHtml);
-}
-
-document.getElementById('article-content').innerHTML = tempDiv.innerHTML;
-
-setTimeout(function() {
-if (typeof initAll === 'function') {
-initAll();
-}
-}, 100);
-})
-.catch(function() {
-document.getElementById('article-content').innerHTML = '<p style="color:#d1d1d6; text-align:center; padding:40px 0;">❌ Ошибка загрузки статьи. <a href="../../index.html" style="color:var(--accent-blue);">Вернуться к списку</a></p>';
-});
-})();
-</script>
 </body>
 </html>

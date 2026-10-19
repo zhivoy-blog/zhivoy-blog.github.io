@@ -18,6 +18,30 @@
 <meta property="og:url" content="https://zhivoy-ai.ru/articles/feik-ii-vzryv-pentagon/">
 <meta name="twitter:card" content="summary_large_image">
 
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "Фейк ИИ, который испугал США: взрыв у Пентагона",
+  "description": "В мае 2023 года ИИ-фото несуществующего взрыва у Пентагона за несколько минут обрушило американский фондовый рынок на четверть процента.",
+  "datePublished": "2026-09-16",
+  "image": [
+    "https://zhivoy-ai.ru/articles/feik-ii-vzryv-pentagon/cover.jpg"
+  ],
+  "author": {
+    "@type": "Organization",
+    "name": "Живой ИИ",
+    "url": "https://zhivoy-ai.ru/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Живой ИИ",
+    "url": "https://zhivoy-ai.ru/"
+  },
+  "mainEntityOfPage": "https://zhivoy-ai.ru/articles/feik-ii-vzryv-pentagon/"
+}
+</script>
+
 <link rel="stylesheet" href="../../article-style.css">
 <link rel="stylesheet" href="../../site-chrome.css">
 <!-- Yandex.Metrika counter -->
@@ -46,56 +70,12 @@ ym(112807526, "init", {ssr:true, webvisor:true, clickmap:true, referrer: documen
 <a href="../../index.html" class="back-link">← Назад к статьям</a>
 
 <article id="article-content">
-<p>Загрузка статьи...</p>
+<time datetime="2026-09-16" class="article-date">16 сентября 2026</time><h1>Фейк ИИ, который испугал США: взрыв у Пентагона</h1><img src="cover.jpg" alt="Смартфон с фейковым снимком взрыва и клубами дыма над зданием" style="max-width: 100%; border-radius: 12px; margin: 20px 0;"><p>Май 2023 года. В соцсети Twitter (X) появился аккаунт с синей галочкой верификации, который выдавал себя за авторитетное агентство Bloomberg News. Он опубликовал «срочную новость» о взрыве возле здания Пентагона и прикрепил реалистичное фото с клубами чёрного дыма.</p><div class="inline-cta"><p>Больше полезного про нейросети — простым языком, каждый день в нашей группе ВКонтакте</p><a href="https://vk.ru/zhivoy_ai" target="_blank" rel="noopener noreferrer" class="inline-cta-btn">Перейти во ВКонтакте →</a></div><p><strong>Провал:</strong> фейковую новость моментально подхватили другие крупные верифицированные каналы. Картинка мгновенно долетела до финансовых рынков: американский фондовый рынок всего за несколько минут просел на четверть процента, а крупные инвесторы начали паниковать, ожидая начала реального военного конфликта.</p><p><strong>Итог:</strong> официальные лица США экстренно выступили с опровержением — никакого ЧП не было. Картинку детально разобрали эксперты и нашли явные следы генерации нейросети — характерные искажения на заборе и колоннах здания. Рынки быстро восстановились, но этот случай доказал: одна ИИ-картинка способна устроить реальный мировой экономический хаос.</p><p>Источники: Twitter Safety, Bloomberg Legal, US Department of Defense.</p>
 </article>
 
 <footer class="site-footer"></footer>
 <script src="../../site-chrome.js"></script>
 
 <script src="../../article-script.js"></script>
-<script>
-(function() {
-fetch('data.json?v=' + Date.now(), { cache: 'no-store' })
-.then(function(response) {
-if (!response.ok) throw new Error('Not found');
-return response.json();
-})
-.then(function(data) {
-var tempDiv = document.createElement('div');
-tempDiv.innerHTML = data.content;
-
-tempDiv.querySelectorAll('video').forEach(function(video) {
-video.setAttribute('playsinline', '');
-video.setAttribute('webkit-playsinline', '');
-video.setAttribute('loop', '');
-video.setAttribute('muted', '');
-video.setAttribute('controls', '');
-video.setAttribute('preload', 'auto');
-video.style.width = '100%';
-video.style.maxWidth = '100%';
-});
-
-var firstP = tempDiv.querySelector('p');
-if (firstP) {
-var ctaHtml = '<div class="inline-cta">' +
-'<p>Больше полезного про нейросети — простым языком, каждый день в нашей группе ВКонтакте</p>' +
-'<a href="https://vk.ru/zhivoy_ai" target="_blank" rel="noopener noreferrer" class="inline-cta-btn">Перейти во ВКонтакте →</a>' +
-'</div>';
-firstP.insertAdjacentHTML('afterend', ctaHtml);
-}
-
-document.getElementById('article-content').innerHTML = tempDiv.innerHTML;
-
-setTimeout(function() {
-if (typeof initAll === 'function') {
-initAll();
-}
-}, 100);
-})
-.catch(function() {
-document.getElementById('article-content').innerHTML = '<p style="color:#d1d1d6; text-align:center; padding:40px 0;">❌ Ошибка загрузки статьи. <a href="../../index.html" style="color:var(--accent-blue);">Вернуться к списку</a></p>';
-});
-})();
-</script>
 </body>
 </html>

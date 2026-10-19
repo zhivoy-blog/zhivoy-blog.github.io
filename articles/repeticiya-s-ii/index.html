@@ -18,6 +18,30 @@
 <meta property="og:url" content="https://zhivoy-ai.ru/articles/repeticiya-s-ii/">
 <meta name="twitter:card" content="summary_large_image">
 
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "Репетиция с ИИ",
+  "description": "Нейросеть как живой собеседник: три готовых сценария, чтобы устроить с ИИ настоящий диалог с вопросами и паузами, а не разовый текст на весь запрос.",
+  "datePublished": "2026-09-16",
+  "image": [
+    "https://zhivoy-ai.ru/articles/repeticiya-s-ii/cover.jpg"
+  ],
+  "author": {
+    "@type": "Organization",
+    "name": "Живой ИИ",
+    "url": "https://zhivoy-ai.ru/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Живой ИИ",
+    "url": "https://zhivoy-ai.ru/"
+  },
+  "mainEntityOfPage": "https://zhivoy-ai.ru/articles/repeticiya-s-ii/"
+}
+</script>
+
 <link rel="stylesheet" href="../../article-style.css">
 <link rel="stylesheet" href="../../site-chrome.css">
 <!-- Yandex.Metrika counter -->
@@ -46,56 +70,12 @@ ym(112807526, "init", {ssr:true, webvisor:true, clickmap:true, referrer: documen
 <a href="../../index.html" class="back-link">← Назад к статьям</a>
 
 <article id="article-content">
-<p>Загрузка статьи...</p>
+<time datetime="2026-09-16" class="article-date">16 сентября 2026</time><h1>Репетиция с ИИ</h1><img src="cover.jpg" alt="Мужчина жестикулирует, показывая на экран ноутбука, дома у окна, рядом кошка на подоконнике" style="max-width: 100%; border-radius: 12px; margin: 20px 0;"><p>Нейросеть как живой собеседник, а не просто генератор текста.</p><div class="inline-cta"><p>Больше полезного про нейросети — простым языком, каждый день в нашей группе ВКонтакте</p><a href="https://vk.ru/zhivoy_ai" target="_blank" rel="noopener noreferrer" class="inline-cta-btn">Перейти во ВКонтакте →</a></div><p>Все знают, что ИИ может написать резюме или список советов. Но мало кто пробовал устроить с ним настоящий диалог — с вопросами, паузами и реакцией на твои ответы, а не разовый текст на весь запрос.</p><p><strong>В чём секрет:</strong> нужно просить ИИ не выдать сразу всё и сразу, а вести пошаговую игру — задавать по одному вопросу и ждать ответа, прежде чем двигаться дальше. Получается тренажёр, а не шпаргалка.</p><p><strong>Три готовых сценария:</strong></p><p><strong>1. Тренировка перед собеседованием:</strong></p><blockquote>«Сыграй роль рекрутёра на позицию [должность]. Задавай вопросы по одному и жди моего ответа, прежде чем перейти к следующему»</blockquote><p><strong>2. Разговорная практика языка:</strong></p><blockquote>«Стань моим собеседником для практики [язык]. Общайся со мной только на этом языке, короткими фразами — максимум 10 слов за раз. Задавай мне вопросы, начнём с темы [тема]»</blockquote><p><strong>3. Быстрая проверка знаний:</strong></p><blockquote>«Устрой мне блицопрос из 10 вопросов на тему [тема]. Спрашивай по одному, жди ответа, и если я ошибусь — сразу объясняй, в чём дело, прежде чем задать следующий вопрос»</blockquote><p>Подставляя свою тему в квадратные скобки, вместо скучного текста получаешь тренажёр, с которым можно репетировать сколько угодно раз.</p>
 </article>
 
 <footer class="site-footer"></footer>
 <script src="../../site-chrome.js"></script>
 
 <script src="../../article-script.js"></script>
-<script>
-(function() {
-fetch('data.json?v=' + Date.now(), { cache: 'no-store' })
-.then(function(response) {
-if (!response.ok) throw new Error('Not found');
-return response.json();
-})
-.then(function(data) {
-var tempDiv = document.createElement('div');
-tempDiv.innerHTML = data.content;
-
-tempDiv.querySelectorAll('video').forEach(function(video) {
-video.setAttribute('playsinline', '');
-video.setAttribute('webkit-playsinline', '');
-video.setAttribute('loop', '');
-video.setAttribute('muted', '');
-video.setAttribute('controls', '');
-video.setAttribute('preload', 'auto');
-video.style.width = '100%';
-video.style.maxWidth = '100%';
-});
-
-var firstP = tempDiv.querySelector('p');
-if (firstP) {
-var ctaHtml = '<div class="inline-cta">' +
-'<p>Больше полезного про нейросети — простым языком, каждый день в нашей группе ВКонтакте</p>' +
-'<a href="https://vk.ru/zhivoy_ai" target="_blank" rel="noopener noreferrer" class="inline-cta-btn">Перейти во ВКонтакте →</a>' +
-'</div>';
-firstP.insertAdjacentHTML('afterend', ctaHtml);
-}
-
-document.getElementById('article-content').innerHTML = tempDiv.innerHTML;
-
-setTimeout(function() {
-if (typeof initAll === 'function') {
-initAll();
-}
-}, 100);
-})
-.catch(function() {
-document.getElementById('article-content').innerHTML = '<p style="color:#d1d1d6; text-align:center; padding:40px 0;">❌ Ошибка загрузки статьи. <a href="../../index.html" style="color:var(--accent-blue);">Вернуться к списку</a></p>';
-});
-})();
-</script>
 </body>
 </html>

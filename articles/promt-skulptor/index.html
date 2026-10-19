@@ -18,6 +18,30 @@
 <meta property="og:url" content="https://zhivoy-ai.ru/articles/promt-skulptor/">
 <meta name="twitter:card" content="summary_large_image">
 
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "Промт-скульптор: как заставить ИИ выдавать премиальный объём вместо плоских картинок",
+  "description": "Обычные промты выдают плоский цифровой арт. Метод «Текстурный переворот» заставляет нейросеть мыслить материалами — гипсом, мрамором, золотой поталью.",
+  "datePublished": "2026-09-10",
+  "image": [
+    "https://zhivoy-ai.ru/articles/promt-skulptor/promt-skulptor.jpg"
+  ],
+  "author": {
+    "@type": "Organization",
+    "name": "Живой ИИ",
+    "url": "https://zhivoy-ai.ru/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Живой ИИ",
+    "url": "https://zhivoy-ai.ru/"
+  },
+  "mainEntityOfPage": "https://zhivoy-ai.ru/articles/promt-skulptor/"
+}
+</script>
+
 <link rel="stylesheet" href="../../article-style.css">
 <link rel="stylesheet" href="../../site-chrome.css">
 <!-- Yandex.Metrika counter -->
@@ -46,56 +70,17 @@ ym(112807526, "init", {ssr:true, webvisor:true, clickmap:true, referrer: documen
 <a href="../../index.html" class="back-link">← Назад к статьям</a>
 
 <article id="article-content">
-<p>Загрузка статьи...</p>
+<time datetime="2026-09-10" class="article-date">10 сентября 2026</time><h1>Промт-скульптор: как заставить ИИ выдавать премиальный объём вместо плоских картинок</h1><img src="promt-skulptor.jpg" alt="Скульптура женщины из мрамора с золотыми цифровыми узорами" style="max-width: 100%; border-radius: 12px; margin: 20px 0;">
+<p>Ребята, всем привет! Короче, давно замечал: кидаешь нейросети обычный промт — что-то там «красивое», «детализированное» — а на выходе плоская картинка, как будто её на принтере распечатали. И вот наткнулся на штуку, которая реально всё меняет — назвал её для себя «текстурный переворот».</p><div class="inline-cta"><p>Больше полезного про нейросети — простым языком, каждый день в нашей группе ВКонтакте</p><a href="https://vk.ru/zhivoy_ai" target="_blank" rel="noopener noreferrer" class="inline-cta-btn">Перейти во ВКонтакте →</a></div>
+<p>Смысл в чём: убираем из запроса все эти абстрактные слова типа «красивый» и «стильный» — нейросеть их и так толком не понимает — и вместо этого описываем материал напрямую. Гипс, мрамор, потрескавшаяся позолота. ИИ тут же начинает мыслить не «красиво или нет», а физикой — как ведёт себя материал, где трескается, где блестит.</p>
+<p>Вот промт, который я использовал для обложки к этому посту (вставляйте в Midjourney, Шедеврум или ГигаЧат):</p>
+<p>«A breathtaking fine art photography of a minimalist marble statue, [вставь объект, например: half-body bust sculpture of a beautiful woman]. The sculpture is artistically fragmented with deep cracks filled with shimmering liquid gold leaf and fine veins of glowing gold foil. The background is a solid, clean, dark charcoal gray studio backdrop with deep shadows. High contrast, soft studio side lighting. No text, no words, aspect ratio 16:9.»</p>
+<p>Как увидел результат — я аж прям не поверил, что это тот же самый инструмент, который до этого выдавал мне плоские картинки. Если среди вас есть дизайнеры, художники или просто те, кто балуется генерацией картинок для соцсетей — забирайте промт, вставляйте свой объект в скобки и пробуйте. Реально другой уровень.</p>
 </article>
 
 <footer class="site-footer"></footer>
 <script src="../../site-chrome.js"></script>
 
 <script src="../../article-script.js"></script>
-<script>
-(function() {
-fetch('data.json?v=' + Date.now(), { cache: 'no-store' })
-.then(function(response) {
-if (!response.ok) throw new Error('Not found');
-return response.json();
-})
-.then(function(data) {
-var tempDiv = document.createElement('div');
-tempDiv.innerHTML = data.content;
-
-tempDiv.querySelectorAll('video').forEach(function(video) {
-video.setAttribute('playsinline', '');
-video.setAttribute('webkit-playsinline', '');
-video.setAttribute('loop', '');
-video.setAttribute('muted', '');
-video.setAttribute('controls', '');
-video.setAttribute('preload', 'auto');
-video.style.width = '100%';
-video.style.maxWidth = '100%';
-});
-
-var firstP = tempDiv.querySelector('p');
-if (firstP) {
-var ctaHtml = '<div class="inline-cta">' +
-'<p>Больше полезного про нейросети — простым языком, каждый день в нашей группе ВКонтакте</p>' +
-'<a href="https://vk.ru/zhivoy_ai" target="_blank" rel="noopener noreferrer" class="inline-cta-btn">Перейти во ВКонтакте →</a>' +
-'</div>';
-firstP.insertAdjacentHTML('afterend', ctaHtml);
-}
-
-document.getElementById('article-content').innerHTML = tempDiv.innerHTML;
-
-setTimeout(function() {
-if (typeof initAll === 'function') {
-initAll();
-}
-}, 100);
-})
-.catch(function() {
-document.getElementById('article-content').innerHTML = '<p style="color:#d1d1d6; text-align:center; padding:40px 0;">❌ Ошибка загрузки статьи. <a href="../../index.html" style="color:var(--accent-blue);">Вернуться к списку</a></p>';
-});
-})();
-</script>
 </body>
 </html>

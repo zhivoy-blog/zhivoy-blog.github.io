@@ -18,6 +18,30 @@
 <meta property="og:url" content="https://zhivoy-ai.ru/articles/vosstanie-mashin-makdonalds/">
 <meta name="twitter:card" content="summary_large_image">
 
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "Восстание машин в Макдоналдсе",
+  "description": "McDonald's тестировал ИИ на драйв-тру больше 100 ресторанов — и вирусные ролики с мороженым и беконом положили конец эксперименту.",
+  "datePublished": "2026-09-10",
+  "image": [
+    "https://zhivoy-ai.ru/articles/vosstanie-mashin-makdonalds/vosstanie-mashin-makdonalds.jpg"
+  ],
+  "author": {
+    "@type": "Organization",
+    "name": "Живой ИИ",
+    "url": "https://zhivoy-ai.ru/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Живой ИИ",
+    "url": "https://zhivoy-ai.ru/"
+  },
+  "mainEntityOfPage": "https://zhivoy-ai.ru/articles/vosstanie-mashin-makdonalds/"
+}
+</script>
+
 <link rel="stylesheet" href="../../article-style.css">
 <link rel="stylesheet" href="../../site-chrome.css">
 <!-- Yandex.Metrika counter -->
@@ -46,56 +70,18 @@ ym(112807526, "init", {ssr:true, webvisor:true, clickmap:true, referrer: documen
 <a href="../../index.html" class="back-link">← Назад к статьям</a>
 
 <article id="article-content">
-<p>Загрузка статьи...</p>
+<time datetime="2026-09-10" class="article-date">10 сентября 2026</time><h1>Восстание машин в Макдоналдсе</h1><img src="vosstanie-mashin-makdonalds.jpg" alt="Мультяшный робот-курьер McDonald's роняет наггетсы и монеты у машины" style="max-width: 100%; border-radius: 12px; margin: 20px 0;">
+<p>Ребята, короче, вот реальная история про то, как ИИ решил, что он тут главный на кассе.</p><div class="inline-cta"><p>Больше полезного про нейросети — простым языком, каждый день в нашей группе ВКонтакте</p><a href="https://vk.ru/zhivoy_ai" target="_blank" rel="noopener noreferrer" class="inline-cta-btn">Перейти во ВКонтакте →</a></div>
+<p>McDonald's вместе с IBM тестировали голосового ИИ, который принимает заказы на драйв-тру — больше чем в 100 ресторанах США. Идея была хорошая — разгрузить сотрудников. А по факту в 2024 году весь Тикток был завален роликами с этим ботом.</p>
+<p>Одна девушка, Мадилинн Кэмерон, просто хотела заказать ванильное мороженое и воду — а бот вместо этого пробил ей мороженое, кетчуп и... два пакетика сливочного масла. Она сняла это на видео с подписью «я закончила», и ролик разлетелся.</p>
+<p>А другого парня бот вообще довёл до ступора — он заказывал обычный рожок мороженого, а получил его щедро политым жидким беконом. ИИ, видимо, решил, что бекон подходит ко всему.</p>
+<p>В итоге в июне 2024 года McDonald's официально свернул партнёрство с IBM и убрал ИИ со всех точек, где его тестировали. Официально объяснили это тем, что хотят «изучить более широкие решения для голосового заказа» — но все понимают, что просто достало разгребать эти вирусные косяки.</p>
+<p>Вот такие дела — ИИ, может, и будущее фастфуда, но пока лучше пусть заказ принимает живой человек, а то мороженого с беконом никто не заказывал.</p>
 </article>
 
 <footer class="site-footer"></footer>
 <script src="../../site-chrome.js"></script>
 
 <script src="../../article-script.js"></script>
-<script>
-(function() {
-fetch('data.json?v=' + Date.now(), { cache: 'no-store' })
-.then(function(response) {
-if (!response.ok) throw new Error('Not found');
-return response.json();
-})
-.then(function(data) {
-var tempDiv = document.createElement('div');
-tempDiv.innerHTML = data.content;
-
-tempDiv.querySelectorAll('video').forEach(function(video) {
-video.setAttribute('playsinline', '');
-video.setAttribute('webkit-playsinline', '');
-video.setAttribute('loop', '');
-video.setAttribute('muted', '');
-video.setAttribute('controls', '');
-video.setAttribute('preload', 'auto');
-video.style.width = '100%';
-video.style.maxWidth = '100%';
-});
-
-var firstP = tempDiv.querySelector('p');
-if (firstP) {
-var ctaHtml = '<div class="inline-cta">' +
-'<p>Больше полезного про нейросети — простым языком, каждый день в нашей группе ВКонтакте</p>' +
-'<a href="https://vk.ru/zhivoy_ai" target="_blank" rel="noopener noreferrer" class="inline-cta-btn">Перейти во ВКонтакте →</a>' +
-'</div>';
-firstP.insertAdjacentHTML('afterend', ctaHtml);
-}
-
-document.getElementById('article-content').innerHTML = tempDiv.innerHTML;
-
-setTimeout(function() {
-if (typeof initAll === 'function') {
-initAll();
-}
-}, 100);
-})
-.catch(function() {
-document.getElementById('article-content').innerHTML = '<p style="color:#d1d1d6; text-align:center; padding:40px 0;">❌ Ошибка загрузки статьи. <a href="../../index.html" style="color:var(--accent-blue);">Вернуться к списку</a></p>';
-});
-})();
-</script>
 </body>
 </html>

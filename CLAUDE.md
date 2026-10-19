@@ -11,7 +11,8 @@
 - `articles/<slug>/` — одна статья: `data.json`, `index.html`, картинки и видео рядом.
   - `data.json` — ровно 5 полей: `title`, `date` (ГГГГ-ММ-ДД), `tag`, `excerpt` (описание для поиска и соцсетей), `content` (HTML статьи).
   - Пути к медиа в `content` — только имя файла рядом (`src="cover.jpg"`), без папок.
-  - `index.html` — страница с мета-тегами этой статьи; текст подгружается из `data.json`.
+  - `index.html` — страница статьи: мета-теги, разметка JSON-LD и полный текст прямо в HTML (собирается из `data.json`).
+    После правки `data.json` пересобрать: `node scripts/new-article.mjs <slug> --force`, иначе `check-site.mjs` выдаст ошибку.
 - `articles/manifest.json` — оглавление для главной, новые сверху.
 - `sitemap.xml`, `robots.txt` — для поисковиков. Каждая статья должна быть в `sitemap.xml`.
 - `article-template.html` + `article-script.js` — старая схема `article-template.html?article=<slug>`.

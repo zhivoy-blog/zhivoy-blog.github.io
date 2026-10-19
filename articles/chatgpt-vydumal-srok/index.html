@@ -18,6 +18,30 @@
 <meta property="og:url" content="https://zhivoy-ai.ru/articles/chatgpt-vydumal-srok/">
 <meta name="twitter:card" content="summary_large_image">
 
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "ChatGPT выдумал человеку уголовный срок на 5 миллионов долларов",
+  "description": "Первый в мире иск к ИИ за клевету: ChatGPT приписал реальному радиоведущему кражу 5 миллионов долларов, которой не было.",
+  "datePublished": "2026-08-19",
+  "image": [
+    "https://zhivoy-ai.ru/articles/chatgpt-vydumal-srok/chatgpt-vydumal-srok-cover.jpg"
+  ],
+  "author": {
+    "@type": "Organization",
+    "name": "Живой ИИ",
+    "url": "https://zhivoy-ai.ru/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Живой ИИ",
+    "url": "https://zhivoy-ai.ru/"
+  },
+  "mainEntityOfPage": "https://zhivoy-ai.ru/articles/chatgpt-vydumal-srok/"
+}
+</script>
+
 <link rel="stylesheet" href="../../article-style.css">
 <link rel="stylesheet" href="../../site-chrome.css">
 <!-- Yandex.Metrika counter -->
@@ -46,56 +70,12 @@ ym(112807526, "init", {ssr:true, webvisor:true, clickmap:true, referrer: documen
 <a href="../../index.html" class="back-link">← Назад к статьям</a>
 
 <article id="article-content">
-<p>Загрузка статьи...</p>
+<time datetime="2026-08-19" class="article-date">19 августа 2026</time><h1>ChatGPT выдумал человеку уголовный срок на 5 миллионов долларов</h1><img src="chatgpt-vydumal-srok-cover.jpg" alt="Робот-ИИ листает книгу с буквами вокруг — иллюстрация к истории о выдуманном ChatGPT уголовном деле" style="max-width: 100%; border-radius: 12px; margin: 20px 0;"><p><strong>Июнь 2023 года.</strong></p><div class="inline-cta"><p>Больше полезного про нейросети — простым языком, каждый день в нашей группе ВКонтакте</p><a href="https://vk.ru/zhivoy_ai" target="_blank" rel="noopener noreferrer" class="inline-cta-btn">Перейти во ВКонтакте →</a></div><p><strong>Проблема:</strong> американский журналист Фред Риан попросил <strong>ChatGPT</strong> сделать краткую выжимку реального судебного процесса. Текст получился очень убедительным, но нейросеть внезапно добавила в него случайного человека — радиоведущего <strong>Марка Уолтерса</strong>.</p><p><strong>Провал:</strong> ИИ "галлюцинировал" (то есть уверенно выдумал факты, которых не было, и подал их как реальные) и написал, что Уолтерс якобы работал бухгалтером и украл у правозащитной организации более <strong>5 миллионов долларов</strong>. Робот от начала и до конца выдумал обвинения, цитаты и даже фейковые номера судебных дел. Марк никогда там не работал и ничего не крал.</p><p><strong>Итог:</strong> узнав о лжи робота, Марк Уолтерс пришёл в ярость и подал в суд на <strong>OpenAI</strong> — компанию-разработчика ChatGPT. Этот случай вошёл в историю как первый в мире иск к ИИ за клевету.</p><p><strong>Пруфы:</strong> Reuters, Bloomberg Law, The Washington Post.</p>
 </article>
 
 <footer class="site-footer"></footer>
 <script src="../../site-chrome.js"></script>
 
 <script src="../../article-script.js"></script>
-<script>
-(function() {
-fetch('data.json?v=' + Date.now(), { cache: 'no-store' })
-.then(function(response) {
-if (!response.ok) throw new Error('Not found');
-return response.json();
-})
-.then(function(data) {
-var tempDiv = document.createElement('div');
-tempDiv.innerHTML = data.content;
-
-tempDiv.querySelectorAll('video').forEach(function(video) {
-video.setAttribute('playsinline', '');
-video.setAttribute('webkit-playsinline', '');
-video.setAttribute('loop', '');
-video.setAttribute('muted', '');
-video.setAttribute('controls', '');
-video.setAttribute('preload', 'auto');
-video.style.width = '100%';
-video.style.maxWidth = '100%';
-});
-
-var firstP = tempDiv.querySelector('p');
-if (firstP) {
-var ctaHtml = '<div class="inline-cta">' +
-'<p>Больше полезного про нейросети — простым языком, каждый день в нашей группе ВКонтакте</p>' +
-'<a href="https://vk.ru/zhivoy_ai" target="_blank" rel="noopener noreferrer" class="inline-cta-btn">Перейти во ВКонтакте →</a>' +
-'</div>';
-firstP.insertAdjacentHTML('afterend', ctaHtml);
-}
-
-document.getElementById('article-content').innerHTML = tempDiv.innerHTML;
-
-setTimeout(function() {
-if (typeof initAll === 'function') {
-initAll();
-}
-}, 100);
-})
-.catch(function() {
-document.getElementById('article-content').innerHTML = '<p style="color:#d1d1d6; text-align:center; padding:40px 0;">❌ Ошибка загрузки статьи. <a href="../../index.html" style="color:var(--accent-blue);">Вернуться к списку</a></p>';
-});
-})();
-</script>
 </body>
 </html>

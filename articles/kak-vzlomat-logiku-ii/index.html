@@ -18,6 +18,30 @@
 <meta property="og:url" content="https://zhivoy-ai.ru/articles/kak-vzlomat-logiku-ii/">
 <meta name="twitter:card" content="summary_large_image">
 
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "Как взломать логику ИИ?",
+  "description": "Метод «Искусственного дилетанта»: заставьте ИИ притвориться профаном из другой сферы — и получите свежую идею вместо скучного шаблона.",
+  "datePublished": "2026-09-10",
+  "image": [
+    "https://zhivoy-ai.ru/articles/kak-vzlomat-logiku-ii/kak-vzlomat-logiku-ii.jpg"
+  ],
+  "author": {
+    "@type": "Organization",
+    "name": "Живой ИИ",
+    "url": "https://zhivoy-ai.ru/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Живой ИИ",
+    "url": "https://zhivoy-ai.ru/"
+  },
+  "mainEntityOfPage": "https://zhivoy-ai.ru/articles/kak-vzlomat-logiku-ii/"
+}
+</script>
+
 <link rel="stylesheet" href="../../article-style.css">
 <link rel="stylesheet" href="../../site-chrome.css">
 <!-- Yandex.Metrika counter -->
@@ -46,56 +70,17 @@ ym(112807526, "init", {ssr:true, webvisor:true, clickmap:true, referrer: documen
 <a href="../../index.html" class="back-link">← Назад к статьям</a>
 
 <article id="article-content">
-<p>Загрузка статьи...</p>
+<time datetime="2026-09-10" class="article-date">10 сентября 2026</time><h1>Как взломать логику ИИ?</h1><img src="kak-vzlomat-logiku-ii.jpg" alt="Повар в форме стоит у экрана с графиками данных" style="max-width: 100%; border-radius: 12px; margin: 20px 0;">
+<p>Ребята, раньше я вам советовал задавать нейросети чёткую роль эксперта под вашу задачу. Но если это не помогает — есть обратный лайфхак, метод «искусственного дилетанта».</p><div class="inline-cta"><p>Больше полезного про нейросети — простым языком, каждый день в нашей группе ВКонтакте</p><a href="https://vk.ru/zhivoy_ai" target="_blank" rel="noopener noreferrer" class="inline-cta-btn">Перейти во ВКонтакте →</a></div>
+<p>Обычно все просят ИИ: «Представь, что ты senior-разработчик». А в ответ получают скучные шаблонные советы. Хотите реально свежую идею — заставьте ИИ притвориться полным профаном из совершенно другой сферы.</p>
+<p>Вот пример промта: «Представь, что ты шеф-повар молекулярной кухни, который впервые увидел Excel. Тебе нужно найти ошибку в финансовом отчёте. Как бы ты искал проблему, используя только логику кулинарии? Опиши шаги».</p>
+<p>Почему это работает: нейросеть сбрасывает свои обычные бизнес-шаблоны и начинает мыслить метафорами. «Шеф-повар» разложит отчёт на ингредиенты и проверит их пропорции — и вы вдруг увидите связи, которые пропустил бы обычный аналитик.</p>
+<p>Попробуйте это на своей задаче — придумайте, какую нелепую роль дать ИИ, и удивитесь результату.</p>
 </article>
 
 <footer class="site-footer"></footer>
 <script src="../../site-chrome.js"></script>
 
 <script src="../../article-script.js"></script>
-<script>
-(function() {
-fetch('data.json?v=' + Date.now(), { cache: 'no-store' })
-.then(function(response) {
-if (!response.ok) throw new Error('Not found');
-return response.json();
-})
-.then(function(data) {
-var tempDiv = document.createElement('div');
-tempDiv.innerHTML = data.content;
-
-tempDiv.querySelectorAll('video').forEach(function(video) {
-video.setAttribute('playsinline', '');
-video.setAttribute('webkit-playsinline', '');
-video.setAttribute('loop', '');
-video.setAttribute('muted', '');
-video.setAttribute('controls', '');
-video.setAttribute('preload', 'auto');
-video.style.width = '100%';
-video.style.maxWidth = '100%';
-});
-
-var firstP = tempDiv.querySelector('p');
-if (firstP) {
-var ctaHtml = '<div class="inline-cta">' +
-'<p>Больше полезного про нейросети — простым языком, каждый день в нашей группе ВКонтакте</p>' +
-'<a href="https://vk.ru/zhivoy_ai" target="_blank" rel="noopener noreferrer" class="inline-cta-btn">Перейти во ВКонтакте →</a>' +
-'</div>';
-firstP.insertAdjacentHTML('afterend', ctaHtml);
-}
-
-document.getElementById('article-content').innerHTML = tempDiv.innerHTML;
-
-setTimeout(function() {
-if (typeof initAll === 'function') {
-initAll();
-}
-}, 100);
-})
-.catch(function() {
-document.getElementById('article-content').innerHTML = '<p style="color:#d1d1d6; text-align:center; padding:40px 0;">❌ Ошибка загрузки статьи. <a href="../../index.html" style="color:var(--accent-blue);">Вернуться к списку</a></p>';
-});
-})();
-</script>
 </body>
 </html>

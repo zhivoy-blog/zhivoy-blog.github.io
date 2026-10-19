@@ -18,6 +18,30 @@
 <meta property="og:url" content="https://zhivoy-ai.ru/articles/promt-kontroler/">
 <meta name="twitter:card" content="summary_large_image">
 
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "Промт-контролёр",
+  "description": "Промт, который заставляет ИИ-агента останавливаться и спрашивать разрешения перед любым необратимым действием, вместо того чтобы действовать самостоятельно.",
+  "datePublished": "2026-09-20",
+  "image": [
+    "https://zhivoy-ai.ru/articles/promt-kontroler/cover.jpg"
+  ],
+  "author": {
+    "@type": "Organization",
+    "name": "Живой ИИ",
+    "url": "https://zhivoy-ai.ru/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Живой ИИ",
+    "url": "https://zhivoy-ai.ru/"
+  },
+  "mainEntityOfPage": "https://zhivoy-ai.ru/articles/promt-kontroler/"
+}
+</script>
+
 <link rel="stylesheet" href="../../article-style.css">
 <link rel="stylesheet" href="../../site-chrome.css">
 <!-- Yandex.Metrika counter -->
@@ -46,56 +70,12 @@ ym(112807526, "init", {ssr:true, webvisor:true, clickmap:true, referrer: documen
 <a href="../../index.html" class="back-link">← Назад к статьям</a>
 
 <article id="article-content">
-<p>Загрузка статьи...</p>
+<time datetime="2026-09-20" class="article-date">20 сентября 2026</time><h1>Промт-контролёр</h1><img src="cover.jpg" alt="Мужчина за ноутбуком с чашкой кофе на столе" style="max-width: 100%; border-radius: 12px; margin: 20px 0;"><p>Давал задание ИИ-агенту (программе-помощнику, которая сама выполняет цепочку действий без остановки) — разобраться с почтой. А он уже начал что-то там удалять и отправлять сам по себе, без запроса.</p><div class="inline-cta"><p>Больше полезного про нейросети — простым языком, каждый день в нашей группе ВКонтакте</p><a href="https://vk.ru/zhivoy_ai" target="_blank" rel="noopener noreferrer" class="inline-cta-btn">Перейти во ВКонтакте →</a></div><p>Хорошо, вовремя заметил — а отошёл бы на пять минут, было бы поздно разбираться.</p><p>Лучший результат — когда задачу дробишь на шаги, и перед любым необратимым действием ИИ обязан остановиться и спросить разрешения.</p><p><strong>Промт:</strong></p><blockquote>«Прежде чем выполнять задачу [впиши задачу], разбей её на шаги — не больше 3-5 действий за раз. Начни с первого. После каждого шага напиши: 1) что сделал, 2) что дальше, 3) есть ли среди следующих действий необратимые (удаление, отправка, публикация, трата денег, смена настроек). Если да — не выполняй, спроси разрешение и жди «да». Не додумывай детали сам, а спрашивай. Отвечай коротко, по шагам».</blockquote><p><strong>Итог:</strong> теперь только так, и нервы целее, и решения остаются за человеком, а не за нейросетью.</p>
 </article>
 
 <footer class="site-footer"></footer>
 <script src="../../site-chrome.js"></script>
 
 <script src="../../article-script.js"></script>
-<script>
-(function() {
-fetch('data.json?v=' + Date.now(), { cache: 'no-store' })
-.then(function(response) {
-if (!response.ok) throw new Error('Not found');
-return response.json();
-})
-.then(function(data) {
-var tempDiv = document.createElement('div');
-tempDiv.innerHTML = data.content;
-
-tempDiv.querySelectorAll('video').forEach(function(video) {
-video.setAttribute('playsinline', '');
-video.setAttribute('webkit-playsinline', '');
-video.setAttribute('loop', '');
-video.setAttribute('muted', '');
-video.setAttribute('controls', '');
-video.setAttribute('preload', 'auto');
-video.style.width = '100%';
-video.style.maxWidth = '100%';
-});
-
-var firstP = tempDiv.querySelector('p');
-if (firstP) {
-var ctaHtml = '<div class="inline-cta">' +
-'<p>Больше полезного про нейросети — простым языком, каждый день в нашей группе ВКонтакте</p>' +
-'<a href="https://vk.ru/zhivoy_ai" target="_blank" rel="noopener noreferrer" class="inline-cta-btn">Перейти во ВКонтакте →</a>' +
-'</div>';
-firstP.insertAdjacentHTML('afterend', ctaHtml);
-}
-
-document.getElementById('article-content').innerHTML = tempDiv.innerHTML;
-
-setTimeout(function() {
-if (typeof initAll === 'function') {
-initAll();
-}
-}, 100);
-})
-.catch(function() {
-document.getElementById('article-content').innerHTML = '<p style="color:#d1d1d6; text-align:center; padding:40px 0;">❌ Ошибка загрузки статьи. <a href="../../index.html" style="color:var(--accent-blue);">Вернуться к списку</a></p>';
-});
-})();
-</script>
 </body>
 </html>

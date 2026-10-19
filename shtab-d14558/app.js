@@ -18,9 +18,10 @@
      подтягивали контент через JS уже после загрузки — из-за этого title/description/og:*
      оставались одинаковыми (общими) для всех статей в сыром HTML, который видят
      соцсети и часть поисковиков. Эта функция строит отдельную статическую страницу
-     articles/<slug>/index.html с правильными мета-тегами конкретной статьи; сам текст
-     статьи она по-прежнему подгружает через fetch('data.json') — как единственный
-     источник правды остаётся data.json, а не дублирующаяся копия HTML. */
+     articles/<slug>/index.html с мета-тегами, разметкой JSON-LD и полным текстом
+     статьи прямо в HTML — поисковики видят текст без запуска скриптов.
+     Источник текста — data.json: после правки data.json страницу надо пересобрать
+     (node scripts/new-article.mjs <slug> --force), check-site.mjs это проверяет. */
   function escapeHtmlAttr(str) {
     return String(str || '')
       .replace(/&/g, '&amp;')
@@ -93,7 +94,56 @@
 
   const TITLE_TAG_SUFFIX = ' — Живой ИИ';
 
-  function buildArticlePageHtml({ slug, title, excerpt, ogImageFile }) {
+  /* Текст статьи для <article>: то же, что раньше делал скрипт страницы после
+     загрузки data.json, — видео получают атрибуты для телефонов, а после первого
+     абзаца встаёт блок «Перейти во ВКонтакте →». */
+  const ARTICLE_CTA_HTML = '<div class="inline-cta">' +
+    '<p>Больше полезного про нейросети — простым языком, каждый день в нашей группе ВКонтакте</p>' +
+    '<a href="https://vk.ru/zhivoy_ai" target="_blank" rel="noopener noreferrer" class="inline-cta-btn">Перейти во ВКонтакте →</a>' +
+    '</div>';
+  const VIDEO_FLAGS = ['playsinline', 'webkit-playsinline', 'loop', 'muted', 'controls'];
+  function prepareVideoTag(tag) {
+    const selfClose = /\/\s*>$/.test(tag);
+    const attrs = [];
+    const attrRe = /([^\s=\/>]+)(?:\s*=\s*("[^"]*"|'[^']*'|[^\s>]+))?/g;
+    let m;
+    const inner = tag.replace(/^<video/i, '').replace(/\/?\s*>$/, '');
+    while ((m = attrRe.exec(inner))) attrs.push([m[1].toLowerCase(), m[2] === undefined ? null : m[2].replace(/^["']|["']$/g, '')]);
+    const get = (name) => attrs.find((a) => a[0] === name);
+    const set = (name, value) => { const a = get(name); if (a) a[1] = value; else attrs.push([name, value]); };
+    VIDEO_FLAGS.forEach((name) => set(name, ''));
+    set('preload', 'auto');
+    const style = ((get('style') || [])[1] || '').trim();
+    set('style', (style && !style.endsWith(';') ? style + ';' : style) + (style ? ' ' : '') + 'width: 100%; max-width: 100%;');
+    return '<video' + attrs.map(([n, v]) => (v === null || v === '' && VIDEO_FLAGS.includes(n) ? ' ' + n : ' ' + n + '="' + v.replace(/"/g, '&quot;') + '"')).join('') + (selfClose ? ' />' : '>');
+  }
+  function renderArticleContent(content) {
+    let html = String(content || '').replace(/<video\b[^>]*>/gi, prepareVideoTag);
+    const firstP = html.search(/<p[\s>]/i);
+    if (firstP >= 0) {
+      const close = html.indexOf('</p>', firstP);
+      if (close >= 0) html = html.slice(0, close + 4) + ARTICLE_CTA_HTML + html.slice(close + 4);
+    }
+    return html;
+  }
+  /* Разметка для поисковиков: статья, её дата и обложка. Автор и издатель — «Живой ИИ». */
+  function buildArticleJsonLd({ title, excerpt, date, canonicalUrl, ogImage }) {
+    const org = { '@type': 'Organization', name: 'Живой ИИ', url: 'https://zhivoy-ai.ru/' };
+    const data = {
+      '@context': 'https://schema.org',
+      '@type': 'Article',
+      headline: String(title || '').trim(),
+      description: String(excerpt || '').trim(),
+      datePublished: date,
+      image: [ogImage],
+      author: org,
+      publisher: org,
+      mainEntityOfPage: canonicalUrl,
+    };
+    return '<script type="application/ld+json">\n' + JSON.stringify(data, null, 2).replace(/</g, '\\u003c') + '\n</script>';
+  }
+
+  function buildArticlePageHtml({ slug, title, excerpt, ogImageFile, date, content }) {
     const safeShortTitle = escapeHtmlAttr(shortenTitle(title, 60 - TITLE_TAG_SUFFIX.length));
     const description = escapeHtmlAttr(truncateForMeta(excerpt, 155));
     const canonicalUrl = `https://zhivoy-ai.ru/articles/${slug}/`;
@@ -120,6 +170,8 @@
 <meta property="og:image" content="${ogImage}">
 <meta property="og:url" content="${canonicalUrl}">
 <meta name="twitter:card" content="summary_large_image">
+
+${buildArticleJsonLd({ title, excerpt, date, canonicalUrl, ogImage })}
 
 <link rel="stylesheet" href="../../article-style.css">
 <link rel="stylesheet" href="../../site-chrome.css">
@@ -150,57 +202,13 @@ ym(112807526, "init", {ssr:true, webvisor:true, clickmap:true, referrer: documen
 <a href="../../index.html" class="back-link">← Назад к статьям</a>
 
 <article id="article-content">
-<p>Загрузка статьи...</p>
+${renderArticleContent(content)}
 </article>
 
 <footer class="site-footer"></footer>
 <script src="../../site-chrome.js"></script>
 
 <script src="../../article-script.js"></script>
-<script>
-(function() {
-fetch('data.json?v=' + Date.now(), { cache: 'no-store' })
-.then(function(response) {
-if (!response.ok) throw new Error('Not found');
-return response.json();
-})
-.then(function(data) {
-var tempDiv = document.createElement('div');
-tempDiv.innerHTML = data.content;
-
-tempDiv.querySelectorAll('video').forEach(function(video) {
-video.setAttribute('playsinline', '');
-video.setAttribute('webkit-playsinline', '');
-video.setAttribute('loop', '');
-video.setAttribute('muted', '');
-video.setAttribute('controls', '');
-video.setAttribute('preload', 'auto');
-video.style.width = '100%';
-video.style.maxWidth = '100%';
-});
-
-var firstP = tempDiv.querySelector('p');
-if (firstP) {
-var ctaHtml = '<div class="inline-cta">' +
-'<p>Больше полезного про нейросети — простым языком, каждый день в нашей группе ВКонтакте</p>' +
-'<a href="https://vk.ru/zhivoy_ai" target="_blank" rel="noopener noreferrer" class="inline-cta-btn">Перейти во ВКонтакте →</a>' +
-'</div>';
-firstP.insertAdjacentHTML('afterend', ctaHtml);
-}
-
-document.getElementById('article-content').innerHTML = tempDiv.innerHTML;
-
-setTimeout(function() {
-if (typeof initAll === 'function') {
-initAll();
-}
-}, 100);
-})
-.catch(function() {
-document.getElementById('article-content').innerHTML = '<p style="color:#d1d1d6; text-align:center; padding:40px 0;">❌ Ошибка загрузки статьи. <a href="../../index.html" style="color:var(--accent-blue);">Вернуться к списку</a></p>';
-});
-})();
-</script>
 </body>
 </html>
 `;
@@ -1396,7 +1404,7 @@ document.getElementById('article-content').innerHTML = '<p style="color:#d1d1d6;
       manifest.unshift({ slug, title, date: todayStr(), tag, excerpt, image: ogImageFile || '' });
       await site.putJson('articles/manifest.json', manifest, `Добавление статьи в manifest: ${title}`, manifestRes ? manifestRes.sha : undefined);
 
-      const pageHtml = buildArticlePageHtml({ slug, title, excerpt, ogImageFile });
+      const pageHtml = buildArticlePageHtml({ slug, title, excerpt, ogImageFile, date: todayStr(), content });
       await site.putText(`articles/${slug}/index.html`, pageHtml, `Страница статьи (мета-теги): ${title}`);
 
       post.siteTransfer = {

@@ -18,6 +18,30 @@
 <meta property="og:url" content="https://zhivoy-ai.ru/articles/ne-speshi-verit-otvetu-sokrat/">
 <meta name="twitter:card" content="summary_large_image">
 
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "Не спеши верить ответу (Промт-Сократ)",
+  "description": "Исследование MIT Media Lab: точность людей с готовыми ИИ-подсказками сначала растёт, а затем падает ниже стартового уровня. Промт, который заставляет ИИ переспрашивать, а не сразу выдавать вердикт.",
+  "datePublished": "2026-09-17",
+  "image": [
+    "https://zhivoy-ai.ru/articles/ne-speshi-verit-otvetu-sokrat/cover.jpg"
+  ],
+  "author": {
+    "@type": "Organization",
+    "name": "Живой ИИ",
+    "url": "https://zhivoy-ai.ru/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Живой ИИ",
+    "url": "https://zhivoy-ai.ru/"
+  },
+  "mainEntityOfPage": "https://zhivoy-ai.ru/articles/ne-speshi-verit-otvetu-sokrat/"
+}
+</script>
+
 <link rel="stylesheet" href="../../article-style.css">
 <link rel="stylesheet" href="../../site-chrome.css">
 <!-- Yandex.Metrika counter -->
@@ -46,56 +70,12 @@ ym(112807526, "init", {ssr:true, webvisor:true, clickmap:true, referrer: documen
 <a href="../../index.html" class="back-link">← Назад к статьям</a>
 
 <article id="article-content">
-<p>Загрузка статьи...</p>
+<time datetime="2026-09-17" class="article-date">17 сентября 2026</time><h1>Не спеши верить ответу (Промт-Сократ)</h1><img src="cover.jpg" alt="Мужчина задумчиво смотрит на ноутбук со знаком вопроса в облаке над экраном" style="max-width: 100%; border-radius: 12px; margin: 20px 0;"><p>Как не отупеть рядом с ИИ.</p><div class="inline-cta"><p>Больше полезного про нейросети — простым языком, каждый день в нашей группе ВКонтакте</p><a href="https://vk.ru/zhivoy_ai" target="_blank" rel="noopener noreferrer" class="inline-cta-btn">Перейти во ВКонтакте →</a></div><p>Мы спрашиваем нейросеть в лоб: «Это правда?» — и получаем готовый вердикт. Удобно, но есть подвох: MIT Media Lab 4 недели наблюдала за людьми с ИИ-подсказками. Точность сначала выросла на 21%. Когда бота убрали — упала на 15% ниже старта, хуже, чем до ИИ.</p><p><strong>Вывод:</strong> нейросети с готовым ответом приучают полагаться на них. А те, что переспрашивают, как учитель, — учат думать самим.</p><p><strong>Промт:</strong></p><blockquote>«Я хочу проверить утверждение: [вставьте текст]. Не говори сразу, правда это или нет. Задай мне ровно 4 вопроса по одному, жди ответа на каждый перед следующим — про источник, дату, кому выгодно и есть ли независимые подтверждения. Не давай оценок, пока не отвечу на все 4. После этого — итоговый вердикт и почему».</blockquote><p>Так тренируется способность отличать правду от вымысла самостоятельно, а не полагаясь на готовый ответ нейросети.</p>
 </article>
 
 <footer class="site-footer"></footer>
 <script src="../../site-chrome.js"></script>
 
 <script src="../../article-script.js"></script>
-<script>
-(function() {
-fetch('data.json?v=' + Date.now(), { cache: 'no-store' })
-.then(function(response) {
-if (!response.ok) throw new Error('Not found');
-return response.json();
-})
-.then(function(data) {
-var tempDiv = document.createElement('div');
-tempDiv.innerHTML = data.content;
-
-tempDiv.querySelectorAll('video').forEach(function(video) {
-video.setAttribute('playsinline', '');
-video.setAttribute('webkit-playsinline', '');
-video.setAttribute('loop', '');
-video.setAttribute('muted', '');
-video.setAttribute('controls', '');
-video.setAttribute('preload', 'auto');
-video.style.width = '100%';
-video.style.maxWidth = '100%';
-});
-
-var firstP = tempDiv.querySelector('p');
-if (firstP) {
-var ctaHtml = '<div class="inline-cta">' +
-'<p>Больше полезного про нейросети — простым языком, каждый день в нашей группе ВКонтакте</p>' +
-'<a href="https://vk.ru/zhivoy_ai" target="_blank" rel="noopener noreferrer" class="inline-cta-btn">Перейти во ВКонтакте →</a>' +
-'</div>';
-firstP.insertAdjacentHTML('afterend', ctaHtml);
-}
-
-document.getElementById('article-content').innerHTML = tempDiv.innerHTML;
-
-setTimeout(function() {
-if (typeof initAll === 'function') {
-initAll();
-}
-}, 100);
-})
-.catch(function() {
-document.getElementById('article-content').innerHTML = '<p style="color:#d1d1d6; text-align:center; padding:40px 0;">❌ Ошибка загрузки статьи. <a href="../../index.html" style="color:var(--accent-blue);">Вернуться к списку</a></p>';
-});
-})();
-</script>
 </body>
 </html>

@@ -18,6 +18,30 @@
 <meta property="og:url" content="https://zhivoy-ai.ru/articles/zhaloba-kotoruyu-ne-otpravyat/">
 <meta name="twitter:card" content="summary_large_image">
 
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "Жалоба, которую не отправят в стол",
+  "description": "Готовый промт для GigaChat: как за минуту получить вежливое, но твёрдое официальное письмо-жалобу вместо расплывчатого раздражённого текста.",
+  "datePublished": "2026-09-23",
+  "image": [
+    "https://zhivoy-ai.ru/articles/zhaloba-kotoruyu-ne-otpravyat/cover.jpg"
+  ],
+  "author": {
+    "@type": "Organization",
+    "name": "Живой ИИ",
+    "url": "https://zhivoy-ai.ru/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Живой ИИ",
+    "url": "https://zhivoy-ai.ru/"
+  },
+  "mainEntityOfPage": "https://zhivoy-ai.ru/articles/zhaloba-kotoruyu-ne-otpravyat/"
+}
+</script>
+
 <link rel="stylesheet" href="../../article-style.css">
 <link rel="stylesheet" href="../../site-chrome.css">
 
@@ -47,56 +71,22 @@ ym(112807526, "init", {ssr:true, webvisor:true, clickmap:true, referrer: documen
 <a href="../../index.html" class="back-link">← Назад к статьям</a>
 
 <article id="article-content">
-<p>Загрузка статьи...</p>
+<time datetime="2026-09-23">23 сентября 2026</time>
+<h1>Жалоба, которую не отправят в стол</h1>
+<img src="cover.jpg" alt="Жалоба, которую не отправят в стол" style="max-width: 100%; border-radius: 12px; margin: 20px 0;">
+<p>Знакомо: батарея еле греет уже месяц, а как написать жалобу так, чтобы её не проигнорировали — непонятно, только раздражение и ни одного нужного слова?</p><div class="inline-cta"><p>Больше полезного про нейросети — простым языком, каждый день в нашей группе ВКонтакте</p><a href="https://vk.ru/zhivoy_ai" target="_blank" rel="noopener noreferrer" class="inline-cta-btn">Перейти во ВКонтакте →</a></div>
+<p>Откройте бесплатный GigaChat (российская нейросеть — программа, которая по вашему текстовому запросу, «промту», сама пишет текст; работает в браузере и в приложении, без VPN). Вставьте туда промт ниже, впишите свою проблему — и получите готовое письмо.</p>
+<p><strong>Промт (скопируйте целиком, впишите своё вместо скобок):</strong></p>
+<p>Act as an assistant who writes formal complaint letters in Russian. Write a polite but firm complaint letter in Russian to [organization name] about [describe the problem and any known details — dates, address]. Structure: 1) short greeting and who is writing; 2) clear description of the problem with facts; 3) reference to the resident's or customer's right to have it resolved; 4) a specific request and a deadline (for example, 10 business days); 5) polite closing. Keep it under 200 words. No rude or threatening language, and do not invent facts, names or dates I did not give you — ask me if something important is missing. Answer in Russian.</p>
+<p><strong>Перевод:</strong></p>
+<p>«Действуй как помощник, который пишет официальные жалобы. Напиши вежливое, но твёрдое письмо-жалобу в [название организации] о [опишите проблему и известные детали — даты, адрес]. Структура: 1) короткое приветствие и кто пишет; 2) чёткое описание проблемы с фактами; 3) ссылка на то, что у жителя или клиента есть право на решение вопроса; 4) конкретное требование и срок (например, 10 рабочих дней); 5) вежливое завершение. Уложись в 200 слов. Без грубости и угроз, ничего не выдумывай из фактов, имён и дат, которых я не назвал(а) — если чего-то важного не хватает, переспроси».</p>
+<p>Получится готовое официальное письмо с описанием проблемы, ссылкой на ваши права и конкретным сроком — останется вписать адрес и ФИО и отправить или распечатать.</p>
+<p>А вы писали жалобы сами — и получилось добиться результата?</p>
 </article>
 
 <footer class="site-footer"></footer>
 <script src="../../site-chrome.js"></script>
 
 <script src="../../article-script.js"></script>
-<script>
-(function() {
-fetch('data.json?v=' + Date.now(), { cache: 'no-store' })
-.then(function(response) {
-if (!response.ok) throw new Error('Not found');
-return response.json();
-})
-.then(function(data) {
-var tempDiv = document.createElement('div');
-tempDiv.innerHTML = data.content;
-
-tempDiv.querySelectorAll('video').forEach(function(video) {
-video.setAttribute('playsinline', '');
-video.setAttribute('webkit-playsinline', '');
-video.setAttribute('loop', '');
-video.setAttribute('muted', '');
-video.setAttribute('controls', '');
-video.setAttribute('preload', 'auto');
-video.style.width = '100%';
-video.style.maxWidth = '100%';
-});
-
-var firstP = tempDiv.querySelector('p');
-if (firstP) {
-var ctaHtml = '<div class="inline-cta">' +
-'<p>Больше полезного про нейросети — простым языком, каждый день в нашей группе ВКонтакте</p>' +
-'<a href="https://vk.ru/zhivoy_ai" target="_blank" rel="noopener noreferrer" class="inline-cta-btn">Перейти во ВКонтакте →</a>' +
-'</div>';
-firstP.insertAdjacentHTML('afterend', ctaHtml);
-}
-
-document.getElementById('article-content').innerHTML = tempDiv.innerHTML;
-
-setTimeout(function() {
-if (typeof initAll === 'function') {
-initAll();
-}
-}, 100);
-})
-.catch(function() {
-document.getElementById('article-content').innerHTML = '<p style="color:#d1d1d6; text-align:center; padding:40px 0;">❌ Ошибка загрузки статьи. <a href="../../index.html" style="color:var(--accent-blue);">Вернуться к списку</a></p>';
-});
-})();
-</script>
 </body>
 </html>

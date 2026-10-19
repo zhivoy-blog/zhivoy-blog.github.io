@@ -18,6 +18,30 @@
 <meta property="og:url" content="https://zhivoy-ai.ru/articles/prodaj-to-chto-pylitsya/">
 <meta name="twitter:card" content="summary_large_image">
 
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "Продай то, что пылится",
+  "description": "Готовый промт для GigaChat, Алисы или DeepSeek: цепляющее объявление на Авито из старой вещи, которая давно пылится без дела.",
+  "datePublished": "2026-09-24",
+  "image": [
+    "https://zhivoy-ai.ru/articles/prodaj-to-chto-pylitsya/cover.jpg"
+  ],
+  "author": {
+    "@type": "Organization",
+    "name": "Живой ИИ",
+    "url": "https://zhivoy-ai.ru/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Живой ИИ",
+    "url": "https://zhivoy-ai.ru/"
+  },
+  "mainEntityOfPage": "https://zhivoy-ai.ru/articles/prodaj-to-chto-pylitsya/"
+}
+</script>
+
 <link rel="stylesheet" href="../../article-style.css">
 <link rel="stylesheet" href="../../site-chrome.css">
 
@@ -47,56 +71,21 @@ ym(112807526, "init", {ssr:true, webvisor:true, clickmap:true, referrer: documen
 <a href="../../index.html" class="back-link">← Назад к статьям</a>
 
 <article id="article-content">
-<p>Загрузка статьи...</p>
+<time datetime="2026-09-24">24 сентября 2026</time>
+<h1>Продай то, что пылится</h1>
+<img src="cover.jpg" alt="Продай то, что пылится" style="max-width: 100%; border-radius: 12px; margin: 20px 0;">
+<p>Всем привет! Решил разобрать такую тему: сколько у нас дома лежит вещей, которые давно пора продать, да руки не доходят. Старый велосипед в гараже, бабушкин сервиз в серванте, детская коляска в кладовке — представляете, сколько таких вещей пылится по квартирам? Вроде и выбросить жалко, и продать страшно: напишешь «велосипед, б/у, недорого» — и объявление потеряется среди сотни таких же.</p><div class="inline-cta"><p>Больше полезного про нейросети — простым языком, каждый день в нашей группе ВКонтакте</p><a href="https://vk.ru/zhivoy_ai" target="_blank" rel="noopener noreferrer" class="inline-cta-btn">Перейти во ВКонтакте →</a></div>
+<p>А ведь дело не в самой вещи, а в том, как её «подать» покупателю. Да, вещь отслужила своё, но по-прежнему исправна. Зачем её выкидывать на помойку, если можно выручить за неё неплохие деньги? Как грамотно преподнести всё это в объявлении на Авито, какие правильные слова подобрать, когда не силён в красноречии? Вот тут и приходит на помощь нейросеть — открываем бесплатный GigaChat, Алису или DeepSeek (любая справится, все работают без VPN прямо в России) — и вставляем такой промт:</p>
+<p><strong>Промт (копировать как есть):</strong></p>
+<p>Ты опытный копирайтер для маркетплейсов вроде Авито. Я опишу тебе б/у вещь, которую хочу продать. Напиши: 1) цепляющий заголовок (не больше 60 символов), который выделится среди похожих объявлений; 2) убедительное описание (100-150 слов), которое подчёркивает выгоды для покупателя, честно упоминает состояние вещи и создаёт ощущение ценности; 3) кратко укажи, кому эта вещь особенно может пригодиться; 4) рекомендованный диапазон цены в рублях с учётом типа, возраста и состояния вещи, кратко объяснив почему (не занижай и не завышай). Не выдумывай факты о вещи, которые я не сообщил. Если моего описания недостаточно — сначала задай уточняющие вопросы: что за вещь, сколько ей лет, в каком она состоянии, сколько стоила изначально (если известно), и в каком городе я нахожусь. Вещь: [опиши свою вещь].</p>
+<p>Совет: чем конкретнее опишете вещь — тем точнее выйдет и текст, и цена. Не просто «велосипед», а «велосипед, 5 лет, немного ржавый, но на ходу» — так нейросеть не будет гадать и не занизит цену на всякий случай.</p>
+<p>Как бы там ни было, а результат того стоит: на выходе получаете готовый заголовок, живое описание вместо сухого «продам стол», кому вещь может пригодиться, и честную вилку цены — не продешевите и не отпугнёте покупателя завышенным ценником.</p>
+<p>Ну вот как то так. А у вас есть дома вещь, которая давно ждёт своего покупателя?</p>
 </article>
 
 <footer class="site-footer"></footer>
 <script src="../../site-chrome.js"></script>
 
 <script src="../../article-script.js"></script>
-<script>
-(function() {
-fetch('data.json?v=' + Date.now(), { cache: 'no-store' })
-.then(function(response) {
-if (!response.ok) throw new Error('Not found');
-return response.json();
-})
-.then(function(data) {
-var tempDiv = document.createElement('div');
-tempDiv.innerHTML = data.content;
-
-tempDiv.querySelectorAll('video').forEach(function(video) {
-video.setAttribute('playsinline', '');
-video.setAttribute('webkit-playsinline', '');
-video.setAttribute('loop', '');
-video.setAttribute('muted', '');
-video.setAttribute('controls', '');
-video.setAttribute('preload', 'auto');
-video.style.width = '100%';
-video.style.maxWidth = '100%';
-});
-
-var firstP = tempDiv.querySelector('p');
-if (firstP) {
-var ctaHtml = '<div class="inline-cta">' +
-'<p>Больше полезного про нейросети — простым языком, каждый день в нашей группе ВКонтакте</p>' +
-'<a href="https://vk.ru/zhivoy_ai" target="_blank" rel="noopener noreferrer" class="inline-cta-btn">Перейти во ВКонтакте →</a>' +
-'</div>';
-firstP.insertAdjacentHTML('afterend', ctaHtml);
-}
-
-document.getElementById('article-content').innerHTML = tempDiv.innerHTML;
-
-setTimeout(function() {
-if (typeof initAll === 'function') {
-initAll();
-}
-}, 100);
-})
-.catch(function() {
-document.getElementById('article-content').innerHTML = '<p style="color:#d1d1d6; text-align:center; padding:40px 0;">❌ Ошибка загрузки статьи. <a href="../../index.html" style="color:var(--accent-blue);">Вернуться к списку</a></p>';
-});
-})();
-</script>
 </body>
 </html>

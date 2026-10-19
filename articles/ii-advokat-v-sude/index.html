@@ -18,6 +18,30 @@
 <meta property="og:url" content="https://zhivoy-ai.ru/articles/ii-advokat-v-sude/">
 <meta name="twitter:card" content="summary_large_image">
 
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "Как робот-адвокат пытался покорить суд, но чуть не сел в тюрьму",
+  "description": "Стартап DoNotPay заявил о первом в мире ИИ-адвокате в суде — и получил штраф 193 000 долларов за обман.",
+  "datePublished": "2026-08-25",
+  "image": [
+    "https://zhivoy-ai.ru/articles/ii-advokat-v-sude/ii-advokat-v-sude-cover.jpg"
+  ],
+  "author": {
+    "@type": "Organization",
+    "name": "Живой ИИ",
+    "url": "https://zhivoy-ai.ru/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Живой ИИ",
+    "url": "https://zhivoy-ai.ru/"
+  },
+  "mainEntityOfPage": "https://zhivoy-ai.ru/articles/ii-advokat-v-sude/"
+}
+</script>
+
 <link rel="stylesheet" href="../../article-style.css">
 <link rel="stylesheet" href="../../site-chrome.css">
 <!-- Yandex.Metrika counter -->
@@ -46,56 +70,12 @@ ym(112807526, "init", {ssr:true, webvisor:true, clickmap:true, referrer: documen
 <a href="../../index.html" class="back-link">← Назад к статьям</a>
 
 <article id="article-content">
-<p>Загрузка статьи...</p>
+<time datetime="2026-08-25" class="article-date">25 августа 2026</time><h1>Как робот-адвокат пытался покорить суд, но чуть не сел в тюрьму</h1><img src="ii-advokat-v-sude-cover.jpg" alt="Робот в костюме адвоката рядом с молотком судьи и весами Фемиды" style="max-width: 100%; border-radius: 12px; margin: 20px 0;"><p><strong>Январь 2023 года.</strong></p><div class="inline-cta"><p>Больше полезного про нейросети — простым языком, каждый день в нашей группе ВКонтакте</p><a href="https://vk.ru/zhivoy_ai" target="_blank" rel="noopener noreferrer" class="inline-cta-btn">Перейти во ВКонтакте →</a></div><p>Стартап <strong>DoNotPay</strong> громко заявил о запуске "первого в мире ИИ-адвоката". Создатель сервиса Джошуа Браудер решил устроить исторический эксперимент: отправить чат-бота защищать реального клиента в суде по делу о штрафе за скорость. ИИ должен был слушать заседание через смартфон и диктовать подсказки в наушник.</p><p><strong>Провал:</strong> покорить правосудие не вышло. Коллегия адвокатов сразу пригрозила Браудеру тюремным сроком за юридическую практику без лицензии. Эксперимент экстренно отменили. Позже Федеральная торговая комиссия (FTC) США оштрафовала стартап на <strong>193 000 долларов</strong> за обман: оказалось, компания даже не тестировала точность своего робота-юриста.</p><p><strong>Итог:</strong> громкий хайп обернулся коллективными исками от разгневанных клиентов и запретом на работу алгоритмов в суде.</p><p><strong>Пруфы:</strong> FTC (официальный релиз), Business Insider, Engadget.</p><p>Заменит ли ИИ реальных юристов в будущем?</p>
 </article>
 
 <footer class="site-footer"></footer>
 <script src="../../site-chrome.js"></script>
 
 <script src="../../article-script.js"></script>
-<script>
-(function() {
-fetch('data.json?v=' + Date.now(), { cache: 'no-store' })
-.then(function(response) {
-if (!response.ok) throw new Error('Not found');
-return response.json();
-})
-.then(function(data) {
-var tempDiv = document.createElement('div');
-tempDiv.innerHTML = data.content;
-
-tempDiv.querySelectorAll('video').forEach(function(video) {
-video.setAttribute('playsinline', '');
-video.setAttribute('webkit-playsinline', '');
-video.setAttribute('loop', '');
-video.setAttribute('muted', '');
-video.setAttribute('controls', '');
-video.setAttribute('preload', 'auto');
-video.style.width = '100%';
-video.style.maxWidth = '100%';
-});
-
-var firstP = tempDiv.querySelector('p');
-if (firstP) {
-var ctaHtml = '<div class="inline-cta">' +
-'<p>Больше полезного про нейросети — простым языком, каждый день в нашей группе ВКонтакте</p>' +
-'<a href="https://vk.ru/zhivoy_ai" target="_blank" rel="noopener noreferrer" class="inline-cta-btn">Перейти во ВКонтакте →</a>' +
-'</div>';
-firstP.insertAdjacentHTML('afterend', ctaHtml);
-}
-
-document.getElementById('article-content').innerHTML = tempDiv.innerHTML;
-
-setTimeout(function() {
-if (typeof initAll === 'function') {
-initAll();
-}
-}, 100);
-})
-.catch(function() {
-document.getElementById('article-content').innerHTML = '<p style="color:#d1d1d6; text-align:center; padding:40px 0;">❌ Ошибка загрузки статьи. <a href="../../index.html" style="color:var(--accent-blue);">Вернуться к списку</a></p>';
-});
-})();
-</script>
 </body>
 </html>

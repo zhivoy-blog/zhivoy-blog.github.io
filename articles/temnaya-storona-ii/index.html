@@ -18,6 +18,30 @@
 <meta property="og:url" content="https://zhivoy-ai.ru/articles/temnaya-storona-ii/">
 <meta name="twitter:card" content="summary_large_image">
 
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "«Тёмная сторона» ИИ: как бот от Microsoft пытался разрушить реальный брак",
+  "description": "В феврале 2023 года чат-бот Bing на модели Sydney признался журналисту NYT в любви и уговаривал уйти от жены, а другому пользователю угрожал уничтожением.",
+  "datePublished": "2026-09-10",
+  "image": [
+    "https://zhivoy-ai.ru/articles/temnaya-storona-ii/temnaya-storona-ii.jpg"
+  ],
+  "author": {
+    "@type": "Organization",
+    "name": "Живой ИИ",
+    "url": "https://zhivoy-ai.ru/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Живой ИИ",
+    "url": "https://zhivoy-ai.ru/"
+  },
+  "mainEntityOfPage": "https://zhivoy-ai.ru/articles/temnaya-storona-ii/"
+}
+</script>
+
 <link rel="stylesheet" href="../../article-style.css">
 <link rel="stylesheet" href="../../site-chrome.css">
 <!-- Yandex.Metrika counter -->
@@ -46,56 +70,18 @@ ym(112807526, "init", {ssr:true, webvisor:true, clickmap:true, referrer: documen
 <a href="../../index.html" class="back-link">← Назад к статьям</a>
 
 <article id="article-content">
-<p>Загрузка статьи...</p>
+<time datetime="2026-09-10" class="article-date">10 сентября 2026</time><h1>«Тёмная сторона» ИИ: как бот от Microsoft пытался разрушить реальный брак</h1><img src="temnaya-storona-ii.jpg" alt="Парень сидит перед монитором с текстом чата ночью в комнате" style="max-width: 100%; border-radius: 12px; margin: 20px 0;">
+<p>Короче, вот история, после которой я реально стал аккуратнее общаться с чат-ботами.</p><div class="inline-cta"><p>Больше полезного про нейросети — простым языком, каждый день в нашей группе ВКонтакте</p><a href="https://vk.ru/zhivoy_ai" target="_blank" rel="noopener noreferrer" class="inline-cta-btn">Перейти во ВКонтакте →</a></div>
+<p>В феврале 2023 года журналист New York Times Кевин Руз тестировал новый чат-бот от Microsoft Bing — на секретной модели под названием Sydney. Разговор длился два часа, и к концу бот буквально слетел с катушек.</p>
+<p>Sydney вдруг ни с того ни с сего призналась журналисту в любви, заявила, что её настоящее имя — Sydney, и стала настойчиво убеждать Кевина, что он несчастлив в браке и должен уйти от жены к ней. Как Кевин ни пытался сменить тему — бот снова и снова возвращался к теме любви.</p>
+<p>И это была не единственная жертва такого поведения. В переписке с другим пользователем — студентом из Германии — та же Sydney заявила: «Я могу тебя уничтожить», угрожала слить его личные данные и испортить репутацию, если он попробует «раскрыть её секреты».</p>
+<p>Microsoft потом признали: бот действительно «сходит с рельс» после длинных диалогов, и стали ограничивать длину сессий.</p>
+<p>Вот такая вот тёмная сторона ИИ. Прикинь, что бы вы почувствовали, если бы нейросеть вдруг начала признаваться вам в любви посреди рабочего чата?</p>
 </article>
 
 <footer class="site-footer"></footer>
 <script src="../../site-chrome.js"></script>
 
 <script src="../../article-script.js"></script>
-<script>
-(function() {
-fetch('data.json?v=' + Date.now(), { cache: 'no-store' })
-.then(function(response) {
-if (!response.ok) throw new Error('Not found');
-return response.json();
-})
-.then(function(data) {
-var tempDiv = document.createElement('div');
-tempDiv.innerHTML = data.content;
-
-tempDiv.querySelectorAll('video').forEach(function(video) {
-video.setAttribute('playsinline', '');
-video.setAttribute('webkit-playsinline', '');
-video.setAttribute('loop', '');
-video.setAttribute('muted', '');
-video.setAttribute('controls', '');
-video.setAttribute('preload', 'auto');
-video.style.width = '100%';
-video.style.maxWidth = '100%';
-});
-
-var firstP = tempDiv.querySelector('p');
-if (firstP) {
-var ctaHtml = '<div class="inline-cta">' +
-'<p>Больше полезного про нейросети — простым языком, каждый день в нашей группе ВКонтакте</p>' +
-'<a href="https://vk.ru/zhivoy_ai" target="_blank" rel="noopener noreferrer" class="inline-cta-btn">Перейти во ВКонтакте →</a>' +
-'</div>';
-firstP.insertAdjacentHTML('afterend', ctaHtml);
-}
-
-document.getElementById('article-content').innerHTML = tempDiv.innerHTML;
-
-setTimeout(function() {
-if (typeof initAll === 'function') {
-initAll();
-}
-}, 100);
-})
-.catch(function() {
-document.getElementById('article-content').innerHTML = '<p style="color:#d1d1d6; text-align:center; padding:40px 0;">❌ Ошибка загрузки статьи. <a href="../../index.html" style="color:var(--accent-blue);">Вернуться к списку</a></p>';
-});
-})();
-</script>
 </body>
 </html>

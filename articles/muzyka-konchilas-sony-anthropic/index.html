@@ -18,6 +18,30 @@
 <meta property="og:url" content="https://zhivoy-ai.ru/articles/muzyka-konchilas-sony-anthropic/">
 <meta name="twitter:card" content="summary_large_image">
 
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "Музыка кончилась",
+  "description": "Sony Music Publishing и Warner Chappell подали в суд на Anthropic: паблишеры утверждают, что Claude обучали на текстах песен, добытых через торренты, и модель могла почти дословно их воспроизводить.",
+  "datePublished": "2026-09-21",
+  "image": [
+    "https://zhivoy-ai.ru/articles/muzyka-konchilas-sony-anthropic/cover.jpg"
+  ],
+  "author": {
+    "@type": "Organization",
+    "name": "Живой ИИ",
+    "url": "https://zhivoy-ai.ru/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Живой ИИ",
+    "url": "https://zhivoy-ai.ru/"
+  },
+  "mainEntityOfPage": "https://zhivoy-ai.ru/articles/muzyka-konchilas-sony-anthropic/"
+}
+</script>
+
 <link rel="stylesheet" href="../../article-style.css">
 <link rel="stylesheet" href="../../site-chrome.css">
 <!-- Yandex.Metrika counter -->
@@ -46,56 +70,12 @@ ym(112807526, "init", {ssr:true, webvisor:true, clickmap:true, referrer: documen
 <a href="../../index.html" class="back-link">← Назад к статьям</a>
 
 <article id="article-content">
-<p>Загрузка статьи...</p>
+<time datetime="2026-09-21" class="article-date">21 сентября 2026</time><h1>Музыка кончилась</h1><img src="cover.jpg" alt="Судейский молоток на фоне нотных листов и цифрового силуэта человека" style="max-width: 100%; border-radius: 12px; margin: 20px 0;"><p>29 августа 2026 года. Sony Music Publishing и Warner Chappell подали в суд на Anthropic — компанию, которая делает Claude.</p><div class="inline-cta"><p>Больше полезного про нейросети — простым языком, каждый день в нашей группе ВКонтакте</p><a href="https://vk.ru/zhivoy_ai" target="_blank" rel="noopener noreferrer" class="inline-cta-btn">Перейти во ВКонтакте →</a></div><p><strong>Проблема:</strong> паблишеры утверждают, что модель обучали на десятках тысяч текстов песен и нот, добытых через торренты и скрапинг с пиратских сайтов, а не купленных по лицензии.</p><p>По их заявлению, Claude по запросу пользователей мог почти дословно выдавать тексты песен — например, слова «I Am the Walrus» Битлз, права на которую принадлежат Sony.</p><p><strong>Итог:</strong> ответчиками названы лично гендиректор Anthropic Дарио Амодей и сооснователь Бенджамин Манн; компенсация может достигать 150 000 долларов за каждое произведение, суммарно — потенциально миллиарды.</p><p>Источник: иск подан 28 августа в окружной суд Северной Калифорнии; писали Business Insider, TechCrunch, Rolling Stone.</p>
 </article>
 
 <footer class="site-footer"></footer>
 <script src="../../site-chrome.js"></script>
 
 <script src="../../article-script.js"></script>
-<script>
-(function() {
-fetch('data.json?v=' + Date.now(), { cache: 'no-store' })
-.then(function(response) {
-if (!response.ok) throw new Error('Not found');
-return response.json();
-})
-.then(function(data) {
-var tempDiv = document.createElement('div');
-tempDiv.innerHTML = data.content;
-
-tempDiv.querySelectorAll('video').forEach(function(video) {
-video.setAttribute('playsinline', '');
-video.setAttribute('webkit-playsinline', '');
-video.setAttribute('loop', '');
-video.setAttribute('muted', '');
-video.setAttribute('controls', '');
-video.setAttribute('preload', 'auto');
-video.style.width = '100%';
-video.style.maxWidth = '100%';
-});
-
-var firstP = tempDiv.querySelector('p');
-if (firstP) {
-var ctaHtml = '<div class="inline-cta">' +
-'<p>Больше полезного про нейросети — простым языком, каждый день в нашей группе ВКонтакте</p>' +
-'<a href="https://vk.ru/zhivoy_ai" target="_blank" rel="noopener noreferrer" class="inline-cta-btn">Перейти во ВКонтакте →</a>' +
-'</div>';
-firstP.insertAdjacentHTML('afterend', ctaHtml);
-}
-
-document.getElementById('article-content').innerHTML = tempDiv.innerHTML;
-
-setTimeout(function() {
-if (typeof initAll === 'function') {
-initAll();
-}
-}, 100);
-})
-.catch(function() {
-document.getElementById('article-content').innerHTML = '<p style="color:#d1d1d6; text-align:center; padding:40px 0;">❌ Ошибка загрузки статьи. <a href="../../index.html" style="color:var(--accent-blue);">Вернуться к списку</a></p>';
-});
-})();
-</script>
 </body>
 </html>
