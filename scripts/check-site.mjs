@@ -43,7 +43,11 @@ for (const entry of manifest) {
   if (data) {
     for (const f of REQUIRED_FIELDS) if (!String(data[f] || '').trim()) err(slug, `в data.json пустое поле "${f}"`);
     if (data.date !== entry.date) warn(slug, `дата в data.json (${data.date}) и в manifest.json (${entry.date}) разные`);
-    texts.push({ slug, title: String(data.title || '').trim().toLowerCase(), words: wordSet(data.content || '') });
+    // Блок «Ещё по теме» в конце — общие ссылки на соседние статьи, на повторы его не сравниваем.
+    texts.push({ slug, title: String(data.title || '').trim().toLowerCase(), words: wordSet(String(data.content || '').split('<h2>Ещё по теме</h2>')[0]) });
+    if (!String(data.content || '').includes('<h2>Ещё по теме</h2>')) {
+      warn(slug, 'в конце статьи нет блока «Ещё по теме» со ссылками на 2–3 похожие статьи');
+    }
     for (const src of localMediaSrcs(data.content || '')) {
       if (!fs.existsSync(path.join(dir, src))) err(slug, `нет файла "${src}", на который ссылается статья`);
     }
