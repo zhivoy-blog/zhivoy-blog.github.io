@@ -22,6 +22,7 @@ const warn = (slug, msg) => warnings.push(`⚠ ${slug}: ${msg}`);
 const manifest = readJson(path.join(ROOT, 'articles', 'manifest.json'));
 const sitemap = readSitemap();
 const seen = new Set();
+const texts = []; // для поиска повторов: слова каждой статьи
 
 for (const entry of manifest) {
   const { slug } = entry;
@@ -40,6 +41,7 @@ for (const entry of manifest) {
   if (data) {
     for (const f of REQUIRED_FIELDS) if (!String(data[f] || '').trim()) err(slug, `в data.json пустое поле "${f}"`);
     if (data.date !== entry.date) warn(slug, `дата в data.json (${data.date}) и в manifest.json (${entry.date}) разные`);
+    texts.push({ slug, title: String(data.title || '').trim().toLowerCase(), words: wordSet(data.content || '') });
     for (const src of localMediaSrcs(data.content || '')) {
       if (!fs.existsSync(path.join(dir, src))) err(slug, `нет файла "${src}", на который ссылается статья`);
     }
@@ -67,8 +69,29 @@ for (const entry of manifest) {
 
 for (const name of fs.readdirSync(path.join(ROOT, 'articles'))) {
   const full = path.join(ROOT, 'articles', name);
-  if (fs.statSync(full).isDirectory() && !seen.has(name)) {
-    warn(name, 'папка есть, но статьи нет в manifest.json — на главной её не видно');
+  if (!fs.statSync(full).isDirectory() || seen.has(name)) continue;
+  // Удалённая статья: в папке остался только index.html, который отправляет на другую статью.
+  const target = redirectTarget(path.join(full, 'index.html'));
+  if (target && !fs.existsSync(path.join(full, 'data.json'))) {
+    if (!seen.has(target)) err(name, `переадресация ведёт на "${target}", а такой статьи нет в manifest.json`);
+    continue;
+  }
+  warn(name, 'папка есть, но статьи нет в manifest.json — на главной её не видно');
+}
+
+// Повторы: одинаковый заголовок или почти тот же текст (общих слов не меньше DUP_LIMIT).
+// У разных статей сайта, даже частей одной серии, общих слов не больше ~0,11.
+const DUP_LIMIT = 0.2;
+for (let i = 0; i < texts.length; i++) {
+  for (let j = i + 1; j < texts.length; j++) {
+    const a = texts[i], b = texts[j];
+    let common = 0;
+    for (const w of a.words) if (b.words.has(w)) common++;
+    const share = common / (a.words.size + b.words.size - common || 1);
+    if (a.title === b.title) err(b.slug, `тот же заголовок, что у "${a.slug}" — повтор статьи`);
+    else if (share >= DUP_LIMIT) {
+      err(b.slug, `текст почти как у "${a.slug}" (общих слов ${Math.round(share * 100)}%) — повтор статьи, одну из них удалить`);
+    }
   }
 }
 
@@ -84,3 +107,13 @@ if (warnings.length) console.log('\n' + warnings.join('\n'));
 if (!errors.length && !warnings.length) console.log('Всё в порядке.');
 console.log(`\nИтого: ошибок ${errors.length}, предупреждений ${warnings.length}`);
 process.exit(errors.length ? 1 : 0);
+
+function wordSet(html) {
+  return new Set(html.replace(/<[^>]+>/g, ' ').toLowerCase().split(/[^а-яёa-z0-9]+/).filter(w => w.length > 3));
+}
+
+function redirectTarget(pagePath) {
+  if (!fs.existsSync(pagePath)) return null;
+  const m = /location\.replace\('\.\.\/([^/']+)\/'\)/.exec(fs.readFileSync(pagePath, 'utf8'));
+  return m ? m[1] : null;
+}
