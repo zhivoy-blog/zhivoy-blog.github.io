@@ -13,6 +13,7 @@ import path from 'node:path';
 import {
   ROOT, TAGS, REQUIRED_FIELDS, readJson, articleDir, localMediaSrcs, readSitemap, articleUrl, loadArticlePageParts,
 } from './lib/site.mjs';
+import { TOOL_PAGES, buildToolPage, readToolsHtml, toolPagePath } from './lib/tool-pages.mjs';
 
 const { renderArticleContent, replaceHomeFeed } = loadArticlePageParts();
 
@@ -116,6 +117,17 @@ const freshHome = replaceHomeFeed(home, manifest);
 if (freshHome === null) err('index.html', 'нет меток ленты <!-- feed:start … --> — поисковики не видят ссылок на статьи');
 else if (freshHome !== home) {
   err('index.html', 'лента статей на главной устарела — обновить: node scripts/new-article.mjs <slug любой статьи>');
+}
+
+// Отдельные страницы инструментов собираются из tools.html и должны быть в sitemap.xml.
+const toolsHtml = readToolsHtml();
+for (const page of TOOL_PAGES) {
+  const file = toolPagePath(page);
+  if (!fs.existsSync(file)) err(page.file, 'нет страницы — собрать: node scripts/build-tool-pages.mjs');
+  else if (fs.readFileSync(file, 'utf8') !== buildToolPage(toolsHtml, page)) {
+    err(page.file, 'устарела после правки tools.html — пересобрать: node scripts/build-tool-pages.mjs');
+  }
+  if (!sitemap.includes(`<loc>https://zhivoy-ai.ru/${page.file}</loc>`)) err(page.file, 'нет в sitemap.xml — поисковики её не увидят');
 }
 
 for (let i = 1; i < manifest.length; i++) {

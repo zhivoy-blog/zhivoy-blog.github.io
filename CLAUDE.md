@@ -27,6 +27,9 @@
   текст с картинки (tesseract.js) — библиотеки с CDN через `loadLibOnce`. Примеры для кнопок
   «Попробовать на примере» — в `audio/` и `img/`. Прямые ссылки: `tools.html#pdf` (категория),
   `tools.html#tomp3` (инструмент).
+- `szhat-foto.html`, `video-v-mp3.html`, `obedinit-pdf.html` — отдельные страницы популярных инструментов
+  (свой title/H1/вопросы под поисковый запрос). Собираются из `tools.html` скриптом, руками не править;
+  тексты — в `scripts/lib/tool-pages.mjs`. После любой правки `tools.html` — `node scripts/build-tool-pages.mjs`.
 - `site-chrome.css` / `site-chrome.js` — общая шапка, бургер-меню, подвал, кнопка «Мы в ВК».
 - `shtab-d14558/` — скрытое приложение «Живой ИИ: Контроль» (PWA автора). Без ссылок из навигации, в `sitemap.xml` не добавлять.
   В `app.js` лежит **единственный шаблон страницы статьи** (`buildArticlePageHtml`), а рядом — лента главной,
@@ -38,6 +41,7 @@
 | Команда | Что делает |
 |---|---|
 | `node scripts/new-article.mjs <slug> [<slug> …]` | Проверяет `data.json` и файлы, дописывает «Ещё по теме», если его нет, создаёт `index.html` по шаблону из `app.js`, добавляет статью в `manifest.json`, `sitemap.xml` и ленту главной. Существующий `index.html` не трогает без `--force`. |
+| `node scripts/build-tool-pages.mjs` | Пересобирает отдельные страницы инструментов из `tools.html`. |
 | `node scripts/check-site.mjs` | Проверяет все статьи: страницы, картинки, `sitemap.xml`, дубли, даты. Код выхода 1 — есть ошибки. |
 | `node scripts/count-chars.mjs post.txt` | Считает знаки поста и сверяет с лимитами Telegram, проверяет хэштеги и тире. |
 

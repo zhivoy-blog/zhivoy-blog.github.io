@@ -101,6 +101,13 @@ box-shadow: 0 0 16px rgba(var(--accent-rgb), 0.45)
 
 .page-intro { text-align: center; margin-bottom: 18px; color: var(--text-muted-alt); font-size: 14px; padding: 0 4px }
 .page-intro strong { color: var(--text-main) }
+/* Пояснения под инструментами: как пользоваться, частые вопросы, ссылки на отдельные страницы */
+.tool-guide h2 { font-size: 17px; margin: 4px 0 10px }
+.tool-guide h3 { font-size: 15px; margin: 14px 0 4px }
+.tool-guide p, .tool-guide li { font-size: 14px; color: var(--text-muted-alt) }
+.tool-guide ol, .tool-guide ul { margin: 0 0 6px 20px }
+.tool-guide li { margin-bottom: 6px }
+.tool-guide a { color: var(--accent) }
 
 /* --- Вкладки --- */
 .tabs {
@@ -1171,6 +1178,17 @@ ym(112807526, "init", {ssr:true, webvisor:true, clickmap:true, referrer: documen
 </div>
 </section>
 
+<!-- guide:start (на отдельных страницах инструментов этот блок пишет scripts/build-tool-pages.mjs) -->
+<div class="card tool-guide">
+<h2>Популярные инструменты на отдельных страницах</h2>
+<ul>
+<li><a href="szhat-foto.html">Сжать фото</a> — уменьшить вес фото для почты, мессенджера или Госуслуг</li>
+<li><a href="video-v-mp3.html">Видео в MP3</a> — достать звук из видео или голосового сообщения</li>
+<li><a href="obedinit-pdf.html">Объединить PDF</a> — несколько документов в один файл</li>
+</ul>
+</div>
+<!-- guide:end -->
+
 </div>
 
 <p class="footer-promo">Промты для нейросетей и простые приёмы каждый день — <a href="https://vk.ru/zhivoy_ai" target="_blank" rel="noopener noreferrer">в нашем сообществе ВКонтакте</a>.</p>
@@ -1264,9 +1282,10 @@ if (history.replaceState) history.replaceState(null, '', cat === 'images' ? loca
 });
 });
 
-// Прямая ссылка на категорию (tools.html#audio, #video, #pdf, #text) или сразу на инструмент (tools.html#tomp3)
+// Прямая ссылка на категорию (tools.html#audio, #video, #pdf, #text) или сразу на инструмент (tools.html#tomp3).
+// У отдельной страницы инструмента (szhat-foto.html и др.) свой инструмент по умолчанию — data-default-tab.
 function openFromHash() {
-var fromHash = (location.hash || '').replace('#', '');
+var fromHash = (location.hash || '').replace('#', '') || wrap.getAttribute('data-default-tab') || '';
 // имя категории главнее: #text — это категория «Текст», а не инструмент «Текст на картинке»
 var hashTool = CATS.indexOf(fromHash) === -1 && fromHash && document.querySelector('.tab-btn[data-tab="' + fromHash.replace(/[^a-z0-9]/gi, '') + '"]');
 if (hashTool) {

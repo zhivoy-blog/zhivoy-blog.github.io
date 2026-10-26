@@ -17,9 +17,30 @@
 
 <url>
 <loc>https://zhivoy-ai.ru/tools.html</loc>
-<lastmod>2026-10-19</lastmod>
+<lastmod>2026-10-26</lastmod>
 <changefreq>monthly</changefreq>
 <priority>0.5</priority>
+</url>
+
+<url>
+<loc>https://zhivoy-ai.ru/szhat-foto.html</loc>
+<lastmod>2026-10-26</lastmod>
+<changefreq>monthly</changefreq>
+<priority>0.8</priority>
+</url>
+
+<url>
+<loc>https://zhivoy-ai.ru/video-v-mp3.html</loc>
+<lastmod>2026-10-26</lastmod>
+<changefreq>monthly</changefreq>
+<priority>0.8</priority>
+</url>
+
+<url>
+<loc>https://zhivoy-ai.ru/obedinit-pdf.html</loc>
+<lastmod>2026-10-26</lastmod>
+<changefreq>monthly</changefreq>
+<priority>0.8</priority>
 </url>
 
 <url>
