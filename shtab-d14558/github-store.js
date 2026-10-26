@@ -61,6 +61,16 @@
       return { json: JSON.parse(text), sha: data.sha };
     }
 
+    /** Возвращает {text, sha} или null, если файла ещё нет. */
+    async getText(path) {
+      const url = `${this.apiUrl(path)}?ref=${encodeURIComponent(this.branch)}&_=${Date.now()}`;
+      const res = await this._request(url);
+      if (res.status === 404) return null;
+      if (!res.ok) throw await this._err('Не удалось прочитать ' + path, res);
+      const data = await res.json();
+      return { text: base64ToUtf8(data.content), sha: data.sha };
+    }
+
     /** Создаёт или обновляет JSON-файл. Возвращает новый sha. */
     async putJson(path, obj, message, sha) {
       const body = {

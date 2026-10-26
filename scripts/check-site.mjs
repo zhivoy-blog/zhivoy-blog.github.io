@@ -14,7 +14,7 @@ import {
   ROOT, TAGS, REQUIRED_FIELDS, readJson, articleDir, localMediaSrcs, readSitemap, articleUrl, loadArticlePageParts,
 } from './lib/site.mjs';
 
-const { renderArticleContent } = loadArticlePageParts();
+const { renderArticleContent, replaceHomeFeed } = loadArticlePageParts();
 
 const errors = [];
 const warnings = [];
@@ -107,6 +107,20 @@ for (let i = 0; i < texts.length; i++) {
     else if (share >= DUP_LIMIT) {
       err(b.slug, `текст почти как у "${a.slug}" (общих слов ${Math.round(share * 100)}%) — повтор статьи, одну из них удалить`);
     }
+  }
+}
+
+// Лента на главной лежит прямо в index.html — она должна совпадать с manifest.json.
+const home = fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8');
+const freshHome = replaceHomeFeed(home, manifest);
+if (freshHome === null) err('index.html', 'нет меток ленты <!-- feed:start … --> — поисковики не видят ссылок на статьи');
+else if (freshHome !== home) {
+  err('index.html', 'лента статей на главной устарела — обновить: node scripts/new-article.mjs <slug любой статьи>');
+}
+
+for (let i = 1; i < manifest.length; i++) {
+  if (manifest[i].date > manifest[i - 1].date) {
+    warn(manifest[i].slug, `в manifest.json стоит ниже более старой статьи "${manifest[i - 1].slug}" — новые должны быть сверху`);
   }
 }
 

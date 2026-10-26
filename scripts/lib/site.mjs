@@ -21,8 +21,9 @@ export function loadArticlePageBuilder() {
   return loadArticlePageParts().buildArticlePageHtml;
 }
 
-// Части шаблона по отдельности: текст статьи для <article> и разметка JSON-LD.
-// Нужны, чтобы проверить готовую страницу, не пересобирая её целиком.
+// Части шаблона по отдельности: текст статьи для <article>, разметка JSON-LD,
+// лента на главной, блок «Ещё по теме» и строка sitemap.xml — всё из app.js.
+// Нужны, чтобы проверить готовые страницы, не пересобирая их целиком.
 export function loadArticlePageParts() {
   const src = fs.readFileSync(path.join(ROOT, 'shtab-d14558', 'app.js'), 'utf8');
   const a = src.indexOf(GEN_START);
@@ -31,7 +32,7 @@ export function loadArticlePageParts() {
     throw new Error('Не нашёл генератор страницы в shtab-d14558/app.js — его переименовали или перенесли?');
   }
   // eslint-disable-next-line no-new-func
-  return new Function(src.slice(a, b) + '\nreturn { buildArticlePageHtml, renderArticleContent, buildArticleJsonLd };')();
+  return new Function(src.slice(a, b) + '\nreturn { buildArticlePageHtml, renderArticleContent, buildArticleJsonLd, buildHomeFeedHtml, replaceHomeFeed, buildRelatedHtml, addToSitemap };')();
 }
 
 export function readJson(file) {
