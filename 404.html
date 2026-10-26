@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>404 — Страница не найдена | Живой ИИ</title>
+    <meta name="description" content="Такой страницы на сайте «Живой ИИ» нет. Вернитесь на главную или откройте инструменты.">
+    <meta name="robots" content="noindex">
     <style>
         :root {
             --bg-color: #1a1f2e;
@@ -79,6 +81,17 @@
         .btn-home:active {
             transform: scale(0.97);
         }
+        .more-links {
+            margin-top: 24px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 8px 20px;
+            font-size: 15px;
+        }
+        .more-links a {
+            color: var(--accent);
+        }
         @media (max-width: 500px) {
             .error-code {
                 font-size: 56px;
@@ -105,7 +118,13 @@ ym(112807526, "init", {ssr:true, webvisor:true, clickmap:true, referrer: documen
         <div class="error-code">404</div>
         <h1>Упс! Страница потерялась в нейросетях</h1>
         <p>Этот промпт выдал ошибку. Возможно, статья была удалена или ссылка написана с опечаткой.</p>
-        <a href="index.html" class="btn-home">Вернуться на главную</a>
+        <!-- Ссылки от корня сайта: эта страница открывается на любом неверном адресе, в том числе внутри папок. -->
+        <a href="/" class="btn-home">Вернуться на главную</a>
+        <div class="more-links">
+            <a href="/tools.html">Инструменты</a>
+            <a href="/about.html">О проекте</a>
+            <a href="https://vk.ru/zhivoy_ai" target="_blank" rel="noopener noreferrer">Мы в ВК</a>
+        </div>
     </div>
 </body>
 </html>
