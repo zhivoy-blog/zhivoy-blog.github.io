@@ -352,6 +352,23 @@ border: 1px solid var(--border-color); border-radius: 12px; padding: 10px 12px
 .video-card .time-row input[type=text] { flex: 1 1 auto }
 .video-card .time-row .btn.small { flex: 0 0 auto; white-space: nowrap }
 .video-card .level-hint { font-size: 13px; color: var(--text-muted-alt); margin-top: 8px }
+.video-card textarea { width: 100%; min-height: 70px; resize: vertical; background-color: var(--card-bg-2); color: var(--text-main); border: 1px solid var(--accent-video); border-radius: 12px; padding: 10px 12px; font: inherit; font-size: 16px; line-height: 1.4 }
+.video-card textarea:focus { outline: 2px solid var(--accent-video); outline-offset: 1px }
+.video-card .dropzone.small { padding: 14px; margin-top: 10px }
+.video-card .two-cols { display: flex; gap: 10px }
+.video-card .two-cols > .field { flex: 1 1 0; min-width: 0 }
+/* Нарезка музыки: поля времени — как у обрезки видео, только в зелёной гамме */
+.audio-card [hidden] { display: none !important }
+.audio-card .v-info { font-size: 14px; margin-top: 12px; text-align: center }
+.audio-card .v-info b { color: var(--accent-audio) }
+.audio-card audio { display: block; width: 100%; margin: 12px 0 4px }
+.audio-card .time-row { display: flex; gap: 8px; align-items: center }
+.audio-card .time-row input[type=text] { flex: 1 1 auto; border-color: var(--accent-audio) }
+.audio-card .time-row .btn.small { flex: 0 0 auto; white-space: nowrap }
+.audio-card input[type=range]::-webkit-slider-thumb { background: var(--accent-audio) }
+.audio-card input[type=range]::-moz-range-thumb { background: var(--accent-audio) }
+.audio-card .check-row { display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 15px; margin-bottom: 8px }
+.audio-card .check-row input { width: 22px; height: 22px; min-height: 0; accent-color: var(--accent-audio) }
 
 /* --- PDF-инструменты (красная гамма категории «PDF») --- */
 .card.pdf-card { border-color: var(--accent-pdf); box-shadow: 0 0 16px rgba(255, 90, 79, 0.15) }
@@ -484,9 +501,11 @@ ym(112807526, "init", {ssr:true, webvisor:true, clickmap:true, referrer: documen
 <button class="tab-btn" data-cat="images" data-tab="exif"><span class="tab-icon" aria-hidden="true">📍</span><span class="tab-title">Данные в фото</span><span class="tab-desc">Убрать место съёмки и телефон</span><span class="tab-badge">новое</span></button>
 <button class="tab-btn" data-cat="audio" data-tab="tomp3" hidden><span class="tab-icon" aria-hidden="true">🎧</span><span class="tab-title">В MP3</span><span class="tab-desc">Звук из видео, голосовые</span><span class="tab-badge">новое</span></button>
 <button class="tab-btn" data-cat="audio" data-tab="volume" hidden><span class="tab-icon" aria-hidden="true">🔊</span><span class="tab-title">Громкость MP3</span><span class="tab-desc">Громче или тише, по каналам</span></button>
+<button class="tab-btn" data-cat="audio" data-tab="acut" hidden><span class="tab-icon" aria-hidden="true">✂️</span><span class="tab-title">Нарезка музыки</span><span class="tab-desc">Кусок песни на звонок или в видео</span><span class="tab-badge">новое</span></button>
 <button class="tab-btn" data-cat="video" data-tab="vcompress" hidden><span class="tab-icon" aria-hidden="true">🗜️</span><span class="tab-title">Сжатие видео</span><span class="tab-desc">Лёгкое видео для отправки</span></button>
 <button class="tab-btn" data-cat="video" data-tab="vtrim" hidden><span class="tab-icon" aria-hidden="true">✂️</span><span class="tab-title">Обрезка видео</span><span class="tab-desc">Оставить нужный отрезок</span></button>
 <button class="tab-btn" data-cat="video" data-tab="vgif" hidden><span class="tab-icon" aria-hidden="true">🎞️</span><span class="tab-title">Видео → GIF</span><span class="tab-desc">Кусок видео в анимацию</span></button>
+<button class="tab-btn" data-cat="video" data-tab="vclip" hidden><span class="tab-icon" aria-hidden="true">📱</span><span class="tab-title">Ролик в клип</span><span class="tab-desc">9:16, музыка и надпись</span><span class="tab-badge">новое</span></button>
 <button class="tab-btn" data-cat="pdf" data-tab="pmerge" hidden><span class="tab-icon" aria-hidden="true">📚</span><span class="tab-title">Объединить PDF</span><span class="tab-desc">Несколько файлов в один</span><span class="tab-badge">новое</span></button>
 <button class="tab-btn" data-cat="pdf" data-tab="ppages" hidden><span class="tab-icon" aria-hidden="true">✂️</span><span class="tab-title">Страницы PDF</span><span class="tab-desc">Вырезать или удалить листы</span><span class="tab-badge">новое</span></button>
 <button class="tab-btn" data-cat="text" data-tab="tcount" hidden><span class="tab-icon" aria-hidden="true">🔢</span><span class="tab-title">Счётчик знаков</span><span class="tab-desc">Влезет ли пост в Telegram и ВК</span><span class="tab-badge">новое</span></button>
@@ -1010,6 +1029,63 @@ ym(112807526, "init", {ssr:true, webvisor:true, clickmap:true, referrer: documen
 </div>
 </section>
 
+<!-- ================= НАРЕЗКА МУЗЫКИ (категория «Аудио») ================= -->
+<section class="panel" id="panel-acut">
+<div class="card audio-card">
+<h2>Нарезка музыки</h2>
+<p class="hint">Вырезает нужный кусок из песни или записи — например, на звонок телефона, в видео или для поздравления. Можно сделать плавное начало и конец, чтобы звук не обрывался.</p>
+<label class="dropzone" id="acut-dropzone">
+<div class="dz-icon">✂️</div>
+<span id="acut-dz-text">Нажмите, чтобы выбрать песню или запись</span>
+<input type="file" accept="audio/*,video/*,.mp3,.m4a,.aac,.wav,.flac,.ogg,.oga,.opus,.amr,.wma,.mp4,.mov,.webm" id="acut-file">
+</label>
+<button class="btn small" id="acut-sample" type="button" style="margin-top:10px;width:100%">🎵 Попробовать на примере</button>
+<div id="acut-times" hidden>
+<div class="v-info" id="acut-duration"></div>
+<audio id="acut-preview" controls preload="metadata" hidden></audio>
+<div class="field">
+<label for="acut-start">Начало (мм:сс или секунды)</label>
+<div class="time-row">
+<input type="text" id="acut-start" inputmode="decimal" placeholder="0:00" autocomplete="off">
+<button class="btn small" type="button" id="acut-start-now" hidden>⏱ Сейчас</button>
+</div>
+<input type="range" id="acut-start-range" min="0" max="1" step="0.1" value="0">
+</div>
+<div class="field">
+<label for="acut-end">Конец (мм:сс или секунды)</label>
+<div class="time-row">
+<input type="text" id="acut-end" inputmode="decimal" placeholder="0:30" autocomplete="off">
+<button class="btn small" type="button" id="acut-end-now" hidden>⏱ Сейчас</button>
+</div>
+<input type="range" id="acut-end-range" min="0" max="1" step="0.1" value="1">
+</div>
+<p class="hint" id="acut-length"></p>
+<p class="hint">Совет: включите песню, дождитесь нужного места и нажмите «⏱ Сейчас».</p>
+</div>
+
+<div class="field">
+<label class="check-row"><input type="checkbox" id="acut-fadein" checked> Плавное начало (2 секунды)</label>
+<label class="check-row"><input type="checkbox" id="acut-fadeout" checked> Плавный конец (3 секунды)</label>
+</div>
+
+<div class="field">
+<label for="acut-quality">Качество</label>
+<select id="acut-quality">
+<option value="128">Обычное — файл поменьше</option>
+<option value="192" selected>Хорошее — для музыки</option>
+<option value="320">Максимальное — файл больше</option>
+</select>
+</div>
+
+<button class="btn primary" id="acut-process" disabled>Вырезать кусок</button>
+<p class="level-hint" id="acut-first-hint" style="font-size:13px;color:var(--text-muted-alt);margin-top:8px">При первом запуске браузер один раз скачивает модуль обработки (около 30&nbsp;МБ), дальше всё работает быстро.</p>
+<div class="status-msg" id="acut-status"></div>
+
+<button class="btn" id="acut-listen" type="button" style="margin-top:12px" hidden>▶ Послушать результат</button>
+<button class="btn success" id="acut-download" style="margin-top:12px" hidden>Скачать MP3</button>
+</div>
+</section>
+
 <!-- ================= СЖАТИЕ ВИДЕО (категория «Видео») ================= -->
 <section class="panel" id="panel-vcompress">
 <div class="card video-card">
@@ -1132,6 +1208,101 @@ ym(112807526, "init", {ssr:true, webvisor:true, clickmap:true, referrer: documen
 <div class="status-msg" id="vgif-status"></div>
 <img id="vgif-result-img" class="gif-preview" alt="Готовая GIF-анимация" hidden>
 <button class="btn success" id="vgif-download" style="margin-top:12px" hidden>Скачать результат</button>
+</div>
+</section>
+
+<!-- ================= РОЛИК В КЛИП (категория «Видео») ================= -->
+<section class="panel" id="panel-vclip">
+<div class="card video-card">
+<h2>Ролик из нейросети в клип</h2>
+<p class="hint">Готовит ролик для Клипов ВКонтакте, Reels и Shorts: вертикальный кадр 9:16, только нужный кусок, своя музыка или тишина и надпись поверх видео. Подходит и для роликов из Kling, Veo, Pixverse, и для видео с телефона.</p>
+<label class="dropzone" id="vclip-dropzone">
+<div class="dz-icon">📱</div>
+<span id="vclip-dz-text">Нажмите, чтобы выбрать видео</span>
+<input type="file" accept="video/*,.mp4,.mov,.m4v,.webm,.mkv,.avi,.3gp" id="vclip-file">
+</label>
+<div id="vclip-times" hidden>
+<div class="v-info" id="vclip-duration"></div>
+<video id="vclip-preview" controls playsinline preload="metadata" hidden></video>
+<div class="field">
+<label for="vclip-start">Начало (мм:сс или секунды)</label>
+<div class="time-row">
+<input type="text" id="vclip-start" inputmode="decimal" placeholder="0:00" autocomplete="off">
+<button class="btn small" type="button" id="vclip-start-now" hidden>⏱ Сейчас</button>
+</div>
+<input type="range" id="vclip-start-range" min="0" max="1" step="0.1" value="0">
+</div>
+<div class="field">
+<label for="vclip-end">Конец (мм:сс или секунды)</label>
+<div class="time-row">
+<input type="text" id="vclip-end" inputmode="decimal" placeholder="0:10" autocomplete="off">
+<button class="btn small" type="button" id="vclip-end-now" hidden>⏱ Сейчас</button>
+</div>
+<input type="range" id="vclip-end-range" min="0" max="1" step="0.1" value="1">
+</div>
+<p class="hint" id="vclip-length"></p>
+</div>
+
+<div class="field">
+<label for="vclip-format">Формат</label>
+<select id="vclip-format">
+<option value="v916" selected>9:16 — Клипы ВК, Reels, Shorts</option>
+<option value="sq">1:1 — квадрат для ленты</option>
+<option value="orig">Как в оригинале</option>
+</select>
+</div>
+<div class="field" id="vclip-fit-field">
+<label for="vclip-fit">Как вписать кадр</label>
+<select id="vclip-fit">
+<option value="blur" selected>Целиком + размытый фон</option>
+<option value="crop">На весь экран (края обрежутся)</option>
+</select>
+</div>
+
+<div class="field">
+<label for="vclip-sound">Звук</label>
+<select id="vclip-sound">
+<option value="keep" selected>Оставить как есть</option>
+<option value="mute">Убрать звук</option>
+<option value="music">Заменить своей музыкой</option>
+</select>
+<div id="vclip-music-box" hidden>
+<label class="dropzone small" id="vclip-music-dropzone">
+<span id="vclip-music-dz-text">🎵 Нажмите, чтобы выбрать музыку (MP3, M4A, WAV…)</span>
+<input type="file" accept="audio/*,.mp3,.m4a,.aac,.wav,.ogg,.opus,.flac" id="vclip-music-file">
+</label>
+<button class="btn small" id="vclip-music-sample" type="button" style="margin-top:10px;width:100%">Взять музыку-пример</button>
+<p class="level-hint">Если музыка короче ролика, она начнётся сначала. В конце звук плавно затихает. Нужный кусок песни можно заранее вырезать в «Аудио» → «Нарезка музыки».</p>
+</div>
+</div>
+
+<div class="field">
+<label for="vclip-text">Надпись на видео (можно оставить пустой)</label>
+<textarea id="vclip-text" maxlength="120" placeholder="Например: Нейросеть сняла это за минуту"></textarea>
+</div>
+<div class="two-cols" id="vclip-text-opts" hidden>
+<div class="field">
+<label for="vclip-text-pos">Где</label>
+<select id="vclip-text-pos">
+<option value="top">Сверху</option>
+<option value="center">По центру</option>
+<option value="bottom" selected>Снизу</option>
+</select>
+</div>
+<div class="field">
+<label for="vclip-text-size">Размер</label>
+<select id="vclip-text-size">
+<option value="normal" selected>Обычный</option>
+<option value="big">Крупный</option>
+</select>
+</div>
+</div>
+
+<button class="btn primary" id="vclip-process" disabled>Сделать клип</button>
+<p class="level-hint">Обработка идёт в браузере и на телефоне может занять пару минут. Не закрывайте вкладку.</p>
+<div class="status-msg" id="vclip-status"></div>
+<video id="vclip-result-video" controls playsinline preload="metadata" hidden></video>
+<button class="btn success" id="vclip-download" style="margin-top:12px" hidden>Скачать клип</button>
 </div>
 </section>
 
@@ -3812,6 +3983,7 @@ var queue = Promise.resolve();
 var logLines = [];
 var progressHandler = null;
 var lastOutTime = 0;
+var lastProbeSize = null; // размер кадра из последнего probeDuration: { width, height }
 
 function parseDurationFromLog() {
 for (var i = 0; i < logLines.length; i++) {
@@ -3928,16 +4100,19 @@ return '';
 }
 
 // Выполняет команду ffmpeg над файлом: кладёт его в память модуля, запускает, забирает результат.
+// file может быть и списком файлов: первый в команде — {in}, следующие — {in1}, {in2}…
 // expectedSec — ожидаемая длительность результата, по ней считается процент готовности.
 // checkOutput — после обработки открыть результат и узнать его настоящую длительность (outputDuration)
 function process(file, args, outName, expectedSec, onStatus, busyText, checkOutput) {
+var files = Array.isArray(file) ? file : [file];
 return run(function() {
 return ensure(onStatus).then(function(ff) {
-var inName = 'input' + extOf(file.name, 'mp4');
-onStatus('Читаю файл…');
-return readFileBytes(file).then(function(bytes) {
-return ff.writeFile(inName, bytes);
-}).then(function() {
+var names = files.map(function(f, i) { return 'input' + (i || '') + extOf(f.name, i ? 'bin' : 'mp4'); });
+var inName = names[0];
+onStatus(files.length > 1 ? 'Читаю файлы…' : 'Читаю файл…');
+return names.reduce(function(p, name, i) {
+return p.then(function() { return readFileBytes(files[i]); }).then(function(bytes) { return ff.writeFile(name, bytes); });
+}, Promise.resolve()).then(function() {
 logLines = [];
 onStatus(busyText + '…');
 progressHandler = function(e) {
@@ -3947,7 +4122,10 @@ if (expectedSec > 0 && sec > 0) pct = sec / expectedSec;
 else if (e.progress > 0 && e.progress <= 1) pct = e.progress; // ffmpeg сам знает длительность входа
 if (pct >= 0) onStatus(busyText + '… ' + Math.min(99, Math.round(pct * 100)) + '%');
 };
-return ff.exec(['-hide_banner', '-nostdin', '-y'].concat(args.map(function(a) { return a === '{in}' ? inName : a; }), [outName]));
+return ff.exec(['-hide_banner', '-nostdin', '-y'].concat(args.map(function(a) {
+var m = /^\{in(\d*)\}$/.exec(a);
+return m ? names[+(m[1] || 0)] : a;
+}), [outName]));
 }).then(function(code) {
 progressHandler = null;
 lastOutTime = 0;
@@ -3962,10 +4140,10 @@ lastOutTime = parseDurationFromLog();
 return ff.readFile(outName);
 });
 }).then(function(data) {
-return cleanup(ff, [inName, outName]).then(function() { return data; });
+return cleanup(ff, names.concat(outName)).then(function() { return data; });
 }, function(err) {
 progressHandler = null;
-return cleanup(ff, [inName, outName]).then(function() { throw err; });
+return cleanup(ff, names.concat(outName)).then(function() { throw err; });
 });
 }).catch(function(err) {
 // «Aborted» / нехватка памяти — модуль больше не годен, пересоздадим его в следующий раз
@@ -3997,6 +4175,11 @@ logLines = [];
 return ff.exec(['-hide_banner', '-i', inName]);
 }).then(function() {
 var d = parseDurationFromLog();
+lastProbeSize = null;
+for (var i = 0; i < logLines.length; i++) {
+var m = /Video:.*?(\d{2,5})x(\d{2,5})/.exec(logLines[i]);
+if (m) { lastProbeSize = { width: +m[1], height: +m[2] }; break; }
+}
 return cleanup(ff, [inName]).then(function() {
 if (!d) throw new Error('не удалось определить длительность видео');
 return d;
@@ -4022,7 +4205,7 @@ return '.' + (m ? m[1].toLowerCase() : fallback);
 }
 
 return { ensure: ensure, process: process, probeDuration: probeDuration, extOf: extOf,
-outputDuration: function() { return lastOutTime; } };
+outputDuration: function() { return lastOutTime; }, probedSize: function() { return lastProbeSize; } };
 })();
 
 // ---- Общие мелочи видео-инструментов ----
@@ -4059,6 +4242,13 @@ for (var i = 0; i < parts.length; i++) sec = sec * 60 + parseFloat(parts[i]);
 return sec;
 }
 
+// Видео или любой звук (голосовые, песни) — для инструментов, которые достают из файла аудио
+function isAudioOrVideoFile(f) {
+var type = (f.type || '').toLowerCase();
+if (type.indexOf('video/') === 0 || type.indexOf('audio/') === 0) return true;
+return /\.(mp4|mov|m4v|webm|mkv|avi|3gp|mpeg|mpg|wmv|flv|ts|ogg|oga|opus|m4a|aac|wav|flac|amr|wma|mp3|mp2|aiff?|caf)$/i.test(f.name || '');
+}
+
 // Длительность: сначала пробуем сам браузер (мгновенно), если он не знает формат — через ffmpeg
 function getVideoDuration(file, previewEl, onStatus) {
 return new Promise(function(resolve) {
@@ -4082,13 +4272,14 @@ previewEl.src = url;
 }).then(function(d) {
 if (d) {
 previewEl.hidden = false;
-return { duration: d, playable: true };
+return { duration: d, playable: true, width: previewEl.videoWidth || 0, height: previewEl.videoHeight || 0 };
 }
 previewEl.hidden = true;
 previewEl.removeAttribute('src');
 previewEl.load();
 return VideoKit.probeDuration(file, onStatus).then(function(d2) {
-return { duration: d2, playable: false };
+var size = VideoKit.probedSize() || {};
+return { duration: d2, playable: false, width: size.width || 0, height: size.height || 0 };
 });
 });
 }
@@ -4236,7 +4427,7 @@ r.duration = d;
 el.max = d.toFixed(1);
 el.step = d > 600 ? 1 : 0.1;
 });
-r.durationEl.innerHTML = 'Длительность видео: <b>' + fmtTime(d) + '</b>';
+r.durationEl.innerHTML = (opts.durationLabel || 'Длительность видео') + ': <b>' + fmtTime(d) + '</b>';
 r.startNow.hidden = r.endNow.hidden = !playable;
 r.box.hidden = false;
 };
@@ -4480,6 +4671,379 @@ t.setStatus('Готово! GIF ' + fmtSec(dur) + ' с, ' + fmtVideoSize(blob.siz
 });
 })();
 
+// ===================== РОЛИК В КЛИП: 9:16, нужный кусок, звук и надпись (категория «Видео») =====================
+// Всё одной командой ffmpeg: обрезка по времени, кадр под формат (целиком с размытым фоном или
+// на весь экран с обрезкой краёв), звук (оставить / убрать / своя музыка по кругу с затуханием)
+// и надпись. Надпись рисуется в браузере на картинке (canvas) шрифтом сайта и накладывается
+// на видео — так работают русские буквы и эмодзи без отдельных шрифтов для ffmpeg.
+(function() {
+var t = makeVideoTool('vclip');
+var formatSel = document.getElementById('vclip-format');
+var fitField = document.getElementById('vclip-fit-field');
+var fitSel = document.getElementById('vclip-fit');
+var soundSel = document.getElementById('vclip-sound');
+var musicBox = document.getElementById('vclip-music-box');
+var musicInput = document.getElementById('vclip-music-file');
+var musicDz = document.getElementById('vclip-music-dropzone');
+var musicDzText = document.getElementById('vclip-music-dz-text');
+var musicSample = document.getElementById('vclip-music-sample');
+var textIn = document.getElementById('vclip-text');
+var textOpts = document.getElementById('vclip-text-opts');
+var posSel = document.getElementById('vclip-text-pos');
+var sizeSel = document.getElementById('vclip-text-size');
+var range = makeTimeRange('vclip', { onChange: changed });
+var ready = false;
+var music = null;
+var srcSize = null; // размер кадра исходного видео
+// Размер кадра на выходе: 720 px по короткой стороне — чётко на телефоне и посильно браузеру
+var SIZES = { v916: [720, 1280], sq: [720, 720] };
+t.controls = [formatSel, fitSel, soundSel, musicInput, musicSample, textIn, posSel, sizeSel].concat(range.inputs);
+t.canProcess = function() { return !!t.file && ready && !range.validate() && (soundSel.value !== 'music' || !!music); };
+function changed() { t.onChange(); if (!t.busy) t.processBtn.disabled = !t.canProcess(); }
+
+formatSel.addEventListener('change', function() { fitField.hidden = formatSel.value === 'orig'; changed(); });
+fitSel.addEventListener('change', changed);
+soundSel.addEventListener('change', function() { musicBox.hidden = soundSel.value !== 'music'; changed(); });
+textIn.addEventListener('input', function() { textOpts.hidden = !textIn.value.trim(); changed(); });
+posSel.addEventListener('change', changed);
+sizeSel.addEventListener('change', changed);
+
+function setMusic(f) {
+music = f;
+musicDz.classList.add('has-file');
+musicDzText.textContent = '🎵 ' + f.name + ' — нажмите, чтобы выбрать другую';
+changed();
+}
+musicInput.addEventListener('change', function() {
+var f = musicInput.files && musicInput.files[0];
+if (!f) return;
+if (!isAudioOrVideoFile(f)) {
+t.setStatus('Это не музыка. Выберите аудиофайл (MP3, M4A, WAV…).', 'err');
+musicInput.value = '';
+return;
+}
+setMusic(f);
+});
+// Пример: 25-секундный фрагмент трека «Explosive Start» (музыка автора сайта, сделана в Suno)
+musicSample.addEventListener('click', function() {
+if (t.busy) return;
+musicSample.disabled = true;
+fetch('audio/primer.mp3').then(function(res) {
+if (!res.ok) throw new Error('HTTP ' + res.status);
+return res.blob();
+}).then(function(blob) {
+musicInput.value = '';
+setMusic(new File([blob], 'explosive-start-primer.mp3', { type: 'audio/mpeg' }));
+}).catch(function() {
+t.setStatus('Не удалось загрузить пример музыки. Проверьте интернет и попробуйте ещё раз.', 'err');
+}).then(function() { musicSample.disabled = t.busy; });
+});
+
+t.init(function(file) {
+ready = false;
+srcSize = null;
+range.hide();
+if (!file) return;
+t.setBusy(true);
+getVideoDuration(file, range.preview, function(s) { t.setStatus(s); }).then(function(info) {
+if (t.file !== file) return;
+range.setDuration(info.duration, info.playable);
+range.set(0, info.duration);
+srcSize = info.width && info.height ? info : null;
+ready = true;
+t.setStatus(info.playable ? '' : 'Браузер не умеет показывать этот формат, но клип из него сделать можно — укажите время вручную.');
+}).catch(function(err) {
+t.setStatus('Не удалось открыть видео: ' + ((err && err.message) || 'файл повреждён') + '.', 'err');
+}).then(function() { t.setBusy(false); });
+});
+
+// «Как в оригинале»: та же длинная сторона не больше 1280 px и чётные стороны, что в команде ffmpeg ниже
+function origOutWidth() {
+if (!srcSize) return 0;
+var k = Math.min(1, 1280 / Math.max(srcSize.width, srcSize.height));
+return Math.max(2, Math.floor(srcSize.width * k / 2) * 2);
+}
+
+// Надпись → прозрачная PNG-полоса: белые буквы с тёмной обводкой, по центру, длинный текст
+// переносится по словам. Рисуется на 1000 px и уменьшается до 90% ширины кадра (outW).
+var TEXT_W = 1000;
+function renderTextPng(text, big, outW) {
+var size = big ? 96 : 72;
+var family = 'Montserrat, "Arial Black", Arial, sans-serif';
+var loaded = document.fonts && document.fonts.load ? document.fonts.load('900 ' + size + 'px Montserrat', text).catch(function() {}) : Promise.resolve();
+return loaded.then(function() {
+var c = document.createElement('canvas');
+var ctx = c.getContext('2d');
+var lines, pad;
+// уменьшаем шрифт, пока самое длинное слово не влезет в строку
+for (;;) {
+ctx.font = '900 ' + size + 'px ' + family;
+pad = Math.round(size * 0.4);
+var maxW = TEXT_W - pad * 2;
+var tooWide = false;
+lines = [];
+text.split('\n').forEach(function(par) {
+var line = '';
+par.split(/\s+/).filter(Boolean).forEach(function(w) {
+if (ctx.measureText(w).width > maxW) tooWide = true;
+var test = line ? line + ' ' + w : w;
+if (line && ctx.measureText(test).width > maxW) { lines.push(line); line = w; } else line = test;
+});
+if (line) lines.push(line);
+});
+if (!tooWide || size <= 28) break;
+size = Math.round(size * 0.85);
+}
+var lh = Math.round(size * 1.2);
+c.width = TEXT_W;
+c.height = lines.length * lh + pad * 2;
+ctx.font = '900 ' + size + 'px ' + family;
+ctx.textAlign = 'center';
+ctx.textBaseline = 'middle';
+ctx.lineJoin = 'round';
+ctx.lineWidth = Math.max(4, Math.round(size * 0.16));
+ctx.strokeStyle = 'rgba(0, 0, 0, 0.85)';
+ctx.fillStyle = '#ffffff';
+lines.forEach(function(l, i) {
+var y = pad + lh * i + lh / 2;
+ctx.strokeText(l, TEXT_W / 2, y);
+ctx.fillText(l, TEXT_W / 2, y);
+});
+var out = document.createElement('canvas');
+out.width = Math.round(outW * 0.9);
+out.height = Math.max(2, Math.round(c.height * out.width / TEXT_W));
+var octx = out.getContext('2d');
+octx.imageSmoothingQuality = 'high';
+octx.drawImage(c, 0, 0, out.width, out.height);
+return new Promise(function(resolve, reject) {
+out.toBlob(function(b) { b ? resolve(new File([b], 'text.png', { type: 'image/png' })) : reject(new Error('не удалось нарисовать надпись')); }, 'image/png');
+});
+});
+}
+
+t.processBtn.addEventListener('click', function() {
+if (!t.canProcess() || t.busy) return;
+var v = range.get();
+var dur = v.end - v.start;
+var size = SIZES[formatSel.value];
+var sound = soundSel.value;
+var text = textIn.value.trim();
+t.setBusy(true);
+t.resetResult();
+var outW = size ? size[0] : origOutWidth();
+// Размер кадра не узнали (редкий формат) — надпись рисуем под ширину вертикального клипа
+(text ? renderTextPng(text, sizeSel.value === 'big', outW || 720) : Promise.resolve(null)).then(function(textPng) {
+var files = [t.file];
+var args = ['-ss', String(v.start), '-t', String(dur), '-i', '{in}'];
+var musicIdx = -1, textIdx = -1;
+if (sound === 'music') {
+musicIdx = files.length;
+files.push(music);
+args.push('-stream_loop', '-1', '-i', '{in' + musicIdx + '}');
+}
+if (textPng) {
+textIdx = files.length;
+files.push(textPng);
+args.push('-loop', '1', '-i', '{in' + textIdx + '}');
+}
+var g = [];
+if (size) {
+var W = size[0], H = size[1];
+var fill = 'scale=' + W + ':' + H + ':force_original_aspect_ratio=increase,crop=' + W + ':' + H;
+if (fitSel.value === 'crop') {
+g.push('[0:v]' + fill + ',setsar=1[v0]');
+} else {
+g.push('[0:v]split[a][b]');
+g.push('[a]' + fill + ',boxblur=20:2[bg]');
+g.push('[b]scale=' + W + ':' + H + ':force_original_aspect_ratio=decrease:force_divisible_by=2[fg]');
+g.push('[bg][fg]overlay=(W-w)/2:(H-h)/2,setsar=1[v0]');
+}
+} else {
+g.push("[0:v]scale='if(gte(iw,ih),min(iw,1280),-2)':'if(gte(iw,ih),-2,min(ih,1280))',scale=trunc(iw/2)*2:trunc(ih/2)*2,setsar=1[v0]");
+}
+var vOut = '[v0]';
+if (textPng) {
+var y = posSel.value === 'top' ? 'H*0.08' : posSel.value === 'center' ? '(H-h)/2' : 'H-h-H*0.1';
+g.push('[v0][' + textIdx + ':v]overlay=x=(W-w)/2:y=' + y + ':shortest=1[v2]');
+vOut = '[v2]';
+}
+var aMap = null;
+if (sound === 'music') {
+var fade = Math.min(2, dur / 3);
+g.push('[' + musicIdx + ':a]afade=t=out:st=' + (dur - fade).toFixed(2) + ':d=' + fade.toFixed(2) + '[aout]');
+aMap = '[aout]';
+} else if (sound === 'keep') {
+aMap = '0:a:0?';
+}
+args.push('-filter_complex', g.join(';'), '-map', vOut);
+if (aMap) args.push('-map', aMap, '-c:a', 'aac', '-b:a', '128k');
+else args.push('-an');
+args.push('-t', String(dur), '-c:v', 'libx264', '-preset', 'veryfast', '-crf', '23', '-pix_fmt', 'yuv420p', '-movflags', '+faststart');
+return VideoKit.process(files, args, 'out.mp4', dur, function(s) { t.setStatus(s); }, 'Делаю клип');
+}).then(function(data) {
+if (!data || data.length < 1024) throw new Error('получился пустой файл');
+var blob = new Blob([data], { type: 'video/mp4' });
+t.showResult(blob, t.baseName() + '-klip.mp4');
+t.setStatus('Готово! Клип ' + fmtTime(dur) + ', ' + fmtVideoSize(blob.size) + '. Посмотрите результат и скачайте.');
+}).catch(t.fail).then(function() { t.setBusy(false); });
+});
+})();
+
+// ===================== НАРЕЗКА МУЗЫКИ (категория «Аудио») =====================
+// Вырезает кусок песни или записи в MP3, по желанию с плавным началом и концом.
+// Поля времени — общие с обрезкой видео (makeTimeRange), обработка — через общий ffmpeg (VideoKit).
+(function() {
+var fileInput = document.getElementById('acut-file');
+var dropzone = document.getElementById('acut-dropzone');
+var dzText = document.getElementById('acut-dz-text');
+var sampleBtn = document.getElementById('acut-sample');
+var fadeIn = document.getElementById('acut-fadein');
+var fadeOut = document.getElementById('acut-fadeout');
+var qualitySel = document.getElementById('acut-quality');
+var processBtn = document.getElementById('acut-process');
+var statusEl = document.getElementById('acut-status');
+var listenBtn = document.getElementById('acut-listen');
+var downloadBtn = document.getElementById('acut-download');
+var firstHint = document.getElementById('acut-first-hint');
+var range = makeTimeRange('acut', { durationLabel: 'Длительность записи', onChange: onChange });
+var player = new Audio();
+var file = null, ready = false, busy = false, resultBlob = null, resultName = '', resultUrl = null;
+
+function setStatus(text, kind) {
+statusEl.textContent = text;
+statusEl.className = 'status-msg' + (kind ? ' ' + kind : '');
+}
+function stopPlayer() { player.pause(); listenBtn.textContent = '▶ Послушать результат'; }
+function resetResult() {
+resultBlob = null;
+stopPlayer();
+listenBtn.hidden = true;
+downloadBtn.hidden = true;
+if (resultUrl) { URL.revokeObjectURL(resultUrl); resultUrl = null; }
+player.removeAttribute('src');
+}
+function canProcess() { return !!file && ready && !range.validate(); }
+function updateBtn() { if (!busy) processBtn.disabled = !canProcess(); }
+function onChange() {
+if (resultBlob && !busy) {
+resetResult();
+setStatus('Настройки изменены — нажмите «Вырезать кусок» ещё раз.', 'warn');
+}
+updateBtn();
+}
+function setBusy(v) {
+busy = v;
+[fileInput, sampleBtn, fadeIn, fadeOut, qualitySel].concat(range.inputs).forEach(function(el) { el.disabled = v; });
+processBtn.disabled = v || !canProcess();
+}
+[fadeIn, fadeOut, qualitySel].forEach(function(el) { el.addEventListener('change', onChange); });
+
+function selectFile(f) {
+resetResult();
+ready = false;
+range.hide();
+if (!isAudioOrVideoFile(f)) {
+file = null;
+processBtn.disabled = true;
+dropzone.classList.remove('has-file');
+dzText.textContent = 'Нажмите, чтобы выбрать песню или запись';
+setStatus('Это не музыка и не видео. Выберите MP3, M4A, WAV или видео со звуком.', 'err');
+fileInput.value = '';
+return;
+}
+file = f;
+dropzone.classList.add('has-file');
+dzText.textContent = f.name + ' (' + fmtVideoSize(f.size) + ') — нажмите, чтобы выбрать другой';
+setBusy(true);
+getVideoDuration(f, range.preview, function(s) { setStatus(s.replace('Готовим инструмент для видео', 'Готовим инструмент для звука')); }).then(function(info) {
+if (file !== f) return;
+range.setDuration(info.duration, info.playable);
+range.set(0, Math.min(30, info.duration));
+ready = true;
+setStatus(info.playable ? '' : 'Браузер не умеет проигрывать этот формат, но вырезать кусок можно — укажите время вручную.');
+}).catch(function(err) {
+setStatus('Не удалось открыть файл: ' + ((err && err.message) || 'файл повреждён') + '.', 'err');
+}).then(function() { setBusy(false); });
+}
+
+fileInput.addEventListener('change', function() {
+var f = fileInput.files && fileInput.files[0];
+if (f) selectFile(f);
+});
+
+// Пример для пробы: 25-секундный фрагмент трека «Explosive Start» (музыка автора сайта, сделана в Suno)
+sampleBtn.addEventListener('click', function() {
+if (busy) return;
+sampleBtn.disabled = true;
+setStatus('Загружаю пример…');
+fetch('audio/primer.mp3').then(function(res) {
+if (!res.ok) throw new Error('HTTP ' + res.status);
+return res.blob();
+}).then(function(blob) {
+fileInput.value = '';
+selectFile(new File([blob], 'explosive-start-primer.mp3', { type: 'audio/mpeg' }));
+}).catch(function() {
+setStatus('Не удалось загрузить пример. Проверьте интернет и попробуйте ещё раз.', 'err');
+sampleBtn.disabled = false;
+});
+});
+
+processBtn.addEventListener('click', function() {
+if (!canProcess() || busy) return;
+var v = range.get();
+var dur = v.end - v.start;
+var af = [];
+var fi = fadeIn.checked ? Math.min(2, dur / 3) : 0;
+var fo = fadeOut.checked ? Math.min(3, dur / 3) : 0;
+if (fi) af.push('afade=t=in:st=0:d=' + fi.toFixed(2));
+if (fo) af.push('afade=t=out:st=' + (dur - fo).toFixed(2) + ':d=' + fo.toFixed(2));
+var args = ['-ss', String(v.start), '-t', String(dur), '-i', '{in}', '-vn', '-map', '0:a:0'];
+if (af.length) args.push('-af', af.join(','));
+args.push('-c:a', 'libmp3lame', '-b:a', qualitySel.value + 'k');
+var src = file;
+range.preview.pause();
+setBusy(true);
+resetResult();
+VideoKit.process(src, args, 'out.mp3', dur, function(s) { setStatus(s.replace('Готовим инструмент для видео', 'Готовим инструмент для звука')); },
+'Вырезаю кусок').then(function(data) {
+resultBlob = new Blob([data], { type: 'audio/mpeg' });
+resultName = (src.name || 'audio').replace(/\.[^.]+$/, '') + '-kusok.mp3';
+resultUrl = URL.createObjectURL(resultBlob);
+player.src = resultUrl;
+listenBtn.hidden = false;
+downloadBtn.hidden = false;
+firstHint.hidden = true;
+setStatus('Готово! Кусок ' + fmtTime(v.start) + ' – ' + fmtTime(v.end) + ', ' + fmtVideoSize(resultBlob.size) + '. Послушайте и скачайте.');
+}).catch(function(err) {
+var msg = (err && err.message) || '';
+if (/does not contain|matches no streams|Stream map|код 1\)/i.test(msg)) msg = 'в файле нет звука или он повреждён';
+setStatus('Не удалось вырезать кусок: ' + (msg || 'файл повреждён или формат не поддерживается') + '.', 'err');
+}).then(function() { setBusy(false); });
+});
+
+listenBtn.addEventListener('click', function() {
+if (!resultBlob) return;
+if (!player.paused) { stopPlayer(); return; }
+range.preview.pause();
+var p = player.play();
+listenBtn.textContent = '⏸ Пауза';
+if (p && p.catch) p.catch(function() {
+stopPlayer();
+setStatus('Браузер не смог воспроизвести файл, но его можно скачать и послушать в плеере.', 'warn');
+});
+});
+player.addEventListener('ended', function() { listenBtn.textContent = '▶ Послушать ещё раз'; });
+document.querySelectorAll('.tab-btn, .cat-btn').forEach(function(b) {
+b.addEventListener('click', function() { stopPlayer(); range.preview.pause(); });
+});
+
+downloadBtn.addEventListener('click', function() {
+if (!resultBlob) return;
+downloadBlob(resultBlob, resultName);
+setStatus('Готово! Файл сохранён в папку «Загрузки».');
+});
+})();
+
 // ===================== В MP3: звук из видео и голосовые (категория «Аудио») =====================
 // Работает через тот же общий ffmpeg, что и видео-инструменты (VideoKit): он понимает почти
 // любой формат — MP4/MOV/WEBM, голосовые Telegram и WhatsApp (OGG/Opus), M4A, AMR, WAV и другие.
@@ -4515,17 +5079,12 @@ fileInput.disabled = v;
 qualitySel.disabled = v;
 processBtn.disabled = v || !file;
 }
-function isMediaFile(f) {
-var type = (f.type || '').toLowerCase();
-if (type.indexOf('video/') === 0 || type.indexOf('audio/') === 0) return true;
-return /\.(mp4|mov|m4v|webm|mkv|avi|3gp|mpeg|mpg|wmv|flv|ts|ogg|oga|opus|m4a|aac|wav|flac|amr|wma|mp3|mp2|aiff?|caf)$/i.test(f.name || '');
-}
 
 fileInput.addEventListener('change', function() {
 var f = fileInput.files && fileInput.files[0];
 if (!f) return;
 resetResult();
-if (!isMediaFile(f)) {
+if (!isAudioOrVideoFile(f)) {
 file = null;
 processBtn.disabled = true;
 dropzone.classList.remove('has-file');
