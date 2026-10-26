@@ -76,6 +76,16 @@ article {
     margin-bottom: 8px
 }
 
+.article-author {
+    font-size: 13px;
+    color: var(--text-muted-alt);
+    margin: -4px 0 8px
+}
+
+.article-author a {
+    color: inherit
+}
+
 h1 {
     font-size: 22px;
     font-weight: 700;

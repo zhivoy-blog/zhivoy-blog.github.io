@@ -112,23 +112,39 @@
     const get = (name) => attrs.find((a) => a[0] === name);
     const set = (name, value) => { const a = get(name); if (a) a[1] = value; else attrs.push([name, value]); };
     VIDEO_FLAGS.forEach((name) => set(name, ''));
-    set('preload', 'auto');
+    // Видео не качаем заранее: на телефоне это мегабайты трафика, даже если ролик не смотрят.
+    // С картинкой-заставкой (poster) грузим ролик только по нажатию, без неё — только первый кадр.
+    set('preload', get('poster') ? 'none' : 'metadata');
     const style = ((get('style') || [])[1] || '').trim();
     set('style', (style && !style.endsWith(';') ? style + ';' : style) + (style ? ' ' : '') + 'width: 100%; max-width: 100%;');
     return '<video' + attrs.map(([n, v]) => (v === null || v === '' && VIDEO_FLAGS.includes(n) ? ' ' + n : ' ' + n + '="' + v.replace(/"/g, '&quot;') + '"')).join('') + (selfClose ? ' />' : '>');
   }
+  /* Картинки ниже первой грузятся, только когда до них долистали. */
+  function lazyImages(html) {
+    let n = 0;
+    return html.replace(/<img\b[^>]*>/gi, (tag) => {
+      n++;
+      if (n === 1 || /\sloading=/i.test(tag)) return tag;
+      return tag.replace(/^<img/i, '<img loading="lazy" decoding="async"');
+    });
+  }
+  /* Подпись автора под датой: поисковики больше доверяют статьям с настоящим автором. */
+  const ARTICLE_AUTHOR_HTML = '<p class="article-author">Автор: <a href="../../about.html" rel="author">Вадим</a></p>';
   function renderArticleContent(content) {
-    let html = String(content || '').replace(/<video\b[^>]*>/gi, prepareVideoTag);
+    let html = lazyImages(String(content || '').replace(/<video\b[^>]*>/gi, prepareVideoTag));
     const firstP = html.search(/<p[\s>]/i);
     if (firstP >= 0) {
       const close = html.indexOf('</p>', firstP);
       if (close >= 0) html = html.slice(0, close + 4) + ARTICLE_CTA_HTML + html.slice(close + 4);
     }
+    if (/<\/time>/i.test(html)) html = html.replace(/<\/time>/i, '</time>' + ARTICLE_AUTHOR_HTML);
+    else html = ARTICLE_AUTHOR_HTML + html;
     return html;
   }
-  /* Разметка для поисковиков: статья, её дата и обложка. Автор и издатель — «Живой ИИ». */
+  /* Разметка для поисковиков: статья, её дата и обложка. Автор — Вадим, издатель — «Живой ИИ». */
   function buildArticleJsonLd({ title, excerpt, date, canonicalUrl, ogImage }) {
     const org = { '@type': 'Organization', name: 'Живой ИИ', url: 'https://zhivoy-ai.ru/' };
+    const author = { '@type': 'Person', name: 'Вадим', url: 'https://zhivoy-ai.ru/about.html' };
     const data = {
       '@context': 'https://schema.org',
       '@type': 'Article',
@@ -136,7 +152,7 @@
       description: String(excerpt || '').trim(),
       datePublished: date,
       image: [ogImage],
-      author: org,
+      author,
       publisher: org,
       mainEntityOfPage: canonicalUrl,
     };
