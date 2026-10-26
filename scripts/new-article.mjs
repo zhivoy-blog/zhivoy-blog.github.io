@@ -1,5 +1,6 @@
 #!/usr/bin/env node
-// Доводит новую статью до публикации: страница index.html, запись в manifest.json и sitemap.xml.
+// Доводит новую статью до публикации: блок «Ещё по теме» (если его нет), страница index.html,
+// запись в manifest.json и sitemap.xml, карточка в ленте главной (index.html).
 //
 //   node scripts/new-article.mjs <slug> [<slug> ...]   — подготовить статьи
 //   node scripts/new-article.mjs <slug> --force        — перезаписать уже существующий index.html
@@ -11,8 +12,8 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import {
-  ROOT, TAGS, REQUIRED_FIELDS, loadArticlePageBuilder, readJson, writeJson,
-  articleDir, localMediaSrcs, pickOgImage, readSitemap, articleUrl,
+  ROOT, TAGS, REQUIRED_FIELDS, loadArticlePageParts, readJson, writeJson,
+  articleDir, localMediaSrcs, pickOgImage, readSitemap,
 } from './lib/site.mjs';
 
 const args = process.argv.slice(2);
@@ -23,7 +24,7 @@ if (!slugs.length) {
   process.exit(1);
 }
 
-const buildArticlePageHtml = loadArticlePageBuilder();
+const { buildArticlePageHtml, replaceHomeFeed, buildRelatedHtml, addToSitemap } = loadArticlePageParts();
 const manifestPath = path.join(ROOT, 'articles', 'manifest.json');
 const manifest = readJson(manifestPath);
 let sitemap = readSitemap();
@@ -63,6 +64,15 @@ for (const slug of slugs) {
   const ogImageFile = pickOgImage(slug, data.content);
   const done = [];
 
+  if (!data.content.includes('<h2>Ещё по теме</h2>')) {
+    const related = buildRelatedHtml(manifest, slug, data.tag);
+    if (related) {
+      data.content = data.content.replace(/\s*$/, '') + related;
+      writeJson(path.join(dir, 'data.json'), data);
+      done.push('в data.json добавлен блок «Ещё по теме»');
+    }
+  }
+
   const pagePath = path.join(dir, 'index.html');
   if (fs.existsSync(pagePath) && !force) {
     done.push('index.html уже был — не трогал (перезаписать: --force)');
@@ -85,20 +95,25 @@ for (const slug of slugs) {
     done.push('добавлена в manifest.json');
   }
 
-  const url = articleUrl(slug);
-  if (sitemap.includes(`<loc>${url}</loc>`)) {
-    done.push('в sitemap.xml уже есть');
-  } else {
-    const block = `<url>\n<loc>${url}</loc>\n<lastmod>${data.date}</lastmod>\n<changefreq>monthly</changefreq>\n<priority>0.7</priority>\n</url>\n\n`;
-    sitemap = sitemap.replace('</urlset>', block + '</urlset>');
-    done.push('добавлена в sitemap.xml');
-  }
+  const nextSitemap = addToSitemap(sitemap, slug, data.date);
+  done.push(nextSitemap === sitemap ? 'в sitemap.xml уже есть' : 'добавлена в sitemap.xml');
+  sitemap = nextSitemap;
 
   console.log(`✓ ${slug} (${data.date}): ${done.join('; ')}`);
 }
 
 writeJson(manifestPath, manifest);
 fs.writeFileSync(path.join(ROOT, 'sitemap.xml'), sitemap);
+
+const homePath = path.join(ROOT, 'index.html');
+const home = replaceHomeFeed(fs.readFileSync(homePath, 'utf8'), manifest);
+if (home === null) {
+  console.error('✗ index.html: не нашёл метки ленты <!-- feed:start … --> — лента на главной не обновлена');
+  failed = true;
+} else {
+  fs.writeFileSync(homePath, home);
+  console.log('✓ лента на главной (index.html) обновлена');
+}
 
 if (failed) {
   console.error('\nЕсть ошибки — исправьте и запустите ещё раз. Остальные статьи обработаны.');

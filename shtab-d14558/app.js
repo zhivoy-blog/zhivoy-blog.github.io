@@ -112,23 +112,39 @@
     const get = (name) => attrs.find((a) => a[0] === name);
     const set = (name, value) => { const a = get(name); if (a) a[1] = value; else attrs.push([name, value]); };
     VIDEO_FLAGS.forEach((name) => set(name, ''));
-    set('preload', 'auto');
+    // Видео не качаем заранее: на телефоне это мегабайты трафика, даже если ролик не смотрят.
+    // С картинкой-заставкой (poster) грузим ролик только по нажатию, без неё — только первый кадр.
+    set('preload', get('poster') ? 'none' : 'metadata');
     const style = ((get('style') || [])[1] || '').trim();
     set('style', (style && !style.endsWith(';') ? style + ';' : style) + (style ? ' ' : '') + 'width: 100%; max-width: 100%;');
     return '<video' + attrs.map(([n, v]) => (v === null || v === '' && VIDEO_FLAGS.includes(n) ? ' ' + n : ' ' + n + '="' + v.replace(/"/g, '&quot;') + '"')).join('') + (selfClose ? ' />' : '>');
   }
+  /* Картинки ниже первой грузятся, только когда до них долистали. */
+  function lazyImages(html) {
+    let n = 0;
+    return html.replace(/<img\b[^>]*>/gi, (tag) => {
+      n++;
+      if (n === 1 || /\sloading=/i.test(tag)) return tag;
+      return tag.replace(/^<img/i, '<img loading="lazy" decoding="async"');
+    });
+  }
+  /* Подпись автора под датой: поисковики больше доверяют статьям с настоящим автором. */
+  const ARTICLE_AUTHOR_HTML = '<p class="article-author">Автор: <a href="../../about.html" rel="author">Вадим</a></p>';
   function renderArticleContent(content) {
-    let html = String(content || '').replace(/<video\b[^>]*>/gi, prepareVideoTag);
+    let html = lazyImages(String(content || '').replace(/<video\b[^>]*>/gi, prepareVideoTag));
     const firstP = html.search(/<p[\s>]/i);
     if (firstP >= 0) {
       const close = html.indexOf('</p>', firstP);
       if (close >= 0) html = html.slice(0, close + 4) + ARTICLE_CTA_HTML + html.slice(close + 4);
     }
+    if (/<\/time>/i.test(html)) html = html.replace(/<\/time>/i, '</time>' + ARTICLE_AUTHOR_HTML);
+    else html = ARTICLE_AUTHOR_HTML + html;
     return html;
   }
-  /* Разметка для поисковиков: статья, её дата и обложка. Автор и издатель — «Живой ИИ». */
+  /* Разметка для поисковиков: статья, её дата и обложка. Автор — Вадим, издатель — «Живой ИИ». */
   function buildArticleJsonLd({ title, excerpt, date, canonicalUrl, ogImage }) {
     const org = { '@type': 'Organization', name: 'Живой ИИ', url: 'https://zhivoy-ai.ru/' };
+    const author = { '@type': 'Person', name: 'Вадим', url: 'https://zhivoy-ai.ru/about.html' };
     const data = {
       '@context': 'https://schema.org',
       '@type': 'Article',
@@ -136,7 +152,7 @@
       description: String(excerpt || '').trim(),
       datePublished: date,
       image: [ogImage],
-      author: org,
+      author,
       publisher: org,
       mainEntityOfPage: canonicalUrl,
     };
@@ -212,6 +228,67 @@ ${renderArticleContent(content)}
 </body>
 </html>
 `;
+  }
+
+  /* ===================== Общие куски сайта: лента на главной, «Ещё по теме», sitemap ===================== */
+  /* Ими пользуются и приложение при переносе статьи, и scripts/new-article.mjs,
+     поэтому после любой из двух публикаций сайт выглядит одинаково. */
+  const RU_MONTHS = ['января', 'февраля', 'марта', 'апреля', 'мая', 'июня',
+    'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря'];
+  function formatArticleDate(dateStr) {
+    const [y, m, d] = String(dateStr).split('-').map(Number);
+    return `${d} ${RU_MONTHS[m - 1]} ${y}`;
+  }
+  // Новые сверху; у статей одного дня — порядок из manifest.json (так же сортирует главная).
+  function sortByDateDesc(manifest) {
+    return manifest.slice().sort((a, b) => (a.date < b.date ? 1 : a.date > b.date ? -1 : 0));
+  }
+
+  /* Лента на главной прямо в HTML: поисковики видят ссылки на все статьи без запуска скриптов.
+     Разметка карточки та же, что строит скрипт главной (createCard в index.html). */
+  const HOME_FEED_START = '<!-- feed:start (собирается из manifest.json скриптом new-article.mjs и приложением «Контроль») -->';
+  const HOME_FEED_END = '<!-- feed:end -->';
+  function buildHomeFeedHtml(manifest) {
+    return sortByDateDesc(manifest).map((a, i) => {
+      const url = `articles/${a.slug}/`;
+      const thumb = a.image
+        ? `<a class="article-thumb" href="${url}" aria-hidden="true" tabindex="-1"><img alt="" loading="lazy" decoding="async" src="${url}${escapeHtmlAttr(a.image)}"></a>`
+        : '';
+      return `<article class="article-card${i === 0 ? ' is-latest' : ''}" data-tag="${escapeHtmlAttr(a.tag)}" data-search="${escapeHtmlAttr((a.title + ' ' + a.excerpt).toLowerCase())}">`
+        + thumb
+        + `<div class="article-row"><span class="article-num" aria-hidden="true">${i + 1}</span><div class="article-body">`
+        + `<time class="article-date" datetime="${a.date}">${formatArticleDate(a.date)}</time>`
+        + `<h2>${escapeHtmlAttr(a.title)}</h2>`
+        + `<p class="article-excerpt">${escapeHtmlAttr(a.excerpt)}</p>`
+        + `<a class="read-more" href="${url}">Читать полностью</a>`
+        + '</div></div></article>';
+    }).join('\n');
+  }
+  // Возвращает index.html с обновлённой лентой или null, если в нём нет меток ленты.
+  function replaceHomeFeed(indexHtml, manifest) {
+    const a = indexHtml.indexOf(HOME_FEED_START);
+    const b = indexHtml.indexOf(HOME_FEED_END, a);
+    if (a < 0 || b < 0) return null;
+    return indexHtml.slice(0, a + HOME_FEED_START.length) + '\n' + buildHomeFeedHtml(manifest) + '\n' + indexHtml.slice(b);
+  }
+
+  /* Блок «Ещё по теме» в конце статьи: 3 самые свежие статьи той же рубрики,
+     если их не хватает — просто самые свежие. */
+  function buildRelatedHtml(manifest, slug, tag) {
+    const others = sortByDateDesc(manifest.filter((a) => a.slug !== slug));
+    const picked = others.filter((a) => a.tag === tag).slice(0, 3);
+    others.forEach((a) => { if (picked.length < 3 && !picked.includes(a)) picked.push(a); });
+    if (!picked.length) return '';
+    return '<h2>Ещё по теме</h2>' + picked.map((a) =>
+      `<p><a href="../${a.slug}/" style="color: var(--accent, #d4a94a);">${escapeHtmlAttr(a.title)}</a></p>`).join('');
+  }
+
+  // Строка статьи для sitemap.xml. Возвращает sitemap как был, если статья там уже есть.
+  function addToSitemap(sitemapXml, slug, date) {
+    const url = `https://zhivoy-ai.ru/articles/${slug}/`;
+    if (sitemapXml.includes(`<loc>${url}</loc>`)) return sitemapXml;
+    const block = `<url>\n<loc>${url}</loc>\n<lastmod>${date}</lastmod>\n<changefreq>monthly</changefreq>\n<priority>0.7</priority>\n</url>\n\n`;
+    return sitemapXml.replace('</urlset>', block + '</urlset>');
   }
 
   const LS_SETTINGS = 'zi_ctrl_settings_v1';
@@ -1385,27 +1462,42 @@ ${renderArticleContent(content)}
         await site.putBinary(`articles/${slug}/image${i + 1}.${extOf(inlineImages[i].name)}`, b64, `Картинка статьи ${slug}`);
       }
 
-      let content = '';
+      const date = todayStr();
+      const manifestRes = await site.getJson('articles/manifest.json');
+      const manifest = (manifestRes ? manifestRes.json : []).filter((a) => a.slug !== slug);
+
+      // Дата и заголовок H1 — в начале статьи, как у статей, перенесённых вручную.
+      let content = `<time datetime="${date}" class="article-date">${formatArticleDate(date)}</time><h1>${escapeHtml(title)}</h1>`;
       if (cover) content += `<img src="cover.${extOf(cover.name)}" alt="${escapeHtmlAttr(coverAlt)}" style="max-width: 100%; border-radius: 12px; margin: 20px 0;">`;
       content += textToArticleHtml(contentText);
       inlineImages.forEach((img, i) => {
         content += `<img src="image${i + 1}.${extOf(img.name)}" alt="${escapeHtmlAttr(img.alt || '')}" style="max-width: 100%; border-radius: 12px; margin: 20px 0;">`;
       });
       content += CTA_HTML;
+      content += buildRelatedHtml(manifest, slug, tag);
 
       const existingData = await site.getJson(`articles/${slug}/data.json`);
-      await site.putJson(`articles/${slug}/data.json`, { title, date: todayStr(), tag, excerpt, content }, `Публикация статьи: ${title}`, existingData ? existingData.sha : undefined);
+      await site.putJson(`articles/${slug}/data.json`, { title, date, tag, excerpt, content }, `Публикация статьи: ${title}`, existingData ? existingData.sha : undefined);
 
       // Картинка для соцсетей и для превью в ленте на главной (image в manifest.json)
       const ogImageFile = cover ? `cover.${extOf(cover.name)}` : (inlineImages[0] ? `image1.${extOf(inlineImages[0].name)}` : null);
 
-      const manifestRes = await site.getJson('articles/manifest.json');
-      const manifest = (manifestRes ? manifestRes.json : []).filter((a) => a.slug !== slug);
-      manifest.unshift({ slug, title, date: todayStr(), tag, excerpt, image: ogImageFile || '' });
+      manifest.unshift({ slug, title, date, tag, excerpt, image: ogImageFile || '' });
       await site.putJson('articles/manifest.json', manifest, `Добавление статьи в manifest: ${title}`, manifestRes ? manifestRes.sha : undefined);
 
-      const pageHtml = buildArticlePageHtml({ slug, title, excerpt, ogImageFile, date: todayStr(), content });
+      const pageHtml = buildArticlePageHtml({ slug, title, excerpt, ogImageFile, date, content });
       await site.putText(`articles/${slug}/index.html`, pageHtml, `Страница статьи (мета-теги): ${title}`);
+
+      // Без строки в sitemap.xml поисковики могут долго не узнать о статье.
+      const sitemapRes = await site.getText('sitemap.xml');
+      if (sitemapRes) {
+        const nextSitemap = addToSitemap(sitemapRes.text, slug, date);
+        if (nextSitemap !== sitemapRes.text) await site.putText('sitemap.xml', nextSitemap, `Статья в sitemap.xml: ${title}`, sitemapRes.sha);
+      }
+      // Карточка статьи прямо в HTML главной — чтобы поисковики видели ссылку без скриптов.
+      const homeRes = await site.getText('index.html');
+      const nextHome = homeRes && replaceHomeFeed(homeRes.text, manifest);
+      if (nextHome && nextHome !== homeRes.text) await site.putText('index.html', nextHome, `Лента на главной: ${title}`, homeRes.sha);
 
       post.siteTransfer = {
         status: 'published', title, slug, excerpt, tag, contentText, coverAlt,
