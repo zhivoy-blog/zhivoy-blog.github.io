@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>О нас — Живой ИИ</title>
-<meta name="description" content="Кто и как делает «Живой ИИ»: сайт, Telegram-канал и сообщество ВКонтакте про нейросети, собранные с телефона без опыта программирования.">
+<title>О проекте и авторе — Живой ИИ</title>
+<meta name="description" content="Вадим — автор «Живого ИИ»: кто ведёт проект, о чём статьи, как проверяются истории и промты, бесплатные инструменты и где нас найти.">
 
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%23113154'/%3E%3Ctext x='50' y='68' font-size='58' font-family='Arial, sans-serif' font-weight='bold' fill='%23007aff' text-anchor='middle'%3EЖ%3C/text%3E%3C/svg%3E">
 
@@ -12,11 +12,33 @@
 
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Живой ИИ">
-<meta property="og:title" content="О нас — Живой ИИ">
-<meta property="og:description" content="Кто и как делает «Живой ИИ»: сайт, Telegram-канал и сообщество ВКонтакте про нейросети, собранные с телефона без опыта программирования.">
+<meta property="og:title" content="О проекте и авторе — Живой ИИ">
+<meta property="og:description" content="Вадим — автор «Живого ИИ»: кто ведёт проект, о чём статьи, как проверяются истории и промты, бесплатные инструменты и где нас найти.">
 <meta property="og:url" content="https://zhivoy-ai.ru/about.html">
 <meta property="og:image" content="https://zhivoy-ai.ru/og-about.jpg">
 <meta name="twitter:card" content="summary_large_image">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "AboutPage",
+  "url": "https://zhivoy-ai.ru/about.html",
+  "name": "О проекте и авторе — Живой ИИ",
+  "mainEntity": {
+    "@type": "Person",
+    "name": "Вадим",
+    "url": "https://zhivoy-ai.ru/about.html",
+    "description": "Автор проекта «Живой ИИ»: пишет простым языком о нейросетях для новичков и проверяет всё на себе.",
+    "sameAs": ["https://vk.ru/zhivoy_ai", "https://vc.ru/id6025411"]
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Живой ИИ",
+    "url": "https://zhivoy-ai.ru/",
+    "sameAs": ["https://vk.ru/zhivoy_ai", "https://vc.ru/id6025411"]
+  }
+}
+</script>
 
 <style>
 :root {
@@ -84,7 +106,7 @@ align-items: center;
 justify-content: center;
 box-shadow: 0 0 14px rgba(var(--accent-rgb), 0.25)
 }
-.header h1 {
+.header .site-name {
 font-size: 22px;
 font-weight: 700;
 margin-bottom: 14px
@@ -130,10 +152,26 @@ padding: 24px 20px;
 border: 1px solid var(--border-color);
 box-shadow: 0 0 16px rgba(var(--accent-rgb), 0.18)
 }
-.about-card h2 {
-font-size: 20px;
+.about-card h1 {
+font-size: 22px;
 font-weight: 700;
-margin-bottom: 16px
+margin-bottom: 16px;
+line-height: 1.3
+}
+.about-card h2 {
+font-size: 18px;
+font-weight: 700;
+margin: 24px 0 12px
+}
+.about-card ul {
+margin: 0 0 16px 20px
+}
+.about-card li {
+font-size: 15px;
+margin-bottom: 8px
+}
+.about-card a {
+color: var(--accent)
 }
 .about-card p {
 font-size: 15px;
@@ -160,7 +198,7 @@ ym(112807526, "init", {ssr:true, webvisor:true, clickmap:true, referrer: documen
 <body>
 <header class="header">
 <button class="theme-toggle" id="theme-toggle" aria-label="Переключить тему">🌙</button>
-<h1>Живой ИИ</h1>
+<p class="site-name">Живой ИИ</p>
 <div class="site-links">
 <a href="https://vk.ru/zhivoy_ai" target="_blank" rel="noopener noreferrer" class="btn-link vk">Мы в ВК</a>
 <a href="https://vc.ru/id6025411" target="_blank" rel="noopener noreferrer" class="btn-link vc">Блог на vc.ru</a>
@@ -172,10 +210,27 @@ ym(112807526, "init", {ssr:true, webvisor:true, clickmap:true, referrer: documen
 <a href="index.html" class="back-link">← На главную</a>
 
 <div class="about-card">
-<h2>О нас</h2>
+<h1>О проекте «Живой ИИ» и его авторе</h1>
 <p>Меня зовут Вадим. Я не программист и не эксперт по нейросетям — обычный человек, который случайно наткнулся на AI Mode в поиске Google Chrome, разговорился с нейросетью — и понеслось. За месяц с небольшим появился этот сайт, Telegram-канал и сообщество ВКонтакте — и то, и другое я завёл впервые в жизни.</p>
 <p>Я веду весь проект с телефона и планшета — без компьютера, без клавиатуры и мыши. Даже домен для сайта покупал с телефона. Сам сайт построен и обновляется через Claude Code — я объясняю нейросети, что нужно сделать, а код пишет она.</p>
 <p>Здесь я делюсь только тем, что сам изучил, прошёл и прощупал руками — ничего с чужих слов и ничего непроверенного. Не сверху вниз как учитель — я такой же новичок, как и вы, просто чуть дальше по пути.</p>
+
+<h2>О чём здесь пишу</h2>
+<ul>
+<li><strong>Промты</strong> (готовые запросы к нейросети) — копируете, вставляете и сразу получаете результат. Например, <a href="articles/prodaj-to-chto-pylitsya/">«Продай то, что пылится»</a>.</li>
+<li><strong>Реальные истории</strong> — случаи из мира ИИ: где нейросеть помогла, а где подвела. Например, <a href="articles/pochemu-lyudi-boyatsya-ii/">«Почему люди всё больше боятся ИИ»</a>.</li>
+<li><strong>Тексты</strong> — разборы простым языком: <a href="articles/bot-ili-agent/">чем бот отличается от агента</a> и как обычные люди зарабатывают на ИИ.</li>
+<li><strong>Музыка</strong> — как я делаю песни в нейросетях: <a href="articles/suno-music/">музыкальный сериал</a>.</li>
+</ul>
+
+<h2>Как я проверяю то, что пишу</h2>
+<p>Промты и советы сначала пробую сам. В историях о чужих случаях даю ссылку на источник (новостной сайт, исследование, заявление компании), чтобы вы могли перепроверить. У каждой статьи стоит дата: нейросети меняются быстро, и по дате видно, насколько свежий совет.</p>
+
+<h2>Бесплатные инструменты</h2>
+<p>На странице <a href="tools.html">«Инструменты»</a> можно сжать фото и видео, вытащить звук из видео в MP3, объединить PDF, сделать QR-код. Всё работает прямо в браузере: ваши файлы никуда не отправляются.</p>
+
+<h2>Где ещё меня найти</h2>
+<p>Каждый день пишу в группе <a href="https://vk.ru/zhivoy_ai" target="_blank" rel="noopener noreferrer">«Живой ИИ» ВКонтакте</a> — там же можно задать вопрос или предложить тему. Часть статей выходит и в <a href="https://vc.ru/id6025411" target="_blank" rel="noopener noreferrer">блоге на vc.ru</a>.</p>
 </div>
 </div>
 
