@@ -207,6 +207,7 @@ ym(112807526, "init", {ssr:true, webvisor:true, clickmap:true, referrer: documen
 <body>
 
 <header class="site-header">
+${buildSiteMenuHtml('../../')}
 <p class="site-logo">Живой ИИ</p>
 <div class="site-links">
 <a href="https://vk.ru/zhivoy_ai" target="_blank" rel="noopener noreferrer" class="btn-link vk">Мы в ВК</a>
@@ -215,13 +216,13 @@ ym(112807526, "init", {ssr:true, webvisor:true, clickmap:true, referrer: documen
 </div>
 </header>
 
-<a href="../../index.html" class="back-link">← Назад к статьям</a>
+<a href="../../" class="back-link">← Назад к статьям</a>
 
 <article id="article-content">
 ${renderArticleContent(content)}
 </article>
 
-<footer class="site-footer"></footer>
+${buildSiteFooterHtml('../../')}
 <script src="../../site-chrome.js"></script>
 
 <script src="../../article-script.js"></script>
@@ -289,6 +290,90 @@ ${renderArticleContent(content)}
     if (sitemapXml.includes(`<loc>${url}</loc>`)) return sitemapXml;
     const block = `<url>\n<loc>${url}</loc>\n<lastmod>${date}</lastmod>\n<changefreq>monthly</changefreq>\n<priority>0.7</priority>\n</url>\n\n`;
     return sitemapXml.replace('</urlset>', block + '</urlset>');
+  }
+
+  /* Меню в шапке и подвал — обычной разметкой прямо в HTML каждой страницы, чтобы поисковики
+     видели ссылки без скриптов (site-chrome.js только открывает и закрывает меню).
+     base — путь до корня сайта: '' для страниц в корне, '../../' для статей.
+     В корне страницы обновляет scripts/build-chrome.mjs. */
+  const SITE_SOCIAL = [
+    { title: 'ВКонтакте', href: 'https://vk.ru/zhivoy_ai' },
+    { title: 'vc.ru', href: 'https://vc.ru/id6025411' },
+  ];
+  const SITE_TOOL_LINKS = [
+    { title: 'Все инструменты', href: 'tools.html' },
+    { title: 'Сжать фото', href: 'szhat-foto.html' },
+    { title: 'Видео в MP3', href: 'video-v-mp3.html' },
+    { title: 'Объединить PDF', href: 'obedinit-pdf.html' },
+  ];
+  const SITE_MENU_START = '<!-- menu:start (собирается из app.js, руками не править) -->';
+  const SITE_MENU_END = '<!-- menu:end -->';
+  const SITE_FOOTER_START = '<footer class="site-footer">';
+  const SITE_FOOTER_END = '</footer>';
+  function siteExtLink(item) {
+    return `<a href="${item.href}" target="_blank" rel="noopener noreferrer">${item.title}</a>`;
+  }
+  function buildSiteMenuHtml(base) {
+    const home = base || './';
+    const social = SITE_SOCIAL.map((s) => `<li>${siteExtLink(s)}</li>`).join('');
+    return SITE_MENU_START + '\n<div class="site-menu">' +
+      '<button class="site-menu-btn" type="button" aria-label="Меню" aria-expanded="false" aria-controls="site-menu-panel">☰</button>' +
+      '<nav class="site-menu-panel" id="site-menu-panel" hidden>' +
+      '<ul>' +
+      `<li><a href="${home}">Главная</a></li>` +
+      `<li><a href="${home}#feed">Статьи</a></li>` +
+      `<li><a href="${base}tools.html">Инструменты</a></li>` +
+      '<li><button class="site-menu-sub-toggle" type="button" aria-expanded="false" aria-controls="site-menu-social">Мы в соцсетях <span class="site-menu-arrow">▾</span></button>' +
+      `<ul class="site-menu-sub" id="site-menu-social" hidden>${social}</ul></li>` +
+      `<li><a href="${base}about.html">О проекте</a></li>` +
+      '</ul>' +
+      '</nav></div>\n' + SITE_MENU_END;
+  }
+  function buildSiteFooterHtml(base) {
+    return SITE_FOOTER_START +
+      '<div class="footer-cols">' +
+      '<div class="footer-col">' +
+      '<h3>О проекте</h3>' +
+      '<p>Кто ведёт этот блог и почему без прикрас</p>' +
+      `<a href="${base}about.html">Подробнее →</a>` +
+      '</div>' +
+      '<div class="footer-col">' +
+      '<h3>Мы в соцсетях</h3>' +
+      '<ul>' + SITE_SOCIAL.map((s) => `<li>${siteExtLink(s)}</li>`).join('') + '</ul>' +
+      '</div>' +
+      '<div class="footer-col">' +
+      '<h3>Контакт</h3>' +
+      '<p>Есть вопрос или идея? Пишите:</p>' +
+      '<div class="footer-write-row">' +
+      `<a class="footer-write" href="${SITE_SOCIAL[0].href}" target="_blank" rel="noopener noreferrer">Написать в ВК</a>` +
+      '</div>' +
+      '</div>' +
+      '</div>' +
+      '<nav class="footer-nav" aria-label="Инструменты">' +
+      SITE_TOOL_LINKS.map((t) => `<a href="${base}${t.href}">${t.title}</a>`).join('') +
+      '</nav>' +
+      '<p class="footer-copy">© Живой ИИ</p>' +
+      SITE_FOOTER_END;
+  }
+  // Вставляет меню и подвал в готовую страницу. null — если на странице нет шапки или подвала.
+  function replaceSiteChrome(html, base) {
+    let out = html;
+    const a = out.indexOf(SITE_MENU_START);
+    if (a >= 0) {
+      const b = out.indexOf(SITE_MENU_END, a);
+      if (b < 0) return null;
+      out = out.slice(0, a) + buildSiteMenuHtml(base) + out.slice(b + SITE_MENU_END.length);
+    } else {
+      const m = /<header class="(?:header|site-header)">\n/.exec(out);
+      if (!m) return null;
+      const at = m.index + m[0].length;
+      out = out.slice(0, at) + buildSiteMenuHtml(base) + '\n' + out.slice(at);
+    }
+    const f = out.indexOf(SITE_FOOTER_START);
+    if (f < 0) return null;
+    const g = out.indexOf(SITE_FOOTER_END, f);
+    if (g < 0) return null;
+    return out.slice(0, f) + buildSiteFooterHtml(base) + out.slice(g + SITE_FOOTER_END.length);
   }
 
   const LS_SETTINGS = 'zi_ctrl_settings_v1';

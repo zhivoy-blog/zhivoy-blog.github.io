@@ -60,6 +60,9 @@ ym(112807526, "init", {ssr:true, webvisor:true, clickmap:true, referrer: documen
 <body>
 
 <header class="site-header">
+<!-- menu:start (собирается из app.js, руками не править) -->
+<div class="site-menu"><button class="site-menu-btn" type="button" aria-label="Меню" aria-expanded="false" aria-controls="site-menu-panel">☰</button><nav class="site-menu-panel" id="site-menu-panel" hidden><ul><li><a href="../../">Главная</a></li><li><a href="../../#feed">Статьи</a></li><li><a href="../../tools.html">Инструменты</a></li><li><button class="site-menu-sub-toggle" type="button" aria-expanded="false" aria-controls="site-menu-social">Мы в соцсетях <span class="site-menu-arrow">▾</span></button><ul class="site-menu-sub" id="site-menu-social" hidden><li><a href="https://vk.ru/zhivoy_ai" target="_blank" rel="noopener noreferrer">ВКонтакте</a></li><li><a href="https://vc.ru/id6025411" target="_blank" rel="noopener noreferrer">vc.ru</a></li></ul></li><li><a href="../../about.html">О проекте</a></li></ul></nav></div>
+<!-- menu:end -->
 <p class="site-logo">Живой ИИ</p>
 <div class="site-links">
 <a href="https://vk.ru/zhivoy_ai" target="_blank" rel="noopener noreferrer" class="btn-link vk">Мы в ВК</a>
@@ -68,13 +71,13 @@ ym(112807526, "init", {ssr:true, webvisor:true, clickmap:true, referrer: documen
 </div>
 </header>
 
-<a href="../../index.html" class="back-link">← Назад к статьям</a>
+<a href="../../" class="back-link">← Назад к статьям</a>
 
 <article id="article-content">
 <time datetime="2026-09-17" class="article-date">17 сентября 2026</time><p class="article-author">Автор: <a href="../../about.html" rel="author">Вадим</a></p><h1>Когда свои же заблокировали: IT-компания учит ИИ ловить хакеров — и сама заблокировала своих лучших спецов</h1><img src="cover.jpg" alt="Человек за ноутбуком с программным кодом на экране" style="max-width: 100%; border-radius: 12px; margin: 20px 0;"><p>10 августа OpenAI (создатели ChatGPT) запустили Daybreak Blue: доступ для проверенных специалистов по кибербезопасности к мощной нейросети с ослабленными ограничениями — чтобы искать уязвимости для защиты, а не для взлома.</p><div class="inline-cta"><p>Больше полезного про нейросети — простым языком, каждый день в нашей группе ВКонтакте</p><a href="https://vk.ru/zhivoy_ai" target="_blank" rel="noopener noreferrer" class="inline-cta-btn">Перейти во ВКонтакте →</a></div><p>Уже 19 августа TechCrunch написал: часть специалистов внезапно потеряла доступ. Вместо входа появлялось сообщение «личность не подтверждена» или «аккаунт временно не подходит».</p><p><strong>Твист:</strong> все пятеро опрошенных специалистов живут за пределами США и Европы. OpenAI назвала это «технической неполадкой»: «Это ошибка на нашей стороне, а не тот опыт, который мы хотим дать пользователям».</p><p>Источник: TechCrunch, Лоренцо Франчески-Биккьерай, 19.08.2026.</p><p>Где почитать подробнее: <a href="https://techcrunch.com/2026/08/19/researchers-complain-that-openai-revoked-their-access-to-limited-cyber-program/" target="_blank" rel="noopener noreferrer" style="color: var(--accent, #d4a94a);">TechCrunch (англ.)</a>.</p><h2>Ещё по теме</h2><p><a href="../ona-ne-sdalas-ona-vzlomala/" style="color: var(--accent, #d4a94a);">Она не сдалась. Она взломала</a></p><p><a href="../ii-agenty-vzlomali-huggingface/" style="color: var(--accent, #d4a94a);">Как ИИ-агенты сами взломали чужую компанию</a></p><p><a href="../god-raboty-sud-runlayer/" style="color: var(--accent, #d4a94a);">Год совместной работы закончился судом из-за одного сообщения</a></p>
 </article>
 
-<footer class="site-footer"></footer>
+<footer class="site-footer"><div class="footer-cols"><div class="footer-col"><h3>О проекте</h3><p>Кто ведёт этот блог и почему без прикрас</p><a href="../../about.html">Подробнее →</a></div><div class="footer-col"><h3>Мы в соцсетях</h3><ul><li><a href="https://vk.ru/zhivoy_ai" target="_blank" rel="noopener noreferrer">ВКонтакте</a></li><li><a href="https://vc.ru/id6025411" target="_blank" rel="noopener noreferrer">vc.ru</a></li></ul></div><div class="footer-col"><h3>Контакт</h3><p>Есть вопрос или идея? Пишите:</p><div class="footer-write-row"><a class="footer-write" href="https://vk.ru/zhivoy_ai" target="_blank" rel="noopener noreferrer">Написать в ВК</a></div></div></div><nav class="footer-nav" aria-label="Инструменты"><a href="../../tools.html">Все инструменты</a><a href="../../szhat-foto.html">Сжать фото</a><a href="../../video-v-mp3.html">Видео в MP3</a><a href="../../obedinit-pdf.html">Объединить PDF</a></nav><p class="footer-copy">© Живой ИИ</p></footer>
 <script src="../../site-chrome.js"></script>
 
 <script src="../../article-script.js"></script>

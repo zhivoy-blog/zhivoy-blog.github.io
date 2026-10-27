@@ -6,7 +6,8 @@
 // Проверяет каждую статью из articles/manifest.json и каждую папку в articles/:
 // есть ли data.json со всеми полями, страница index.html с правильным адресом,
 // все картинки/видео, обложка, запись в sitemap.xml, совпадают ли даты,
-// нет ли дублей. Ошибки (✗) ломают сайт, предупреждения (⚠) — нет.
+// нет ли дублей; есть ли в sitemap.xml каждая страница сайта, а в HTML — меню и подвал.
+// Ошибки (✗) ломают сайт, предупреждения (⚠) — нет.
 
 import fs from 'node:fs';
 import path from 'node:path';
@@ -15,7 +16,7 @@ import {
 } from './lib/site.mjs';
 import { TOOL_PAGES, buildToolPage, readToolsHtml, toolPagePath } from './lib/tool-pages.mjs';
 
-const { renderArticleContent, replaceHomeFeed } = loadArticlePageParts();
+const { renderArticleContent, replaceHomeFeed, replaceSiteChrome } = loadArticlePageParts();
 
 const errors = [];
 const warnings = [];
@@ -142,6 +143,41 @@ while ((m = locRe.exec(sitemap))) {
   if (!seen.has(m[1])) warn(m[1], 'есть в sitemap.xml, но нет в manifest.json');
 }
 
+// Каждая страница сайта, открытая для поиска, должна быть в sitemap.xml, и наоборот:
+// в карте — только настоящие страницы без noindex и со своим canonical.
+// Не считаются: служебные файлы подтверждения Google/Яндекса, скрытое приложение
+// и страницы с noindex (переадресации, 404, упаковщик).
+const sitemapLocs = new Set([...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map((x) => x[1]));
+for (const file of sitePages()) {
+  const html = fs.readFileSync(path.join(ROOT, file), 'utf8');
+  const url = pageUrl(file);
+  const inMap = sitemapLocs.has(url);
+  if (isNoindex(html)) {
+    if (inMap) err(file, 'в sitemap.xml, но на странице noindex — поисковик её не возьмёт, убрать из карты');
+    continue;
+  }
+  if (!inMap) err(file, `страница есть на сайте, но её нет в sitemap.xml — добавить <loc>${url}</loc>`);
+  const canon = /<link rel="canonical" href="([^"]+)">/.exec(html);
+  if (!canon) warn(file, 'нет <link rel="canonical"> — поисковик сам выберет адрес страницы');
+  else if (canon[1] !== url) err(file, `canonical указывает на ${canon[1]}, а страница живёт на ${url}`);
+
+  // Меню и подвал должны лежать прямо в HTML: ссылки из скрипта поисковики видят хуже.
+  if (html.includes('site-chrome.js')) {
+    const base = file.startsWith('articles/') ? '../../' : '';
+    const fresh = replaceSiteChrome(html, base);
+    if (fresh === null) err(file, 'нет шапки или <footer class="site-footer"> — меню и подвал некуда вставить');
+    else if (fresh !== html) {
+      err(file, file.startsWith('articles/')
+        ? 'меню или подвал в HTML устарели — пересобрать: node scripts/new-article.mjs <slug> --force'
+        : 'меню или подвал в HTML устарели — обновить: node scripts/build-chrome.mjs');
+    }
+  }
+}
+for (const url of sitemapLocs) {
+  const file = urlFile(url);
+  if (!file || !fs.existsSync(path.join(ROOT, file))) err(url, 'есть в sitemap.xml, но такой страницы на сайте нет (404)');
+}
+
 console.log(`Статей в manifest.json: ${manifest.length}`);
 if (errors.length) console.log('\n' + errors.join('\n'));
 if (warnings.length) console.log('\n' + warnings.join('\n'));
@@ -157,4 +193,30 @@ function redirectTarget(pagePath) {
   if (!fs.existsSync(pagePath)) return null;
   const m = /location\.replace\('\.\.\/([^/']+)\/'\)/.exec(fs.readFileSync(pagePath, 'utf8'));
   return m ? m[1] : null;
+}
+
+// Все HTML-страницы сайта: файлы в корне и articles/<папка>/index.html.
+function sitePages() {
+  const service = /^(404|google[0-9a-f]+|yandex_[0-9a-f]+)\.html$/;
+  const out = fs.readdirSync(ROOT).filter((f) => f.endsWith('.html') && !service.test(f));
+  for (const name of fs.readdirSync(path.join(ROOT, 'articles'))) {
+    if (fs.existsSync(path.join(ROOT, 'articles', name, 'index.html'))) out.push(`articles/${name}/index.html`);
+  }
+  return out.sort();
+}
+
+function isNoindex(html) {
+  return /<meta name="robots" content="[^"]*noindex/i.test(html);
+}
+
+// Адрес страницы, как он должен стоять в sitemap.xml и canonical.
+function pageUrl(file) {
+  if (file === 'index.html') return 'https://zhivoy-ai.ru/';
+  return 'https://zhivoy-ai.ru/' + file.replace(/(^|\/)index\.html$/, '$1');
+}
+
+function urlFile(url) {
+  if (!url.startsWith('https://zhivoy-ai.ru/')) return null;
+  const p = url.slice('https://zhivoy-ai.ru/'.length);
+  return p === '' || p.endsWith('/') ? p + 'index.html' : p;
 }

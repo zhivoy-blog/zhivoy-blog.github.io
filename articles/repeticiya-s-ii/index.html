@@ -60,6 +60,9 @@ ym(112807526, "init", {ssr:true, webvisor:true, clickmap:true, referrer: documen
 <body>
 
 <header class="site-header">
+<!-- menu:start (собирается из app.js, руками не править) -->
+<div class="site-menu"><button class="site-menu-btn" type="button" aria-label="Меню" aria-expanded="false" aria-controls="site-menu-panel">☰</button><nav class="site-menu-panel" id="site-menu-panel" hidden><ul><li><a href="../../">Главная</a></li><li><a href="../../#feed">Статьи</a></li><li><a href="../../tools.html">Инструменты</a></li><li><button class="site-menu-sub-toggle" type="button" aria-expanded="false" aria-controls="site-menu-social">Мы в соцсетях <span class="site-menu-arrow">▾</span></button><ul class="site-menu-sub" id="site-menu-social" hidden><li><a href="https://vk.ru/zhivoy_ai" target="_blank" rel="noopener noreferrer">ВКонтакте</a></li><li><a href="https://vc.ru/id6025411" target="_blank" rel="noopener noreferrer">vc.ru</a></li></ul></li><li><a href="../../about.html">О проекте</a></li></ul></nav></div>
+<!-- menu:end -->
 <p class="site-logo">Живой ИИ</p>
 <div class="site-links">
 <a href="https://vk.ru/zhivoy_ai" target="_blank" rel="noopener noreferrer" class="btn-link vk">Мы в ВК</a>
@@ -68,13 +71,13 @@ ym(112807526, "init", {ssr:true, webvisor:true, clickmap:true, referrer: documen
 </div>
 </header>
 
-<a href="../../index.html" class="back-link">← Назад к статьям</a>
+<a href="../../" class="back-link">← Назад к статьям</a>
 
 <article id="article-content">
 <time datetime="2026-09-16" class="article-date">16 сентября 2026</time><p class="article-author">Автор: <a href="../../about.html" rel="author">Вадим</a></p><h1>Репетиция с ИИ</h1><img src="cover.jpg" alt="Мужчина жестикулирует, показывая на экран ноутбука, дома у окна, рядом кошка на подоконнике" style="max-width: 100%; border-radius: 12px; margin: 20px 0;"><p>Нейросеть как живой собеседник, а не просто генератор текста.</p><div class="inline-cta"><p>Больше полезного про нейросети — простым языком, каждый день в нашей группе ВКонтакте</p><a href="https://vk.ru/zhivoy_ai" target="_blank" rel="noopener noreferrer" class="inline-cta-btn">Перейти во ВКонтакте →</a></div><p>Все знают, что ИИ может написать резюме или список советов. Но мало кто пробовал устроить с ним настоящий диалог — с вопросами, паузами и реакцией на твои ответы, а не разовый текст на весь запрос.</p><p><strong>В чём секрет:</strong> нужно просить ИИ не выдать сразу всё и сразу, а вести пошаговую игру — задавать по одному вопросу и ждать ответа, прежде чем двигаться дальше. Получается тренажёр, а не шпаргалка.</p><p><strong>Три готовых сценария:</strong></p><p><strong>1. Тренировка перед собеседованием:</strong></p><blockquote>«Сыграй роль рекрутёра на позицию [должность]. Задавай вопросы по одному и жди моего ответа, прежде чем перейти к следующему»</blockquote><p><strong>2. Разговорная практика языка:</strong></p><blockquote>«Стань моим собеседником для практики [язык]. Общайся со мной только на этом языке, короткими фразами — максимум 10 слов за раз. Задавай мне вопросы, начнём с темы [тема]»</blockquote><p><strong>3. Быстрая проверка знаний:</strong></p><blockquote>«Устрой мне блицопрос из 10 вопросов на тему [тема]. Спрашивай по одному, жди ответа, и если я ошибусь — сразу объясняй, в чём дело, прежде чем задать следующий вопрос»</blockquote><p>Подставляя свою тему в квадратные скобки, вместо скучного текста получаешь тренажёр, с которым можно репетировать сколько угодно раз.</p><h2>Ещё по теме</h2><p><a href="../english-tutor-prompt/" style="color: var(--accent, #d4a94a);">Промпт-репетитор английского языка</a></p><p><a href="../ne-speshi-verit-otvetu-sokrat/" style="color: var(--accent, #d4a94a);">Не спеши верить ответу (Промт-Сократ)</a></p><p><a href="../poshagovyi-bufer/" style="color: var(--accent, #d4a94a);">Как лечить «склероз» ИИ при работе со смартфона</a></p>
 </article>
 
-<footer class="site-footer"></footer>
+<footer class="site-footer"><div class="footer-cols"><div class="footer-col"><h3>О проекте</h3><p>Кто ведёт этот блог и почему без прикрас</p><a href="../../about.html">Подробнее →</a></div><div class="footer-col"><h3>Мы в соцсетях</h3><ul><li><a href="https://vk.ru/zhivoy_ai" target="_blank" rel="noopener noreferrer">ВКонтакте</a></li><li><a href="https://vc.ru/id6025411" target="_blank" rel="noopener noreferrer">vc.ru</a></li></ul></div><div class="footer-col"><h3>Контакт</h3><p>Есть вопрос или идея? Пишите:</p><div class="footer-write-row"><a class="footer-write" href="https://vk.ru/zhivoy_ai" target="_blank" rel="noopener noreferrer">Написать в ВК</a></div></div></div><nav class="footer-nav" aria-label="Инструменты"><a href="../../tools.html">Все инструменты</a><a href="../../szhat-foto.html">Сжать фото</a><a href="../../video-v-mp3.html">Видео в MP3</a><a href="../../obedinit-pdf.html">Объединить PDF</a></nav><p class="footer-copy">© Живой ИИ</p></footer>
 <script src="../../site-chrome.js"></script>
 
 <script src="../../article-script.js"></script>

@@ -60,6 +60,9 @@ ym(112807526, "init", {ssr:true, webvisor:true, clickmap:true, referrer: documen
 <body>
 
 <header class="site-header">
+<!-- menu:start (собирается из app.js, руками не править) -->
+<div class="site-menu"><button class="site-menu-btn" type="button" aria-label="Меню" aria-expanded="false" aria-controls="site-menu-panel">☰</button><nav class="site-menu-panel" id="site-menu-panel" hidden><ul><li><a href="../../">Главная</a></li><li><a href="../../#feed">Статьи</a></li><li><a href="../../tools.html">Инструменты</a></li><li><button class="site-menu-sub-toggle" type="button" aria-expanded="false" aria-controls="site-menu-social">Мы в соцсетях <span class="site-menu-arrow">▾</span></button><ul class="site-menu-sub" id="site-menu-social" hidden><li><a href="https://vk.ru/zhivoy_ai" target="_blank" rel="noopener noreferrer">ВКонтакте</a></li><li><a href="https://vc.ru/id6025411" target="_blank" rel="noopener noreferrer">vc.ru</a></li></ul></li><li><a href="../../about.html">О проекте</a></li></ul></nav></div>
+<!-- menu:end -->
 <p class="site-logo">Живой ИИ</p>
 <div class="site-links">
 <a href="https://vk.ru/zhivoy_ai" target="_blank" rel="noopener noreferrer" class="btn-link vk">Мы в ВК</a>
@@ -68,13 +71,13 @@ ym(112807526, "init", {ssr:true, webvisor:true, clickmap:true, referrer: documen
 </div>
 </header>
 
-<a href="../../index.html" class="back-link">← Назад к статьям</a>
+<a href="../../" class="back-link">← Назад к статьям</a>
 
 <article id="article-content">
 <time datetime="2026-09-17" class="article-date">17 сентября 2026</time><p class="article-author">Автор: <a href="../../about.html" rel="author">Вадим</a></p><h1>Промт-провокатор</h1><img src="cover.jpg" alt="Шахматная доска с одной красной пешкой среди белых фигур" style="max-width: 100%; border-radius: 12px; margin: 20px 0;"><p>Как выжимать из ИИ вирусные идеи вместо унылой фигни.</p><div class="inline-cta"><p>Больше полезного про нейросети — простым языком, каждый день в нашей группе ВКонтакте</p><a href="https://vk.ru/zhivoy_ai" target="_blank" rel="noopener noreferrer" class="inline-cta-btn">Перейти во ВКонтакте →</a></div><p>Если просто попросить нейросеть придумать тему для поста или идею для проекта, она выдаёт «безопасный», предсказуемый и скучный список. Такую подачу ИИ выдаёт по умолчанию, потому что настроен быть максимально усреднённым, вежливым и никого не задевать.</p><p>Чтобы достать из нейросети по-настоящему дерзкие и цепляющие мысли, нужно заставить её сознательно нарушить эти правила и выйти за рамки шаблонов.</p><p><strong>В чём секрет:</strong> нужно заставить ИИ сначала выгрузить весь очевидный, банальный материал, а затем принудительно переключиться на поиск нестандартных связей и контр-интуитивных идей.</p><p><strong>Промт для копирования:</strong></p><blockquote>«Я хочу написать пост на тему [укажи свою тему]. Твоя задача — сгенерировать глубокий, нестандартный контент. Выполни задачу строго по шагам: Сначала выведи 5 самых очевидных, банальных и заезженных тезисов на эту тему, которые выдаёт обычный ИИ (чтобы мы их сразу исключили). Напиши 3 глубоких, парадоксальных и провокационных идеи, которые полностью противоречат этим шаблонам, ломают привычные убеждения аудитории и вызовут бурное обсуждение».</blockquote><p><strong>Результат:</strong> ИИ моментально перестраивается, отбрасывает стандартную чепуху и выдаёт неожиданные углы зрения, способные вызвать живое обсуждение у аудитории.</p><h2>Ещё по теме</h2><p><a href="../promt-antibanalnost/" style="color: var(--accent, #d4a94a);">Промт-антибанальность: выжимаем из ИИ уникальные идеи</a></p><p><a href="../promt-professor/" style="color: var(--accent, #d4a94a);">Промт-Профессор: как включить у ИИ режим эксперта</a></p><p><a href="../shablon-dlya-ii-konstruktor/" style="color: var(--accent, #d4a94a);">Шаблон для ИИ (Промт-Конструктор)</a></p>
 </article>
 
-<footer class="site-footer"></footer>
+<footer class="site-footer"><div class="footer-cols"><div class="footer-col"><h3>О проекте</h3><p>Кто ведёт этот блог и почему без прикрас</p><a href="../../about.html">Подробнее →</a></div><div class="footer-col"><h3>Мы в соцсетях</h3><ul><li><a href="https://vk.ru/zhivoy_ai" target="_blank" rel="noopener noreferrer">ВКонтакте</a></li><li><a href="https://vc.ru/id6025411" target="_blank" rel="noopener noreferrer">vc.ru</a></li></ul></div><div class="footer-col"><h3>Контакт</h3><p>Есть вопрос или идея? Пишите:</p><div class="footer-write-row"><a class="footer-write" href="https://vk.ru/zhivoy_ai" target="_blank" rel="noopener noreferrer">Написать в ВК</a></div></div></div><nav class="footer-nav" aria-label="Инструменты"><a href="../../tools.html">Все инструменты</a><a href="../../szhat-foto.html">Сжать фото</a><a href="../../video-v-mp3.html">Видео в MP3</a><a href="../../obedinit-pdf.html">Объединить PDF</a></nav><p class="footer-copy">© Живой ИИ</p></footer>
 <script src="../../site-chrome.js"></script>
 
 <script src="../../article-script.js"></script>

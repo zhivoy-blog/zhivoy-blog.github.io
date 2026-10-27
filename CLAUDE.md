@@ -31,6 +31,8 @@
   (свой title/H1/вопросы под поисковый запрос). Собираются из `tools.html` скриптом, руками не править;
   тексты — в `scripts/lib/tool-pages.mjs`. После любой правки `tools.html` — `node scripts/build-tool-pages.mjs`.
 - `site-chrome.css` / `site-chrome.js` — общая шапка, бургер-меню, подвал, кнопка «Мы в ВК».
+  Меню и подвал лежат обычной разметкой прямо в HTML (шаблон — `buildSiteMenuHtml`/`buildSiteFooterHtml` в `app.js`),
+  скрипт только открывает меню. В корневых страницах их обновляет `node scripts/build-chrome.mjs`.
 - `shtab-d14558/` — скрытое приложение «Живой ИИ: Контроль» (PWA автора). Без ссылок из навигации, в `sitemap.xml` не добавлять.
   В `app.js` лежит **единственный шаблон страницы статьи** (`buildArticlePageHtml`), а рядом — лента главной,
   блок «Ещё по теме» и строка `sitemap.xml` (их же берут скрипты).
@@ -42,7 +44,8 @@
 |---|---|
 | `node scripts/new-article.mjs <slug> [<slug> …]` | Проверяет `data.json` и файлы, дописывает «Ещё по теме», если его нет, создаёт `index.html` по шаблону из `app.js`, добавляет статью в `manifest.json`, `sitemap.xml` и ленту главной. Существующий `index.html` не трогает без `--force`. |
 | `node scripts/build-tool-pages.mjs` | Пересобирает отдельные страницы инструментов из `tools.html`. |
-| `node scripts/check-site.mjs` | Проверяет все статьи: страницы, картинки, `sitemap.xml`, дубли, даты. Код выхода 1 — есть ошибки. |
+| `node scripts/build-chrome.mjs` | Пишет меню и подвал в `index.html`, `about.html`, `tools.html` и пересобирает страницы инструментов. |
+| `node scripts/check-site.mjs` | Проверяет все статьи: страницы, картинки, `sitemap.xml`, дубли, даты; что каждая страница сайта без noindex есть в `sitemap.xml` с верным canonical, а меню и подвал — в HTML. Код выхода 1 — есть ошибки. |
 | `node scripts/count-chars.mjs post.txt` | Считает знаки поста и сверяет с лимитами Telegram, проверяет хэштеги и тире. |
 
 ## Правила работы

@@ -60,6 +60,9 @@ ym(112807526, "init", {ssr:true, webvisor:true, clickmap:true, referrer: documen
 <body>
 
 <header class="site-header">
+<!-- menu:start (собирается из app.js, руками не править) -->
+<div class="site-menu"><button class="site-menu-btn" type="button" aria-label="Меню" aria-expanded="false" aria-controls="site-menu-panel">☰</button><nav class="site-menu-panel" id="site-menu-panel" hidden><ul><li><a href="../../">Главная</a></li><li><a href="../../#feed">Статьи</a></li><li><a href="../../tools.html">Инструменты</a></li><li><button class="site-menu-sub-toggle" type="button" aria-expanded="false" aria-controls="site-menu-social">Мы в соцсетях <span class="site-menu-arrow">▾</span></button><ul class="site-menu-sub" id="site-menu-social" hidden><li><a href="https://vk.ru/zhivoy_ai" target="_blank" rel="noopener noreferrer">ВКонтакте</a></li><li><a href="https://vc.ru/id6025411" target="_blank" rel="noopener noreferrer">vc.ru</a></li></ul></li><li><a href="../../about.html">О проекте</a></li></ul></nav></div>
+<!-- menu:end -->
 <p class="site-logo">Живой ИИ</p>
 <div class="site-links">
 <a href="https://vk.ru/zhivoy_ai" target="_blank" rel="noopener noreferrer" class="btn-link vk">Мы в ВК</a>
@@ -68,13 +71,13 @@ ym(112807526, "init", {ssr:true, webvisor:true, clickmap:true, referrer: documen
 </div>
 </header>
 
-<a href="../../index.html" class="back-link">← Назад к статьям</a>
+<a href="../../" class="back-link">← Назад к статьям</a>
 
 <article id="article-content">
 <time datetime="2026-09-16" class="article-date">16 сентября 2026</time><p class="article-author">Автор: <a href="../../about.html" rel="author">Вадим</a></p><h1>Шаблон для ИИ (Промт-Конструктор)</h1><img src="cover.jpg" alt="Пазл с одним светящимся фиолетовым фрагментом среди белых деталей" style="max-width: 100%; border-radius: 12px; margin: 20px 0;"><p>Как создавать универсальные шаблоны, чтобы ИИ работал на автомате.</p><div class="inline-cta"><p>Больше полезного про нейросети — простым языком, каждый день в нашей группе ВКонтакте</p><a href="https://vk.ru/zhivoy_ai" target="_blank" rel="noopener noreferrer" class="inline-cta-btn">Перейти во ВКонтакте →</a></div><p>Для каждой новой задачи приходится заново расписывать нейросети километровые инструкции. Сегодня нужен пост — пиши контекст с нуля, завтра нужен сценарий — опять разжёвывай всё заново. Это отнимает много времени.</p><p><strong>Решение:</strong> полностью перейти на систему мега-промтов. Один раз написать универсальный каркас с пустыми переменными и потом просто менять их за несколько секунд перед запуском.</p><p><strong>В чём секрет:</strong> нужно создать для ИИ жёсткую модульную структуру. Нейросеть считывает квадратные скобки как переменные и моментально понимает архитектуру запроса.</p><p><strong>Шаблон для копирования:</strong></p><blockquote>«Действуй в роли [Роль, например: маркетолог]. Твоя целевая аудитория — [ЦА, например: фрилансеры]. Я пришлю тебе тему, а твоя задача — написать текст в стиле [Стиль, например: инфостиль], объёмом до [Объём, например: 1000 знаков]. Обязательно добавь в конце [Деталь, например: призыв к действию]. Вот моя тема: [Вставь тему]. Игнорируй любые банальные шаблоны».</blockquote><p><strong>Результат:</strong> шаблон один раз сохраняется в заметки, и больше не нужно каждый раз объяснять нейросети, какой у автора канал и для кого он пишет — просто копируется каркас, вбиваются нужные вводные в скобки, и готовый контент выходит как с конвейера.</p><h2>Ещё по теме</h2><p><a href="../promt-provokator/" style="color: var(--accent, #d4a94a);">Промт-провокатор</a></p><p><a href="../how-to-tame-ai/" style="color: var(--accent, #d4a94a);">«Как укротить нейросети со смартфона...» Личный опыт и бесплатные аналоги ИИ, которые реально работают</a></p><p><a href="../promt-nozhnitsy/" style="color: var(--accent, #d4a94a);">Промт-ножницы: как выжать суть из любой объёмной статьи</a></p>
 </article>
 
-<footer class="site-footer"></footer>
+<footer class="site-footer"><div class="footer-cols"><div class="footer-col"><h3>О проекте</h3><p>Кто ведёт этот блог и почему без прикрас</p><a href="../../about.html">Подробнее →</a></div><div class="footer-col"><h3>Мы в соцсетях</h3><ul><li><a href="https://vk.ru/zhivoy_ai" target="_blank" rel="noopener noreferrer">ВКонтакте</a></li><li><a href="https://vc.ru/id6025411" target="_blank" rel="noopener noreferrer">vc.ru</a></li></ul></div><div class="footer-col"><h3>Контакт</h3><p>Есть вопрос или идея? Пишите:</p><div class="footer-write-row"><a class="footer-write" href="https://vk.ru/zhivoy_ai" target="_blank" rel="noopener noreferrer">Написать в ВК</a></div></div></div><nav class="footer-nav" aria-label="Инструменты"><a href="../../tools.html">Все инструменты</a><a href="../../szhat-foto.html">Сжать фото</a><a href="../../video-v-mp3.html">Видео в MP3</a><a href="../../obedinit-pdf.html">Объединить PDF</a></nav><p class="footer-copy">© Живой ИИ</p></footer>
 <script src="../../site-chrome.js"></script>
 
 <script src="../../article-script.js"></script>
