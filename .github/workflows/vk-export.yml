@@ -11,20 +11,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Read public wall pages (no key, approved by owner)
-        run: |
-          mkdir -p vk-export/raw
-          for u in "https://m.vk.com/wall-240983163" "https://vk.com/wall-240983163"; do
-            f="vk-export/raw/$(echo "$u" | sed 's#https://##; s#[/?=]#_#g').html"
-            curl -sSL -H "Accept-Language: ru" --max-time 30 -o "$f" -w "%{http_code} %{url_effective} $u\n" "$u" || true
-          done
-          ls -la vk-export/raw
       - name: Export wall
-        continue-on-error: true
         env:
           VK_KEY: ${{ secrets.VK_KEY }}
         run: |
-          if [ -z "$VK_KEY" ]; then echo "Нет секрета VK_KEY"; exit 0; fi
+          if [ -z "$VK_KEY" ]; then echo "Нет секрета VK_KEY"; exit 1; fi
           python3 scripts/vk-export.py
       - name: Commit export
         run: |
