@@ -60,6 +60,9 @@ ym(112807526, "init", {ssr:true, webvisor:true, clickmap:true, referrer: documen
 <body>
 
 <header class="site-header">
+<!-- menu:start (собирается из app.js, руками не править) -->
+<div class="site-menu"><button class="site-menu-btn" type="button" aria-label="Меню" aria-expanded="false" aria-controls="site-menu-panel">☰</button><nav class="site-menu-panel" id="site-menu-panel" hidden><ul><li><a href="../../">Главная</a></li><li><a href="../../#feed">Статьи</a></li><li><a href="../../tools.html">Инструменты</a></li><li><button class="site-menu-sub-toggle" type="button" aria-expanded="false" aria-controls="site-menu-social">Мы в соцсетях <span class="site-menu-arrow">▾</span></button><ul class="site-menu-sub" id="site-menu-social" hidden><li><a href="https://vk.ru/zhivoy_ai" target="_blank" rel="noopener noreferrer">ВКонтакте</a></li><li><a href="https://vc.ru/id6025411" target="_blank" rel="noopener noreferrer">vc.ru</a></li></ul></li><li><a href="../../about.html">О проекте</a></li></ul></nav></div>
+<!-- menu:end -->
 <p class="site-logo">Живой ИИ</p>
 <div class="site-links">
 <a href="https://vk.ru/zhivoy_ai" target="_blank" rel="noopener noreferrer" class="btn-link vk">Мы в ВК</a>
@@ -68,13 +71,13 @@ ym(112807526, "init", {ssr:true, webvisor:true, clickmap:true, referrer: documen
 </div>
 </header>
 
-<a href="../../index.html" class="back-link">← Назад к статьям</a>
+<a href="../../" class="back-link">← Назад к статьям</a>
 
 <article id="article-content">
 <time datetime="2026-08-19" class="article-date">19 августа 2026</time><p class="article-author">Автор: <a href="../../about.html" rel="author">Вадим</a></p><h1>ChatGPT выдумал, что человек украл 5 миллионов долларов</h1><img src="chatgpt-vydumal-srok-cover.jpg" alt="Робот-ИИ листает книгу с буквами вокруг — иллюстрация к истории о выдуманном ChatGPT уголовном деле" style="max-width: 100%; border-radius: 12px; margin: 20px 0;"><p><strong>Июнь 2023 года.</strong></p><div class="inline-cta"><p>Больше полезного про нейросети — простым языком, каждый день в нашей группе ВКонтакте</p><a href="https://vk.ru/zhivoy_ai" target="_blank" rel="noopener noreferrer" class="inline-cta-btn">Перейти во ВКонтакте →</a></div><p><strong>Проблема:</strong> американский журналист Фред Риан попросил <strong>ChatGPT</strong> сделать краткую выжимку реального судебного процесса. Текст получился очень убедительным, но нейросеть внезапно добавила в него случайного человека — радиоведущего <strong>Марка Уолтерса</strong>.</p><p><strong>Провал:</strong> ИИ "галлюцинировал" (то есть уверенно выдумал факты, которых не было, и подал их как реальные) и написал, что Уолтерс якобы работал бухгалтером и украл у правозащитной организации более <strong>5 миллионов долларов</strong>. Робот от начала и до конца выдумал обвинения, цитаты и даже фейковые номера судебных дел. Марк никогда там не работал и ничего не крал.</p><p><strong>Итог:</strong> узнав о лжи робота, Марк Уолтерс пришёл в ярость и подал в суд на <strong>OpenAI</strong> — компанию-разработчика ChatGPT. Этот случай вошёл в историю как первый в мире иск к ИИ за клевету.</p><p><strong>Пруфы:</strong> Reuters, Bloomberg Law, The Washington Post.</p><p>Где почитать подробнее: <a href="https://news.bloomberglaw.com/bloomberg-government-news/openai-hit-with-first-defamation-suit-over-chatgpt-hallucination" target="_blank" rel="noopener noreferrer" style="color: var(--accent, #d4a94a);">Bloomberg Law (англ.)</a>.</p><h2>Ещё по теме</h2><p><a href="../podstava-ot-ii/" style="color: var(--accent, #d4a94a);">Подстава от ИИ: как ChatGPT опозорил адвоката в суде</a></p><p><a href="../zloy-ii-dpd/" style="color: var(--accent, #d4a94a);">Робот-бунтарь, стихи про никчёмность и маты клиенту</a></p><p><a href="../ii-protiv-chelovechestva-chaosgpt/" style="color: var(--accent, #d4a94a);">ИИ против человечества: проект ChaosGPT</a></p>
 </article>
 
-<footer class="site-footer"></footer>
+<footer class="site-footer"><div class="footer-cols"><div class="footer-col"><h3>О проекте</h3><p>Кто ведёт этот блог и почему без прикрас</p><a href="../../about.html">Подробнее →</a></div><div class="footer-col"><h3>Мы в соцсетях</h3><ul><li><a href="https://vk.ru/zhivoy_ai" target="_blank" rel="noopener noreferrer">ВКонтакте</a></li><li><a href="https://vc.ru/id6025411" target="_blank" rel="noopener noreferrer">vc.ru</a></li></ul></div><div class="footer-col"><h3>Контакт</h3><p>Есть вопрос или идея? Пишите:</p><div class="footer-write-row"><a class="footer-write" href="https://vk.ru/zhivoy_ai" target="_blank" rel="noopener noreferrer">Написать в ВК</a></div></div></div><nav class="footer-nav" aria-label="Инструменты"><a href="../../tools.html">Все инструменты</a><a href="../../szhat-foto.html">Сжать фото</a><a href="../../video-v-mp3.html">Видео в MP3</a><a href="../../obedinit-pdf.html">Объединить PDF</a></nav><p class="footer-copy">© Живой ИИ</p></footer>
 <script src="../../site-chrome.js"></script>
 
 <script src="../../article-script.js"></script>

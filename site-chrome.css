@@ -1,5 +1,5 @@
 /* ===== Общие для всех страниц: бургер-меню в шапке, плавающая кнопка ВК и подвал =====
-   Разметку рисует site-chrome.js. Подключается после стилей страницы. */
+   Разметка лежит в HTML страниц, site-chrome.js её оживляет. Подключается после стилей страницы. */
 
 .header, .site-header {
 position: relative;
@@ -155,6 +155,19 @@ box-shadow: 0 0 12px rgba(var(--accent-rgb, 212, 169, 74), 0.35)
 display: flex;
 flex-wrap: wrap;
 gap: 8px
+}
+.footer-nav {
+display: flex;
+flex-wrap: wrap;
+justify-content: center;
+gap: 6px 16px;
+margin-bottom: 14px
+}
+.footer-nav a {
+color: var(--accent, #d4a94a);
+text-decoration: none;
+font-weight: 600;
+font-size: 13px
 }
 .footer-copy {
 text-align: center;

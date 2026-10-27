@@ -1,46 +1,13 @@
 // --- Общие для всех страниц: бургер-меню в шапке, плавающая кнопка ВК и подвал ---
-// Подключается в конце <body> после <footer class="site-footer"></footer>.
-// Все ссылки строятся от адреса этого файла, поэтому скрипт работает
-// и в корне сайта, и в articles/<slug>/.
+// Меню и подвал лежат обычной разметкой прямо в HTML страницы (чтобы поисковики
+// видели ссылки без скриптов). Разметку пишут shtab-d14558/app.js и scripts/build-chrome.mjs,
+// а этот скрипт только открывает и закрывает меню и добавляет кнопку ВК.
 (function() {
-// Фраза-тизер для блока «О проекте» в подвале (полный текст — на about.html).
-var ABOUT_TEXT = 'Кто ведёт этот блог и почему без прикрас';
-
-var SOCIAL = [
-{ title: 'ВКонтакте', href: 'https://vk.ru/zhivoy_ai' },
-{ title: 'vc.ru', href: 'https://vc.ru/id6025411' }
-];
-var CONTACT_VK = 'https://vk.ru/zhivoy_ai';
-
-var script = document.currentScript;
-var base = script ? new URL('.', script.src).href : '/';
-
-function ext(item) {
-return '<a href="' + item.href + '" target="_blank" rel="noopener noreferrer">' + item.title + '</a>';
-}
+var VK_URL = 'https://vk.ru/zhivoy_ai';
 
 // --- Меню ---
-var header = document.querySelector('.header, .site-header');
-if (header) {
-var socialItems = SOCIAL.map(function(s) { return '<li>' + ext(s) + '</li>'; }).join('');
-var menu = document.createElement('div');
-menu.className = 'site-menu';
-menu.innerHTML =
-'<button class="site-menu-btn" type="button" aria-label="Меню" aria-expanded="false" aria-controls="site-menu-panel">☰</button>' +
-'<nav class="site-menu-panel" id="site-menu-panel" hidden>' +
-'<ul>' +
-'<li><a href="' + base + 'index.html">Главная</a></li>' +
-'<li><a href="' + base + 'index.html#feed">Статьи</a></li>' +
-'<li><a href="' + base + 'tools.html">Инструменты</a></li>' +
-'<li><button class="site-menu-sub-toggle" type="button" aria-expanded="false" aria-controls="site-menu-social">Мы в соцсетях <span class="site-menu-arrow">▾</span></button>' +
-'<ul class="site-menu-sub" id="site-menu-social" hidden>' + socialItems + '</ul></li>' +
-'<li><a href="' + base + 'about.html">О проекте</a></li>' +
-'</ul>' +
-'</nav>';
-
-var toggle = header.querySelector('.theme-toggle');
-header.insertBefore(menu, toggle || header.firstChild);
-
+var menu = document.querySelector('.site-menu');
+if (menu) {
 var btn = menu.querySelector('.site-menu-btn');
 var panel = menu.querySelector('.site-menu-panel');
 var subBtn = menu.querySelector('.site-menu-sub-toggle');
@@ -79,36 +46,11 @@ btn.focus();
 // --- Плавающая кнопка ВК ---
 var vk = document.createElement('a');
 vk.className = 'vk-float';
-vk.href = SOCIAL[0].href;
+vk.href = VK_URL;
 vk.target = '_blank';
 vk.rel = 'noopener noreferrer';
 vk.textContent = 'Мы в ВК';
 document.body.appendChild(vk);
-
-// --- Подвал ---
-var footer = document.querySelector('.site-footer');
-if (footer) {
-footer.innerHTML =
-'<div class="footer-cols">' +
-'<div class="footer-col">' +
-'<h3>О проекте</h3>' +
-'<p>' + ABOUT_TEXT + '</p>' +
-'<a href="' + base + 'about.html">Подробнее →</a>' +
-'</div>' +
-'<div class="footer-col">' +
-'<h3>Мы в соцсетях</h3>' +
-'<ul>' + SOCIAL.map(function(s) { return '<li>' + ext(s) + '</li>'; }).join('') + '</ul>' +
-'</div>' +
-'<div class="footer-col">' +
-'<h3>Контакт</h3>' +
-'<p>Есть вопрос или идея? Пишите:</p>' +
-'<div class="footer-write-row">' +
-'<a class="footer-write" href="' + CONTACT_VK + '" target="_blank" rel="noopener noreferrer">Написать в ВК</a>' +
-'</div>' +
-'</div>' +
-'</div>' +
-'<p class="footer-copy">© Живой ИИ</p>';
-}
 
 // --- Цели Яндекс.Метрики: клики по ссылкам на ВК ---
 // Одна проверка на весь документ, поэтому считаются и кнопки, которые

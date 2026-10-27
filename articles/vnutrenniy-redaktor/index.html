@@ -60,6 +60,9 @@ ym(112807526, "init", {ssr:true, webvisor:true, clickmap:true, referrer: documen
 <body>
 
 <header class="site-header">
+<!-- menu:start (собирается из app.js, руками не править) -->
+<div class="site-menu"><button class="site-menu-btn" type="button" aria-label="Меню" aria-expanded="false" aria-controls="site-menu-panel">☰</button><nav class="site-menu-panel" id="site-menu-panel" hidden><ul><li><a href="../../">Главная</a></li><li><a href="../../#feed">Статьи</a></li><li><a href="../../tools.html">Инструменты</a></li><li><button class="site-menu-sub-toggle" type="button" aria-expanded="false" aria-controls="site-menu-social">Мы в соцсетях <span class="site-menu-arrow">▾</span></button><ul class="site-menu-sub" id="site-menu-social" hidden><li><a href="https://vk.ru/zhivoy_ai" target="_blank" rel="noopener noreferrer">ВКонтакте</a></li><li><a href="https://vc.ru/id6025411" target="_blank" rel="noopener noreferrer">vc.ru</a></li></ul></li><li><a href="../../about.html">О проекте</a></li></ul></nav></div>
+<!-- menu:end -->
 <p class="site-logo">Живой ИИ</p>
 <div class="site-links">
 <a href="https://vk.ru/zhivoy_ai" target="_blank" rel="noopener noreferrer" class="btn-link vk">Мы в ВК</a>
@@ -68,13 +71,13 @@ ym(112807526, "init", {ssr:true, webvisor:true, clickmap:true, referrer: documen
 </div>
 </header>
 
-<a href="../../index.html" class="back-link">← Назад к статьям</a>
+<a href="../../" class="back-link">← Назад к статьям</a>
 
 <article id="article-content">
 <time datetime="2026-09-19" class="article-date">19 сентября 2026</time><p class="article-author">Автор: <a href="../../about.html" rel="author">Вадим</a></p><h1>Приём «Внутренний редактор»: как заставить нейросеть самой улучшить ответ</h1><img src="cover.jpg" alt="Женщина с ноутбуком на диване вечером у окна" style="max-width: 100%; border-radius: 12px; margin: 20px 0;"><p>Обычно человек берёт от нейросети первый ответ и правит сам. А исследователи MIT Technology Review разобрали больше 24 тысяч реальных переписок людей с нейросетями и показали: хороший результат обычно получается не с первого захода, а после нескольких уточнений.</p><div class="inline-cta"><p>Больше полезного про нейросети — простым языком, каждый день в нашей группе ВКонтакте</p><a href="https://vk.ru/zhivoy_ai" target="_blank" rel="noopener noreferrer" class="inline-cta-btn">Перейти во ВКонтакте →</a></div><p>Пригодится, когда нужен не любой ответ, а сильный: письмо клиенту, важный пост.</p><p><strong>Промт:</strong></p><blockquote>«Напиши [что нужно] на тему [тема]. Набросай черновик, но не показывай его. Как строгий редактор найди в нём минимум три слабых места: расплывчатые фразы, штампы, слабые аргументы. Перепиши с учётом критики. Покажи только финал не длиннее [150] слов и списком — что исправил и почему. Не используй канцелярит и фразы вроде «в современном мире».</blockquote><p><strong>Итог:</strong> с одного запроса — сразу отредактированный текст.</p><h2>Ещё по теме</h2><p><a href="../ideya-tvoya-chernovik-ego/" style="color: var(--accent, #d4a94a);">Идея — твоя, черновик — его</a></p><p><a href="../promt-ot-obratnogo/" style="color: var(--accent, #d4a94a);">Промт от обратного: как скопировать чужой стиль текста через ИИ</a></p><p><a href="../hakerskiy-rezhim/" style="color: var(--accent, #d4a94a);">Хакерский режим: как заставить ИИ разнести твою идею в пух и прах</a></p>
 </article>
 
-<footer class="site-footer"></footer>
+<footer class="site-footer"><div class="footer-cols"><div class="footer-col"><h3>О проекте</h3><p>Кто ведёт этот блог и почему без прикрас</p><a href="../../about.html">Подробнее →</a></div><div class="footer-col"><h3>Мы в соцсетях</h3><ul><li><a href="https://vk.ru/zhivoy_ai" target="_blank" rel="noopener noreferrer">ВКонтакте</a></li><li><a href="https://vc.ru/id6025411" target="_blank" rel="noopener noreferrer">vc.ru</a></li></ul></div><div class="footer-col"><h3>Контакт</h3><p>Есть вопрос или идея? Пишите:</p><div class="footer-write-row"><a class="footer-write" href="https://vk.ru/zhivoy_ai" target="_blank" rel="noopener noreferrer">Написать в ВК</a></div></div></div><nav class="footer-nav" aria-label="Инструменты"><a href="../../tools.html">Все инструменты</a><a href="../../szhat-foto.html">Сжать фото</a><a href="../../video-v-mp3.html">Видео в MP3</a><a href="../../obedinit-pdf.html">Объединить PDF</a></nav><p class="footer-copy">© Живой ИИ</p></footer>
 <script src="../../site-chrome.js"></script>
 
 <script src="../../article-script.js"></script>
